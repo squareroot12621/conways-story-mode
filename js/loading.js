@@ -35,7 +35,7 @@ function update_glider_canvas() {
         [[2, 1], [0, 2], [2, 2], [1, 3], [2, 3]],
         [[1, 1], [2, 2], [3, 2], [1, 3], [2, 3]],
     ]
-    var cell_size = 6
+    var cell_size = 8
     var grid_buffer = 3
     const glider_canvas = document.getElementById('loading-canvas')
     const ctx = glider_canvas.getContext('2d')
