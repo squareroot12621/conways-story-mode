@@ -2,7 +2,7 @@ import {create_element, update_root} from './utilities.js'
 
 function create_loading_screen() {
     var loading_progress = create_element(
-        'span', '42%', {id: 'loading-progress', 'aria-busy': 'true'}
+        'span', '0%', {id: 'loading-progress', 'aria-busy': 'true'}
     )
     var loading_text = create_element(
         'p', ['Loading\u2026 ', loading_progress], {class: 'loading-text'}
