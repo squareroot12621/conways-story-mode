@@ -23,8 +23,8 @@ function create_loading_screen() {
         'data-frame': 0,
     })
 
-    update_glider_canvas()
     update_root(loading_container, glider_canvas)
+    update_glider_canvas()
     setInterval(update_glider_canvas, 55) // 18 FPS = 55 ms
 }
 
