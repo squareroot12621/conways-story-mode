@@ -29,6 +29,17 @@ function create_loading_screen() {
 }
 
 function update_glider_canvas() {
+    const glider_canvas = document.getElementById('loading-canvas')
+    if (!glider_canvas) {
+        return undefined
+    }
+    var root = document.getElementById('conways-story-mode')
+    var root_size = Math.min(root.clientWidth, root.clientHeight)
+    var canvas_size = Math.round(root_size / 2)
+    glider_canvas.setAttribute('width', canvas_size)
+    glider_canvas.setAttribute('height', canvas_size)
+    const ctx = glider_canvas.getContext('2d')
+    
     var glider_phases = [
         [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]],
         [[0, 1], [2, 1], [1, 2], [2, 2], [1, 3]],
@@ -37,13 +48,6 @@ function update_glider_canvas() {
     ]
     var cell_size = 8
     var grid_buffer = 3
-    const glider_canvas = document.getElementById('loading-canvas')
-    var root = document.getElementById('conways-story-mode')
-    var root_size = Math.min(root.clientWidth, root.clientHeight)
-    var canvas_size = Math.round(root_size / 2)
-    glider_canvas.setAttribute('width', canvas_size)
-    glider_canvas.setAttribute('height', canvas_size)
-    const ctx = glider_canvas.getContext('2d')
     var grid_size = Math.ceil(glider_canvas.width / cell_size)
     var current_frame = parseInt(glider_canvas.getAttribute('data-frame'))
     
