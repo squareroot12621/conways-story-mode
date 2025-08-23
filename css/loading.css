@@ -23,6 +23,5 @@
         position: absolute;
         top: 0;
         right: 0;
-        max-width: unset; /* Ignore max-width: 100% from base.css */
     }
 }
