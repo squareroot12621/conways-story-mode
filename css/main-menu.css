@@ -1,0 +1,15 @@
+#conways-story-mode {
+    .main-title {
+        margin: 0.5rem 1rem;
+        text-align: center;
+        line-height: 1.05;
+    }
+    .main-title::after {
+        height: 0.25rem;
+        width: calc(100% + 1rem);
+        background-color: var(--text-primary-color);
+        margin: 0.25rem -0.5rem 0rem;
+        content: '';
+        display: block;
+    }
+}
