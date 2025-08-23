@@ -45,7 +45,7 @@ function update_glider_canvas() {
     var glider_x = -grid_buffer
     var glider_y = -grid_buffer
     var glider_frame = current_frame
-    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight)
+    ctx.clearRect(0, 0, glider_canvas.clientWidth, glider_canvas.clientHeight)
     ctx.fillStyle = '#E3E5E5'
     while (glider_x < grid_size + grid_buffer && glider_y < grid_size + grid_buffer) {
         glider_x = Math.floor(glider_frame / 4) - grid_buffer
