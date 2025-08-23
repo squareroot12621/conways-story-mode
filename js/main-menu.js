@@ -6,19 +6,19 @@ function create_main_menu() {
         {
             name: 'Play',
             icon: 'play-arrow',
-            'icon-type': 'icon',
+            icon_type: 'icon',
             info: 'Play short 5-minute lessons',
         },
         {
             name: 'Sandbox',
             icon: '\u{F0710}', // The shovel icon is the best we have
-            'icon-type': 'icon-alt',
+            icon_type: 'icon-alt',
             info: "Mess around with Conway's Game of Life",
         },
         {
             name: 'Settings',
             icon: 'settings',
-            'icon-type': 'icon',
+            icon_type: 'icon',
             info: 'Change and customize options',
         },
     ]
