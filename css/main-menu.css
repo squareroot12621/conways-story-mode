@@ -1,3 +1,12 @@
+@keyframes bar-grow {
+    0% {
+        transform: scaleX(0%);
+    }
+    100% {
+        transform: scaleX(100%);
+    }
+}
+
 #conways-story-mode {
     .main-title {
         margin: 0.5rem 1rem;
@@ -7,6 +16,7 @@
     .main-title::after {
         height: 0.25rem;
         width: calc(100% + 1rem);
+        animation: 0.8s ease-out 0.3s bar-grow;
         background-color: var(--text-primary-color);
         margin: 0.25rem -0.5rem 0rem;
         content: '';
