@@ -5,10 +5,12 @@ function create_loading_screen() {
         'span', '0%', {id: 'loading-progress', 'aria-busy': 'true'}
     )
     var loading_text = create_element(
-        'p', ['Loading\u2026', loading_progress], {class: 'loading-text'}
+        'p', ['Loading\u2026 ', loading_progress], {class: 'loading-text'}
     )
     var progress_bar = create_element('div', [], {class: 'loading-bar'})
-    var loading_container = create_element('div', [loading_text, progress_bar])
+    var loading_container = create_element(
+        'div', [loading_text, progress_bar], {class: 'loading-container'}
+    )
     update_root(loading_container)
 }
 
