@@ -49,15 +49,17 @@
     font-family: 'Material Symbols Outlined';
     font-weight: 100 700;
     font-style: normal;
+    unicode-range: U+0000-EFFFF;
 }
 @font-face {
     src: url('https://cdn.jsdelivr.net/gh/Templarian/MaterialDesign-Webfont/fonts/materialdesignicons-webfont.woff2') format('woff2');
-    font-family: 'Material Symbols Outlined Alternate';
+    font-family: 'Material Symbols Outlined';
     font-weight: 100 700;
     font-style: normal;
+    unicode-range: U+F0000-10FFFF;
 }
-.icon {
-    font-family: 'Material Symbols Outlined Alternate', 'Material Symbols Outlined';
+.icon, .icon-alt {
+    font-family: 'Material Symbols Outlined';
     font-weight: inherit;
     font-style: normal;
     font-optical-sizing: auto;
@@ -74,6 +76,12 @@
     vertical-align: middle;
     position: relative;
     top: calc(-0.05em - 0.05rem);
+}
+.icon-alt {
+    /* No, this can't be the same class as .icon.
+       For some reason, putting Alternate as a fallback
+       causes it to be too low. */
+    font-family: 'Material Symbols Outlined Alternate';
 }
 
 /* CSS reset, public domain
