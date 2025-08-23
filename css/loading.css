@@ -16,7 +16,7 @@
     .loading-bar {
         height: 1.5rem;
         background: #9FF9AB;
-        width: calc(var(--loading-percentage-backup) * 100%);
+        width: calc(var(--loading-percentage-backup) * (100% - 0.25rem) + 0.25rem);
     }
 
     #loading-canvas {
