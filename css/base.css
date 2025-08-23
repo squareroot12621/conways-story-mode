@@ -50,8 +50,14 @@
     font-weight: 100 700;
     font-style: normal;
 }
+@font-face {
+    src: url('https://cdn.jsdelivr.net/gh/Templarian/MaterialDesign-Webfont/fonts/materialdesignicons-webfont.woff2') format('woff2');
+    font-family: 'Material Symbols Outlined Alternate';
+    font-weight: 100 700;
+    font-style: normal;
+}
 .icon {
-    font-family: 'Material Symbols Outlined';
+    font-family: 'Material Symbols Outlined', 'Material Symbols Outlined Alternate';
     font-weight: inherit;
     font-style: normal;
     font-optical-sizing: auto;
