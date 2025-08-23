@@ -135,6 +135,7 @@ html {
     /* Background colors */
     --background-color: #202425;
     --background-main-color: #303637;
+    --background-primary-color: #23612C;
     --background-error-color: #5B2426;
     
     /* Border colors */
@@ -142,6 +143,7 @@ html {
     
     /* Text colors */
     --text-color: #E3E5E5;
+    --text-primary-color: #9FF9AB;
     --text-error-color: #FFBEB8;
     --link-color: #8AB8F5;
     --link-color-visited: #CE9BF8;
