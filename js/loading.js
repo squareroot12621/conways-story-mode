@@ -15,7 +15,7 @@ function create_loading_screen() {
 
     var root = document.getElementById('conways-story-mode')
     var root_size = Math.min(root.clientWidth, root.clientHeight)
-    var canvas_size = Math.round(root_size / 2) + 'px'
+    var canvas_size = Math.round(root_size / 2)
     var glider_canvas = create_element('canvas', [], {
         id: 'loading-canvas',
         width: canvas_size,
