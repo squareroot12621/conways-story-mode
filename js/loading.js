@@ -25,7 +25,7 @@ function create_loading_screen() {
 
     update_root(loading_container, glider_canvas)
     update_glider_canvas()
-    setInterval(update_glider_canvas, 500) // 18 FPS = 55 ms
+    setInterval(update_glider_canvas, 55) // 18 FPS = 55 ms
 }
 
 function update_glider_canvas() {
@@ -36,7 +36,7 @@ function update_glider_canvas() {
         [[1, 1], [2, 2], [3, 2], [1, 3], [2, 3]],
     ]
     var cell_size = 6
-    var grid_buffer = 10
+    var grid_buffer = 3
     const glider_canvas = document.getElementById('loading-canvas')
     const ctx = glider_canvas.getContext('2d')
     var grid_size = Math.ceil(glider_canvas.clientWidth / cell_size)
@@ -48,7 +48,7 @@ function update_glider_canvas() {
     ctx.clearRect(0, 0, glider_canvas.clientWidth, glider_canvas.clientHeight)
     ctx.fillStyle = '#E3E5E5'
     while (glider_x < grid_size + grid_buffer && glider_y < grid_size + grid_buffer) {
-        glider_x = Math.floor(glider_frame / 4) - grid_buffer
+        glider_x = Math.floor(glider_frame / 4) // - grid_buffer + grid_buffer cancels out
         glider_y = Math.floor(glider_frame / 4) - grid_buffer
         for (var cell of glider_phases[glider_frame % 4]) {
             var cell_x = cell[0] + glider_x
@@ -58,7 +58,6 @@ function update_glider_canvas() {
         glider_frame += 30
     }
 
-    console.log(current_frame)
     glider_canvas.setAttribute('data-frame', (current_frame + 1) % 30)
 }
 
