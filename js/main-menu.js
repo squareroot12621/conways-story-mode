@@ -5,13 +5,13 @@ function create_main_menu() {
     var button_info = [
         {
             name: 'Play',
-            icon: 'play-arrow',
+            icon: 'play_arrow',
             icon_type: 'icon',
             info: 'Play short 5-minute lessons',
         },
         {
             name: 'Sandbox',
-            icon: '\u{F0710}', // The shovel icon is the best we have
+            icon: '\u{F0710}', // The shovel icon is the best we have to a sandbox icon
             icon_type: 'icon-alt',
             info: "Mess around with Conway's Game of Life",
         },
