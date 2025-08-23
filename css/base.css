@@ -23,6 +23,22 @@
     font-weight: 200 700;
     font-style: normal;
     font-stretch: 75% 125%;
+    font-display: swap;
+}
+/* Google Sans Code */
+@font-face {
+    src: url('https://fonts.gstatic.com/s/googlesanscode/v11/pxifyogzv91QhV44Z_GQBHsGf5PuWE5krw.woff2') format('woff2');
+    font-family: 'Google Sans Code';
+    font-weight: 300 800;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    src: url('https://fonts.gstatic.com/s/googlesanscode/v11/pxiZyogzv91QhV44Z_GQBHsGf5PuWEtUrU6t.woff2') format('woff2');
+    font-family: 'Google Sans Code';
+    font-weight: 300 800;
+    font-style: italic;
+    font-display: swap;
 }
 /* Icons */
 @font-face {
@@ -33,8 +49,10 @@
 }
 .icon {
     font-family: 'Material Symbols Outlined';
-    font-weight: normal;
+    font-weight: inherit;
     font-style: normal;
+    font-optical-sizing: auto;
+    font-size: inherit;
     line-height: 1;
     letter-spacing: normal;
     text-transform: none;
@@ -46,7 +64,7 @@
     -webkit-font-smoothing: antialiased;
     vertical-align: middle;
     position: relative;
-    top: -0.0625em;
+    top: calc(-0.05em - 0.05rem);
 }
 
 /* CSS reset, public domain
@@ -73,9 +91,16 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 p {
     text-wrap: pretty;
+    max-width: 72ch;
 }
 h1, h2, h3, h4, h5, h6 {
+    /*
+    For some reason, on Safari, this splits headings
+    that could fit on one line into two lines.
+    I have no idea why.
+    
     text-wrap: balance;
+    */
 }
 /* I don't use React so I don't need #10 */
 
@@ -91,28 +116,40 @@ html {
     }
     font-size: var(--font-size);
 
-    /* Colors */
+    /* Background colors */
     --background-color: #202425;
     --background-main-color: #303637;
+    --background-error-color: #5B2426;
+    
+    /* Border colors */
+    --border-error-color: #98373B;
+    
+    /* Text colors */
     --text-color: #E3E5E5;
+    --text-error-color: #FFBEB8;
     --link-color: #8AB8F5;
-    --link-color-hover: #74AAF1;
     --link-color-visited: #CE9BF8;
-    --link-color-visited-hover: #C286F4;
 }
 body {
     background-color: var(--background-color);
     color: var(--text-color);
 }
+body, button, input, kbd {
+    font-size: var(--font-size);
+}
 .body-wrapper {
     display: flex;
     flex-direction: column;
     height: 100svh;
+    min-width: 20rem;
 }
 main#conways-story-mode {
     flex: 1;
     margin: 1rem 1rem 0rem;
     background-color: var(--background-main-color);
+    overflow-x: hidden;
+    overflow-y: auto;
+    color-scheme: dark;
 }
 footer {
     margin: 0.6875rem 1rem 0.8125rem;
@@ -142,10 +179,30 @@ a {
 a:visited {
     color: var(--link-color-visited);
 }
+a:focus-visible {
+    outline: 0.125rem solid currentcolor;
+    outline-offset: 0.125rem;
+    border-radius: 10000rem;
+    margin-inline: -0.125rem;
+    padding-inline: 0.125rem;
+}
 a:hover {
-    color: var(--link-color-hover);
     text-decoration: underline;
 }
-a:visited:hover {
-    color: var(--link-color-visited-hover);
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Mozilla Headline', var(--system-ui);
+    margin: 0.5rem 0rem;
+}
+h1 { font-weight: 600; font-size: min(3rem, 11vw); }
+h2 { font-weight: 550; font-size: min(2.35rem, 9.5vw); }
+h3 { font-weight: 510; font-size: min(1.85rem, 8.5vw); }
+h4 { font-weight: 480; font-size: min(1.5rem, 8vw); }
+h5 { font-weight: 460; font-size: 1.2rem; }
+h6 { font-weight: 450; font-size: 1rem; }
+code, pre, samp {
+    font-family: 'Google Sans Code', monospace;
+    overflow-x: auto;
+}
+kbd {
+    font-family: inherit;
 }
