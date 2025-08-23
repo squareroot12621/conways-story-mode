@@ -44,15 +44,12 @@
     font-display: swap;
 }
 /* Icons */
-
-/* Templarian's version has more icons
 @font-face {
     src: url('https://fonts.gstatic.com/s/materialsymbolsoutlined/v271/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2') format('woff2');
     font-family: 'Material Symbols Outlined';
     font-weight: 100 700;
     font-style: normal;
 }
-*/
 @font-face {
     src: url('https://cdn.jsdelivr.net/gh/Templarian/MaterialDesign-Webfont/fonts/materialdesignicons-webfont.woff2') format('woff2');
     font-family: 'Material Symbols Outlined Alternate';
@@ -60,7 +57,7 @@
     font-style: normal;
 }
 .icon {
-    font-family: /* 'Material Symbols Outlined', */ 'Material Symbols Outlined Alternate';
+    font-family: 'Material Symbols Outlined', 'Material Symbols Outlined Alternate';
     font-weight: inherit;
     font-style: normal;
     font-optical-sizing: auto;
@@ -75,10 +72,8 @@
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
     vertical-align: middle;
-    /*
     position: relative;
     top: calc(-0.05em - 0.05rem);
-    */
 }
 
 /* CSS reset, public domain
