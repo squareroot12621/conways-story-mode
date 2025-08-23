@@ -25,7 +25,7 @@ function create_loading_screen() {
 
     update_root(loading_container, glider_canvas)
     update_glider_canvas()
-    setInterval(update_glider_canvas, 55) // 18 FPS = 55 ms
+    setInterval(update_glider_canvas, 500) // 18 FPS = 55 ms
 }
 
 function update_glider_canvas() {
@@ -58,6 +58,7 @@ function update_glider_canvas() {
         glider_frame += 30
     }
 
+    console.log(current_frame)
     glider_canvas.setAttribute('data-frame', (current_frame + 1) % 30)
 }
 
