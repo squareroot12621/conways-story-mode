@@ -135,7 +135,7 @@ html {
     /* Background colors */
     --background-color: #202425;
     --background-main-color: #303637;
-    --background-button-color: #4F5658;
+    --background-button-color: #464E50;
     --background-primary-color: #23612C;
     --background-error-color: #5B2426;
     
@@ -144,6 +144,7 @@ html {
     
     /* Text colors */
     --text-color: #E3E5E5;
+    --text-button-color: #E8EAEA;
     --text-primary-color: #9FF9AB;
     --text-error-color: #FFBEB8;
     --link-color: #8AB8F5;
@@ -228,13 +229,13 @@ kbd {
 }
 
 button {
-    --button-fg: var(--text-color);
+    --button-fg: var(--text-button-color);
     --button-bg: var(--background-button-color);
-    &.primarybutton {
+    &.primary-button {
         --button-fg: var(--text-primary-color);
         --button-bg: var(--background-primary-color);
     }
-    &.warningbutton {
+    &.warning-button {
         --button-fg: var(--text-error-color);
         --button-bg: var(--background-error-color);
     }
