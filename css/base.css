@@ -135,6 +135,7 @@ html {
     /* Background colors */
     --background-color: #202425;
     --background-main-color: #303637;
+    --background-button-color: #4F5658;
     --background-primary-color: #23612C;
     --background-error-color: #5B2426;
     
@@ -224,4 +225,27 @@ code, pre, samp {
 }
 kbd {
     font-family: inherit;
+}
+
+button {
+    --button-fg: var(--text-color);
+    --button-bg: var(--background-button-color);
+    &.primarybutton {
+        --button-fg: var(--text-primary-color);
+        --button-bg: var(--background-primary-color);
+    }
+    &.warningbutton {
+        --button-fg: var(--text-error-color);
+        --button-bg: var(--background-error-color);
+    }
+    appearance: none;
+    border: 0.125rem solid var(--button-fg);
+    background-color: var(--button-bg);
+    color: var(--button-fg);
+    &:hover {
+        background-color: var(--button-fg);
+        color: var(--button-bg);
+    }
+    border-radius: 0.625rem;
+    cursor: pointer;
 }
