@@ -11,7 +11,7 @@ function create_loading_screen() {
     var loading_container = create_element(
         'div', [loading_text, progress_bar], {class: 'loading-container'}
     )
-    loading_container.style.setProperty('--loading-progress', 42)
+    loading_container.style.setProperty('--loading-progress', 0.42)
     update_root(loading_container)
 }
 
