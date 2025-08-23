@@ -39,7 +39,7 @@ function update_glider_canvas() {
     var grid_buffer = 10
     const glider_canvas = document.getElementById('loading-canvas')
     const ctx = glider_canvas.getContext('2d')
-    var grid_size = Math.ceiling(glider_canvas.clientWidth / cell_size)
+    var grid_size = Math.ceil(glider_canvas.clientWidth / cell_size)
     var current_frame = glider_canvas.getAttribute('data-frame')
     
     var glider_x = -grid_buffer
