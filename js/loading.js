@@ -49,9 +49,9 @@ function update_glider_canvas() {
     while (glider_x < grid_size + grid_buffer && glider_y < grid_size + grid_buffer) {
         glider_x = Math.floor(glider_frame / 4) - grid_buffer
         glider_y = Math.floor(glider_frame / 4) - grid_buffer
-        for (cell of glider_phases[glider_frame % 4]) {
-            cell_x = cell[0] + glider_x
-            cell_y = cell[1] + glider_y
+        for (var cell of glider_phases[glider_frame % 4]) {
+            var cell_x = cell[0] + glider_x
+            var cell_y = cell[1] + glider_y
             ctx.fillRect(cell_x * cell_size, cell_y * cell_size, cell_size, cell_size)
         }
         glider_frame += 30
