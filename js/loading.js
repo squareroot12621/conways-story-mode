@@ -1,7 +1,7 @@
 import {create_element, update_root} from './utilities.js'
 
 function create_loading_screen() {
-    heading = create_element('h1', 'This is a test')
+    var heading = create_element('h1', 'This is a test')
     update_root(heading)
 }
 
