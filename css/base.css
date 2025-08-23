@@ -56,8 +56,8 @@
     font-weight: 100 700;
     font-style: normal;
 }
-.icon {
-    font-family: 'Material Symbols Outlined', 'Material Symbols Outlined Alternate';
+.icon, .icon-alt {
+    font-family: 'Material Symbols Outlined';
     font-weight: inherit;
     font-style: normal;
     font-optical-sizing: auto;
@@ -74,6 +74,10 @@
     vertical-align: middle;
     position: relative;
     top: calc(-0.05em - 0.05rem);
+}
+.icon-alt {
+    font-family: 'Material Symbols Outlined Alternate';
+    top: calc(-0.1em - 0.1rem);
 }
 
 /* CSS reset, public domain
