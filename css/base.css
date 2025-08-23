@@ -49,14 +49,12 @@
     font-family: 'Material Symbols Outlined';
     font-weight: 100 700;
     font-style: normal;
-    unicode-range: U+0000-EFFFF;
 }
 @font-face {
     src: url('https://cdn.jsdelivr.net/gh/Templarian/MaterialDesign-Webfont/fonts/materialdesignicons-webfont.woff2') format('woff2');
-    font-family: 'Material Symbols Outlined';
+    font-family: 'Material Symbols Outlined Alternate';
     font-weight: 100 700;
     font-style: normal;
-    unicode-range: U+F0000-10FFFF;
 }
 .icon, .icon-alt {
     font-family: 'Material Symbols Outlined';
