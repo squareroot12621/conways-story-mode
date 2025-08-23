@@ -12,4 +12,8 @@ function create_element(tag, content=[], attributes={}) {
   return element
 }
 
-export {create_element}
+function update_root(...elements) {
+  document.getElementById('conways-story-mode').replaceChildren(...elements)
+}
+
+export {create_element, update_root}
