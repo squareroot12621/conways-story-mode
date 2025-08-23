@@ -4,17 +4,18 @@
         flex-direction: column;
         height: 100%;
         justify-content: end;
+        --loading-percentage-backup: var(--loading-percentage, 0);
     }
     .loading-text {
         margin: 0.25rem 0.5rem;
         font-size: 1.5rem;
     }
     #loading-progress {
-        font-weight: calc(200 + var(--loading-percentage, 0) * 700);
+        font-weight: calc(200 + var(--loading-percentage-backup) * 700);
     }
     .loading-bar {
         height: 1.5rem;
         background: #9FF9AB;
-        width: calc(var(--loading-percentage, 0) * 100%);
+        width: calc(var(--loading-percentage-backup) * 100%);
     }
 }
