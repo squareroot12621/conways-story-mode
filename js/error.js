@@ -31,7 +31,7 @@ function create_error_screen(error) {
     }
 
     // Create the HTML
-    var heading_text = 'JavaScript crashed'
+    var heading_text = ' JavaScript crashed'
     var heading_icon = create_element('span', 'error', {class: 'icon', alt: ''})
     var heading = create_element('h1', [heading_icon, heading_text], {class: 'script-error-header'})
     var description_text_before = "Uh oh! Something happened in Conway's Story Mode, "
