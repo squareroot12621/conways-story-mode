@@ -18,4 +18,10 @@
         background: #9FF9AB;
         width: calc(var(--loading-percentage-backup) * 100%);
     }
+
+    #loading-canvas {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
 }
