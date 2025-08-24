@@ -18,6 +18,7 @@ function update_root(...elements) {
 }
 
 function resize_root() {
+    // Squish headings on small screens
     var root = document.getElementById('conways-story-mode')
     var width = document.getElementsByClassName('body-wrapper')[0].clientWidth
     if (width >= 640) {
@@ -29,8 +30,11 @@ function resize_root() {
     }
     var all_headings = root.querySelectorAll('h1, h2, h3, h4, h5, h6')
     for (var heading of all_headings) {
-        heading.style.setProperty('font-stretch', heading_width + '%')
-        heading.style.setProperty('font-width', heading_width + '%')
+        var heading_type = parseInt(heading.tagName[1])
+        // Smaller headings don't need to be squished as much
+        var current_heading_width = 100 - (100 - heading_width) / (1.6 ** (heading_type - 1))
+        heading.style.setProperty('font-stretch', current_heading_width + '%')
+        heading.style.setProperty('font-width', current_heading_width + '%')
     }
 }
 
