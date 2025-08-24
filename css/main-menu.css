@@ -50,6 +50,12 @@
             "b c";
         grid-template-columns: 1fr 4rem;
         padding: 0.125rem 0.5rem;
+
+        --button-fg: hsl(from var(--text-primary-color) calc(h + var(--button-color-offset)) s l);
+        --button-bg: hsl(from var(--background-primary-color) calc(h + var(--button-color-offset)) s l);
+        &:nth-child(1) { --button-color-offset:   0; /* Green  */ }
+        &:nth-child(2) { --button-color-offset: -75; /* Orange */ }
+        &:nth-child(3) { --button-color-offset: 140; /* Purple */ }
     }
     .main-button-name {
         margin: 0rem;
