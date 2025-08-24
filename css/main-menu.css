@@ -1,9 +1,9 @@
 @keyframes bar-grow {
     0%, 25% {
-        --scale: 0%;
+        transform: translateX(calc(0.5rem - 50%)) scaleX(0%);
     }
     100% {
-        --scale: 100%;
+        transform: translateX(calc(0.5rem - 50%)) scaleX(100%);
     }
 }
 
@@ -31,7 +31,7 @@
         display: block;
         position: relative;
         left: 50%;
-        transform: translateX(calc(0.5rem - 50%)) scaleX(var(--scale));
+        transform: translateX(calc(0.5rem - 50%));
     }
 
     .main-button-wrapper {
