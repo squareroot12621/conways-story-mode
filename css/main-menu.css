@@ -30,7 +30,7 @@
         display: block;
         position: relative;
         left: 50%;
-        transform: translateX(-50%) scaleX(var(--scale, 100%));
+        transform: translateX(calc(0.5rem - 50%)) scaleX(var(--scale, 100%));
     }
 
     .main-button-wrapper {
