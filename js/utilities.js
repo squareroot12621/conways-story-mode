@@ -14,9 +14,12 @@ function create_element(tag, content=[], attributes={}) {
 function update_root(...elements) {
     var root = document.getElementById('conways-story-mode')
     root.replaceChildren(...elements)
+    resize_root()
+}
+
+function resize_root() {
     var width = document.getElementsByClassName('body-wrapper')[0].clientWidth
     var heading_width = Math.min(75 + 25 * (width-320)/320, 100) + '%'
-    root.append(document.createElement('p').append(width + ''))
     var all_headings = root.querySelectorAll('h1, h2, h3, h4, h5, h6')
     for (var heading of all_headings) {
         heading.style.setProperty('font-stretch', heading_width)
@@ -24,4 +27,4 @@ function update_root(...elements) {
     }
 }
 
-export {create_element, update_root}
+export {create_element, update_root, resize_root}
