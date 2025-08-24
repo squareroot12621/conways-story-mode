@@ -173,7 +173,7 @@ footer {
     column-gap: 1.25rem;
     a .icon-alt {
         font-size: var(--font-size);
-        margin-right: 0.18em;
+        margin-right: 0.24em;
         color: var(--text-color); /* The GitHub icon can't be blue or purple */
     }
 }
