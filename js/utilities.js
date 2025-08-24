@@ -14,6 +14,11 @@ function create_element(tag, content=[], attributes={}) {
 function update_root(...elements) {
     var root = document.getElementById('conways-story-mode')
     root.replaceChildren(...elements)
+
+    var TEST = document.createElement('p')
+    TEST.append('Test')
+    root.append(TEST)
+    
     var heading_width = '75' // TODO: Change to something more dynamic
     var all_headings = root.querySelectorAll('h1, h2, h3, h4, h5, h6')
     console.log(all_headings)
