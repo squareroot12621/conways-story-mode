@@ -16,7 +16,7 @@ function update_root(...elements) {
     root.replaceChildren(...elements)
     var width = document.getElementById('body-wrapper').clientWidth
     var heading_width = Math.min(75 + 25 * (width-320)/320, 100) + '%'
-    root.append(width + '')
+    root.append(document.createElement('p').append(width + ''))
     var all_headings = root.querySelectorAll('h1, h2, h3, h4, h5, h6')
     for (var heading of all_headings) {
         heading.style.setProperty('font-stretch', heading_width)
