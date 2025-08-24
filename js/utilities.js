@@ -18,6 +18,7 @@ function update_root(...elements) {
 }
 
 function resize_root() {
+    var root = document.getElementById('conways-story-mode')
     var width = document.getElementsByClassName('body-wrapper')[0].clientWidth
     var heading_width = Math.min(75 + 25 * (width-320)/320, 100) + '%'
     var all_headings = root.querySelectorAll('h1, h2, h3, h4, h5, h6')
