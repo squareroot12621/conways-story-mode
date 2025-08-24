@@ -38,11 +38,12 @@
         width: calc(100% - 2rem);
         max-width: 30rem;
         flex: 1;
-        padding-bottom: 5rem;
+        padding-bottom: min(max(calc(50vh - 20rem), 1rem), 5rem);
         justify-content: center;
     }
     .main-button {
-        margin: 1rem 0rem;
+        margin-block: min(max(calc(12.5vh - 4.625rem), 0.5rem), 1rem);
+        margin-inline: 0rem;
         display: grid;
         grid-template-areas:
             "a c"
@@ -51,7 +52,7 @@
         padding: 0.125rem 0.5rem;
     }
     .main-button-name {
-        margin: 0rem 0rem -0.25rem;
+        margin: 0rem;
         text-align: left;
     }
     .main-button-icon {
@@ -65,5 +66,8 @@
     .main-button-info {
         text-align: left;
         font-size: 1.125rem;
+        line-height: 1.25;
+        margin: -0.125rem 0rem 0.125rem;
+        text-wrap: pretty;
     }
 }
