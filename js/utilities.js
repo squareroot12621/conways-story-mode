@@ -20,11 +20,17 @@ function update_root(...elements) {
 function resize_root() {
     var root = document.getElementById('conways-story-mode')
     var width = document.getElementsByClassName('body-wrapper')[0].clientWidth
-    var heading_width = Math.min(75 + 25 * (width-320)/320, 100) + '%'
+    if (width >= 640) {
+        var heading_width = 100
+    } else if (width <= 400) {
+        var heading_width = 75
+    } else {
+        var heading_width = 75 + 25 * (width-400)/240
+    }
     var all_headings = root.querySelectorAll('h1, h2, h3, h4, h5, h6')
     for (var heading of all_headings) {
-        heading.style.setProperty('font-stretch', heading_width)
-        heading.style.setProperty('font-width', heading_width)
+        heading.style.setProperty('font-stretch', heading_width + '%')
+        heading.style.setProperty('font-width', heading_width + '%')
     }
 }
 
