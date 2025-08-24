@@ -1,0 +1,70 @@
+#conways-story-mode {
+    .levels-heading {
+        margin: 0.5rem 0.5rem 0rem;
+    }
+
+    .levels-units-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+    .levels-lessons-wrapper {
+        /* Because the z-indexes don't work for ::before
+           (they go on top of the previous element instead of behind),
+           we have to simulate the ::befores in one long background image instead. */
+        background:
+            linear-gradient(
+                90deg,
+                transparent 0rem calc(var(--gap-per-line) + 1rem),
+                var(--background-main-color) calc(var(--gap-per-line) + 1rem) 100%
+            ),
+            linear-gradient(
+                180deg,
+                var(--background-main-color) 0rem 3.5rem,
+                transparent 3.5rem 100%
+            ),
+            repeating-linear-gradient(
+                180deg,
+                transparent 0rem 1.625rem,
+                gray 1.625rem 1.875rem,
+                transparent 1.875rem 3.5rem
+            );
+        --gap-per-line: calc((100% - round(down, 100%, 4.5rem)) / 2);
+    }
+    .levels-units {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        width: max-content;
+    }
+    .levels-lessons {
+        display: flex;
+        flex-wrap: wrap;
+        list-style-type: none;
+        padding: 0;
+        margin-inline: var(--gap-per-line);
+    }
+    .levels-units li, .levels-lessons li {
+        width: 2.5rem;
+        height: 2.5rem;
+        position: relative;
+        margin: 0.5rem 1.5rem;
+        outline: 0.125rem solid gray;
+        background-color: black;
+        border-radius: 1.25rem;
+        font-size: 1.5rem;
+        &:nth-child(n + 100) {
+            font-size: 1.25rem;
+        }
+        text-align: center;
+        line-height: 2.5rem;
+        &:not(:last-child)::after {
+            position: absolute;
+            content: '';
+            width: 3.25rem;
+            height: 0.25rem;
+            top: 1.125rem;
+            left: 2.5rem;
+            background-color: gray;
+        }
+    }
+}
