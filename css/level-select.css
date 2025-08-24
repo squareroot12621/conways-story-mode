@@ -6,6 +6,7 @@
     .levels-units-wrapper {
         width: 100%;
         overflow-x: auto;
+        --gap-per-line: calc((100% - round(down, 100%, 4.5rem)) / 2);
     }
     .levels-lessons-wrapper {
         /* Because the z-indexes don't work for ::before
@@ -35,6 +36,7 @@
         list-style-type: none;
         padding: 0;
         width: max-content;
+        margin-inline: var(--gap-per-line);
     }
     .levels-lessons {
         display: flex;
