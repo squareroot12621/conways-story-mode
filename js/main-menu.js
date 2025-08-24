@@ -1,3 +1,4 @@
+import {create_level_select} from './level-select.js'
 import {create_element, update_root} from './utilities.js'
 
 function create_main_menu() {
@@ -36,6 +37,8 @@ function create_main_menu() {
     var button_wrapper = create_element('section', buttons, {class: 'main-button-wrapper'})
     var main_wrapper = create_element('div', [heading, button_wrapper], {class: 'main-wrapper'})
     update_root(main_wrapper)
+
+    buttons[0].addEventListener('click', create_level_select) // Play
 }
 
 export {create_main_menu}
