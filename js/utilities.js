@@ -14,7 +14,7 @@ function create_element(tag, content=[], attributes={}) {
 function update_root(...elements) {
     var root = document.getElementById('conways-story-mode')
     root.replaceChildren(...elements)
-    var width = document.getElementById('body-wrapper').clientWidth
+    var width = document.getElementsByClassName('body-wrapper')[0].clientWidth
     var heading_width = Math.min(75 + 25 * (width-320)/320, 100) + '%'
     root.append(document.createElement('p').append(width + ''))
     var all_headings = root.querySelectorAll('h1, h2, h3, h4, h5, h6')
