@@ -148,7 +148,7 @@ body {
     color: var(--text-color);
 }
 body, button, input, kbd {
-    font-size: var(--font-size);
+    font-size: inherit;
 }
 .body-wrapper {
     display: flex;
