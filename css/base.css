@@ -1,6 +1,7 @@
 @import './script-error.css';
 @import './loading.css';
 @import './main-menu.css';
+@import './level-select.css';
 
 /* Inter */
 @font-face {
