@@ -4,8 +4,11 @@
     }
 
     .levels-units-wrapper {
-        width: 100%;
+        width: fit-content;
+        max-width: 100%;
         overflow-x: auto;
+    }
+    .levels-units-wrapper, .levels-lessons-wrapper {
         --gap-per-line: calc((100% - round(down, 100%, 4.5rem)) / 2);
     }
     .levels-lessons-wrapper {
@@ -29,7 +32,7 @@
                 gray 1.625rem 1.875rem,
                 transparent 1.875rem 3.5rem
             );
-        --gap-per-line: calc((100% - round(down, 100%, 4.5rem)) / 2);
+        width: fit-content;
     }
     .levels-units {
         display: flex;
