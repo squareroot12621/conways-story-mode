@@ -171,12 +171,10 @@ footer {
     justify-content: space-between;
     flex-wrap: wrap;
     column-gap: 1.25rem;
-    a .icon {
+    a .icon-alt {
         font-size: var(--font-size);
         margin-right: 0.18em;
-    }
-    a:is(:hover, :focus-visible) .icon {
-        font-variation-settings: 'FILL' 1;
+        color: var(--text-color); /* The GitHub icon can't be blue or purple */
     }
 }
 @media (width < 36rem) {
