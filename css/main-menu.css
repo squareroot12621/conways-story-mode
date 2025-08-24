@@ -8,6 +8,12 @@
 }
 
 #conways-story-mode {
+    .main-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    
     .main-title {
         margin: 0.5rem 1rem;
         text-align: center;
@@ -23,5 +29,41 @@
         margin: 0.25rem -0.5rem 0rem;
         content: '';
         display: block;
+    }
+
+    .main-button-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        width: calc(100% - 2rem);
+        max-width: 30rem;
+        flex: 1;
+        padding-bottom: 5rem;
+        justify-content: center;
+    }
+    .main-button {
+        margin: 1rem 0rem;
+        display: grid;
+        grid-template-areas:
+            "a c"
+            "b c";
+        grid-template-columns: 1fr 4rem;
+        padding: 0.125rem 0.5rem;
+    }
+    .main-button-name {
+        margin: 0rem 0rem -0.25rem;
+        text-align: left;
+    }
+    .main-button-icon {
+        font-variation-settings: 'FILL' 1;
+        font-size: 3.5rem;
+        text-align: center;
+        grid-area: c;
+        top: 0rem;
+        margin-block: auto;
+    }
+    .main-button-info {
+        text-align: left;
+        font-size: 1.125rem;
     }
 }
