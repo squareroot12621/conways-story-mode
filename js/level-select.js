@@ -10,6 +10,7 @@ function create_level_select() {
         unit_array.push(create_element('li', i.toString()))
     }
     var units = create_element('ol', unit_array, {class: 'levels-units'})
+    var units_wrapper = create_element('div', units, {class: 'levels-units-wrapper'})
     
     var lessons_heading = create_element('h3', 'Lessons', {class: 'levels-heading'})
     var lesson_array = []
@@ -19,7 +20,9 @@ function create_level_select() {
     var lessons = create_element('ol', lesson_array, {class: 'levels-lessons'})
     var lessons_wrapper = create_element('div', lessons, {class: 'levels-lessons-wrapper'})
 
-    update_root(back_button, units_heading, units, lessons_heading, lessons_wrapper)
+    update_root(back_button,
+                units_heading, units_wrapper,
+                lessons_heading, lessons_wrapper)
 }
 
 export {create_level_select}
