@@ -13,7 +13,7 @@ function get_error_info(error) {
         }
     }
     var error_string = error_new.toString()
-    var error_stack = error_new?.stack ?? 'No stack available'
+    var error_stack = error_new?.stack ?? error_new?.filename + ' ' + error_new?.lineno // 'No stack available'
     var error_info_text = [error_type, error_string, error_stack].join('\n')
     return {info: error_info_text, error: error_new}
 }
