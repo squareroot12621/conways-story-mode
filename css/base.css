@@ -123,12 +123,9 @@ h1, h2, h3, h4, h5, h6 {
 html {
     --system-ui: system-ui, 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     font-family: 'Inter', var(--system-ui);
-    --font-size: 1.125rem;
-    @media (width <= 30rem) {
-        --font-size: 1rem;
-    }
-    @media (width > 30rem) and (width < 40rem) {
-        --font-size: calc(0.625rem + 100vw / 80);
+    --font-size: 100%;
+    @media (width > 30rem) {
+        --font-size: min(calc(62.5% + 100vw / 80rem), 112.5%);
     }
     font-size: var(--font-size);
 
