@@ -24,13 +24,14 @@
         width: calc(100% + 1rem);
         max-width: calc(40% + 20rem);
         animation: 1.1s cubic-bezier(0.2, 0.8, 0.55, 1) bar-grow;
+        animation-fill-mode: both;
         background-color: var(--text-primary-color);
         margin: 0.25rem -0.5rem 0rem;
         content: '';
         display: block;
         position: relative;
         left: 50%;
-        transform: translateX(calc(0.5rem - 50%)) scaleX(var(--scale, 100%));
+        transform: translateX(calc(0.5rem - 50%)) scaleX(var(--scale));
     }
 
     .main-button-wrapper {
