@@ -1,3 +1,4 @@
+import {create_main_menu} from './main-menu.js'
 import {create_element, update_root} from './utilities.js'
 
 function create_level_select() {
@@ -23,6 +24,8 @@ function create_level_select() {
     update_root(back_button,
                 units_heading, units_wrapper,
                 lessons_heading, lessons_wrapper)
+
+    back_button.addEventListener('click', create_main_menu)
 }
 
 export {create_level_select}
