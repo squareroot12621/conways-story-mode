@@ -7,25 +7,25 @@
         width: fit-content;
         max-width: 100%;
         overflow-x: auto;
+        background:
+            linear-gradient(
+                90deg,
+                var(--background-main-color) 0rem var(--gap-per-line),
+                transparent var(--gap-per-line) calc(100% - var(--gap-per-line)),
+                var(--background-main-color) calc(100% - var(--gap-per-line)) 100%
+            ),
+            repeating-linear-gradient(
+                180deg,
+                transparent 0rem 1.625rem,
+                gray 1.625rem 1.875rem,
+                transparent 1.875rem 3.5rem
+            );
     }
     .levels-units-wrapper, .levels-lessons-wrapper {
         --gap-per-line: calc((100% - round(down, 100%, 4.5rem)) / 2);
     }
     .levels-lessons-wrapper {
-        /* Because the z-indexes don't work for ::before
-           (they go on top of the previous element instead of behind),
-           we have to simulate the ::befores in one long background image instead. */
         background:
-            linear-gradient(
-                90deg,
-                transparent 0rem calc(var(--gap-per-line) + 1rem),
-                var(--background-main-color) calc(var(--gap-per-line) + 1rem) 100%
-            ),
-            linear-gradient(
-                180deg,
-                var(--background-main-color) 0rem 3.5rem,
-                transparent 3.5rem 100%
-            ),
             repeating-linear-gradient(
                 180deg,
                 transparent 0rem 1.625rem,
@@ -62,14 +62,21 @@
         }
         text-align: center;
         line-height: 2.5rem;
-        &:not(:last-child)::after {
-            position: absolute;
-            content: '';
-            width: 3.25rem;
-            height: 0.25rem;
-            top: 1.125rem;
-            left: 2.5rem;
-            background-color: gray;
-        }
+        z-index: 1;
+    }
+    .levels-lessons:is(:first-child)::before {
+        position: absolute;
+        content: '';
+        width: max(100vw, 20rem);
+        height: 2rem;
+        top: 0.25rem;
+        background-color: var(--background-main-color);
+        z-index: -1;
+    }
+    .levels-lessons:first-child::before {
+        right: 2.5rem;
+    }
+    .levels-lessons:last-child::before {
+        left: 2.5rem;
     }
 }
