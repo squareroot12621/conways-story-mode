@@ -48,6 +48,7 @@
         padding: 0;
         margin-inline: var(--gap-per-line);
     }
+    
     .levels-units li, .levels-lessons li {
         width: 2.5rem;
         height: 2.5rem;
@@ -78,5 +79,16 @@
     }
     .levels-lessons li:last-child::before {
         left: 2.5rem;
+    }
+
+    li.level-locked::after {
+        content: 'lock';
+        font-family: 'Material Symbols Outlined';
+        position: absolute;
+        right: -0.4rem;
+        top: -0.54rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        font-variation-settings: 'FILL' 1;
     }
 }
