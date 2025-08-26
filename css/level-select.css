@@ -7,19 +7,6 @@
         width: fit-content;
         max-width: 100%;
         overflow-x: auto;
-        background:
-            linear-gradient(
-                90deg,
-                var(--background-main-color) 0rem calc(var(--gap-per-line) + 2rem),
-                transparent calc(var(--gap-per-line) + 2rem) calc(100% - var(--gap-per-line) - 2rem),
-                var(--background-main-color) calc(100% - var(--gap-per-line) - 2rem) 100%
-            ),
-            repeating-linear-gradient(
-                180deg,
-                transparent 0rem 1.625rem,
-                gray 1.625rem 1.875rem,
-                transparent 1.875rem 3.5rem
-            );
     }
     .levels-units-wrapper, .levels-lessons-wrapper {
         --gap-per-line: calc((100% - round(down, 100%, 4.5rem)) / 2);
@@ -40,6 +27,19 @@
         padding: 0;
         width: max-content;
         margin-inline: var(--gap-per-line);
+        background:
+            linear-gradient(
+                90deg,
+                var(--background-main-color) 0rem calc(var(--gap-per-line) + 2rem),
+                transparent calc(var(--gap-per-line) + 2rem) calc(100% - var(--gap-per-line) - 2rem),
+                var(--background-main-color) calc(100% - var(--gap-per-line) - 2rem) 100%
+            ),
+            repeating-linear-gradient(
+                180deg,
+                transparent 0rem 1.625rem,
+                gray 1.625rem 1.875rem,
+                transparent 1.875rem 3.5rem
+            );
     }
     .levels-lessons {
         display: flex;
