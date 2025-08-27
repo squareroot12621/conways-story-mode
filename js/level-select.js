@@ -9,7 +9,8 @@ function create_level_select() {
     var unit_array = []
     for (var i = 1; i <= 10; ++i) {
         var button = create_element('button', i.toString(), {class: 'level'})
-        unit_array.push(create_element('li', button))
+        var tooltip = create_element('div', `Unit ${i.toString()}`, {class: 'level-tooltip'})
+        unit_array.push(create_element('li', [button, tooltip]))
     }
     var units = create_element('ol', unit_array, {class: 'levels-units'})
     var units_wrapper = create_element('div', units, {class: 'levels-units-wrapper'})
@@ -18,7 +19,8 @@ function create_level_select() {
     var lesson_array = []
     for (var i = 1; i <= 10; ++i) {
         var button = create_element('button', i.toString(), {class: 'level'})
-        lesson_array.push(create_element('li', button))
+        var tooltip = create_element('div', `Lesson ${i.toString()}`, {class: 'level-tooltip'})
+        lesson_array.push(create_element('li', [button, tooltip]))
     }
     var lessons = create_element('ol', lesson_array, {class: 'levels-lessons'})
     var lessons_wrapper = create_element('div', lessons, {class: 'levels-lessons-wrapper'})
