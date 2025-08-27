@@ -17,7 +17,8 @@ function create_level_select() {
     var lessons_heading = create_element('h3', 'Lessons', {class: 'levels-heading'})
     var lesson_array = []
     for (var i = 1; i <= 10; ++i) {
-        lesson_array.push(create_element('li', i.toString()))
+        var button = create_element('button', i.toString(), {class: 'level'})
+        lesson_array.push(create_element('li', button))
     }
     var lessons = create_element('ol', lesson_array, {class: 'levels-lessons'})
     var lessons_wrapper = create_element('div', lessons, {class: 'levels-lessons-wrapper'})
