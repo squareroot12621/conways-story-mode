@@ -8,7 +8,8 @@ function create_level_select() {
     var units_heading = create_element('h3', 'Units', {class: 'levels-heading'})
     var unit_array = []
     for (var i = 1; i <= 10; ++i) {
-        unit_array.push(create_element('li', i.toString()))
+        var button = create_element('button', i.toString(), {class: 'level'})
+        unit_array.push(create_element('li', button))
     }
     var units = create_element('ol', unit_array, {class: 'levels-units'})
     var units_wrapper = create_element('div', units, {class: 'levels-units-wrapper'})
