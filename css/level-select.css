@@ -114,9 +114,11 @@
         top: 100%;
         clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
     }
-    li:has(:focus-visible) .level-tooltip,
- /* <--------- There's no other focus in this timeline ---------> <- but this one is hovered -> */
-    :is(.levels-units, .levels-lessons):not(:has(:focus-visible)) li:has(:hover) .level-tooltip {
+    /* Show the tooltip if:
+       1. The level is hovered
+       2. The level is focused, and nothing else in the timeline is hovered */
+    li:has(:hover) .level-tooltip,
+    :is(.levels-units, .levels-lessons):not(:has(:hover)) li:has(:focus-visible) .level-tooltip {
         display: block;
     }
     
