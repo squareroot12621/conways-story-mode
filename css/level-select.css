@@ -102,6 +102,7 @@
         background-color: var(--gray-5);
         padding: 0.375rem 0.625rem;
         border-radius: 0.625rem;
+        display: none; /* Gets overwritten when hovered or focused */
     }
     .level-tooltip::after {
         position: absolute;
@@ -112,6 +113,11 @@
         background-color: var(--gray-5);
         top: 100%;
         clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
+    }
+    li:has(:focus-visible) .level-tooltip,
+ /* <--There's no other focus in this timeline---> <--but this one is hovered--> */
+    :is(.units, .levels):not(:has(:focus-visible)) li:has(:hover) .level-tooltip {
+        display: block;
     }
     
     li.level-locked {
