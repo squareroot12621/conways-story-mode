@@ -66,7 +66,6 @@
         }
     }
     button.level {
-        outline: 0.125rem solid var(--gray);
         --button-bg: var(--gray-5);
         border-radius: 1.25rem;
         width: 100%;
@@ -75,8 +74,10 @@
         line-height: 2.5rem;
         border: none;
         padding: 0rem;
+        outline: 0.125rem solid var(--gray);
         &:focus-visible {
-            outline: none; /* This is done on the surrounding li element */
+            outline: 0.125rem solid var(--gray);
+            /* The real focus indicator is done on the surrounding li element */
         }
     }
     .levels-lessons li:is(:first-child, :last-child)::before {
