@@ -1,3 +1,5 @@
+import {update_tooltip_locations} from './level-select.js'
+
 function create_element(tag, content=[], attributes={}) {
     var element = document.createElement(tag)
     if (content instanceof Array) {
@@ -35,6 +37,11 @@ function resize_root() {
         var current_heading_width = 100 - (100 - heading_width) / (1.6 ** (heading_type - 1))
         heading.style.setProperty('font-stretch', current_heading_width + '%')
         heading.style.setProperty('font-width', current_heading_width + '%')
+    }
+
+    // Update the tooltips (if they exist)
+    if (document.getElementsByClassName('levels-units').length) {
+        update_tooltip_locations()
     }
 }
 
