@@ -41,6 +41,7 @@ function update_tooltip_locations() {
     var root_width = document.getElementById('conways-story-mode').getBoundingClientRect().width
     var units_wrapper = document.getElementsByClassName('levels-units-wrapper')[0]
     var units_wrapper_width = units_wrapper.getBoundingClientRect().width
+                              - units_wrapper.style.paddingRight
     units_wrapper.style.paddingRight = (root_width - units_wrapper_width) + 'px'
     
     // If needed, move the tooltips so they don't go off the screen
