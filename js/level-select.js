@@ -29,6 +29,26 @@ function create_level_select() {
                 units_heading, units_wrapper,
                 lessons_heading, lessons_wrapper)
 
+    // If needed, move the tooltips so they don't go off the screen
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize)
+    var edge_buffer = 0.5 * rem
+    for (var tooltip of document.getElementsByClassName('level-tooltip')) {
+        var container = tooltip.closest('ol')
+        tooltip.style.display = 'block' // getBoundingClientRect doesn't work with display: none;
+        var tooltip_rect = tooltip.getBoundingClientRect()
+        tooltip.style.removeProperty('display')
+        var container_rect = container.getBoundingClientRect()
+
+        var left_distance = tooltip_rect.left - container_rect.left
+        var right_distance = tooltip_rect.right - container_rect.right
+        if (left_distance < edge_buffer) {
+            tooltip.style.setProperty('--tooltip-offset', edge_buffer - left_distance)
+        }
+        if (right_distance < edge_buffer) {
+            tooltip.style.setProperty('--tooltip-offset', edge_buffer - right_distance)
+        }
+    }
+    
     back_button.addEventListener('click', create_main_menu)
 }
 
