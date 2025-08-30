@@ -40,7 +40,7 @@ function create_level_select() {
         var container_rect = container.getBoundingClientRect()
 
         var left_distance = tooltip_rect.left - container_rect.left
-        var right_distance = tooltip_rect.right - container_rect.right
+        var right_distance = container_rect.right - tooltip_rect.right
         if (left_distance < edge_buffer) {
             tooltip.style.setProperty('--tooltip-offset', edge_buffer - left_distance)
         }
