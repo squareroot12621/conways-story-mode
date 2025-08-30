@@ -29,6 +29,12 @@ function create_level_select() {
                 units_heading, units_wrapper,
                 lessons_heading, lessons_wrapper)
 
+    update_tooltip_locations()
+    
+    back_button.addEventListener('click', create_main_menu)
+}
+
+function update_tooltip_locations() {
     /* Add padding-right to .levels-units-wrapper to keep it at 100% width.
        This ensures that the last tooltip won't break out of the wrapper,
        putting a scroll bar where it definitely shouldn't be. */
@@ -62,8 +68,6 @@ function create_level_select() {
             tooltip.style.setProperty('--tooltip-offset', right_distance - edge_buffer)
         }
     }
-    
-    back_button.addEventListener('click', create_main_menu)
 }
 
-export {create_level_select}
+export {create_level_select, update_tooltip_locations}
