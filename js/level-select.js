@@ -45,7 +45,7 @@ function create_level_select() {
             tooltip.style.setProperty('--tooltip-offset', edge_buffer - left_distance)
         }
         if (right_distance < edge_buffer) {
-            tooltip.style.setProperty('--tooltip-offset', edge_buffer - right_distance)
+            tooltip.style.setProperty('--tooltip-offset', right_distance - edge_buffer)
         }
     }
     
