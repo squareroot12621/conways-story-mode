@@ -44,9 +44,8 @@ function create_level_select() {
         tooltip.style.display = 'block' // getBoundingClientRect doesn't work with display: none;
         var tooltip_rect = tooltip.getBoundingClientRect()
         tooltip.style.removeProperty('display')
-        var ol_rect = tooltip.closest('ol').getBoundingClientRect()
-        // var root_rect = document.getElementById('conways-story-mode').getBoundingClientRect()
-        var container_rect = ol_rect // ol_rect.width > root_rect.width ? ol_rect : root_rect
+        var container = tooltip.closest('.levels-units-wrapper, .levels-lessons-wrapper')
+        var container_rect = container.getBoundingClientRect()
 
         var left_distance = tooltip_rect.left - container_rect.left
         var right_distance = container_rect.right - tooltip_rect.right
