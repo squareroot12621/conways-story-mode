@@ -33,11 +33,12 @@ function create_level_select() {
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize)
     var edge_buffer = 0.5 * rem
     for (var tooltip of document.getElementsByClassName('level-tooltip')) {
-        var container = tooltip.closest('ol')
         tooltip.style.display = 'block' // getBoundingClientRect doesn't work with display: none;
         var tooltip_rect = tooltip.getBoundingClientRect()
         tooltip.style.removeProperty('display')
-        var container_rect = container.getBoundingClientRect()
+        var ol_rect = tooltip.closest('ol').getBoundingClientRect()
+        var root_rect = document.getElementById('conways-story-mode').getBoundingClientRect()
+        var container_rect = ol_rect.width > root_rect.width ? ol_rect : root_rect
 
         var left_distance = tooltip_rect.left - container_rect.left
         var right_distance = container_rect.right - tooltip_rect.right
