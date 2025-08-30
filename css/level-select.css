@@ -132,7 +132,7 @@
        1. The level is hovered
        2. The level is focused, and nothing else in the timeline is hovered */
     li:has(:hover) .level-tooltip,
-    :is(.levels-units, .levels-lessons):not(:has(:hover)) li:has(:focus-visible) .level-tooltip {
+    :is(.levels-units, .levels-lessons):not(:has(li *:hover)) li:has(:focus-visible) .level-tooltip {
         display: block;
     }
     
