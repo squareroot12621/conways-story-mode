@@ -112,13 +112,13 @@
         border-radius: 0.625rem;
         display: none; /* Gets overwritten when hovered or focused */
         left: 50%;
-        transform: translateX(calc(var(--tooltip-offset, 0) - 50%));
+        transform: translateX(calc(1px * var(--tooltip-offset, 0) - 50%));
     }
     .level-tooltip::after {
         position: absolute;
         content: '';
         left: calc(50% - 0.75rem);
-        transform: translateX(calc(-1 * var(--tooltip-offset, 0)));
+        transform: translateX(calc(-1px * var(--tooltip-offset, 0)));
         width: 1.5rem;
         height: 1.5rem;
         background-color: var(--gray-5);
