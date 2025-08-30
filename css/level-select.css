@@ -112,33 +112,18 @@
         border-radius: 0.625rem;
         display: none; /* Gets overwritten when hovered or focused */
         left: 50%;
-        transform: translateX(-50%);
-    }
-    li:first-child .level-tooltip {
-        left: -0.125rem;
-        transform: none;
-    }
-    li:last-child .level-tooltip {
-        left: auto;
-        right: -0.125rem;
-        transform: none;
+        transform: translateX(calc(var(--tooltip-offset, 0) - 50%));
     }
     .level-tooltip::after {
         position: absolute;
         content: '';
         left: calc(50% - 0.75rem);
+        transform: translateX(calc(-1 * var(--tooltip-offset, 0)));
         width: 1.5rem;
         height: 1.5rem;
         background-color: var(--gray-5);
         top: calc(100% - 0.0625rem);
         clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
-    }
-    li:first-child .level-tooltip::after {
-        left: 0.625rem;
-    }
-    li:last-child .level-tooltip::after {
-        left: auto;
-        right: 0.625rem;
     }
     /* Show the tooltip if:
        1. The level is hovered
