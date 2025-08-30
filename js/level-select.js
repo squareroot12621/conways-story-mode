@@ -29,6 +29,14 @@ function create_level_select() {
                 units_heading, units_wrapper,
                 lessons_heading, lessons_wrapper)
 
+    /* Add padding-right to .levels-units-wrapper to keep it at 100% width.
+       This ensures that the last tooltip won't break out of the wrapper,
+       putting a scroll bar where it definitely shouldn't be. */
+    var root_width = document.getElementById('conways-story-mode').getBoundingClientRect().width
+    var units_wrapper = document.getElementsByClassName('levels-units-wrapper')[0]
+    var units_wrapper_width = units_wrapper.getBoundingClientRect().width
+    units_wrapper.style.paddingRight = (root_width - units_wrapper_width) + 'px'
+    
     // If needed, move the tooltips so they don't go off the screen
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize)
     var edge_buffer = 0.5 * rem
@@ -37,15 +45,14 @@ function create_level_select() {
         var tooltip_rect = tooltip.getBoundingClientRect()
         tooltip.style.removeProperty('display')
         var ol_rect = tooltip.closest('ol').getBoundingClientRect()
-        var root_rect = document.getElementById('conways-story-mode').getBoundingClientRect()
-        var container_rect = ol_rect.width > root_rect.width ? ol_rect : root_rect
+        // var root_rect = document.getElementById('conways-story-mode').getBoundingClientRect()
+        var container_rect = ol_rect // ol_rect.width > root_rect.width ? ol_rect : root_rect
 
         var left_distance = tooltip_rect.left - container_rect.left
         var right_distance = container_rect.right - tooltip_rect.right
         if (left_distance < edge_buffer) {
             tooltip.style.setProperty('--tooltip-offset', edge_buffer - left_distance)
         }
-        console.log((right_distance < edge_buffer ? '! ' : '  ') + right_distance) //DEBUG
         if (right_distance < edge_buffer) {
             tooltip.style.setProperty('--tooltip-offset', right_distance - edge_buffer)
         }
