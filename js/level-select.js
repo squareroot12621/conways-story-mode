@@ -44,8 +44,14 @@ function create_level_select() {
         tooltip.style.display = 'block' // getBoundingClientRect doesn't work with display: none;
         var tooltip_rect = tooltip.getBoundingClientRect()
         tooltip.style.removeProperty('display')
-        var container = tooltip.closest('.levels-units-wrapper, .levels-lessons-wrapper')
-        var container_rect = container.getBoundingClientRect()
+        if (tooltip.closest('.levels-units-wrapper')) {
+            var units_wrapper = tooltip.closest('.levels-units-wrapper').getBoundingClientRect()
+            var units = tooltip.closest('.levels-units').getBoundingClientRect()
+            var container_rect = units_wrapper.width > units.width ? units_wrapper : units
+        } else {
+            var container = tooltip.closest('.levels-lessons-wrapper')
+            var container_rect = container.getBoundingClientRect()
+        }
 
         var left_distance = tooltip_rect.left - container_rect.left
         var right_distance = container_rect.right - tooltip_rect.right
