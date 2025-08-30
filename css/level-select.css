@@ -114,15 +114,18 @@
         left: 50%;
         transform: translateX(calc(1px * var(--tooltip-offset, 0) - 50%));
     }
-    .level-tooltip::after {
+    .level-tooltip::before, .level-tooltip::after {
         position: absolute;
         content: '';
         left: calc(50% - 0.75rem);
         transform: translateX(calc(-1px * var(--tooltip-offset, 0)));
         width: 1.5rem;
         height: 1.5rem;
-        background-color: var(--gray-5);
         top: calc(100% - 0.0625rem);
+    }
+    /* ::before is the bounding box hack, ::after is what's shown */
+    .level-tooltip::after {
+        background-color: var(--gray-5);
         clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
     }
     /* Show the tooltip if:
