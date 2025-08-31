@@ -70,6 +70,8 @@ function update_tooltip_locations() {
             tooltip.style.setProperty('--tooltip-offset', right_distance - edge_buffer)
         }
     }
+
+    console.log('Moved tooltips') //DEBUG
 }
 
 export {create_level_select, update_tooltip_locations}
