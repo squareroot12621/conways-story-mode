@@ -44,6 +44,8 @@ function update_tooltip_locations() {
     var units_wrapper_width = units_wrapper.getBoundingClientRect().width
                               - units_wrapper.style.paddingRight
     units_wrapper.style.paddingRight = (root_width - units_wrapper_width) + 'px'
+
+    console.log(`Changed padding to ${root_width - units_wrapper_width}px`) //DEBUG
     
     // If needed, move the tooltips so they don't go off the screen
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize)
