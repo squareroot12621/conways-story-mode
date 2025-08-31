@@ -42,7 +42,6 @@ function update_tooltip_locations() {
     var units_wrapper = document.getElementsByClassName('levels-units-wrapper')[0]
     units_wrapper.style.paddingRight = '0px' // Reset padding temporarily
     var units_wrapper_width = units_wrapper.getBoundingClientRect().width
-                              - units_wrapper.style.paddingRight
     units_wrapper.style.paddingRight = (root_width - units_wrapper_width) + 'px'
 
     console.log(`Changed padding to ${root_width - units_wrapper_width}px`) //DEBUG
