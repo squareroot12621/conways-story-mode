@@ -135,6 +135,12 @@
     :is(.levels-units, .levels-lessons):not(:has(li *:hover)) li:has(:focus-visible) .level-tooltip {
         display: block;
     }
+
+    li.level-completed .level {
+        background-color: var(--primary-10);
+        color: var(--text-primary-color);
+        outline-color: var(--primary-50);
+    }
     
     li.level-locked {
         pointer-events: none;
