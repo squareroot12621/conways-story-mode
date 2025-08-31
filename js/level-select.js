@@ -39,12 +39,12 @@ function update_tooltip_locations() {
        This ensures that the last tooltip won't break out of the wrapper,
        putting a scroll bar where it definitely shouldn't be. */
     var root_width = document.getElementById('conways-story-mode').getBoundingClientRect().width
-    var units_wrapper = document.getElementsByClassName('levels-units-wrapper')[0]
-    units_wrapper.style.paddingRight = '0px' // Reset padding temporarily
-    var units_wrapper_width = units_wrapper.getBoundingClientRect().width
-    units_wrapper.style.paddingRight = (root_width - units_wrapper_width) + 'px'
-
-    console.log(`Changed padding to ${root_width - units_wrapper_width}px`) //DEBUG
+    for (var timeline_class of ['levels-units-wrapper', 'levels-lessons-wrapper']) {
+        var wrapper = document.getElementsByClassName(timeline_class)[0]
+        wrapper.style.paddingRight = '0px' // Reset padding temporarily
+        var wrapper_width = wrapper.getBoundingClientRect().width
+        wrapper.style.paddingRight = (root_width - wrapper_width) + 'px'
+    }
     
     // If needed, move the tooltips so they don't go off the screen
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize)
@@ -54,13 +54,15 @@ function update_tooltip_locations() {
         var tooltip_rect = tooltip.getBoundingClientRect()
         tooltip.style.removeProperty('display')
         if (tooltip.closest('.levels-units-wrapper')) {
-            var units_wrapper = tooltip.closest('.levels-units-wrapper').getBoundingClientRect()
-            var units = tooltip.closest('.levels-units').getBoundingClientRect()
-            var container_rect = units_wrapper.width > units.width ? units_wrapper : units
+            var wrapper_class = '.levels-units-wrapper'
+            var inner_class = '.levels-units'
         } else {
-            var container = tooltip.closest('.levels-lessons-wrapper')
-            var container_rect = container.getBoundingClientRect()
+            var wrapper_class = '.levels-lessons-wrapper'
+            var inner_class = '.levels-lessons'
         }
+        var wrapper = tooltip.closest(wrapper_class).getBoundingClientRect()
+        var inner = tooltip.closest(inner_class).getBoundingClientRect()
+        var container_rect = wrapper.width > inner.width ? wrapper : inner
 
         var left_distance = tooltip_rect.left - container_rect.left
         var right_distance = container_rect.right - tooltip_rect.right
@@ -71,8 +73,6 @@ function update_tooltip_locations() {
             tooltip.style.setProperty('--tooltip-offset', right_distance - edge_buffer)
         }
     }
-
-    console.log('Moved tooltips') //DEBUG
 }
 
 export {create_level_select, update_tooltip_locations}
