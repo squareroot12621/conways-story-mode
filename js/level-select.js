@@ -51,6 +51,7 @@ function update_tooltip_locations() {
     var edge_buffer = 0.5 * rem
     for (var tooltip of document.getElementsByClassName('level-tooltip')) {
         tooltip.style.display = 'block' // getBoundingClientRect doesn't work with display: none;
+        tooltip.style.setProperty('--tooltip-offset', 0) // We also need to reset this
         var tooltip_rect = tooltip.getBoundingClientRect()
         tooltip.style.removeProperty('display')
         if (tooltip.closest('.levels-units-wrapper')) {
