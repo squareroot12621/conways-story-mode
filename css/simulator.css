@@ -32,6 +32,10 @@
       top: -0.0625rem;
     }
   }
+  .simulator-sidebar-bottom .invisible-button:last-child {
+    --button-bg: var(--error-90);
+    --button-fg: var(--error-20);
+  }
   
   .simulator-sidebar-main {
     padding: 0rem 0.75rem 0.5rem;
