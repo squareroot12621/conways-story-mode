@@ -1,0 +1,107 @@
+{
+  "unit": 1,
+  "lesson": 1,
+  "name": {
+    "en-US": "What Is CGoL?",
+    "en-GB": "What Is CGoL?",
+    "en": "What Is CGoL?"
+  },
+  "text": {
+    "en-US": [
+      {
+        "text": [
+          "Conway's Game of Life is a \"zero-player game,\" devised by mathematician John Conway in 1969."
+        ]
+      },
+      {
+        "text": [
+          "CGoL, as we'll call it, operates on an infinite square grid. Each square in this grid is called a ",
+          {"format": ["italic"], "text": "cell"},
+          "."
+        ]
+      },
+      {
+        "text": [
+          "Each cell can have two states: alive and dead. We'll mark alive cells in light colors, and dead cells in dark colors."
+        ]
+      },
+      {
+        "text": [
+          "In CGoL, you set up some configuration of alive and dead cells (called a ",
+          {"format": ["italic"], "text": "pattern"},
+          ") at the start."
+        ]
+      },
+      {
+        "text": [
+          "After that, each cell changes according to its own state, as well as the states of its ",
+          {"format": ["italic"], "text": "neighbors"},
+          "."
+        ]
+      },
+      {
+        "text": [
+          "A cell has 8 neighbors, arranged in a ring. Here, the green cells are neighbors of the white cell:"
+        ],
+        "player": {
+          "pattern": "3E$EAE$3E",
+          "grid_size": 16,
+          "width": 140,
+          "height": 140,
+          "zoom": 25,
+          "controls": false
+        }
+      },
+      {
+        "text": [
+          "You'll learn more about the rules that the cells follow to change state in the next lesson, Lesson 2."
+        ]
+      },
+      {
+        "text": [
+          "For now, though, you'll just be given a question to answer. Don't worry, it's not that hard."
+        ]
+      }
+    ]
+  },
+  "quiz": {
+    "questions": {
+      "en-US": [
+        {
+          "question": "Which pattern has more alive cells?",
+          "answers": [
+            {
+              "player": {
+                "pattern": ".A$.A$.A$A",
+                "grid_size": 16,
+                "width": 120,
+                "height": 160,
+                "zoom": 20,
+                "controls": false
+              },
+              "correct": false,
+              "choose_text": [
+                "Oops! This only has 4 alive cells, which is smaller than the 10 alive cells that B has."
+              ]
+            },
+            {
+              "player": {
+                "pattern": "A$A.A$A$A2.A$.2A$.A.A",
+                "grid_size": 16,
+                "width": 120,
+                "height": 160,
+                "zoom": 20,
+                "controls": false
+              },
+              "correct": true,
+              "choose_text": [
+                "Great job! B does have more cells than A, with 10 alive cells compared to 4."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "questions_per_star": [0, 1, 1]
+  }
+}
