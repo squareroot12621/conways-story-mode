@@ -56,8 +56,33 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var sidebar = create_element(
     'section', [sidebar_top, sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'}
   )
-  
-  var simulator = create_element('section', [ /* TODO: FINISH */ ], {class: 'simulator-main'})
+
+  var tool_selector = create_element('select', 'Object', {class: 'simulator-tool'})
+  var tool_options = create_element('select', 'Options', {class: 'simulator-tool-options'})
+  var tool_wrapper = create_element('div', [tool_selector, tool_options], {class: 'simulator-toolbar-item'})
+  var gen_0_button = create_element('button', 'Reset', {class: 'simulator-toolbar-item'})
+  var step_button = create_element('button', 'Step', {class: 'simulator-toolbar-item'})
+  var play_button = create_element('button', 'Play', {class: 'simulator-toolbar-item'})
+  var slider_thumb = create_element('div', [], {class: 'slider-thumb'})
+  var slider_track = create_element('div', slider_thumb, {class: 'slider-track'})
+  var slider_true = create_element('input', [], {
+    type: 'range',
+    min: 0,
+    max: 1,
+    value: Math.log(5) / Math.log(60), // log_60(5)
+    step: 'any',
+    class: 'slider-true'
+  })
+  var slider_value = create_element('div', '5/s', {class: 'slider-value'})
+  var slider_wrapper = create_element(
+    'div', [slider_track, slider_true, slider_value], {class: 'simulator-toolbar-item slider-wrapper'}
+  )
+  var toolbar_top = create_element(
+    'section',
+    [tool_wrapper, gen_0_button, step_button, play_button, slider_wrapper],
+    {class: 'simulator-toolbar-top'},
+  )
+  var simulator = create_element('section', [toolbar_top, /* TODO: FINISH */ ], {class: 'simulator-main'})
 
   var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
   update_root(simulator_wrapper)
