@@ -36,6 +36,8 @@
   .simulator-sidebar-main {
     padding: 0rem 0.75rem 0.5rem;
     flex: 1;
+    overflow-y: auto;
+    color-scheme: light;
   }
   .simulator-sidebar h3 {
     margin-block: 0rem;
