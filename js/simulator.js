@@ -60,8 +60,8 @@ function directionalize_menu_arrows() {
   var root = document.getElementById('conways-story-mode')
   var portrait = root.getAttribute('data-portrait') === 'true'
   var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')
-  var close_menu_icon = sidebar_top.children[1].children[0]
-  close_menu_icon.replaceChildren(portrait ? 'arrow_drop_up' : 'arrow_left')
+  /*var close_menu_icon = sidebar_top.children[1].children[0]
+  close_menu_icon.replaceChildren(portrait ? 'arrow_drop_up' : 'arrow_left')*/ // DEBUG
 }
 
 export {create_cgol_simulator, directionalize_menu_arrows}
