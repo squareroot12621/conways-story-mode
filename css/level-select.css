@@ -137,8 +137,8 @@
     }
 
     li.level-completed .level {
-        background-color: var(--primary-10);
-        color: var(--text-primary-color);
+        --button-bg: var(--primary-10);
+        --button-fg: var(--text-primary-color);
         outline-color: var(--primary-50);
     }
     
