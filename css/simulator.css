@@ -12,6 +12,7 @@
     flex-direction: column;
     min-width: 16rem;
   }
+  
   .simulator-sidebar-top {
     display: flex;
     justify-content: space-between;
@@ -27,6 +28,7 @@
       top: -0.0625rem;
     }
   }
+  
   .simulator-sidebar-main {
     padding: 0rem 0.75rem 0.5rem;
     flex: 1;
@@ -36,6 +38,10 @@
   }
   .simulator-mission-wrapper {
     margin-bottom: 1rem;
+  }
+  .simulator-library-list {
+    list-style-type: none;
+    padding-left: 0;
   }
   .simulator-library-empty {
     font-style: italic;
