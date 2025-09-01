@@ -1,0 +1,102 @@
+{
+  "unit": 1,
+  "lesson": 2,
+  "name": {
+    "en-US": "What Do Cells Do?",
+    "en-GB": "What Do Cells Do?",
+    "en": "What Do Cells Do?"
+  },
+  "text": {
+    "en-US": [
+      {
+        "text": [
+          "Last lesson, you learned that CGoL is made of cells that, collectively, make up a square grid."
+        ]
+      },
+      {
+        "text": [
+          "However, when you place the cells down, they don't just sit around doing nothing all day."
+        ]
+      },
+      {
+        "text": [
+          "Instead, the entire grid goes through ",
+          {"format": ["italic"], "text": "generations"},
+          ", or iterations, which happen to every cell at once."
+        ]
+      },
+      {
+        "text": [
+          "During a generation, each cell changes state according a few simple rules:"
+        ]
+      },
+      {
+        "text": [
+          {"format": ["bold"], "text": "1."},
+          " If an alive cell is surrounded by two or three other alive cells, it stays alive."
+        ]
+      },
+      {
+        "text": [
+          {"format": ["bold"], "text": "2."},
+          " If a dead cell is surrounded by exactly three alive cells, it becomes alive."
+        ]
+      },
+      {
+        "text": [
+          {"format": ["bold"], "text": "3."},
+          " All other cells become dead. (So tragic.)"
+        ]
+      },
+      {
+        "text": [
+          "Fortunately, in this program, you won't have to simulate any patterns yourself\u2014the computer will."
+        ]
+      },
+      {
+        "text": [
+          "This lesson has an exercise, and in it, you'll just get to know the CGoL Simulator."
+        ]
+      },
+      {
+        "text": [
+          "To finish the exercise, all you'll have to do is run a certain pattern to a certain point."
+        ]
+      }
+    ]
+  },
+  "exercise": {
+    "pattern": ".A2.A$2A$A3.A$2A2.A$.A.2A$2.A",
+    "library": [],
+    "objective": {
+      "en-US": [
+        "This is the CGoL Simulator. All you have to do here is run this sample pattern for 100 generations. You can see the generation number by pressing the ",
+        {"symbol": "bar_chart"},
+        " button."
+      ]
+    },
+    "hints": {
+      "en-US": [
+        [
+          "You can run the pattern by pressing the ",
+          {"symbol": "play_arrow"},
+          " button."
+        ]
+      ]
+    },
+    "win_conditions": {
+      "generation_checked": 0,
+      "generation_run": 100
+    },
+    "star_conditions": [
+      {},
+      {},
+      {}
+    ],
+    "win_text": {
+      "en-US": [
+        "Great job! You'll learn more about what the pattern created in the next lesson."
+      ]
+    }
+  }
+}
