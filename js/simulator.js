@@ -40,7 +40,11 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     objective === null ? [library_wrapper] : [mission_wrapper, library_wrapper],
     {class: 'simulator-sidebar-main'}
   )
-  var sidebar_bottom = create_element('div', [ /* TODO: FINISH */ ], {class: 'simulator-sidebar-bottom'})
+  var lightbulb_icon = create_element('span', 'lightbulb_2', {class: 'icon', alt: 'Show hint'})
+  var hint_button = create_element('button', lightbulb_icon, {class: 'invisible-button'})
+  var reset_icon = create_element('span', 'replay', {class: 'icon', alt: 'Reset level'})
+  var reset_button = create_element('button', reset_icon, {class: 'invisible-button'})
+  var sidebar_bottom = create_element('div', [hint_button, reset_button], {class: 'simulator-sidebar-bottom'})
   var sidebar = create_element(
     'section', [sidebar_top, sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'}
   )
