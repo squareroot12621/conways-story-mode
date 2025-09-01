@@ -38,7 +38,7 @@
   }
   
   /* Shamelessly stolen from level-select.css */
-  button:has(.hint-tooltip) {
+  .hint-button:has(.hint-tooltip) {
     position: relative;
   }
   .hint-tooltip {
@@ -70,7 +70,7 @@
     background-color: var(--gray-5);
     clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
   }
-  button:is(:hover, :focus-visible) .hint-tooltip {
+  .hint-button:is(:hover, :focus-visible) .hint-tooltip {
     display: block;
   }
   
