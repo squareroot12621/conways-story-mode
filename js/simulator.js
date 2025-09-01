@@ -3,7 +3,7 @@ import {create_element, update_root} from './utilities.js'
 function create_cgol_simulator(sandbox, objective=null, library=null) {
   if (objective !== null) {
     var mission_icon = create_element('span', 'list_alt', {class: 'icon'})
-    var mission_heading = create_element('h3', [mission_icon, 'MISSION'])
+    var mission_heading = create_element('h3', [mission_icon, ' Mission'])
     var mission_text = []
     for (line of objective.split('\n')) {
       mission_text.push(create_element('p', line))
@@ -12,13 +12,19 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       'div', [mission_heading].concat(mission_text), {class: 'simulator-mission-wrapper'}
     )
   }
+  library ??= [] // TODO: Change to everything you've learned so far
   var library_icon = create_element('span', 'menu_book', {class: 'icon'})
-  var library_heading = create_element('h3', [library_icon, 'LIBRARY'])
-  var library_items = []
-  for (object of library ?? []) {
-    library_items.push(create_element(`${object.count}\u00DF ${object.name['en-US']}`))
+  var library_heading = create_element('h3', [library_icon, ' Library'])
+  if (library.length) {
+    var library_items = []
+    for (object of library) {
+      var item_name = `${object.count}\u00DF ${object.id}`
+      library_items.push(create_element('li', item_name))
+    }
+    var library_list = create_element('ul', library_items, {class: 'simulator-library-list'})
+  } else {
+    var library_list = create_element('p', 'No objects.', {class: 'simulator-library-empty'})
   }
-  var library_list = create_element('ul', library_items, {class: 'simulator-library-list'})
   var library_wrapper = create_element(
     'div', [library_heading].concat(library_list), {class: 'simulator-library-wrapper'}
   )
