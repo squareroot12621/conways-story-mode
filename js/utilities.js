@@ -20,8 +20,11 @@ function update_root(...elements) {
 }
 
 function resize_root() {
-    // Squish headings on small screens
+    // Add a data-portrait attribute to #conways-story-mode
     var root = document.getElementById('conways-story-mode')
+    root.setAttribute('data-portrait', (root.clientWidth <= root.clientHeight).toString())
+    
+    // Squish headings on small screens
     var width = document.getElementsByClassName('body-wrapper')[0].clientWidth
     if (width >= 640) {
         var heading_width = 100
