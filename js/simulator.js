@@ -53,7 +53,10 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   directionalize_menu_arrows()
   
   back_button.addEventListener('click', create_main_menu)
-  close_menu_button.addEventListener('click', () => { /* TODO: FINISH */ })
+  close_menu_button.addEventListener('click', () => {
+    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
+    // TODO: Make open_menu_button.style.display = 'block'
+  })
 }
 
 function directionalize_menu_arrows() {
