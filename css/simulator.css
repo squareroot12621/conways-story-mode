@@ -17,17 +17,17 @@
     min-height: 14rem;
   }
   
-  .simulator-sidebar-top {
+  .simulator-sidebar-top, .simulator-sidebar-bottom {
     display: flex;
     justify-content: space-between;
   }
-  .simulator-sidebar-top button {
+  :is(.simulator-sidebar-top, .simulator-sidebar-bottom) button {
     --button-bg: var(--gray-90);
     --button-fg: var(--gray-10);
   }
-  .simulator-sidebar-top .invisible-button {
-    padding: 0rem 0.0625rem;
-    font-size: 1.5rem;
+  :is(.simulator-sidebar-top, .simulator-sidebar-bottom) .invisible-button {
+    padding: 0.0625rem 0.125rem;
+    font-size: 1.375rem;
     .icon {
       top: -0.0625rem;
     }
