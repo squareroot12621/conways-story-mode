@@ -41,7 +41,7 @@ function create_main_menu() {
 
     buttons[0].addEventListener('click', create_level_select) // Play
     buttons[1].addEventListener('click', () => {
-        create_cgol_simulator(sandbox=true)
+        create_cgol_simulator(true)
     }) // Sandbox
 }
 
