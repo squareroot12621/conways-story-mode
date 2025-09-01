@@ -16,18 +16,15 @@
     display: flex;
     justify-content: space-between;
   }
-  .simulator-sidebar-top .back-button {
+  .simulator-sidebar-top button {
     --button-bg: var(--gray-90);
     --button-fg: var(--gray-10);
-    &:last-child {
-      padding: 0rem 0.0625rem;
-      font-size: 1.5rem;
-      &:not(:hover) {
-        background-color: transparent;
-      }
-      .icon {
-        top: -0.0625rem;
-      }
+  }
+  .simulator-sidebar-top .invisible-button {
+    padding: 0rem 0.0625rem;
+    font-size: 1.5rem;
+    .icon {
+      top: -0.0625rem;
     }
   }
   .simulator-sidebar-main {
