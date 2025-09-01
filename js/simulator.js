@@ -2,7 +2,7 @@ import {create_element, update_root} from './utilities.js'
 
 function create_cgol_simulator(sandbox, objective=null, library=null) {
   if (objective !== null) {
-    var mission_icon = create_element('span', 'list_alt', {class: 'icon'})
+    var mission_icon = create_element('span', 'list_alt', {class: 'icon', alt: ''})
     var mission_heading = create_element('h3', [mission_icon, ' Mission'])
     var mission_text = []
     for (line of objective.split('\n')) {
@@ -13,7 +13,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     )
   }
   library ??= [] // TODO: Change to everything you've learned so far
-  var library_icon = create_element('span', 'menu_book', {class: 'icon'})
+  var library_icon = create_element('span', 'menu_book', {class: 'icon', alt: ''})
   var library_heading = create_element('h3', [library_icon, ' Library'])
   if (library.length) {
     var library_items = []
@@ -38,8 +38,9 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var sidebar = create_element('section', [sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'})
   
   var simulator = create_element('section', [ /* TODO: FINISH */ ], {class: 'simulator-main'})
-  
-  update_root(sidebar, simulator)
+
+  var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
+  update_root(simulator_wrapper)
 }
 
 export {create_cgol_simulator}
