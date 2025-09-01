@@ -28,14 +28,20 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var library_wrapper = create_element(
     'div', [library_heading].concat(library_list), {class: 'simulator-library-wrapper'}
   )
-  
+
+  var back_icon = create_element('span', 'arrow_back', {class: 'icon', alt: ''})
+  var back_button = create_element('button', [back_icon, ' Back'], {class: 'back-button'})
+  var close_menu_button = create_element('button', 'arrow_menu_close', {class: 'icon', alt: 'Close menu'})
+  var sidebar_top = create_element('div', [back_button, close_menu_button], {class: 'simulator-sidebar-top'})
   var sidebar_main = create_element(
     'div',
     objective === null ? [library_wrapper] : [mission_wrapper, library_wrapper],
-    {class: 'simulator_sidebar_main'}
+    {class: 'simulator-sidebar-main'}
   )
-  var sidebar_bottom = create_element('div', [ /* TODO: FINISH */ ], {class: 'simulator_sidebar_bottom'})
-  var sidebar = create_element('section', [sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'})
+  var sidebar_bottom = create_element('div', [ /* TODO: FINISH */ ], {class: 'simulator-sidebar-bottom'})
+  var sidebar = create_element(
+    'section', [sidebar_top, sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'}
+  )
   
   var simulator = create_element('section', [ /* TODO: FINISH */ ], {class: 'simulator-main'})
 
