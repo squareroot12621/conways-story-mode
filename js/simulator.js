@@ -31,7 +31,8 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
   var back_icon = create_element('span', 'arrow_back', {class: 'icon', alt: ''})
   var back_button = create_element('button', [back_icon, ' Back'], {class: 'back-button'})
-  var close_menu_button = create_element('button', 'arrow_menu_close', {class: 'icon', alt: 'Close menu'})
+  var close_menu_icon = create_element('span', 'arrow_menu_close', {class: 'icon', alt: 'Close menu'})
+  var close_menu_button = create_element('button', close_menu_icon, {class: 'back-button'})
   var sidebar_top = create_element('div', [back_button, close_menu_button], {class: 'simulator-sidebar-top'})
   var sidebar_main = create_element(
     'div',
