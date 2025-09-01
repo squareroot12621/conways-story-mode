@@ -81,7 +81,7 @@
   }
   
   .simulator-sidebar-main {
-    padding: 0rem 0.75rem 0.5rem;
+    padding: 0rem 0.75rem;
     flex: 1;
     overflow-y: auto;
     color-scheme: light;
