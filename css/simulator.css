@@ -19,8 +19,9 @@
     }
   }
   .simulator-sidebar-main {
-    padding: 0.5rem 0.75rem;
+    padding: 0rem 0.75rem 0.5rem;
     flex: 1;
+    min-width: 16rem;
   }
   .simulator-sidebar h3 {
     margin-block: 0rem;
