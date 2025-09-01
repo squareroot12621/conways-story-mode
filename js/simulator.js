@@ -5,7 +5,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     var mission_icon = create_element('span', 'list_alt', {class: 'icon', alt: ''})
     var mission_heading = create_element('h3', [mission_icon, ' Mission'])
     var mission_text = []
-    for (line of objective.split('\n')) {
+    for (var line of objective.split('\n')) {
       mission_text.push(create_element('p', line))
     }
     var mission_wrapper = create_element(
