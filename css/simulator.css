@@ -37,6 +37,43 @@
     --button-fg: var(--error-20);
   }
   
+  /* Shamelessly stolen from level-select.css */
+  button:has(.hint-tooltip) {
+    position: relative;
+  }
+  .hint-tooltip {
+    position: absolute;
+    bottom: 3.75rem;
+    text-align: center;
+    font-size: 1.125rem;
+    max-width: 14rem;
+    min-width: 2.75rem;
+    width: max-content;
+    z-index: 20;
+    line-height: 1.2;
+    background-color: var(--gray-5);
+    padding: 0.375rem 0.625rem;
+    border-radius: 0.625rem;
+    display: none; /* Gets overwritten when hovered or focused */
+    left: -0.125rem;
+  }
+  .hint-tooltip::before, .hint-tooltip::after {
+    position: absolute;
+    content: '';
+    left: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: calc(100% - 0.0625rem);
+  }
+  /* ::before is the bounding box hack, ::after is what's shown */
+  .hint-tooltip::after {
+    background-color: var(--gray-5);
+    clip-path: polygon(0% 0%, 100% 0%, 50% 50%);
+  }
+  button:is(:hover, :focus-visible) .hint-tooltip {
+    display: block;
+  }
+  
   .simulator-sidebar-main {
     padding: 0rem 0.75rem 0.5rem;
     flex: 1;
