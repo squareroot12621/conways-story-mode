@@ -17,7 +17,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var library_heading = create_element('h3', [library_icon, ' Library'])
   if (library.length) {
     var library_items = []
-    for (object of library) {
+    for (var object of library) {
       var item_name = `${object.count}\u00DF ${object.id}`
       library_items.push(create_element('li', item_name))
     }
