@@ -38,12 +38,17 @@
   }
   
   /* Shamelessly stolen from level-select.css */
-  .hint-button:has(.hint-tooltip) {
+  .hint-button {
     position: relative;
+    margin: 0.5rem;
+    border-radius: 0.625rem;
+  }
+  .hint-button button {
+    margin: 0rem;
   }
   .hint-tooltip {
     position: absolute;
-    bottom: 3.75rem;
+    bottom: 3rem;
     text-align: center;
     font-size: 1.125rem;
     max-width: 14rem;
@@ -55,12 +60,13 @@
     padding: 0.375rem 0.625rem;
     border-radius: 0.625rem;
     display: none; /* Gets overwritten when hovered or focused */
-    left: -0.125rem;
+    left: -0.25rem;
+    color: var(--text-color);
   }
   .hint-tooltip::before, .hint-tooltip::after {
     position: absolute;
     content: '';
-    left: 1.5rem;
+    left: 0.4375rem;
     width: 1.5rem;
     height: 1.5rem;
     top: calc(100% - 0.0625rem);
