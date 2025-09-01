@@ -297,11 +297,14 @@ button {
     }
 }
 
-.back-button {
+.back-button, .invisible-button {
     margin: 0.5rem;
     font-size: 1.125rem;
     padding-left: 0.25rem;
     &:not(:hover) {
         border-color: transparent;
     }
+}
+.invisible-button:not(:hover) {
+    background-color: transparent;
 }
