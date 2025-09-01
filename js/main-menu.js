@@ -1,4 +1,5 @@
 import {create_level_select} from './level-select.js'
+import {create_cgol_simulator} from './simulator.js'
 import {create_element, update_root} from './utilities.js'
 
 function create_main_menu() {
@@ -39,6 +40,9 @@ function create_main_menu() {
     update_root(main_wrapper)
 
     buttons[0].addEventListener('click', create_level_select) // Play
+    buttons[1].addEventListener('click', () => {
+        create_cgol_simulator(sandbox=true)
+    }) // Sandbox
 }
 
 export {create_main_menu}
