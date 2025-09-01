@@ -1,3 +1,4 @@
+import {create_main_menu} from './main-menu.js'
 import {create_element, update_root} from './utilities.js'
 
 function create_cgol_simulator(sandbox, objective=null, library=null) {
@@ -48,6 +49,9 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
   var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
   update_root(simulator_wrapper)
+
+  back_button.addEventListener('click', create_main_menu)
+  close_menu_button.addEventListener('click', () => { /* TODO: FINISH */ })
 }
 
 export {create_cgol_simulator}
