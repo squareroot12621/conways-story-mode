@@ -2,6 +2,7 @@
 @import './loading.css';
 @import './main-menu.css';
 @import './level-select.css';
+@import './simulator.css';
 
 /* Inter */
 @font-face {
