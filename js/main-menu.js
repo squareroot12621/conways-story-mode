@@ -40,9 +40,7 @@ function create_main_menu() {
     update_root(main_wrapper)
 
     buttons[0].addEventListener('click', create_level_select) // Play
-    buttons[1].addEventListener('click', () => {
-        create_cgol_simulator(false, 'Test mission\nthat has multiple lines', [{count: 2, id: 'Block'}, {count: 3, id: 'Glider'}]) // TEST
-    }) // Sandbox
+    buttons[1].addEventListener('click', () => { create_cgol_simulator(true) }) // Sandbox
 }
 
 export {create_main_menu}
