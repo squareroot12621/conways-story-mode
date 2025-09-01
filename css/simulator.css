@@ -10,6 +10,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 16rem;
   }
   .simulator-sidebar-top .back-button {
     --button-bg: var(--gray-90);
@@ -21,7 +22,6 @@
   .simulator-sidebar-main {
     padding: 0rem 0.75rem 0.5rem;
     flex: 1;
-    min-width: 16rem;
   }
   .simulator-sidebar h3 {
     margin-block: 0rem;
