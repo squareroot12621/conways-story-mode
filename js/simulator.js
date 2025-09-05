@@ -2,6 +2,44 @@ import {create_main_menu} from './main-menu.js'
 import {create_element, update_root} from './utilities.js'
 
 function create_cgol_simulator(sandbox, objective=null, library=null) {
+  var sidebar = create_simulator_sidebar()
+  var simulator = create_simulator_main()
+  
+  var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
+  update_root(simulator_wrapper)
+
+  directionalize_menu_arrows()
+
+  /* Sidebar event handlers */
+  var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
+  var [back_button, close_menu_button] = sidebar_top.children
+  var sidebar_bottom = document.getElementsByClassName('simulator-sidebar-bottom')[0]
+  var hint_button = document.getElementsByClassName('hint-button')[0]?.children[0]
+  var reset_button = sidebar_bottom.children.at(-1)
+  back_button.addEventListener('click', create_main_menu)
+  close_menu_button.addEventListener('click', () => {
+    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
+    // TODO: Make open_menu_button.style.display = 'block'
+  })
+  if (!sandbox) {
+    hint_button.addEventListener('click', () => {
+      // TODO: Make the hint button show a hint
+    })
+  }
+  reset_button.addEventListener('click', () => {
+    // TODO: Reset the level after a confirmation
+  })
+
+  /* Simulator event handlers */
+  var simulator_speed = document.getElementById('simulator-speed')
+  var simulator_speed_button = document.getElementById('simulator-speed-button')
+  simulator_speed_button.addEventListener('click', () => {
+    simulator_speed.toggleAttribute('open')
+  })
+}
+
+
+function create_simulator_sidebar() {
   if (objective !== null) {
     var mission_icon = create_element('span', 'list_alt', {class: 'icon', alt: ''})
     var mission_heading = create_element('h3', [mission_icon, ' Mission'])
@@ -56,7 +94,12 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var sidebar = create_element(
     'section', [sidebar_top, sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'}
   )
+  
+  return sidebar
+}
 
+
+function create_simulator_main() {
   var tool_selector = create_element('select', 'Object', {id: 'simulator-tool'})
   var tool_options = create_element('select', 'Options', {id: 'simulator-tool-options'})
   var tool_wrapper = create_element('div', [tool_selector, tool_options], {class: 'simulator-toolbar-item'})
@@ -90,25 +133,9 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   )
   var simulator = create_element('section', [toolbar_top, /* TODO: FINISH */ ], {class: 'simulator-main'})
 
-  var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
-  update_root(simulator_wrapper)
-
-  directionalize_menu_arrows()
-  
-  back_button.addEventListener('click', create_main_menu)
-  close_menu_button.addEventListener('click', () => {
-    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
-    // TODO: Make open_menu_button.style.display = 'block'
-  })
-  if (!sandbox) {
-    hint_button.addEventListener('click', () => {
-      // TODO: Make the hint button show a hint
-    })
-  }
-  reset_button.addEventListener('click', () => {
-    // TODO: Reset the level after a confirmation
-  })
+  return simulator
 }
+
 
 function directionalize_menu_arrows() {
   var root = document.getElementById('conways-story-mode')
