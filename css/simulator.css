@@ -133,7 +133,6 @@
       background-color: transparent;
     }
     font-family: 'Material Symbols Outlined';
-    font-size: 1.75rem;
     line-height: 1;
   }
   #simulator-reset, #simulator-step, #simulator-play {
@@ -142,7 +141,6 @@
   #simulator-speed {
     display: flex;
     align-items: center;
-    gap: 0.125rem;
     .simulator-summary {
       list-style-type: none;
       border-radius: 0.625rem;
@@ -150,6 +148,7 @@
     }
     .slider-wrapper {
       display: flex;
+      margin-left: 0.125rem;
     }
     .slider-value {
       margin-left: 0.25rem;
