@@ -2,8 +2,8 @@ import {create_main_menu} from './main-menu.js'
 import {create_element, update_root} from './utilities.js'
 
 function create_cgol_simulator(sandbox, objective=null, library=null) {
-  var sidebar = create_simulator_sidebar()
-  var simulator = create_simulator_main()
+  var sidebar = create_simulator_sidebar(sandbox, objective, library)
+  var simulator = create_simulator_main(sandbox)
   
   var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
   update_root(simulator_wrapper)
@@ -39,7 +39,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 }
 
 
-function create_simulator_sidebar() {
+function create_simulator_sidebar(sandbox, objective=null, library=null) {
   if (objective !== null) {
     var mission_icon = create_element('span', 'list_alt', {class: 'icon', alt: ''})
     var mission_heading = create_element('h3', [mission_icon, ' Mission'])
@@ -99,7 +99,7 @@ function create_simulator_sidebar() {
 }
 
 
-function create_simulator_main() {
+function create_simulator_main(sandbox) {
   var tool_selector = create_element('select', 'Object', {id: 'simulator-tool'})
   var tool_options = create_element('select', 'Options', {id: 'simulator-tool-options'})
   var tool_wrapper = create_element('div', [tool_selector, tool_options], {class: 'simulator-toolbar-item'})
