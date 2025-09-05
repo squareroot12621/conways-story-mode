@@ -77,7 +77,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var slider_wrapper = create_element(
     'div', [slider_track, slider_true, slider_value], {class: 'slider-wrapper'}
   )
-  var speed_button = create_element('button', 'Speed', {class: 'simulator-toolbar-item'})
+  var speed_button = create_element('button', 'Speed', {class: 'simulator-toolbar-item', id: 'simulator-speed-button'})
   var speed_summary = create_element('summary', speed_button, {class: 'simulator-summary'})
   var speed_wrapper = create_element('details', [speed_summary, slider_wrapper], {id: 'simulator-speed'})
   var undo_button = create_element('button', 'Undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
