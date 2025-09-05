@@ -15,7 +15,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var [back_button, close_menu_button] = sidebar_top.children
   var sidebar_bottom = document.getElementsByClassName('simulator-sidebar-bottom')[0]
   var hint_button = document.getElementsByClassName('hint-button')[0]?.children[0]
-  var reset_button = sidebar_bottom.children.at(-1)
+  var reset_button = sidebar_bottom.children[sidebar_bottom.children.length - 1]
   back_button.addEventListener('click', create_main_menu)
   close_menu_button.addEventListener('click', () => {
     document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
