@@ -57,8 +57,8 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     'section', [sidebar_top, sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'}
   )
 
-  var tool_selector = create_element('select', 'Object', {class: 'simulator-tool'})
-  var tool_options = create_element('select', 'Options', {class: 'simulator-tool-options'})
+  var tool_selector = create_element('select', 'Object', {id: 'simulator-tool'})
+  var tool_options = create_element('select', 'Options', {id: 'simulator-tool-options'})
   var tool_wrapper = create_element('div', [tool_selector, tool_options], {class: 'simulator-toolbar-item'})
   var gen_0_button = create_element('button', 'Reset', {class: 'simulator-toolbar-item'})
   var step_button = create_element('button', 'Step', {class: 'simulator-toolbar-item'})
@@ -77,9 +77,15 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var slider_wrapper = create_element(
     'div', [slider_track, slider_true, slider_value], {class: 'simulator-toolbar-item slider-wrapper'}
   )
+  var speed_button = create_element('button', 'Speed')
+  var speed_summary = create_element('summary', speed_button)
+  var speed_wrapper = create_element('details', [speed_summary, slider_wrapper], {class: 'simulator-toolbar-item'})
+  var undo_button = create_element('button', 'Undo', {class: 'simulator-toolbar-item'})
+  var redo_button = create_element('button', 'Redo', {class: 'simulator-toolbar-item'})
   var toolbar_top = create_element(
     'section',
-    [tool_wrapper, gen_0_button, step_button, play_button, slider_wrapper],
+    [tool_wrapper, gen_0_button, step_button, play_button, speed_wrapper,
+     undo_button, redo_button],
     {class: 'simulator-toolbar-top'},
   )
   var simulator = create_element('section', [toolbar_top, /* TODO: FINISH */ ], {class: 'simulator-main'})
