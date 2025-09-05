@@ -132,9 +132,29 @@
     &:not(:hover) {
       background-color: transparent;
     }
+    font-family: 'Material Symbols Outlined';
+    font-size: 1.75rem;
+    line-height: 1;
   }
-  .simulator-summary {
-    list-style-type: none;
-    border-radius: 0.625rem;
+  #simulator-speed {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    .simulator-summary {
+      list-style-type: none;
+      border-radius: 0.625rem;
+      margin-bottom: calc(-1 * max(1px, round(down, 0.125rem, 1px))); /* Account for border width rounding */
+    }
+    .slider-wrapper {
+      display: flex;
+    }
+    .slider-value {
+      margin-left: 0.25rem;
+      width: 3.125rem;
+      text-align: right;
+    }
+  }
+  #simulator-undo {
+    margin-left: auto;
   }
 }
