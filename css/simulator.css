@@ -114,12 +114,12 @@
     font-size: 1.5rem;
     backdrop-filter: blur(0.5rem);
   }
-  .simulator-tool { /* TODO: Convert to id */
+  #simulator-tool {
     border-radius: 0rem;
     border-top-left-radius: 100rem;
     border-bottom-left-radius: 100rem;
   }
-  .simulator-tool-options { /* TODO: Convert to id */
+  #simulator-tool-options {
     border-radius: 0rem;
     border-top-right-radius: 100rem;
     border-bottom-right-radius: 100rem;
@@ -132,5 +132,9 @@
     &:not(:hover) {
       background-color: transparent;
     }
+  }
+  .simulator-summary {
+    list-style-type: none;
+    border-radius: 0.625rem;
   }
 }
