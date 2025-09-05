@@ -60,9 +60,9 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var tool_selector = create_element('select', 'Object', {id: 'simulator-tool'})
   var tool_options = create_element('select', 'Options', {id: 'simulator-tool-options'})
   var tool_wrapper = create_element('div', [tool_selector, tool_options], {class: 'simulator-toolbar-item'})
-  var gen_0_button = create_element('button', 'Reset', {class: 'simulator-toolbar-item'})
-  var step_button = create_element('button', 'Step', {class: 'simulator-toolbar-item'})
-  var play_button = create_element('button', 'Play', {class: 'simulator-toolbar-item'})
+  var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
+  var step_button = create_element('button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step'})
+  var play_button = create_element('button', 'play_arrow', {class: 'simulator-toolbar-item', id: 'simulator-play'})
   var slider_thumb = create_element('div', [], {class: 'slider-thumb'})
   var slider_track = create_element('div', slider_thumb, {class: 'slider-track'})
   var slider_true = create_element('input', [], {
@@ -79,9 +79,9 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   )
   var speed_button = create_element('button', 'Speed', {class: 'simulator-toolbar-item'})
   var speed_summary = create_element('summary', speed_button, {class: 'simulator-summary'})
-  var speed_wrapper = create_element('details', [speed_summary, slider_wrapper])
-  var undo_button = create_element('button', 'Undo', {class: 'simulator-toolbar-item'})
-  var redo_button = create_element('button', 'Redo', {class: 'simulator-toolbar-item'})
+  var speed_wrapper = create_element('details', [speed_summary, slider_wrapper], {id: 'simulator-speed'})
+  var undo_button = create_element('button', 'Undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
+  var redo_button = create_element('button', 'Redo', {class: 'simulator-toolbar-item', id: 'simulator-redo'})
   var toolbar_top = create_element(
     'section',
     [tool_wrapper, gen_0_button, step_button, play_button, speed_wrapper,
