@@ -142,7 +142,7 @@
       top: -0.125rem;
     }
   }
-  .simulator-options {
+  #simulator-options {
     position: absolute;
     top: calc(100% + 0.5rem);
     width: max-content;
