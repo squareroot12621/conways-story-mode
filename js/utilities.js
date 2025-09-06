@@ -1,5 +1,5 @@
 import {update_tooltip_locations} from './level-select.js'
-import {directionalize_menu_arrows} from './simulator.js'
+import {resize_simulator} from './simulator.js'
 
 function create_element(tag, content=[], attributes={}) {
     var element = document.createElement(tag)
@@ -48,9 +48,9 @@ function resize_root() {
         update_tooltip_locations()
     }
 
-    // Directionalize the menu arrows (if they exist)
+    // Resize the simulator (if it exists)
     if (document.getElementsByClassName('simulator-wrapper').length) {
-        directionalize_menu_arrows()
+        resize_simulator()
     }
 }
 
