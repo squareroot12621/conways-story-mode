@@ -51,7 +51,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     } else if (['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
       var options = tool_options.getElementsByClassName('simulator-option')
       var selected_old = [...options].map((option) => {
-        option.getAttribute('data-selected') !== null
+        return option.getAttribute('data-selected') !== null
       }).indexOf(true)
       if (event.key === 'ArrowUp') {
         var selected_new = selected_old - 1
