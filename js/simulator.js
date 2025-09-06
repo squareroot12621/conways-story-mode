@@ -40,7 +40,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   /* Simulation tool event handlers */
   var tool_button = document.querySelector('#simulator-tool button')
   var tool_options = document.getElementById('simulator-options')
-  tool_button.addEventListener('click keydown', () => {
+  tool_button.addEventListener('click keydown', (event) => {
     if (event.type === 'click' || event.key === 'Enter') {
       // Short-circuiting removes the need for event.type === 'keydown' &&
       var display = window.getComputedStyle(tool_options).display
