@@ -199,8 +199,26 @@
       text-align: right;
       font-size: calc(1.25rem + 0.25rem * var(--button-stretch));
     }
+    @media (width < 22rem) { /* 352px */
+      .slider-wrapper {
+        flex-direction: column;
+      }
+      .slider-true {
+        height: 1rem;
+      }
+      .slider-value {
+        margin: 0rem 0rem -0.25rem;
+        text-align: center;
+        font-size: 1rem;
+      }
+    }
   }
   #simulator-undo {
     margin-left: auto;
+  }
+  @media (width < 25.75rem) { /* 412px */
+    #simulator-speed[open] ~ :is(#simulator-undo, #simulator-redo) {
+      display: none;
+    }
   }
 }
