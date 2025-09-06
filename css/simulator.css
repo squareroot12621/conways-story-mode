@@ -190,10 +190,14 @@
       display: flex;
       margin-left: 0.125rem;
     }
+    .slider-true {
+      width: calc(4rem + 4rem * var(--button-stretch));
+    }
     .slider-value {
-      margin-left: 0.25rem;
-      width: 3.125rem;
+      margin-left: calc(0.0625rem + 0.1875rem * var(--button-stretch));
+      width: 2.125em;
       text-align: right;
+      font-size: calc(1.25rem + 0.25rem * var(--button-stretch));
     }
   }
   #simulator-undo {
