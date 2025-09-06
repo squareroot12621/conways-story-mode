@@ -100,9 +100,9 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
 
 
 function create_simulator_main(sandbox) {
+  var sidebar_open = create_element('button', 'arrow_drop_down', {class: 'simulator-toolbar-item', id: 'sidebar-open'})
   var tool_selector = create_element('select', 'Object', {id: 'simulator-tool'})
-  var tool_options = create_element('select', 'Options', {id: 'simulator-tool-options'})
-  var tool_wrapper = create_element('div', [tool_selector, tool_options], {class: 'simulator-toolbar-item'})
+  var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
   var step_button = create_element('button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step'})
   var play_button = create_element('button', 'play_arrow', {class: 'simulator-toolbar-item', id: 'simulator-play'})
@@ -127,7 +127,7 @@ function create_simulator_main(sandbox) {
   var redo_button = create_element('button', 'Redo', {class: 'simulator-toolbar-item', id: 'simulator-redo'})
   var toolbar_top = create_element(
     'section',
-    [tool_wrapper, gen_0_button, step_button, play_button, speed_wrapper,
+    [sidebar_open, tool_wrapper, gen_0_button, step_button, play_button, speed_wrapper,
      undo_button, redo_button],
     {class: 'simulator-toolbar-top'},
   )
