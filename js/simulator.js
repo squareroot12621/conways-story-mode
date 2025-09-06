@@ -132,9 +132,10 @@ function create_simulator_main(sandbox) {
     tool_array.push(create_element('div', [tool_icon, ' ' + name], {class: 'simulator-option', role: 'option'}))
   }
   var tool_selected = create_element('button', tools[0].icon, {class: 'simulator-toolbar-item'})
-  var tools_wrapper = create_element('div', tool_array, {id: 'simulator-options'})
-  tools_wrapper.style.display = 'none'
-  var tool_selector = create_element('div', [tool_selected, tools_wrapper], {id: 'simulator-tool', role: 'listbox'})
+  var tools_inner = create_element('div', tool_array, {class: 'simulator-option-wrapper'})
+  var tools_outer = create_element('div', tools_inner, {id: 'simulator-options'})
+  tools_outer.style.display = 'none'
+  var tool_selector = create_element('div', [tool_selected, tools_outer], {id: 'simulator-tool', role: 'listbox'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   // Reset, step, and play buttons
   var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
