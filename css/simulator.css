@@ -170,6 +170,9 @@
     padding-inline: 0.3125rem 0.5rem;
     cursor: pointer;
     &:hover {
+      background-color: var(--gray-20);
+    }
+    &[data-selected] {
       background-color: var(--text-color);
       color: var(--gray-10);
     }
