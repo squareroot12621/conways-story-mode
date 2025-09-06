@@ -41,7 +41,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   function toggle_option_visibility(set_to=null) {
     var display = window.getComputedStyle(tool_options).display
     if (set_to !== null) {
-      var new_display = set_to
+      var new_display = set_to ? 'block' : 'none'
     } else {
       var new_display = display === 'none' ? 'block' : 'none' // Toggle display
     }
