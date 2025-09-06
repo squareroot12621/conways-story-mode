@@ -131,9 +131,9 @@
     margin-inline: -0.25rem 0.25rem;
   }
   #simulator-tool {
-    border-radius: 0rem;
-    border-top-left-radius: 100rem;
-    border-bottom-left-radius: 100rem;
+    border-radius: 0.625rem;
+    appearance: none;
+    line-height: 1;
   }
   #simulator-reset, #simulator-step, #simulator-play {
     font-variation-settings: 'FILL' 1;
