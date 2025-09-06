@@ -109,7 +109,18 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
 function create_simulator_main(sandbox) {
   var sidebar_open = create_element('button', 'arrow_right', {class: 'simulator-toolbar-item', id: 'sidebar-open'})
   sidebar_open.style.display = 'none'
-  var tool_selector = create_element('select', 'Object', {id: 'simulator-tool'})
+  var tools = [
+    {icon: 'edit', name: 'Draw'},
+    {icon: 'vignette_2', name: 'Object'},
+    {icon: 'select', name: 'Select'},
+    {icon: 'pan_tool', name: 'Pan'},
+  ]
+  var tool_array = []
+  for ({icon, name} of tools) {
+    var tool_icon = create_element('span', icon, {class: 'icon'})
+    tool_array.push(create_element('option', [tool_icon, ' ' + name]))
+  }
+  var tool_selector = create_element('select', tool_array, {id: 'simulator-tool'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
   var step_button = create_element('button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step'})
