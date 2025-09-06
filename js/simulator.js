@@ -50,7 +50,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       tool_options.style.display = display === 'none' ? 'block' : 'none'
     } else if (['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
       var options = tool_options.getElementsByClassName('simulator-option')
-      var selected_old = options.map((option) => {
+      var selected_old = [...options].map((option) => {
         option.getAttribute('data-selected') !== null
       }).indexOf(true)
       if (event.key === 'ArrowUp') {
