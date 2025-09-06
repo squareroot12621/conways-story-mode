@@ -10,7 +10,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
   resize_simulator()
 
-  /* Sidebar event handlers */
+  // Sidebar event handlers
   var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
   var [back_button, close_menu_button] = sidebar_top.children
   var sidebar_bottom = document.getElementsByClassName('simulator-sidebar-bottom')[0]
@@ -27,7 +27,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     // TODO: Reset the level after a confirmation
   })
 
-  /* Event handlers for opening/closing the sidebar */
+  // Event handlers for opening/closing the sidebar
   close_menu_button.addEventListener('click', () => {
     document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
     open_menu_button.style.display = 'block'
@@ -37,7 +37,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     open_menu_button.style.display = 'none'
   })
 
-  /* Simulation tool event handlers */
+  // Simulation tool event handlers
   function toggle_option_visibility(set_to=null) {
     var display = window.getComputedStyle(tool_options).display
     if (set_to !== null) {
@@ -102,8 +102,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     })
   }
   
-  
-  /* Simulation speed event handlers */
+  // Simulation speed event handlers
   var simulator_speed = document.getElementById('simulator-speed')
   var simulator_speed_button = document.getElementById('simulator-speed-button')
   simulator_speed_button.addEventListener('click', () => {
@@ -214,7 +213,7 @@ function create_simulator_main(sandbox) {
     'div', [slider, slider_value], {class: 'slider-wrapper'}
   )
   var speed_button = create_element('button', 'Speed', {class: 'simulator-toolbar-item', id: 'simulator-speed-button'})
-  var speed_summary = create_element('summary', speed_button, {class: 'simulator-summary'})
+  var speed_summary = create_element('summary', speed_button, {class: 'simulator-summary', tabindex: '-1'})
   var speed_wrapper = create_element('details', [speed_summary, slider_wrapper], {id: 'simulator-speed'})
   // Undo and redo buttons
   var undo_button = create_element('button', 'Undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
