@@ -38,8 +38,19 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   })
 
   /* Simulation tool event handlers */
+  function select_option(num, relative=false) {
+    var selected_old = [...options].map((option) => {
+      return option.getAttribute('data-selected') !== null
+    }).indexOf(true)
+    var selected_new = relative ? selected_old + num : num
+    if (selected_new >= 0 && selected_new < options.length) { // We can't move out of the array
+      options[selected_old].toggleAttribute('data-selected')
+      options[selected_new].toggleAttribute('data-selected')
+    }
+  }
   var tool_button = document.querySelector('#simulator-tool button')
   var tool_options = document.getElementById('simulator-options')
+  var options = tool_options.getElementsByClassName('simulator-option')
   tool_button.addEventListener('click', () => {
     var display = window.getComputedStyle(tool_options).display
     tool_options.style.display = display === 'none' ? 'block' : 'none'
@@ -51,26 +62,22 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     if (event.key === 'Enter') {
       var display = window.getComputedStyle(tool_options).display
       tool_options.style.display = display === 'none' ? 'block' : 'none'
-    } else if (['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
-      var options = tool_options.getElementsByClassName('simulator-option')
-      var selected_old = [...options].map((option) => {
-        return option.getAttribute('data-selected') !== null
-      }).indexOf(true)
-      if (event.key === 'ArrowUp') {
-        var selected_new = selected_old - 1
-      } else if (event.key === 'ArrowDown') {
-        var selected_new = selected_old + 1
-      } else if (event.key === 'Home') {
-        var selected_new = 0
-      } else if (event.key === 'End') {
-        var selected_new = options.length - 1
-      }
-      if (selected_new >= 0 && selected_new < options.length) { // We can't move out of the array
-        options[selected_old].toggleAttribute('data-selected')
-        options[selected_new].toggleAttribute('data-selected')
-      }
+    } else if (event.key === 'ArrowUp') {
+      select_option(-1, true)
+    } else if (event.key === 'ArrowDown') {
+      select_option(1, true)
+    } else if (event.key === 'Home') {
+      select_option(0)
+    } else if (event.key === 'End') {
+      select_option(options.length - 1)
     }
   })
+  for ([index, option] of options.entries()) {
+    option.addEventListener('mouseenter', () => {
+      select_option(index)
+    }
+  }
+  
   
   /* Simulation speed event handlers */
   var simulator_speed = document.getElementById('simulator-speed')
