@@ -107,8 +107,11 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
 
 
 function create_simulator_main(sandbox) {
+  // The button that opens the sidebar
   var sidebar_open = create_element('button', 'arrow_right', {class: 'simulator-toolbar-item', id: 'sidebar-open'})
   sidebar_open.style.display = 'none'
+  /* The tool selector. I can't just use <select>/<option>
+     because you can't put icons in <option> elements, unfortunately. */
   var tools = [
     {icon: 'edit', name: 'Draw'},
     {icon: 'vignette_2', name: 'Object'},
@@ -118,13 +121,17 @@ function create_simulator_main(sandbox) {
   var tool_array = []
   for (var {icon, name} of tools) {
     var tool_icon = create_element('span', icon, {class: 'icon'})
-    tool_array.push(create_element('option', [tool_icon, ' ' + name]))
+    tool_array.push(create_element('div', [tool_icon, ' ' + name], {class: 'simulator-option', role: 'option'}))
   }
-  var tool_selector = create_element('select', tool_array, {id: 'simulator-tool'})
+  var tool_selected = create_element('button', tools[0].icon, {class: 'simulator-toolbar-item'})
+  var tools_wrapper = create_element('div', tool_array, {class: 'simulator-options'})
+  var tool_selector = create_element('div', [tool_selected, tool_array], {id: 'simulator-tool', role: 'listbox'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
+  // Reset, step, and play buttons
   var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
   var step_button = create_element('button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step'})
   var play_button = create_element('button', 'play_arrow', {class: 'simulator-toolbar-item', id: 'simulator-play'})
+  // The speed slider
   var slider = create_element('input', [], {
     type: 'range',
     min: 0,
@@ -140,14 +147,18 @@ function create_simulator_main(sandbox) {
   var speed_button = create_element('button', 'Speed', {class: 'simulator-toolbar-item', id: 'simulator-speed-button'})
   var speed_summary = create_element('summary', speed_button, {class: 'simulator-summary'})
   var speed_wrapper = create_element('details', [speed_summary, slider_wrapper], {id: 'simulator-speed'})
+  // Undo and redo buttons
   var undo_button = create_element('button', 'Undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
   var redo_button = create_element('button', 'Redo', {class: 'simulator-toolbar-item', id: 'simulator-redo'})
+  
+  // The top toolbar
   var toolbar_top = create_element(
     'section',
     [sidebar_open, tool_wrapper, gen_0_button, step_button, play_button, speed_wrapper,
      undo_button, redo_button],
     {class: 'simulator-toolbar-top'},
   )
+  
   var simulator = create_element('section', [toolbar_top, /* TODO: FINISH */ ], {class: 'simulator-main'})
 
   return simulator
