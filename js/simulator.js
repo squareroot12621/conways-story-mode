@@ -114,9 +114,7 @@ function create_simulator_main(sandbox) {
   var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
   var step_button = create_element('button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step'})
   var play_button = create_element('button', 'play_arrow', {class: 'simulator-toolbar-item', id: 'simulator-play'})
-  var slider_thumb = create_element('div', [], {class: 'slider-thumb'})
-  var slider_track = create_element('div', slider_thumb, {class: 'slider-track'})
-  var slider_true = create_element('input', [], {
+  var slider = create_element('input', [], {
     type: 'range',
     min: 0,
     max: 1,
@@ -126,7 +124,7 @@ function create_simulator_main(sandbox) {
   })
   var slider_value = create_element('div', '5/s', {class: 'slider-value'})
   var slider_wrapper = create_element(
-    'div', [slider_track, slider_true, slider_value], {class: 'slider-wrapper'}
+    'div', [slider, slider_value], {class: 'slider-wrapper'}
   )
   var speed_button = create_element('button', 'Speed', {class: 'simulator-toolbar-item', id: 'simulator-speed-button'})
   var speed_summary = create_element('summary', speed_button, {class: 'simulator-summary'})
