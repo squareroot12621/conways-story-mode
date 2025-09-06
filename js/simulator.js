@@ -40,13 +40,32 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   /* Simulation tool event handlers */
   var tool_button = document.querySelector('#simulator-tool button')
   var tool_options = document.getElementById('simulator-options')
-  tool_button.addEventListener('click', () => {
-    var display = window.getComputedStyle(tool_options).display
-    tool_options.style.display = display === 'none' ? 'block' : 'none'
-    var options = tool_options.getElementsByClassName('simulator-option')
-    var option_selected = parseInt(tool_options.getAttribute('data-option-selected'))
-    options[option_selected - 1].focus()
+  tool_button.addEventListener('click keydown', () => {
+    if (event.type === 'click' || event.key === 'Enter') {
+      // Short-circuiting removes the need for event.type === 'keydown' &&
+      var display = window.getComputedStyle(tool_options).display
+      tool_options.style.display = display === 'none' ? 'block' : 'none'
+    } else if (['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
+      var options = tool_options.getElementsByClassName('simulator-option')
+      var selected_old = options.map((option) => {
+        option.getAttribute('data-selected') !== null
+      }).indexOf(true)
+      if (event.key === 'ArrowUp') {
+        var selected_new = selected_old - 1
+      } else if (event.key === 'ArrowDown') {
+        var selected_new = selected_old + 1
+      } else if (event.key === 'Home') {
+        var selected_new = 0
+      } else if (event.key === 'End') {
+        var selected_new = options.length - 1
+      }
+      if (selected_new >= 0 && selected_new < options.length) { // We can't move out of the array
+        options[selected_old].toggleAttribute('data-selected')
+        options[selected_new].toggleAttribute('data-selected')
+      }
+    }
   })
+  tool_button.addEventListener('
   
   /* Simulation speed event handlers */
   var simulator_speed = document.getElementById('simulator-speed')
@@ -138,7 +157,7 @@ function create_simulator_main(sandbox) {
   var tools_inner = create_element('div', tool_array, {class: 'simulator-option-wrapper'})
   var tools_outer = create_element('div', tools_inner, {id: 'simulator-options'})
   tools_outer.style.display = 'none'
-  tools_outer.setAttribute('data-option-selected', '1')
+  tool_array[0].toggleAttribute('data-selected')
   var tool_selector = create_element('div', [tool_selected, tools_outer], {id: 'simulator-tool', role: 'listbox'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   // Reset, step, and play buttons
