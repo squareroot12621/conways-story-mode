@@ -81,6 +81,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       event.preventDefault()
     } else if (event.key === 'Escape') {
       toggle_option_visibility(false)
+      event.preventDefault()
     } else if (event.key === 'ArrowUp') {
       select_option(-1, true)
     } else if (event.key === 'ArrowDown') {
