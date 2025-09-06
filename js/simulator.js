@@ -65,7 +65,6 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       }
     }
   })
-  tool_button.addEventListener('
   
   /* Simulation speed event handlers */
   var simulator_speed = document.getElementById('simulator-speed')
