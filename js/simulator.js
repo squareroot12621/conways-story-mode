@@ -44,7 +44,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     tool_options.style.display = new_display
     if (new_display === 'none') {
       // Update the icon on the selector when we close it
-      for (option of options) {
+      for (var option of options) {
         if (option.getAttribute('data-selected') !== null) {
           tool_button.innerText = option.innerText
           break
