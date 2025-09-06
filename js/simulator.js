@@ -39,7 +39,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
   /* Simulation tool event handlers */
   function select_option(num, relative=false) {
-    var selected_old = [...options].map((option) => {
+    var selected_old = options.map((option) => {
       return option.getAttribute('data-selected') !== null
     }).indexOf(true)
     var selected_new = relative ? selected_old + num : num
@@ -50,7 +50,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   }
   var tool_button = document.querySelector('#simulator-tool button')
   var tool_options = document.getElementById('simulator-options')
-  var options = tool_options.getElementsByClassName('simulator-option')
+  var options = [...tool_options.getElementsByClassName('simulator-option')]
   tool_button.addEventListener('click', () => {
     var display = window.getComputedStyle(tool_options).display
     tool_options.style.display = display === 'none' ? 'block' : 'none'
