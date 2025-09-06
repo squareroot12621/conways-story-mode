@@ -72,7 +72,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       select_option(options.length - 1)
     }
   })
-  for (var [index, option] of options.entries()) {
+  for (let [index, option] of options.entries()) {
     option.addEventListener('mouseenter', () => {
       select_option(index)
     })
