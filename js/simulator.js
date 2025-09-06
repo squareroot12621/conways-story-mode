@@ -116,7 +116,7 @@ function create_simulator_main(sandbox) {
     {icon: 'pan_tool', name: 'Pan'},
   ]
   var tool_array = []
-  for ({icon, name} of tools) {
+  for (var {icon, name} of tools) {
     var tool_icon = create_element('span', icon, {class: 'icon'})
     tool_array.push(create_element('option', [tool_icon, ' ' + name]))
   }
