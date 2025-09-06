@@ -46,7 +46,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       // Update the icon on the selector when we close it
       for (var option of options) {
         if (option.getAttribute('data-selected') !== null) {
-          tool_button.innerText = option.innerText
+          tool_button.innerText = option.children[0].innerText // Get the icon name
           break
         }
       }
