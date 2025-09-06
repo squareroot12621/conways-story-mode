@@ -44,6 +44,9 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     var display = window.getComputedStyle(tool_options).display
     tool_options.style.display = display === 'none' ? 'block' : 'none'
   })
+  tool_button.addEventListener('blur', () => {
+    tool_options.style.display = 'none'
+  })
   tool_button.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
       var display = window.getComputedStyle(tool_options).display
