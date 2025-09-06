@@ -8,7 +8,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
   update_root(simulator_wrapper)
 
-  directionalize_menu_arrows()
+  resize_simulator()
 
   /* Sidebar event handlers */
   var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
@@ -143,7 +143,8 @@ function create_simulator_main(sandbox) {
 }
 
 
-function directionalize_menu_arrows() {
+function resize_simulator() {
+  // Change direction of menu arrows
   var root = document.getElementById('conways-story-mode')
   var portrait = root.getAttribute('data-portrait') === 'true'
   var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
@@ -151,6 +152,18 @@ function directionalize_menu_arrows() {
   close_menu_icon.replaceChildren(portrait ? 'arrow_drop_up' : 'arrow_left')
   var open_menu_icon = document.getElementById('sidebar-open')
   open_menu_icon.replaceChildren(portrait ? 'arrow_drop_down' : 'arrow_right')
+
+  // Change --button-stretch of the top toolbar
+  var toolbar_top = document.getElementsByClassName('simulator-toolbar-top')[0]
+  var toolbar_width = toolbar_top.clientWidth
+  if (toolbar_width < 400) {
+    var button_stretch = 0
+  } else if (toolbar_width > 600) {
+    var button_stretch = 1
+  } else {
+    var button_stretch = (toolbar_width - 400) / 200
+  }
+  toolbar_top.style.setProperty('--button-stretch', button_stretch)
 }
 
-export {create_cgol_simulator, directionalize_menu_arrows}
+export {create_cgol_simulator, resize_simulator}
