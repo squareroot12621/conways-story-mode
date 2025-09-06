@@ -31,10 +31,12 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   close_menu_button.addEventListener('click', () => {
     document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
     open_menu_button.style.display = 'block'
+    open_menu_button.setAttribute('data-visible', '')
   })
   open_menu_button.addEventListener('click', () => {
     document.getElementsByClassName('simulator-sidebar')[0].style.display = 'flex'
     open_menu_button.style.display = 'none'
+    open_menu_button.removeAttribute('data-visible')
   })
 
   // Simulation tool event handlers
