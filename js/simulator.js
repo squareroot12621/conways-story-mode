@@ -16,11 +16,8 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var sidebar_bottom = document.getElementsByClassName('simulator-sidebar-bottom')[0]
   var hint_button = document.getElementsByClassName('hint-button')[0]?.children[0]
   var reset_button = sidebar_bottom.children[sidebar_bottom.children.length - 1]
+  var open_menu_button = document.getElementById('sidebar-open')
   back_button.addEventListener('click', create_main_menu)
-  close_menu_button.addEventListener('click', () => {
-    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
-    // TODO: Make open_menu_button.style.display = 'block'
-  })
   if (!sandbox) {
     hint_button.addEventListener('click', () => {
       // TODO: Make the hint button show a hint
@@ -30,6 +27,16 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     // TODO: Reset the level after a confirmation
   })
 
+  /* Event handlers for opening/closing the sidebar */
+  close_menu_button.addEventListener('click', () => {
+    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
+    open_menu_button.style.display = 'block'
+  })
+  open_menu_button.addEventListener('click', () => {
+    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'block'
+    close_menu_button.style.display = 'none'
+  })
+  
   /* Simulator event handlers */
   var simulator_speed = document.getElementById('simulator-speed')
   var simulator_speed_button = document.getElementById('simulator-speed-button')
@@ -100,7 +107,8 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
 
 
 function create_simulator_main(sandbox) {
-  var sidebar_open = create_element('button', 'arrow_drop_down', {class: 'simulator-toolbar-item', id: 'sidebar-open'})
+  var sidebar_open = create_element('button', 'arrow_right', {class: 'simulator-toolbar-item', id: 'sidebar-open'})
+  sidebar_open.style.display = 'none'
   var tool_selector = create_element('select', 'Object', {id: 'simulator-tool'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
@@ -143,6 +151,8 @@ function directionalize_menu_arrows() {
   var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
   var close_menu_icon = sidebar_top.children[1].children[0]
   close_menu_icon.replaceChildren(portrait ? 'arrow_drop_up' : 'arrow_left')
+  var open_menu_icon = document.getElementById('sidebar-open')
+  open_menu_icon.replaceChildren(portrait ? 'arrow_drop_down' : 'arrow_right')
 }
 
 export {create_cgol_simulator, directionalize_menu_arrows}
