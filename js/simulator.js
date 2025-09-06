@@ -65,6 +65,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       console.log(`Test 2, display = ${display}`)
       tool_options.style.display = display === 'none' ? 'block' : 'none'
       console.log(`Test 3, new display = ${window.getComputedStyle(tool_options).display} but should be ${display === 'none' ? 'block' : 'none'}`)
+      event.preventDefault()
     } else if (event.key === 'ArrowUp') {
       select_option(-1, true)
     } else if (event.key === 'ArrowDown') {
