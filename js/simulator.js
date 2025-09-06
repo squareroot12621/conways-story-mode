@@ -73,8 +73,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   })
   tool_button.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-      var display = window.getComputedStyle(tool_options).display
-      tool_options.style.display = display === 'none' ? 'block' : 'none'
+      toggle_option_visibility()
       event.preventDefault()
     } else if (event.key === 'ArrowUp') {
       select_option(-1, true)
