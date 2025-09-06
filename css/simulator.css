@@ -147,7 +147,6 @@
     top: calc(100% + 0.5rem);
     width: max-content;
     background-color: var(--gray-10);
-    padding-block: 0.25rem;
     border-radius: 0.625rem;
     font-size: 1.25rem;
     &::before {
@@ -162,8 +161,18 @@
       clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
     }
   }
+  .simulator-option-wrapper {
+    padding-block: 0.25rem;
+    border-radius: 0.625rem;
+    overflow: hidden; /* The reason we can't combine this with #simulator-options */
+  }
   .simulator-option {
     padding-inline: 0.3125rem 0.5rem;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--text-color);
+      color: var(--gray-10);
+    }
   }
   #simulator-reset, #simulator-step, #simulator-play {
     font-variation-settings: 'FILL' 1;
