@@ -38,6 +38,20 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   })
 
   /* Simulation tool event handlers */
+  function toggle_option_visibility() {
+    var display = window.getComputedStyle(tool_options).display
+    var new_display = display === 'none' ? 'block' : 'none'
+    tool_options.style.display = new_display
+    if (new_display === 'none') {
+      // Update the icon on the selector when we close it
+      for (option of options) {
+        if (option.getAttribute('data-selected') !== null) {
+          tool_button.innerText = option.innerText
+          break
+        }
+      }
+    }
+  }
   function select_option(num, relative=false) {
     var selected_old = options.map((option) => {
       return option.getAttribute('data-selected') !== null
@@ -52,19 +66,15 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   var tool_options = document.getElementById('simulator-options')
   var options = [...tool_options.getElementsByClassName('simulator-option')]
   tool_button.addEventListener('click', () => {
-    var display = window.getComputedStyle(tool_options).display
-    tool_options.style.display = display === 'none' ? 'block' : 'none'
+    toggle_option_visibility()
   })
   tool_button.addEventListener('blur', () => {
     tool_options.style.display = 'none'
   })
   tool_button.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-      console.log('Test 1')
       var display = window.getComputedStyle(tool_options).display
-      console.log(`Test 2, display = ${display}`)
       tool_options.style.display = display === 'none' ? 'block' : 'none'
-      console.log(`Test 3, new display = ${window.getComputedStyle(tool_options).display} but should be ${display === 'none' ? 'block' : 'none'}`)
       event.preventDefault()
     } else if (event.key === 'ArrowUp') {
       select_option(-1, true)
