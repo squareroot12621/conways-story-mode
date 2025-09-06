@@ -38,9 +38,13 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   })
 
   /* Simulation tool event handlers */
-  function toggle_option_visibility() {
+  function toggle_option_visibility(set_to=null) {
     var display = window.getComputedStyle(tool_options).display
-    var new_display = display === 'none' ? 'block' : 'none'
+    if (set_to !== null) {
+      var new_display = set_to
+    } else {
+      var new_display = display === 'none' ? 'block' : 'none' // Toggle display
+    }
     tool_options.style.display = new_display
     if (new_display === 'none') {
       // Update the icon on the selector when we close it
@@ -69,12 +73,14 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     toggle_option_visibility()
   })
   tool_button.addEventListener('blur', () => {
-    tool_options.style.display = 'none'
+    toggle_option_visibility(false)
   })
   tool_button.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
       toggle_option_visibility()
       event.preventDefault()
+    } else if (event.key === 'Escape') {
+      toggle_option_visibility(false)
     } else if (event.key === 'ArrowUp') {
       select_option(-1, true)
     } else if (event.key === 'ArrowDown') {
