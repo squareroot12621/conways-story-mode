@@ -40,12 +40,16 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   /* Simulation tool event handlers */
   var tool_button = document.querySelector('#simulator-tool button')
   var tool_options = document.getElementById('simulator-options')
+  console.log('Test created')
   tool_button.addEventListener('click keydown', (event) => {
+    console.log('Test 1')
     if (event.type === 'click' || event.key === 'Enter') {
       // Short-circuiting removes the need for event.type === 'keydown' &&
+      console.log('Test 2')
       var display = window.getComputedStyle(tool_options).display
       tool_options.style.display = display === 'none' ? 'block' : 'none'
     } else if (['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) {
+      console.log('Test 3')
       var options = tool_options.getElementsByClassName('simulator-option')
       var selected_old = options.map((option) => {
         option.getAttribute('data-selected') !== null
