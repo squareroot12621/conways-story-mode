@@ -36,8 +36,16 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     document.getElementsByClassName('simulator-sidebar')[0].style.display = 'block'
     open_menu_button.style.display = 'none'
   })
+
+  /* Simulation tool event handlers */
+  var tool_button = document.querySelector('#simulator-tool button')
+  var tool_options = document.getElementById('simulator-options')
+  tool_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(tool_options).display
+    tool_options.style.display = display === 'none' ? 'block' : 'none'
+  })
   
-  /* Simulator event handlers */
+  /* Simulation speed event handlers */
   var simulator_speed = document.getElementById('simulator-speed')
   var simulator_speed_button = document.getElementById('simulator-speed-button')
   simulator_speed_button.addEventListener('click', () => {
@@ -125,6 +133,7 @@ function create_simulator_main(sandbox) {
   }
   var tool_selected = create_element('button', tools[0].icon, {class: 'simulator-toolbar-item'})
   var tools_wrapper = create_element('div', tool_array, {id: 'simulator-options'})
+  tools_wrapper.style.display = 'none'
   var tool_selector = create_element('div', [tool_selected, tools_wrapper], {id: 'simulator-tool', role: 'listbox'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   // Reset, step, and play buttons
