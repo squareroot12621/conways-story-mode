@@ -43,6 +43,9 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   tool_button.addEventListener('click', () => {
     var display = window.getComputedStyle(tool_options).display
     tool_options.style.display = display === 'none' ? 'block' : 'none'
+    var options = tool_options.getElementsByClassName('simulator-option')
+    var option_selected = parseInt(tool_options.getAttribute('data-option-selected'))
+    options[option_selected - 1].focus()
   })
   
   /* Simulation speed event handlers */
@@ -135,6 +138,7 @@ function create_simulator_main(sandbox) {
   var tools_inner = create_element('div', tool_array, {class: 'simulator-option-wrapper'})
   var tools_outer = create_element('div', tools_inner, {id: 'simulator-options'})
   tools_outer.style.display = 'none'
+  tools_outer.setAttribute('data-option-selected', '1')
   var tool_selector = create_element('div', [tool_selected, tools_outer], {id: 'simulator-tool', role: 'listbox'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   // Reset, step, and play buttons
