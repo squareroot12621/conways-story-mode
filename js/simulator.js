@@ -96,6 +96,10 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
     option.addEventListener('mouseenter', () => {
       select_option(index)
     })
+    option.addEventListener('click', () => {
+      select_option(index)
+      toggle_option_visibility(false)
+    })
   }
   
   
