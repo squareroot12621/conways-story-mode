@@ -67,14 +67,14 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
     'div', sandbox ? [reset_button] : [hint_wrapper, reset_button], {class: 'simulator-sidebar-bottom'}
   )
   var sidebar = create_element(
-    'section', [sidebar_top, sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'}
+    'article', [sidebar_top, sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'}
   )
   
   return sidebar
 }
 
 
-function create_simulator_main(sandbox) {
+function create_simulator_main(sandbox) {  
   // The button that opens the sidebar
   var sidebar_open = create_element('button', 'arrow_right', {class: 'simulator-toolbar-item', id: 'sidebar-open'})
   sidebar_open.style.display = 'none'
@@ -121,7 +121,6 @@ function create_simulator_main(sandbox) {
   // Undo and redo buttons
   var undo_button = create_element('button', 'Undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
   var redo_button = create_element('button', 'Redo', {class: 'simulator-toolbar-item', id: 'simulator-redo'})
-  
   // The top toolbar
   var toolbar_top = create_element(
     'section',
@@ -129,8 +128,18 @@ function create_simulator_main(sandbox) {
      undo_button, redo_button],
     {class: 'simulator-toolbar-top'},
   )
+
+  // The canvas in the middle
+  var canvas = create_element('canvas', "Sorry, your browser doesn't support the <canvas> element.", {id: 'simulator-cgol'})
   
-  var simulator = create_element('section', [toolbar_top, /* TODO: FINISH */ ], {class: 'simulator-main'})
+  // The bottom toolbar
+  var toolbar_bottom = create_element(
+    'section',
+    [],
+    {class: 'simulator-toolbar-bottom'},
+  )
+  
+  var simulator = create_element('article', [toolbar_top, canvas, toolbar_bottom], {class: 'simulator-main'})
 
   return simulator
 }
