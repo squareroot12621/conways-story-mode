@@ -254,7 +254,7 @@
   .simulator-toolbar-bottom {
     display: flex;
     padding: 0.5rem;
-    gap: calc(0.25rem * var(--button-stretch));
+    gap: 0.25rem;
     font-size: 1.5rem;
     background-color: var(--gray-5);
     position: absolute;
