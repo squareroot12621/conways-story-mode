@@ -110,6 +110,12 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   simulator_speed_button.addEventListener('click', () => {
     simulator_speed.toggleAttribute('open')
   })
+  var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
+  var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
+  speed_slider.addEventListener('onchange', () => {
+    var true_speed = Math.pow(60, speed_slider.value)
+    speed_label.textContent = Math.round(true_speed) + '/s'
+  })
 }
 
 
@@ -206,10 +212,10 @@ function create_simulator_main(sandbox) {
     type: 'range',
     min: 0,
     max: 1,
-    value: Math.log(5) / Math.log(60), // log_60(5)
     step: 'any',
     class: 'slider-true'
   })
+  slider.value = Math.log(5) / Math.log(60) // log_60(5)
   var slider_value = create_element('div', '5/s', {class: 'slider-value'})
   var slider_wrapper = create_element(
     'div', [slider, slider_value], {class: 'slider-wrapper'}
