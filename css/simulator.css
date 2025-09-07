@@ -181,7 +181,6 @@
   #simulator-speed {
     display: flex;
     align-items: center;
-    flex: 1; /*DEBUG*/
     .simulator-summary {
       list-style-type: none;
       border-radius: 0.625rem;
@@ -190,11 +189,9 @@
     .slider-wrapper {
       display: flex;
       margin-left: 0.125rem;
-      flex: 1; /*DEBUG*/
     }
     .slider-true {
       width: calc(4rem + 4rem * var(--button-stretch));
-      flex: 1; /*DEBUG*/
     }
     .slider-value {
       margin-left: calc(0.0625rem + 0.1875rem * var(--button-stretch));
