@@ -227,6 +227,19 @@
       }
     }
   }
+  *:has(+ details[open]) {
+    /* The details' negative margin-left
+       can sometimes make it overlap the previous element,
+       so this makes said previous element appear on top. */
+    position: relative;
+    z-index: 1;
+  }
+  details[open] {
+    background-color: var(--black);
+    padding-inline: 0.125rem 0.5rem;
+    margin-inline: -0.125rem -0.5rem;
+    border-radius: 1000rem;
+  }
   #simulator-undo {
     margin-left: auto;
   }
