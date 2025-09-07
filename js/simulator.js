@@ -141,7 +141,7 @@ function create_simulator_main(sandbox) {
   var bounding_box_stat = create_element('div', '444\u00D7444', {id: 'simulator-stat-bounding-box'})
   var extra_stats = create_element('div', [population_stat, bounding_box_stat], {class: 'extra-stats-wrapper'})
   var extra_stat_wrapper = create_element(
-    'details', [extra_stat_summary, extra_stats], {class: 'simulator-stats'}
+    'details', [extra_stat_summary, extra_stats], {id: 'simulator-extra-stats'}
   )
   // The settings button
   var settings_button = create_element('button', 'settings', {class: 'simulator-toolbar-item', id: 'simulator-settings'})
