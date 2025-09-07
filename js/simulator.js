@@ -133,9 +133,9 @@ function create_simulator_main(sandbox) {
   var canvas = create_element('canvas', "Sorry, your browser doesn't support the <canvas> element.", {id: 'simulator-cgol'})
   
   // The bottom toolbar
-  var generations_stat = create_element('div', 'Redo', {id: 'simulator-stat-generations'})
-  var population_stat = create_element('div', 'Redo', {id: 'simulator-stat-population'})
-  var bounding_box_stat = create_element('div', 'Redo', {id: 'simulator-stat-bounding-box'})
+  var generations_stat = create_element('div', 'Gen. 4,444', {id: 'simulator-stat-generations'})
+  var population_stat = create_element('div', '4,444 cells', {id: 'simulator-stat-population'})
+  var bounding_box_stat = create_element('div', '444\u00D7444', {id: 'simulator-stat-bounding-box'})
   var stat_wrapper = create_element(
     'div', [generations_stat, population_stat, bounding_box_stat], {class: 'simulator-stats'}
   )
