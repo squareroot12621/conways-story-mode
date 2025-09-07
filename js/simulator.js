@@ -110,7 +110,7 @@ function create_simulator_main(sandbox) {
     step: 'any',
     class: 'slider-true'
   })
-  slider.value = Math.log(5) / Math.log(60) // log_60(5)
+  slider.value = Math.log(95/59) / Math.log(10) // Found with WolframAlpha
   var slider_value = create_element('div', '5/s', {class: 'slider-value'})
   var slider_wrapper = create_element(
     'div', [slider, slider_value], {class: 'slider-wrapper'}
@@ -263,8 +263,10 @@ function create_event_handlers(sandbox) {
   })
   var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
   var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
+  var EASE = 10 // Lower number = curve becomes more of a line
+  var MAX_SPEED = 60
   speed_slider.addEventListener('input', () => {
-    var true_speed = Math.pow(60, speed_slider.value)
+    var true_speed = (MAX_SPEED-1)/(EASE-1) * (EASE**speed_slider.value - 1) + 1
     speed_label.innerText = Math.round(true_speed) + '/s'
   })
 }
