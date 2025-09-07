@@ -265,8 +265,22 @@
   }
   .simulator-stats {
     display: flex;
-    gap: 0.5rem;
     font-size: 1.25rem;
+  }
+  #simulator-stat-generations {
+    margin-right: 0.5rem;
+    &:has(~ #simulator-extra-stats[open]) {
+      display: none;
+    }
+  }
+  #simulator-extra-stats {
+    display: flex;
+    align-items: center;
+    .extra-stats-wrapper {
+      display: flex;
+      margin-left: 0.125rem;
+      gap: 0.5rem;
+    }
   }
   #simulator-settings {
     margin-left: auto;
