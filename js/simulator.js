@@ -144,7 +144,7 @@ function create_simulator_main(sandbox) {
   )
   var settings_button = create_element('button', 'settings', {class: 'simulator-toolbar-item', id: 'simulator-settings'})
   var toolbar_bottom = create_element(
-    'section', [stat_wrapper, extra_stat_wrapper, settings_button], {class: 'simulator-toolbar-bottom'}
+    'section', [generations_stat, extra_stat_wrapper, settings_button], {class: 'simulator-toolbar-bottom'}
   )
   
   var simulator = create_element('article', [toolbar_top, canvas, toolbar_bottom], {class: 'simulator-main'})
