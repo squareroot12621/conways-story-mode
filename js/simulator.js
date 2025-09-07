@@ -160,6 +160,7 @@ function resize_simulator() {
 
   // Change --button-stretch of the top toolbar
   var toolbar_top = document.getElementsByClassName('simulator-toolbar-top')[0]
+  var toolbar_bottom = document.getElementsByClassName('simulator-toolbar-bottom')[0]
   var toolbar_width = toolbar_top.clientWidth
   if (toolbar_width < 380) {
     var button_stretch = 0
@@ -169,6 +170,7 @@ function resize_simulator() {
     var button_stretch = (toolbar_width - 380) / 220
   }
   toolbar_top.style.setProperty('--button-stretch', button_stretch)
+  toolbar_bottom.style.setProperty('--button-stretch', button_stretch)
 }
 
 
