@@ -112,9 +112,9 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
   })
   var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
   var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
-  speed_slider.addEventListener('onchange', () => {
+  speed_slider.addEventListener('change', () => {
     var true_speed = Math.pow(60, speed_slider.value)
-    speed_label.textContent = Math.round(true_speed) + '/s'
+    speed_label.innerText = Math.round(true_speed) + '/s'
   })
 }
 
