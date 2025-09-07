@@ -291,5 +291,12 @@ function create_event_handlers(sandbox) {
     var true_speed = (MAX_SPEED-1)/(EASE-1) * (EASE**speed_slider.value - 1) + 1
     speed_label.innerText = Math.round(true_speed) + '/s'
   })
+
+  // Simulation stat event handlers
+  var simulator_stats = document.getElementById('simulator-extra-stats')
+  var simulator_stat_button = document.getElementById('extra-stat-button')
+  simulator_stat_button.addEventListener('click', () => {
+    simulator_stats.toggleAttribute('open')
+  })
 }
 export {create_cgol_simulator, resize_simulator}
