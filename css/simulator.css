@@ -282,6 +282,7 @@
   }
   #simulator-stat-generations {
     margin-right: 0.5rem;
+    font-size: 1.25rem;
     @media (width < 28.25rem) {
       &:has(~ #simulator-extra-stats[open]) {
         display: none;
