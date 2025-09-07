@@ -134,13 +134,18 @@ function create_simulator_main(sandbox) {
   
   // The bottom toolbar
   var generations_stat = create_element('div', 'Gen. 4,444', {id: 'simulator-stat-generations'})
+  var extra_stat_button = create_element('button', 'bar_chart', {class: 'simulator-toolbar-item', id: 'extra-stat-button'})
+  var extra_stat_summary = create_element('summary', extra_stat_button, {class: 'simulator-summary', tabindex: '-1'})
   var population_stat = create_element('div', '4,444 cells', {id: 'simulator-stat-population'})
   var bounding_box_stat = create_element('div', '444\u00D7444', {id: 'simulator-stat-bounding-box'})
-  var stat_wrapper = create_element(
-    'div', [generations_stat, population_stat, bounding_box_stat], {class: 'simulator-stats'}
+  var extra_stats = create_element('div', [population_stat, bounding_box_stat], {class: 'extra-stats-wrapper'})
+  var extra_stat_wrapper = create_element(
+    'div', [generations_stat, extra_stats], {class: 'simulator-stats'}
   )
   var settings_button = create_element('button', 'settings', {class: 'simulator-toolbar-item', id: 'simulator-settings'})
-  var toolbar_bottom = create_element('section', [stat_wrapper, settings_button], {class: 'simulator-toolbar-bottom'})
+  var toolbar_bottom = create_element(
+    'section', [stat_wrapper, extra_stat_wrapper, settings_button], {class: 'simulator-toolbar-bottom'}
+  )
   
   var simulator = create_element('article', [toolbar_top, canvas, toolbar_bottom], {class: 'simulator-main'})
 
