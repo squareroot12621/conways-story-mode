@@ -115,12 +115,12 @@ function create_simulator_main(sandbox) {
   var slider_wrapper = create_element(
     'div', [slider, slider_value], {class: 'slider-wrapper'}
   )
-  var speed_button = create_element('button', 'Speed', {class: 'simulator-toolbar-item', id: 'simulator-speed-button'})
+  var speed_button = create_element('button', 'speed', {class: 'simulator-toolbar-item', id: 'simulator-speed-button'})
   var speed_summary = create_element('summary', speed_button, {class: 'simulator-summary', tabindex: '-1'})
   var speed_wrapper = create_element('details', [speed_summary, slider_wrapper], {id: 'simulator-speed'})
   // Undo and redo buttons
-  var undo_button = create_element('button', 'Undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
-  var redo_button = create_element('button', 'Redo', {class: 'simulator-toolbar-item', id: 'simulator-redo'})
+  var undo_button = create_element('button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
+  var redo_button = create_element('button', 'redo', {class: 'simulator-toolbar-item', id: 'simulator-redo'})
   // The top toolbar
   var toolbar_top = create_element(
     'section',
@@ -133,11 +133,14 @@ function create_simulator_main(sandbox) {
   var canvas = create_element('canvas', "Sorry, your browser doesn't support the <canvas> element.", {id: 'simulator-cgol'})
   
   // The bottom toolbar
-  var toolbar_bottom = create_element(
-    'section',
-    [],
-    {class: 'simulator-toolbar-bottom'},
+  var generations_stat = create_element('div', 'Redo', {id: 'simulator-stat-generations'})
+  var population_stat = create_element('div', 'Redo', {id: 'simulator-stat-population'})
+  var bounding_box_stat = create_element('div', 'Redo', {id: 'simulator-stat-bounding-box'})
+  var stat_wrapper = create_element(
+    'div', [generations_stat, population_stat, bounding_box_stat], {class: 'simulator-stats'}
   )
+  var settings_button = create_element('button', 'settings', {class: 'simulator-toolbar-item', id: 'simulator-settings'})
+  var toolbar_bottom = create_element('section', [stat_wrapper, settings_button], {class: 'simulator-toolbar-bottom'})
   
   var simulator = create_element('article', [toolbar_top, canvas, toolbar_bottom], {class: 'simulator-main'})
 
