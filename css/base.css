@@ -203,6 +203,7 @@ body, button, input, kbd {
     flex-direction: column;
     height: 100svh;
     min-width: 20rem;
+    min-height: 40rem;
 }
 #conways-story-mode {
     flex: 1;
