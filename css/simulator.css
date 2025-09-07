@@ -116,7 +116,7 @@
     font-size: 1.5rem;
     background-color: var(--gray-5);
   }
-  :is(button, select).simulator-toolbar-item {
+  button.simulator-toolbar-item {
     --button-bg: var(--gray-10);
     --button-fg: var(--gray-90);
     border-color: transparent;
@@ -276,6 +276,11 @@
   #simulator-extra-stats {
     display: flex;
     align-items: center;
+    .simulator-summary {
+      list-style-type: none;
+      border-radius: 0.625rem;
+      margin-bottom: calc(-1 * max(1px, round(down, 0.125rem, 1px))); /* Account for border width rounding */
+    }
     .extra-stats-wrapper {
       display: flex;
       margin-left: 0.125rem;
