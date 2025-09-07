@@ -10,112 +10,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
   resize_simulator()
 
-  // Sidebar event handlers
-  var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
-  var [back_button, close_menu_button] = sidebar_top.children
-  var sidebar_bottom = document.getElementsByClassName('simulator-sidebar-bottom')[0]
-  var hint_button = document.getElementsByClassName('hint-button')[0]?.children[0]
-  var reset_button = sidebar_bottom.children[sidebar_bottom.children.length - 1]
-  var open_menu_button = document.getElementById('sidebar-open')
-  back_button.addEventListener('click', create_main_menu)
-  if (!sandbox) {
-    hint_button.addEventListener('click', () => {
-      // TODO: Make the hint button show a hint
-    })
-  }
-  reset_button.addEventListener('click', () => {
-    // TODO: Reset the level after a confirmation
-  })
-
-  // Event handlers for opening/closing the sidebar
-  close_menu_button.addEventListener('click', () => {
-    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
-    open_menu_button.style.display = 'block'
-    open_menu_button.setAttribute('data-visible', '')
-  })
-  open_menu_button.addEventListener('click', () => {
-    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'flex'
-    open_menu_button.style.display = 'none'
-    open_menu_button.removeAttribute('data-visible')
-  })
-
-  // Simulation tool event handlers
-  function toggle_option_visibility(set_to=null) {
-    var display = window.getComputedStyle(tool_options).display
-    if (set_to !== null) {
-      var new_display = set_to ? 'block' : 'none'
-    } else {
-      var new_display = display === 'none' ? 'block' : 'none' // Toggle display
-    }
-    tool_options.style.display = new_display
-    if (new_display === 'none') {
-      // Update the icon on the selector when we close it
-      for (var option of options) {
-        if (option.getAttribute('data-selected') !== null) {
-          tool_button.innerText = option.children[0].innerText // Get the icon name
-          break
-        }
-      }
-    }
-  }
-  function select_option(num, relative=false) {
-    var selected_old = options.map((option) => {
-      return option.getAttribute('data-selected') !== null
-    }).indexOf(true)
-    var selected_new = relative ? selected_old + num : num
-    if (selected_new >= 0 && selected_new < options.length) { // We can't move out of the array
-      options[selected_old].toggleAttribute('data-selected')
-      options[selected_new].toggleAttribute('data-selected')
-    }
-  }
-  var tool_button = document.querySelector('#simulator-tool button')
-  var tool_options = document.getElementById('simulator-options')
-  var options = [...tool_options.getElementsByClassName('simulator-option')]
-  tool_button.addEventListener('click', () => {
-    toggle_option_visibility()
-  })
-  tool_button.addEventListener('blur', () => {
-    toggle_option_visibility(false)
-  })
-  tool_button.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      toggle_option_visibility()
-      event.preventDefault()
-    } else if (event.key === 'Escape') {
-      toggle_option_visibility(false)
-      event.preventDefault()
-    } else if (event.key === 'ArrowUp') {
-      select_option(-1, true)
-    } else if (event.key === 'ArrowDown') {
-      select_option(1, true)
-    } else if (event.key === 'Home') {
-      select_option(0)
-    } else if (event.key === 'End') {
-      select_option(options.length - 1)
-    }
-  })
-  for (let [index, option] of options.entries()) {
-    option.addEventListener('mouseenter', () => {
-      select_option(index)
-    })
-    option.addEventListener('click', () => {
-      select_option(index)
-      toggle_option_visibility(false)
-    })
-  }
-  
-  // Simulation speed event handlers
-  var simulator_speed = document.getElementById('simulator-speed')
-  var simulator_speed_button = document.getElementById('simulator-speed-button')
-  simulator_speed_button.addEventListener('click', () => {
-    simulator_speed.toggleAttribute('open')
-  })
-  var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
-  var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
-  speed_slider.addEventListener('change', () => {
-    var true_speed = Math.pow(60, speed_slider.value)
-    speed_label.innerText = Math.round(true_speed) + '/s'
-  })
+  create_event_handlers(sandbox)
 }
 
 
@@ -264,4 +159,113 @@ function resize_simulator() {
   toolbar_top.style.setProperty('--button-stretch', button_stretch)
 }
 
+
+function create_event_handlers(sandbox) {
+  // Sidebar event handlers
+  var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
+  var [back_button, close_menu_button] = sidebar_top.children
+  var sidebar_bottom = document.getElementsByClassName('simulator-sidebar-bottom')[0]
+  var hint_button = document.getElementsByClassName('hint-button')[0]?.children[0]
+  var reset_button = sidebar_bottom.children[sidebar_bottom.children.length - 1]
+  var open_menu_button = document.getElementById('sidebar-open')
+  back_button.addEventListener('click', create_main_menu)
+  if (!sandbox) {
+    hint_button.addEventListener('click', () => {
+      // TODO: Make the hint button show a hint
+    })
+  }
+  reset_button.addEventListener('click', () => {
+    // TODO: Reset the level after a confirmation
+  })
+
+  // Event handlers for opening/closing the sidebar
+  close_menu_button.addEventListener('click', () => {
+    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
+    open_menu_button.style.display = 'block'
+    open_menu_button.setAttribute('data-visible', '')
+  })
+  open_menu_button.addEventListener('click', () => {
+    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'flex'
+    open_menu_button.style.display = 'none'
+    open_menu_button.removeAttribute('data-visible')
+  })
+
+  // Simulation tool event handlers
+  function toggle_option_visibility(set_to=null) {
+    var display = window.getComputedStyle(tool_options).display
+    if (set_to !== null) {
+      var new_display = set_to ? 'block' : 'none'
+    } else {
+      var new_display = display === 'none' ? 'block' : 'none' // Toggle display
+    }
+    tool_options.style.display = new_display
+    if (new_display === 'none') {
+      // Update the icon on the selector when we close it
+      for (var option of options) {
+        if (option.getAttribute('data-selected') !== null) {
+          tool_button.innerText = option.children[0].innerText // Get the icon name
+          break
+        }
+      }
+    }
+  }
+  function select_option(num, relative=false) {
+    var selected_old = options.map((option) => {
+      return option.getAttribute('data-selected') !== null
+    }).indexOf(true)
+    var selected_new = relative ? selected_old + num : num
+    if (selected_new >= 0 && selected_new < options.length) { // We can't move out of the array
+      options[selected_old].toggleAttribute('data-selected')
+      options[selected_new].toggleAttribute('data-selected')
+    }
+  }
+  var tool_button = document.querySelector('#simulator-tool button')
+  var tool_options = document.getElementById('simulator-options')
+  var options = [...tool_options.getElementsByClassName('simulator-option')]
+  tool_button.addEventListener('click', () => {
+    toggle_option_visibility()
+  })
+  tool_button.addEventListener('blur', () => {
+    toggle_option_visibility(false)
+  })
+  tool_button.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      toggle_option_visibility()
+      event.preventDefault()
+    } else if (event.key === 'Escape') {
+      toggle_option_visibility(false)
+      event.preventDefault()
+    } else if (event.key === 'ArrowUp') {
+      select_option(-1, true)
+    } else if (event.key === 'ArrowDown') {
+      select_option(1, true)
+    } else if (event.key === 'Home') {
+      select_option(0)
+    } else if (event.key === 'End') {
+      select_option(options.length - 1)
+    }
+  })
+  for (let [index, option] of options.entries()) {
+    option.addEventListener('mouseenter', () => {
+      select_option(index)
+    })
+    option.addEventListener('click', () => {
+      select_option(index)
+      toggle_option_visibility(false)
+    })
+  }
+  
+  // Simulation speed event handlers
+  var simulator_speed = document.getElementById('simulator-speed')
+  var simulator_speed_button = document.getElementById('simulator-speed-button')
+  simulator_speed_button.addEventListener('click', () => {
+    simulator_speed.toggleAttribute('open')
+  })
+  var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
+  var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
+  speed_slider.addEventListener('input', () => {
+    var true_speed = Math.pow(60, speed_slider.value)
+    speed_label.innerText = Math.round(true_speed) + '/s'
+  })
+}
 export {create_cgol_simulator, resize_simulator}
