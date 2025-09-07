@@ -132,17 +132,20 @@ function create_simulator_main(sandbox) {
   // The canvas in the middle
   var canvas = create_element('canvas', "Sorry, your browser doesn't support the <canvas> element.", {id: 'simulator-cgol'})
   
-  // The bottom toolbar
+  // The "generations" statistic
   var generations_stat = create_element('div', 'Gen. 4,444', {id: 'simulator-stat-generations'})
+  // The other statistics
   var extra_stat_button = create_element('button', 'bar_chart', {class: 'simulator-toolbar-item', id: 'extra-stat-button'})
   var extra_stat_summary = create_element('summary', extra_stat_button, {class: 'simulator-summary', tabindex: '-1'})
   var population_stat = create_element('div', '4,444 cells', {id: 'simulator-stat-population'})
   var bounding_box_stat = create_element('div', '444\u00D7444', {id: 'simulator-stat-bounding-box'})
   var extra_stats = create_element('div', [population_stat, bounding_box_stat], {class: 'extra-stats-wrapper'})
   var extra_stat_wrapper = create_element(
-    'div', [generations_stat, extra_stats], {class: 'simulator-stats'}
+    'details', [extra_stat_summary, extra_stats], {class: 'simulator-stats'}
   )
+  // The settings button
   var settings_button = create_element('button', 'settings', {class: 'simulator-toolbar-item', id: 'simulator-settings'})
+  // The bottom toolbar
   var toolbar_bottom = create_element(
     'section', [generations_stat, extra_stat_wrapper, settings_button], {class: 'simulator-toolbar-bottom'}
   )
