@@ -1,5 +1,5 @@
 class CGoL {
-  constructor(options) {
+  constructor(options={}) {
     this.grid_size = options.grid_size ?? 64
     this.border = options.border ?? 8
     if (this.border >= this.grid_size / 2) {
@@ -9,6 +9,14 @@ class CGoL {
     var parsed = this.parse_rle(this.intermediate_rle)
     this.pattern = parsed.pattern
     this.rule = options.rule ?? parsed.rule ?? 'B3/S23'
+    this.objects = []
+    for (var object of options.objects) {
+      this.objects.push(this.parse_rle(object).pattern)
+    }
+    this.canvas = options.canvas
+    this.x_offset = options.x_offset ?? 0
+    this.y_offset = options.y_offset ?? 0
+    this.zoom = options.zoom ?? 8
   }
 
   static #normalize_rule(rule) {
@@ -156,7 +164,7 @@ class CGoL {
     for (var line of lines) {
       var processing_line = line
       while (processing_line) {
-        var part = processing_line.match(/([1-9][0-9]*)?([.boA-W$])/)
+        var part = processing_line.match(/([1-9][0-9]*)?([.boA-Y$])/)
         if (!part) {
           throw SyntaxError(`Invalid RLE ${processing_line}`)
         } else if (part.index) {
@@ -178,7 +186,7 @@ class CGoL {
             case 'o':
               cell_number = 1
               break
-            case /[A-W]/.test(cell):
+            case /[A-Y]/.test(cell):
               cell_number = cell.codePointAt(0) - 64
               break
             default:
@@ -195,5 +203,15 @@ class CGoL {
     output.pattern = grid
     output.width = max_row_width
     output.height = grid.length
+  }
+
+  move_to(x, y, zoom) {
+    this.x_offset = x
+    this.y_offset = y
+    this.zoom = zoom
+  }
+
+  draw(options={}) {
+    // TODO
   }
 }
