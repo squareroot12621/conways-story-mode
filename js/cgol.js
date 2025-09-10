@@ -190,7 +190,7 @@ class CGoL {
         if (!part) {
           throw SyntaxError(`Invalid RLE ${processing_line}`)
         } else if (part.index) {
-          throw SyntaxError(`Invalid RLE ${processing_line.slice(0, part.index}`)
+          throw SyntaxError(`Invalid RLE ${processing_line.slice(0, part.index)}`)
         }
         var count = parseInt(part[1])
         var cell = part[2]
