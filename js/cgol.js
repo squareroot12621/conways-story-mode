@@ -289,3 +289,5 @@ class CGoL {
     // TODO: Make sure this actually works
   }
 }
+
+export {CGoL}
