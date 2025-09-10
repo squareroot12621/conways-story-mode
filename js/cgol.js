@@ -40,7 +40,8 @@ class CGoL {
 
   static #normalize_rule(rule) {
     rule = rule.toUpperCase()
-    if ((var rule_match = rule.match(/^B?([0-8]*)(?:\/|S|\/S)([0-8]*)(?:(?:\/|G|\/G)(\d+))?$/))) {
+    var rule_match = rule.match(/^B?([0-8]*)(?:\/|S|\/S)([0-8]*)(?:(?:\/|G|\/G)(\d+))?$/)
+    if (rule_match) {
       // Either a B.../S.../G... rule or a .../.../... rule
       var [birth, survival, generations] = rule_match.slice(1, 4)
       if (!(rule.includes('B') || rule.includes('S'))) {
@@ -147,7 +148,8 @@ class CGoL {
         case "RINGS 'N' SLUGS":          rule = 'B56/S14568'; break;
         case 'VOTE':                     rule = 'B5678/S45678'; break;
         default:
-          if ((var rule_match = rule.match(/^[A-Za-z][A-Za-z0-9_\-]*$/))) {
+          var rule_match = rule.match(/^[A-Za-z][A-Za-z0-9_\-]*$/)
+          if (rule_match) {
             throw Error(`Unknown rule name ${rule}`)
           }
           throw SyntaxError(`Invalid rule name ${rule}`)
@@ -171,7 +173,8 @@ class CGoL {
     const header_regexp = RegExp('^x *= *(?:0|[1-9][0-9]*) *(?:, *)?' // x = ...
                                  + 'y *= *(?:0|[1-9][0-9]*) *(?:, *)?' // y = ...
                                  + '(?:rule *= *(.*))?$') // rule = ...
-    if ((var header_match = lines[0].match(header_regexp))) {
+    var header_match = lines[0].match(header_regexp)
+    if (header_match) {
       output.rule = this.#normalize_rule(header_match[1])
       lines.shift()
     }
