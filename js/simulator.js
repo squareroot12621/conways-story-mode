@@ -299,5 +299,14 @@ function create_event_handlers(sandbox) {
   simulator_stat_button.addEventListener('click', () => {
     simulator_stats.toggleAttribute('open')
   })
+
+  // CGoL class
+  var cgol_object = CGoL({
+    grid_size: 128, // TODO: Increase to 256 once it stops lagging
+    pattern: 'x = 3, y = 3, rule = B3/S23\n3o$2bo$bo!',
+    canvas: document.getElementById('simulator-cgol'),
+    zoom: 20,
+  })
+  cgol_object.draw()
 }
 export {create_cgol_simulator, resize_simulator}
