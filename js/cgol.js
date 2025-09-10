@@ -1,4 +1,6 @@
 class CGoL {
+  #ctx
+  
   constructor(options={}) {
     // CGoL stuff
     this.grid_size = options.grid_size ?? 64
@@ -32,7 +34,7 @@ class CGoL {
     this.#compile_pattern()
     // Graphical stuff
     this.canvas = options.canvas
-    #ctx = options.canvas.getContext('2d')
+    this.#ctx = options.canvas.getContext('2d')
     this.x_offset = options.x_offset ?? 0
     this.y_offset = options.y_offset ?? 0
     this.zoom = options.zoom ?? 8
