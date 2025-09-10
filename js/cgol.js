@@ -20,7 +20,7 @@ class CGoL {
     this.pattern_height = parsed.height
     this.objects = []
     for (var object of options.objects) {
-      var parsed_object = this.parse_rle(object.pattern)
+      var parsed_object = CGoL.parse_rle(object.pattern)
       this.objects.push({
         pattern: parsed_object.pattern,
         x: (object.x ?? 0) + this.pattern_x,
@@ -167,7 +167,7 @@ class CGoL {
       var [line, comment] = line.trim().split('#', 1)
       // TODO: Don't ignore #P or #R
       if (comment.startsWith('r')) {
-        output.rule = this.#normalize_rule(comment.slice(1).trim())
+        output.rule = CGoL.#normalize_rule(comment.slice(1).trim())
       }
       lines.push(line)
     }
@@ -177,7 +177,7 @@ class CGoL {
                                  + '(?:rule *= *(.*))?$') // rule = ...
     var header_match = lines[0].match(header_regexp)
     if (header_match) {
-      output.rule = this.#normalize_rule(header_match[1])
+      output.rule = CGoL#normalize_rule(header_match[1])
       lines.shift()
     }
     // Decode the RLE
