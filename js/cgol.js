@@ -56,7 +56,7 @@ class CGoL {
       return generations > 2 ? `B${birth}/S${survival}/G${generations}` : `B${birth}/S${survival}`
     } else {
       // Named rule
-      switch rule {
+      switch (rule) {
         case 'H-TREES':                  rule = 'B1/S012345678'; break;
         case 'FUZZ':                     rule = 'B1/S014567'; break;
         case 'GNARL':                    rule = 'B1/S1'; break;
@@ -200,7 +200,7 @@ class CGoL {
           max_row_width = Math.max(row_width, max_row_width)
           row_width = 0
         } else {
-          switch cell {
+          switch (cell) {
             case '.':
             case 'b':
               cell_number = 0
