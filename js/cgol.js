@@ -24,8 +24,8 @@ class CGoL {
         x: (object.x ?? 0) + this.pattern_x,
         y: (object.y ?? 0) + this.pattern_y,
         width: parsed_object.width,
-        height = parsed_object.height,
-        rotation: object.rotation ?? 0, /* 0 = upright, 1 = 90 degrees CW */
+        height: parsed_object.height,
+        rotation: object.rotation ?? 0, // 0 = upright, 1 = 90 degrees CW
         flip_x: object.flip_x ?? false,
       })
     }
