@@ -248,14 +248,14 @@ class CGoL {
     for (var y = 0; y < this.pattern_height; ++y) {
       this.board.splice((y+this.pattern_y) * this.grid_size + this.pattern_x,
                         this.pattern_width,
-                        this.pattern.slice(y*this.grid_size, (y+1)*this.grid_size)
+                        this.pattern.slice(y*this.grid_size, (y+1)*this.grid_size))
     }
     for (var object of this.objects) {
       // TODO: Add flip_x and rotation
       for (var y = 0; y < object.height; ++y) {
         this.board.splice((y+object.y) * this.grid_size + object.x,
                           object.width,
-                          object.slice(y*this.grid_size, (y+1)*this.grid_size)
+                          object.slice(y*this.grid_size, (y+1)*this.grid_size))
       }
     }
   }
