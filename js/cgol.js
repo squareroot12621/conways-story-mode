@@ -32,7 +32,7 @@ class CGoL {
     this.#compile_pattern()
     // Graphical stuff
     this.canvas = options.canvas
-    this.#ctx = options.canvas.getContext('2d')
+    #ctx = options.canvas.getContext('2d')
     this.x_offset = options.x_offset ?? 0
     this.y_offset = options.y_offset ?? 0
     this.zoom = options.zoom ?? 8
