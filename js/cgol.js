@@ -1,5 +1,6 @@
 class CGoL {
   constructor(options={}) {
+    // CGoL stuff
     this.grid_size = options.grid_size ?? 64
     this.border = options.border ?? 8
     if (this.border >= this.grid_size / 2) {
@@ -7,13 +8,31 @@ class CGoL {
     }
     this.intermediate_rle = options.pattern ?? '.'
     var parsed = this.parse_rle(this.intermediate_rle)
-    this.pattern = parsed.pattern
     this.rule = options.rule ?? parsed.rule ?? 'B3/S23'
+    this.pattern = parsed.pattern
+    this.pattern_x = options.pattern_x ?? 0
+    this.pattern_x += Math.floor((this.grid_size - parsed.width) / 2)
+    this.pattern_y = options.pattern_y ?? 0
+    this.pattern_y += Math.floor((this.grid_size - parsed.height) / 2)
+    this.pattern_width = parsed.width
+    this.pattern_height = parsed.height
     this.objects = []
     for (var object of options.objects) {
-      this.objects.push(this.parse_rle(object).pattern)
+      var parsed_object = this.parse_rle(object.pattern)
+      this.objects.push({
+        pattern: parsed_object.pattern,
+        x: (object.x ?? 0) + this.pattern_x,
+        y: (object.y ?? 0) + this.pattern_y,
+        width: parsed_object.width,
+        height = parsed_object.height,
+        rotation: object.rotation ?? 0, /* 0 = upright, 1 = 90 degrees CW */
+        flip_x: object.flip_x ?? false,
+      })
     }
+    this.#compile_pattern()
+    // Graphical stuff
     this.canvas = options.canvas
+    this.#ctx = options.canvas.getContext('2d')
     this.x_offset = options.x_offset ?? 0
     this.y_offset = options.y_offset ?? 0
     this.zoom = options.zoom ?? 8
@@ -203,8 +222,41 @@ class CGoL {
     output.pattern = grid
     output.width = max_row_width
     output.height = grid.length
+    return output
   }
 
+  #compile_pattern() {
+    this.board = Array(this.grid_size * this.grid_size).fill(0)
+    this.cell_types = Array(this.grid_size * this.grid_size).fill(0)
+    /* Cell types:
+       0 = normal
+       1 = delete
+       2 = create
+       3 = important
+       4 = unchangeable
+       5 = connecting N
+       6 = connecting NE
+       7 = connecting E
+       8 = connecting SE
+       9 = connecting S
+       10 = connecting SW
+       11 = connecting W
+       12 = connecting NW */
+    for (var y = 0; y < this.pattern_height; ++y) {
+      this.board.splice((y+this.pattern_y) * this.grid_size + this.pattern_x,
+                        this.pattern_width,
+                        this.pattern.slice(y*this.grid_size, (y+1)*this.grid_size)
+    }
+    for (var object of this.objects) {
+      // TODO: Add flip_x and rotation
+      for (var y = 0; y < object.height; ++y) {
+        this.board.splice((y+object.y) * this.grid_size + object.x,
+                          object.width,
+                          object.slice(y*this.grid_size, (y+1)*this.grid_size)
+      }
+    }
+  }
+  
   move_to(x, y, zoom) {
     this.x_offset = x
     this.y_offset = y
@@ -212,6 +264,28 @@ class CGoL {
   }
 
   draw(options={}) {
-    // TODO
+    var ctx = this.#ctx
+    var canvas = this.canvas
+    var grid_size = this.grid_size
+    var cell_size = this.zoom
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    var x, y
+    for (var i = 0; i < grid_size; ++i) {
+      for (var j = 0; j < grid_size; ++j) {
+        var cell = this.board[i*grid_size + j] >>= 1
+        if (!cell) {
+          continue
+        }
+        ctx.fillStyle = 'white'
+        left_x = j * cell_size | 0
+        right_x = (j + 1) * cell_size | 0
+        width = right_x - left_x
+        top_y = i * cell_size | 0
+        bottom_y = (i + 1) * cell_size | 0
+        height = bottom_y - top_y
+        ctx.fillRect(left_x - this.x_offset, top_y - this.y_offset, width, height)
+      }
+    }
+    // TODO: Make sure this actually works
   }
 }
