@@ -1,4 +1,5 @@
 import {create_main_menu} from './main-menu.js'
+import {CGoL} from './cgol.js'
 import {create_element, update_root} from './utilities.js'
 
 function create_cgol_simulator(sandbox, objective=null, library=null) {
