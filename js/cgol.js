@@ -1,5 +1,6 @@
 class CGoL {
   #ctx
+  #compile_pattern
   
   constructor(options={}) {
     // CGoL stuff
@@ -31,7 +32,7 @@ class CGoL {
         flip_x: object.flip_x ?? false,
       })
     }
-    CGoL.#compile_pattern()
+    this.#compile_pattern()
     // Graphical stuff
     this.canvas = options.canvas
     this.#ctx = options.canvas.getContext('2d')
