@@ -198,7 +198,6 @@ class CGoL {
         var cell = part[2]
         var cell_number
         if (cell === '$') {
-          console.log(`count: ${count}, cell_number: ${cell_number}, current_line: ${JSON.stringify(current_line)}, grid: ${JSON.stringify(grid)}`) //DEBUG
           grid.push(current_line)
           grid = grid.concat(Array(count - 1).fill([]))
           max_row_width = Math.max(row_width, max_row_width)
@@ -221,7 +220,6 @@ class CGoL {
             default:
               throw SyntaxError(`Unknown cell ${cell}`)
           }
-          console.log(`count: ${count}, cell_number: ${cell_number}, current_line: ${JSON.stringify(current_line)}`) //DEBUG
           current_line = current_line.concat(Array(count).fill(cell_number))
           row_width += count
         }
@@ -229,12 +227,12 @@ class CGoL {
       }
     }
     for (var row of grid) {
-      console.log(max_row_width, row.length, max_row_width - row.length) //DEBUG
       row = row.concat(Array(max_row_width - row.length).fill(0))
     }
     output.pattern = grid
     output.width = max_row_width
     output.height = grid.length
+    console.log(grid) // DEBUG
     return output
   }
 
