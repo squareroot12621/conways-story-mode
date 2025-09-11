@@ -202,6 +202,7 @@ class CGoL {
           grid.push(current_line)
           grid = grid.concat(Array(count - 1).fill([]))
           max_row_width = Math.max(row_width, max_row_width)
+          current_line = []
           row_width = 0
         } else if (cell === '!') {
           break parse_rle_loop // No more RLE
