@@ -19,7 +19,7 @@ class CGoL {
     this.pattern_width = parsed.width
     this.pattern_height = parsed.height
     this.objects = []
-    for (var object of options.objects) {
+    for (var object of options.objects ?? []) {
       var parsed_object = CGoL.parse_rle(object.pattern)
       this.objects.push({
         pattern: parsed_object.pattern,
