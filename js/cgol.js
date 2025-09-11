@@ -220,6 +220,7 @@ class CGoL {
           current_line.push(...Array(count).fill(cell_number))
           row_width += count
         }
+        processing_line = processing_line.slice(part[0].length)
       }
     }
     for (var row of grid) {
