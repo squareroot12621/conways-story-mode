@@ -178,7 +178,7 @@ class CGoL {
                                  + '(?:rule *= *(.*))?$') // rule = ...
     var header_match = lines[0].match(header_regexp)
     if (header_match) {
-      output.rule = CGoL#normalize_rule(header_match[1])
+      output.rule = CGoL.#normalize_rule(header_match[1])
       lines.shift()
     }
     // Decode the RLE
