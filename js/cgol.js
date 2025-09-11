@@ -216,7 +216,7 @@ class CGoL {
             default:
               throw SyntaxError(`Unknown cell ${cell}`)
           }
-          console.log(`count: ${count}, cell_number: ${cell_number}`) //DEBUG
+          console.log(`count: ${count}, cell_number: ${cell_number}, current_line: ${JSON.stringify(current_line)}`) //DEBUG
           current_line.push(...Array(count).fill(cell_number))
           row_width += count
         }
