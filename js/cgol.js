@@ -185,10 +185,10 @@ class CGoL {
     var current_line = []
     var row_width = 0
     var max_row_width = 0
-    for (var line of lines) {
+    parse_rle_loop: for (var line of lines) {
       var processing_line = line
       while (processing_line) {
-        var part = processing_line.match(/([1-9][0-9]*)?([.boA-Y$])/)
+        var part = processing_line.match(/([1-9][0-9]*)?([.boA-Y$!])/)
         if (!part) {
           throw SyntaxError(`Invalid RLE ${processing_line}`)
         } else if (part.index) {
@@ -203,6 +203,8 @@ class CGoL {
           grid = grid.concat(Array(count - 1).fill([]))
           max_row_width = Math.max(row_width, max_row_width)
           row_width = 0
+        } else if (cell === '!') {
+          break parse_rle_loop // No more RLE
         } else {
           switch (cell) {
             case '.':
