@@ -226,6 +226,11 @@ class CGoL {
         processing_line = processing_line.slice(part[0].length)
       }
     }
+    // Push the last line because it doesn't end in a $
+    grid.push(current_line)
+    grid = grid.concat(Array(count - 1).fill([]))
+    max_row_width = Math.max(row_width, max_row_width)
+    // Pad the rows with zeroes
     for (var row of grid) {
       row = row.concat(Array(max_row_width - row.length).fill(0))
     }
