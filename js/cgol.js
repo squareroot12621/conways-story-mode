@@ -166,7 +166,7 @@ class CGoL {
     for (var line of rle.split('\n')) {
       var [line, comment] = line.trim().split('#', 1)
       // TODO: Don't ignore #P or #R
-      if (comment.startsWith('r')) {
+      if (comment?.startsWith('r')) {
         output.rule = CGoL.#normalize_rule(comment.slice(1).trim())
       }
       lines.push(line)
