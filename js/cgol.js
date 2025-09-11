@@ -270,6 +270,8 @@ class CGoL {
                           object.slice(y*this.grid_size, (y+1)*this.grid_size))
       }
     }
+    console.log(this.board) // DEBUG
+    console.log(this.cell_types) // DEBUG
   }
   
   move_to(x, y, zoom) {
