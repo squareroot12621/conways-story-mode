@@ -232,6 +232,7 @@ class CGoL {
     max_row_width = Math.max(row_width, max_row_width)
     // Pad the rows with zeroes
     for (var row of grid) {
+      console.log(max_row_width + '  ' + row.length) // DEBUG
       row = row.concat(Array(max_row_width - row.length).fill(0))
     }
     output.pattern = grid
