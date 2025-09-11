@@ -9,7 +9,7 @@ class CGoL {
       this.border = Math.floor((this.grid_size-1) / 2)
     }
     this.intermediate_rle = options.pattern ?? '.'
-    var parsed = this.parse_rle(this.intermediate_rle)
+    var parsed = CGoL.parse_rle(this.intermediate_rle)
     this.rule = options.rule ?? parsed.rule ?? 'B3/S23'
     this.pattern = parsed.pattern
     this.pattern_x = options.pattern_x ?? 0
