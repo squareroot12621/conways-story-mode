@@ -198,7 +198,8 @@ class CGoL {
         var cell = part[2]
         var cell_number
         if (cell === '$') {
-          grid.push(current_line, ...Array(count - 1).fill([]))
+          grid.push(current_line)
+          grid = grid.concat(Array(count - 1).fill([]))
           max_row_width = Math.max(row_width, max_row_width)
           row_width = 0
         } else {
