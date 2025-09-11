@@ -228,7 +228,7 @@ class CGoL {
       }
     }
     for (var row of grid) {
-      console.log(max_row_width - row.length) //DEBUG
+      console.log(max_row_width, row.length, max_row_width - row.length) //DEBUG
       row = row.concat(Array(max_row_width - row.length).fill(0))
     }
     output.pattern = grid
