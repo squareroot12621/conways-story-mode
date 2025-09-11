@@ -194,7 +194,7 @@ class CGoL {
         } else if (part.index) {
           throw SyntaxError(`Invalid RLE ${processing_line.slice(0, part.index)}`)
         }
-        var count = parseInt(part[1])
+        var count = parseInt(part[1]) || 1 // No count gets turned into 1
         var cell = part[2]
         var cell_number
         if (cell === '$') {
