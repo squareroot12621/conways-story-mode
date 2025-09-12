@@ -298,14 +298,14 @@ class CGoL {
           continue
         }
         ctx.fillStyle = 'white'
-        left_x = j * cell_size | 0
-        right_x = (j + 1) * cell_size | 0
-        width = right_x - left_x
-        top_y = i * cell_size | 0
-        bottom_y = (i + 1) * cell_size | 0
-        height = bottom_y - top_y
+        var left_x = j * cell_size | 0
+        var right_x = (j + 1) * cell_size | 0
+        var width = right_x - left_x
+        var top_y = i * cell_size | 0
+        var bottom_y = (i + 1) * cell_size | 0
+        var height = bottom_y - top_y
         ctx.fillRect(left_x - this.x_offset, top_y - this.y_offset, width, height)
-        //console.log(`(${left_x}-${right_x}, ${top_y}-${bottom_y})`) // DEBUG
+        console.log(`(${left_x}-${right_x}, ${top_y}-${bottom_y})`) // DEBUG
       }
     }
     // TODO: Make sure this actually works
