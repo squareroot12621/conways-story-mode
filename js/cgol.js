@@ -260,7 +260,7 @@ class CGoL {
        12 = connecting NW */
     for (var y = 0; y < this.pattern_height; ++y) {
       for (var x = 0; x < this.pattern_width; ++x) {
-        var cell = this.pattern[y*this.grid_size + x]
+        var cell = this.pattern[y][x]
         var board_position = (y+this.pattern_y) * this.grid_size + (x+this.pattern_x)
         console.log(board_position + ' ' + cell) // DEBUG
         this.board[board_position] = cell % 2
@@ -271,7 +271,7 @@ class CGoL {
       // TODO: Add flip_x and rotation
       for (var y = 0; y < object.height; ++y) {
         for (var x = 0; x < object.width; ++x) {
-          var cell = object[y*this.grid_size + x]
+          var cell = object[y][x]
           var board_position = (y+object.y) * this.grid_size + (x+object.x)
           this.board[board_position] = cell % 2
           this.cell_types[board_position] = Math.floor(cell / 2)
