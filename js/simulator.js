@@ -132,6 +132,9 @@ function create_simulator_main(sandbox) {
 
   // The canvas in the middle
   var canvas = create_element('canvas', "Sorry, your browser doesn't support the <canvas> element.", {id: 'simulator-cgol'})
+  // Resize the canvas so it doesn't get stretched weirdly
+  canvas.width = canvas.clientWidth
+  canvas.height = canvas.clientHeight
   
   // The "generations" statistic
   var generations_stat = create_element('div', 'Gen. 4,444', {id: 'simulator-stat-generations'})
@@ -180,6 +183,11 @@ function resize_simulator() {
   }
   toolbar_top.style.setProperty('--button-stretch', button_stretch)
   toolbar_bottom.style.setProperty('--button-stretch', button_stretch)
+  
+  // Resize the canvas so it doesn't get stretched weirdly
+  var canvas = document.getElementById('simulator-cgol')
+  canvas.width = canvas.clientWidth
+  canvas.height = canvas.clientHeight
 }
 
 
