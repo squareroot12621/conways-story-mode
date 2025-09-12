@@ -261,7 +261,6 @@ class CGoL {
       for (var x = 0; x < this.pattern_width; ++x) {
         var cell = this.pattern[y][x]
         var board_position = (y+this.pattern_y) * this.grid_size + (x+this.pattern_x)
-        console.log(board_position + ' ' + cell) // DEBUG
         this.board[board_position] = cell % 2
         this.cell_types[board_position] = Math.floor(cell / 2)
       }
@@ -294,7 +293,7 @@ class CGoL {
     var x, y
     for (var i = 0; i < grid_size; ++i) {
       for (var j = 0; j < grid_size; ++j) {
-        var cell = this.board[i*grid_size + j] >>= 1
+        var cell = this.board[i*grid_size + j]
         if (!cell) {
           continue
         }
