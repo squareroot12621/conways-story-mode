@@ -289,6 +289,8 @@ class CGoL {
     var canvas = this.canvas
     var grid_size = this.grid_size
     var cell_size = this.zoom
+    var true_x_offset = this.x_offset + (grid_size*cell_size - canvas.width) / 2
+    var true_y_offset = this.y_offset + (grid_size*cell_size - canvas.height) / 2
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     var x, y
     for (var i = 0; i < grid_size; ++i) {
@@ -304,7 +306,7 @@ class CGoL {
         var top_y = i * cell_size | 0
         var bottom_y = (i + 1) * cell_size | 0
         var height = bottom_y - top_y
-        ctx.fillRect(left_x - this.x_offset, top_y - this.y_offset, width, height)
+        ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
         console.log(`(${left_x}-${right_x}, ${top_y}-${bottom_y})`) // DEBUG
       }
     }
