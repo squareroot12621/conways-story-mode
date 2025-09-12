@@ -258,16 +258,22 @@ class CGoL {
        11 = connecting W
        12 = connecting NW */
     for (var y = 0; y < this.pattern_height; ++y) {
-      this.board.splice((y+this.pattern_y) * this.grid_size + this.pattern_x,
-                        this.pattern_width,
-                        this.pattern.slice(y*this.grid_size, (y+1)*this.grid_size))
+      for (var x = 0; x < this.pattern_width; ++x) {
+        var cell = this.pattern[y*this.grid_size + x]
+        var board_position = (y+this.pattern_y) * this.grid_size + (x+this.pattern_x)
+        this.board[board_position] = cell % 2
+        this.cell_types[board_position] = Math.floor(cell / 2)
+      }
     }
     for (var object of this.objects) {
       // TODO: Add flip_x and rotation
       for (var y = 0; y < object.height; ++y) {
-        this.board.splice((y+object.y) * this.grid_size + object.x,
-                          object.width,
-                          object.slice(y*this.grid_size, (y+1)*this.grid_size))
+        for (var x = 0; x < object.width; ++x) {
+          var cell = object[y*this.grid_size + x]
+          var board_position = (y+object.y) * this.grid_size + (x+object.x)
+          this.board[board_position] = cell % 2
+          this.cell_types[board_position] = Math.floor(cell / 2)
+        }
       }
     }
     console.log(this.board) // DEBUG
