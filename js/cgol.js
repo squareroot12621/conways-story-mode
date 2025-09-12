@@ -262,7 +262,7 @@ class CGoL {
       for (var x = 0; x < this.pattern_width; ++x) {
         var cell = this.pattern[y*this.grid_size + x]
         var board_position = (y+this.pattern_y) * this.grid_size + (x+this.pattern_x)
-        console.log(board_position) // DEBUG
+        console.log(board_position + ' ' + cell) // DEBUG
         this.board[board_position] = cell % 2
         this.cell_types[board_position] = Math.floor(cell / 2)
       }
@@ -278,8 +278,8 @@ class CGoL {
         }
       }
     }
-    console.log(this.board) // DEBUG
-    console.log(this.cell_types) // DEBUG
+    console.log(this.board.slice(7990, 8010)) // DEBUG
+    console.log(this.cell_types.slice(7990, 8010)) // DEBUG
   }
   
   move_to(x, y, zoom) {
