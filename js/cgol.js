@@ -241,6 +241,7 @@ class CGoL {
   }
 
   #compile_pattern() {
+    console.log(this.pattern) // DEBUG
     this.board = Array(this.grid_size * this.grid_size).fill(0)
     this.cell_types = Array(this.grid_size * this.grid_size).fill(0)
     /* Cell types:
