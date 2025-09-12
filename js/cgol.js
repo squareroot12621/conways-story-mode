@@ -241,7 +241,6 @@ class CGoL {
   }
 
   #compile_pattern() {
-    console.log(this.pattern) // DEBUG
     this.board = Array(this.grid_size * this.grid_size).fill(0)
     this.cell_types = Array(this.grid_size * this.grid_size).fill(0)
     /* Cell types:
@@ -278,8 +277,6 @@ class CGoL {
         }
       }
     }
-    console.log(this.board.slice(7990, 8010)) // DEBUG
-    console.log(this.cell_types.slice(7990, 8010)) // DEBUG
   }
   
   move_to(x, y, zoom) {
@@ -309,6 +306,7 @@ class CGoL {
         bottom_y = (i + 1) * cell_size | 0
         height = bottom_y - top_y
         ctx.fillRect(left_x - this.x_offset, top_y - this.y_offset, width, height)
+        console.log(`(${left_x}-${right_x}, ${top_y}-${bottom_y})`) // DEBUG
       }
     }
     // TODO: Make sure this actually works
