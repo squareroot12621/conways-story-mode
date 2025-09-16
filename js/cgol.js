@@ -1,5 +1,8 @@
 class CGoL {
   #ctx
+  #last_draw_time
+  #last_animation_frame
+  #cached_picture
   
   constructor(options={}) {
     // CGoL stuff
@@ -38,6 +41,10 @@ class CGoL {
     this.x_offset = options.x_offset ?? 0
     this.y_offset = options.y_offset ?? 0
     this.zoom = options.zoom ?? 8
+
+    this.#last_draw_time = -Infinity
+    this.#last_animation_frame = null
+    this.#cached_picture = null
   }
 
   static #normalize_rule(rule) {
@@ -284,7 +291,20 @@ class CGoL {
     this.zoom = zoom
   }
 
-  draw(options={}) {
+  draw(options={}, timestamp) {
+    if (timestamp === null || timestamp === undefined) {
+      draw_inner(options)
+    } else {
+      draw_inner(options) // TODO: Cache the image so it only runs once per second // TODO: Make that changeable using speed
+      this.#last_animation_frame = requestAnimationFrame((t) => draw(options, timestamp))
+    }
+  }
+
+  stop_drawing() {
+    cancelAnimationFrame(this.#last_animation_frame)
+  }
+  
+  draw_inner(options={}) {
     var ctx = this.#ctx
     var canvas = this.canvas
     var grid_size = this.grid_size
@@ -307,10 +327,11 @@ class CGoL {
         var bottom_y = (i + 1) * cell_size | 0
         var height = bottom_y - top_y
         ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
-        console.log(`(${left_x}-${right_x}, ${top_y}-${bottom_y})`) // DEBUG
       }
     }
-    // TODO: Make sure this actually works
+    // TODO: Gridlines
+    // TODO: Different cell colors
+    // TODO: Colorblind symbols
   }
 }
 
