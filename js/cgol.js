@@ -293,9 +293,15 @@ class CGoL {
 
   draw(options={}, timestamp) {
     if (timestamp === null || timestamp === undefined) {
-      draw_inner(options)
+      this.draw_inner(options)
     } else {
-      draw_inner(options) // TODO: Cache the image so it only runs once per second // TODO: Make that changeable using speed
+      if (timestamp - this.#last_draw_time >= 1000) {
+        this.draw_inner(options)
+        this.#last_draw_time = timestamp
+        // TODO: Make the cache interval changeable using the speed slider
+      } else {
+        this.#ctx.putImageData(this.#cached_picture, 0, 0)
+      }
       this.#last_animation_frame = requestAnimationFrame((t) => draw(options, timestamp))
     }
   }
@@ -332,6 +338,7 @@ class CGoL {
     // TODO: Gridlines
     // TODO: Different cell colors
     // TODO: Colorblind symbols
+    this.#cached_picture = ctx.getImageData(0, 0, canvas.width, canvas.height)
   }
 }
 
