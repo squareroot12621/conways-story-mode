@@ -293,10 +293,10 @@ class CGoL {
 
   draw(options={}, timestamp) {
     if (timestamp === null || timestamp === undefined) {
-      this.draw_inner(options)
+      this.#draw_inner(options)
     } else {
       if (timestamp - this.#last_draw_time >= 1000) {
-        this.draw_inner(options)
+        this.#draw_inner(options)
         this.#last_draw_time = timestamp
         // TODO: Make the cache interval changeable using the speed slider
       } else {
@@ -304,13 +304,14 @@ class CGoL {
       }
       this.#last_animation_frame = requestAnimationFrame((t) => draw(options, timestamp))
     }
+    // TODO: Make every new frame add 1 to a visible counter on the canvas
   }
 
   stop_drawing() {
     cancelAnimationFrame(this.#last_animation_frame)
   }
   
-  draw_inner(options={}) {
+  #draw_inner(options={}) {
     var ctx = this.#ctx
     var canvas = this.canvas
     var grid_size = this.grid_size
