@@ -303,6 +303,12 @@ class CGoL {
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
       }
       this.#last_animation_frame = requestAnimationFrame((t) => draw(options, timestamp))
+      if (timestamp - this.#last_draw_time >= 1000) { // TEST --------------------
+        this.#ctx.fillStyle = 'white'
+        this.#ctx.font = '20px sans-serif'
+        var last_animation_frame = this.#last_animation_frame?.toString() ?? ''
+        this.#ctx.fillText(last_animation_frame, 50, 50)
+      } // END TEST --------------------------------------------------------------
     }
     // TODO: Make every new frame add 1 to a visible counter on the canvas
   }
