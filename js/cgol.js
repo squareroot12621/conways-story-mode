@@ -302,7 +302,7 @@ class CGoL {
       } else {
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
       }
-      this.#last_animation_frame = requestAnimationFrame((t) => draw(options, timestamp))
+      this.#last_animation_frame = requestAnimationFrame((t) => this.draw(options, timestamp))
       if (timestamp - this.#last_draw_time >= 1000) { // TEST --------------------
         this.#ctx.fillStyle = 'white'
         this.#ctx.font = '20px sans-serif'
