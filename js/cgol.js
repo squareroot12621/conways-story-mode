@@ -308,9 +308,9 @@ class CGoL {
         this.#ctx.font = '20px sans-serif'
         var last_animation_frame = this.#last_animation_frame?.toString() ?? ''
         this.#ctx.fillText(last_animation_frame, 50, 50)
+        console.log("If this doesn't appear, something went wrong") // DEBUG
       } // END TEST --------------------------------------------------------------
     }
-    // TODO: Make every new frame add 1 to a visible counter on the canvas
   }
 
   stop_drawing() {
