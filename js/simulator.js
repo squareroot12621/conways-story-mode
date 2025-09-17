@@ -315,6 +315,7 @@ function create_event_handlers(sandbox) {
     canvas: document.getElementById('simulator-cgol'),
     zoom: 20,
   })
-  cgol_object.draw({}, performance.now()) // performance.now() is a TEST for requestAnimationFrame
+  var now = document.timeline.currentTime
+  cgol_object.draw({}, now) // Using now instead of null is a TEST for requestAnimationFrame
 }
 export {create_cgol_simulator, resize_simulator}
