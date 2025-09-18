@@ -357,9 +357,9 @@ class CGoL {
       }
     }
     // START DEBUG
-    this.#ctx.fillStyle = 'white'
-    this.#ctx.font = '20px sans-serif'
-    this.#ctx.fillText('Does it work in #draw_inner?', 200, 50)
+    ctx.fillStyle = 'white'
+    ctx.font = '20px sans-serif'
+    ctx.fillText('Does it work in #draw_inner?', 200, 50)
     // END DEBUG
     
     // TODO: Gridlines
