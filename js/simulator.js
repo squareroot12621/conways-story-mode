@@ -116,8 +116,9 @@ function create_simulator_main(sandbox) {
   var slider_wrapper = create_element(
     'div', [slider, slider_value], {class: 'slider-wrapper'}
   )
-  var speed_button = create_element('button', 'speed', {class: 'simulator-toolbar-item', id: 'simulator-speed-button'})
-  var speed_summary = create_element('summary', speed_button, {class: 'simulator-summary', tabindex: '-1'})
+  var speed_summary = create_element(
+    'summary', 'speed', {class: 'simulator-summary simulator-toolbar-item', id: 'simulator-speed-button'}
+  )
   var speed_wrapper = create_element('details', [speed_summary, slider_wrapper], {id: 'simulator-speed'})
   // Undo and redo buttons
   var undo_button = create_element('button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
