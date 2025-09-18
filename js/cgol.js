@@ -311,17 +311,18 @@ class CGoL {
         this.#draw_inner(options)
         this.#last_draw_time = timestamp
         // TODO: Make the cache interval changeable using the speed slider
+        if (timestamp === this.#last_draw_time) { // TEST --------------------------
+          this.#ctx.fillStyle = 'white'
+          this.#ctx.font = '20px sans-serif'
+          var last_animation_frame = this.#last_animation_frame?.toString() ?? ''
+          this.#ctx.fillText(last_animation_frame, 50, 50)
+          console.log("If this doesn't appear, something went wrong") // DEBUG
+          this.#cached_picture = this.#ctx.getImageData(0, 0, canvas.width, canvas.height)
+        } // END TEST --------------------------------------------------------------
       } else {
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
       }
       this.#last_animation_frame = requestAnimationFrame((t) => this.draw(options, timestamp))
-      if (timestamp === this.#last_draw_time) { // TEST --------------------------
-        this.#ctx.fillStyle = 'white'
-        this.#ctx.font = '20px sans-serif'
-        var last_animation_frame = this.#last_animation_frame?.toString() ?? ''
-        this.#ctx.fillText(last_animation_frame, 50, 50)
-        console.log("If this doesn't appear, something went wrong") // DEBUG
-      } // END TEST --------------------------------------------------------------
     }
   }
 
