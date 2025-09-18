@@ -314,14 +314,14 @@ class CGoL {
         if (timestamp === this.#last_draw_time) { // TEST --------------------------
           this.#ctx.fillStyle = 'white'
           this.#ctx.font = '20px sans-serif'
-          var last_animation_frame = this.#last_animation_frame?.toString() ?? ''
+          var last_animation_frame = this.#last_animation_frame?.toString() ?? 'N/A'
           this.#ctx.fillText(last_animation_frame, 50, 50)
-          console.log("If this doesn't appear, something went wrong") // DEBUG
+          console.log("Cache expired") // DEBUG
           this.#cached_picture = this.#ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
         } // END TEST --------------------------------------------------------------
       } else {
+        this.#ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
-        console.log(`It's only been ${timestamp - this.#last_draw_time}!`) // DEBUG
       }
       this.#last_animation_frame = requestAnimationFrame((t) => this.draw(options, t))
     }
