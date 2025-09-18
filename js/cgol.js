@@ -356,6 +356,12 @@ class CGoL {
         ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
       }
     }
+    // START DEBUG
+    this.#ctx.fillStyle = 'white'
+    this.#ctx.font = '20px sans-serif'
+    this.#ctx.fillText('Does it work in #draw_inner?', 200, 50)
+    // END DEBUG
+    
     // TODO: Gridlines
     // TODO: Different cell colors
     // TODO: Colorblind symbols
