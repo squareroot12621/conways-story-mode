@@ -271,7 +271,7 @@ kbd {
     font-family: inherit;
 }
 
-button {
+button, summary {
     --button-fg: var(--text-button-color);
     --button-bg: var(--background-button-color);
     &.primary-button {
