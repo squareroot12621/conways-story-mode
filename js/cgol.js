@@ -52,11 +52,11 @@ class CGoL {
         observer.disconnect()
         this.stop_drawing()
       }
-    }, {
-      childList: true,
-      subtree: true
     })
-    observer.observe(document.getElementById('conways-story-mode'))
+    observer.observe(
+      document.getElementById('conways-story-mode'),
+      {childList: true, subtree: true},
+    )
   }
 
   static #normalize_rule(rule) {
