@@ -323,7 +323,7 @@ class CGoL {
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
         console.log(`It's only been ${timestamp - this.#last_draw_time}!`) // DEBUG
       }
-      this.#last_animation_frame = requestAnimationFrame((t) => this.draw(options, timestamp))
+      this.#last_animation_frame = requestAnimationFrame((t) => this.draw(options, t))
     }
   }
 
