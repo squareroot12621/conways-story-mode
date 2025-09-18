@@ -45,6 +45,18 @@ class CGoL {
     this.#last_draw_time = -Infinity
     this.#last_animation_frame = null
     this.#cached_picture = null
+    /* Make sure the canvas doesn't keep requesting animation frames after it's destroyed
+       https://stackoverflow.com/questions/20156453/how-to-detect-element-being-added-removed-from-dom-element */
+    const observer = new MutationObserver(() => {
+      if (!element.isConnected) {
+        observer.disconnect()
+        this.stop_drawing()
+      }
+    })
+    observer.observe(document, {
+      childList: true,
+      subtree: true
+    })
   }
 
   static #normalize_rule(rule) {
