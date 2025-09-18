@@ -52,6 +52,9 @@ class CGoL {
         observer.disconnect()
         this.stop_drawing()
       }
+    }, {
+      childList: true,
+      subtree: true
     })
     observer.observe(document.getElementById('conways-story-mode'))
   }
