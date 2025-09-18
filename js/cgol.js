@@ -311,14 +311,6 @@ class CGoL {
         this.#draw_inner(options)
         this.#last_draw_time = timestamp
         // TODO: Make the cache interval changeable using the speed slider
-        if (timestamp === this.#last_draw_time) { // TEST --------------------------
-          this.#ctx.fillStyle = 'white'
-          this.#ctx.font = '20px sans-serif'
-          var last_animation_frame = this.#last_animation_frame?.toString() ?? 'N/A'
-          this.#ctx.fillText(last_animation_frame, 50, 50)
-          console.log("Cache expired") // DEBUG
-          this.#cached_picture = this.#ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
-        } // END TEST --------------------------------------------------------------
       } else {
         this.#ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
@@ -359,7 +351,8 @@ class CGoL {
     // START DEBUG
     ctx.fillStyle = 'white'
     ctx.font = '20px sans-serif'
-    ctx.fillText('Does it work in #draw_inner?', 200, 50)
+    var last_animation_frame = this.#last_animation_frame?.toString() ?? 'N/A'
+    ctx.fillText(last_animation_frame, 50, 50)
     // END DEBUG
     
     // TODO: Gridlines
