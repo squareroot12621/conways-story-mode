@@ -116,7 +116,7 @@
     font-size: 1.5rem;
     background-color: var(--gray-5);
   }
-  button.simulator-toolbar-item {
+  :is(button, summary).simulator-toolbar-item {
     --button-bg: var(--gray-10);
     --button-fg: var(--gray-90);
     border-color: transparent;
