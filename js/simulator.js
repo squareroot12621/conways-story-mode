@@ -140,8 +140,9 @@ function create_simulator_main(sandbox) {
   // The "generations" statistic
   var generations_stat = create_element('div', 'Gen. 4,444', {id: 'simulator-stat-generations'})
   // The other statistics
-  var extra_stat_button = create_element('button', 'bar_chart', {class: 'simulator-toolbar-item', id: 'extra-stat-button'})
-  var extra_stat_summary = create_element('summary', extra_stat_button, {class: 'simulator-summary', tabindex: '-1'})
+  var extra_stat_summary = create_element(
+    'summary', 'bar_chart', {class: 'simulator-summary simulator-toolbar-item', id: 'extra-stat-button'}
+  )
   var population_stat = create_element('div', '4,444 cells', {id: 'simulator-stat-population'})
   var bounding_box_stat = create_element('div', '444\u00D7444', {id: 'simulator-stat-bounding-box'})
   var extra_stats = create_element('div', [population_stat, bounding_box_stat], {class: 'extra-stats-wrapper'})
@@ -290,9 +291,6 @@ function create_event_handlers(sandbox) {
   // Simulation speed event handlers
   var simulator_speed = document.getElementById('simulator-speed')
   var simulator_speed_button = document.getElementById('simulator-speed-button')
-  simulator_speed_button.addEventListener('click', () => {
-    simulator_speed.toggleAttribute('open')
-  })
   var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
   var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
   var EASE = 10 // Lower number = curve becomes more of a line
@@ -300,13 +298,6 @@ function create_event_handlers(sandbox) {
   speed_slider.addEventListener('input', () => {
     var true_speed = (MAX_SPEED-1)/(EASE-1) * (EASE**speed_slider.value - 1) + 1
     speed_label.innerText = Math.round(true_speed) + '/s'
-  })
-
-  // Simulation stat event handlers
-  var simulator_stats = document.getElementById('simulator-extra-stats')
-  var simulator_stat_button = document.getElementById('extra-stat-button')
-  simulator_stat_button.addEventListener('click', () => {
-    simulator_stats.toggleAttribute('open')
   })
 
   // CGoL class
