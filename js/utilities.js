@@ -23,7 +23,7 @@ function create_element(tag, content=[], attributes={}) {
     ]
     if (svg_element_list.includes(tag)) {
         var namespace = 'http://www.w3.org/2000/svg'
-    } else if (attributes.hasOwn('xmlns')) {
+    } else if (Object.hasOwn(attributes, 'xmlns')) {
         var namespace = attributes['xmlns']
     } else {
         var namespace = null
