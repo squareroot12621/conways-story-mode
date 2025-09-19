@@ -2,7 +2,12 @@ import {update_tooltip_locations} from './level-select.js'
 import {resize_simulator} from './simulator.js'
 
 function create_element(tag, content=[], attributes={}) {
-    var element = document.createElement(tag)
+    if (tag === 'svg') {
+        // Yes, this is required
+        var element = document.createElementNS('http://www.w3.org/2000/svg', tag)
+    } else {
+        var element = document.createElement(tag)
+    }
     if (content instanceof Array) {
         element.append(...content)
     } else {
