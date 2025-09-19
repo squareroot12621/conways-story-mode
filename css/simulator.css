@@ -177,6 +177,9 @@
   #simulator-reset, #simulator-step, #simulator-play {
     font-variation-settings: 'FILL' 1;
   }
+  #simulator-back svg {
+    max-width: none;
+  }
   #simulator-speed {
     display: flex;
     align-items: center;
@@ -199,7 +202,7 @@
       font-size: calc(1.25rem + 0.25rem * var(--button-stretch));
       line-height: 1.25;
     }
-    @media (width < 22rem) { /* 352px */
+    @media (width < 23.875rem) { /* 382px */
       #sidebar-open[data-visible] ~ .slider-wrapper {
         flex-direction: column;
       }
@@ -213,7 +216,7 @@
         width: auto;
       }
     }
-    @media (width < 20.25rem) { /* 324px */
+    @media (width < 22.125rem) { /* 354px */
       .slider-wrapper {
         flex-direction: column;
       }
