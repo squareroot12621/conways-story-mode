@@ -2,12 +2,33 @@ import {update_tooltip_locations} from './level-select.js'
 import {resize_simulator} from './simulator.js'
 
 function create_element(tag, content=[], attributes={}) {
-    if (tag === 'svg') {
-        // Yes, this is required
-        var element = document.createElementNS('http://www.w3.org/2000/svg', tag)
+    var svg_element_list = [
+        'animate', 'animateMotion', 'animateTransform',
+        'circle', 'clipPath', 'defs', 'desc', 'ellipse',
+        'feBlend', 'feColorMatrix', 'feComponentTransfer',
+        'feComposite', 'feConvolveMatrix', 'feDiffuseLighting',
+        'feDisplacementMap', 'feDistantLight', 'feDropShadow',
+        'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR',
+        'feGaussianBlur', 'feImage', 'feMerge', 'feMergeNode',
+        'feMorphology', 'feOffset', 'fePointLight',
+        'feSpecularLighting', 'feSpotLight', 'feTile',
+        'feTurbulence', 'filter', 'foreignObject', 'g',
+        'image', 'line', 'linearGradient', 'marker', 'mask',
+        'metadata', 'mpath', 'path', 'pattern', 'polygon',
+        'polyline', 'radialGradient', 'rect', 'set', 'stop',
+        'style', 'svg', 'switch', 'symbol', 'text', 'textPath',
+        'tspan', 'use', 'view',
+        /* 'a', 'script', and 'title' are omitted
+           since they're also used outside of SVG */
+    ]
+    if (svg_element_list.includes(tag)) {
+        var namespace = 'http://www.w3.org/2000/svg'
+    } else if (attributes.hasOwn('xmlns')) {
+        var namespace = attributes['xmlns']
     } else {
-        var element = document.createElement(tag)
+        var namespace = null
     }
+    var element = document.createElementNS(namespace, tag)
     if (content instanceof Array) {
         element.append(...content)
     } else {
