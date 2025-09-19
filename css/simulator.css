@@ -197,6 +197,7 @@
       width: 2.125em;
       text-align: right;
       font-size: calc(1.25rem + 0.25rem * var(--button-stretch));
+      line-height: 1.25;
     }
     @media (width < 22rem) { /* 352px */
       #sidebar-open[data-visible] ~ .slider-wrapper {
