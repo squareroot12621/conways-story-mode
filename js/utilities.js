@@ -22,13 +22,12 @@ function create_element(tag, content=[], attributes={}) {
            since they're also used outside of SVG */
     ]
     if (svg_element_list.includes(tag)) {
-        var namespace = 'http://www.w3.org/2000/svg'
+        var element = document.createElementNS('http://www.w3.org/2000/svg', tag)
     } else if (Object.hasOwn(attributes, 'xmlns')) {
-        var namespace = attributes['xmlns']
+        var element = document.createElementNS(attributes['xmlns'], tag)
     } else {
-        var namespace = null
+        var element = document.createElement(tag)
     }
-    var element = document.createElementNS(namespace, tag)
     if (content instanceof Array) {
         element.append(...content)
     } else {
