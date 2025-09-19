@@ -99,8 +99,22 @@ function create_simulator_main(sandbox) {
   tool_array[0].toggleAttribute('data-selected')
   var tool_selector = create_element('div', [tool_selected, tools_outer], {id: 'simulator-tool', role: 'listbox'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
-  // Reset, step, and play buttons
+  // Reset, step back, step forward, and play buttons
   var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
+  /* We can't just do scale: -1 because that'll make the GPU kick in,
+     and that kills the hinting and makes everything blurry.
+     So instead of letting the GPU do that, we do it ourselves with the SVG. */
+  var back_path = create_element(
+    'path', [], {d: 'M 720 -240 v -480 h -80 v 480 h 80 Z m -160 0 -400 -240 400 -240 v 480 Z'}
+  )
+  var back_svg = create_element('svg', back_path, {
+    xmlns: 'http://www.w3.org/2000/svg',
+    viewBox: '0 -960 960 960',
+    width: '1em',
+    height: '1em',
+    fill: 'currentColor',
+  })
+  var back_button = create_element('button', back_svg, {class: 'simulator-toolbar-item', id: 'simulator-back'})
   var step_button = create_element('button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step'})
   var play_button = create_element('button', 'play_arrow', {class: 'simulator-toolbar-item', id: 'simulator-play'})
   // The speed slider
@@ -126,7 +140,8 @@ function create_simulator_main(sandbox) {
   // The top toolbar
   var toolbar_top = create_element(
     'section',
-    [sidebar_open, tool_wrapper, gen_0_button, step_button, play_button, speed_wrapper,
+    [sidebar_open, tool_wrapper,
+     gen_0_button, back_button, step_button, play_button, speed_wrapper,
      undo_button, redo_button],
     {class: 'simulator-toolbar-top'},
   )
