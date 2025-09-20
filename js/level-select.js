@@ -2,13 +2,13 @@ import {create_main_menu} from './main-menu.js'
 import {create_element, update_root} from './utilities.js'
 
 function create_level_select() {
-    var back_icon = create_element('span', 'arrow_back', {class: 'icon', alt: ''})
-    var back_button = create_element('button', [back_icon, ' Back'], {class: 'back-button'})
+    var back_icon = create_element('span', 'arrow_back', {class: 'icon', 'aria-hidden': true})
+    var back_button = create_element('button', [back_icon, ' Back'], {class: 'back-button', type: 'button'})
 
     var units_heading = create_element('h3', 'Units', {class: 'levels-heading'})
     var unit_array = []
     for (var i = 1; i <= 10; ++i) {
-        var button = create_element('button', i.toString(), {class: 'level'})
+        var button = create_element('button', i.toString(), {class: 'level', type: 'button'})
         var tooltip = create_element('div', `Unit ${i.toString()}`, {class: 'level-tooltip'})
         unit_array.push(create_element('li', [button, tooltip]))
     }
@@ -18,7 +18,7 @@ function create_level_select() {
     var lessons_heading = create_element('h3', 'Lessons', {class: 'levels-heading'})
     var lesson_array = []
     for (var i = 1; i <= 10; ++i) {
-        var button = create_element('button', i.toString(), {class: 'level'})
+        var button = create_element('button', i.toString(), {class: 'level', type: 'button'})
         var tooltip = create_element('div', `Lesson ${i.toString()}`, {class: 'level-tooltip'})
         lesson_array.push(create_element('li', [button, tooltip]))
     }
