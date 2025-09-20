@@ -141,7 +141,7 @@
       top: -0.125rem;
     }
   }
-  #simulator-options {
+  #simulator-options, #simulator-extra-options {
     position: absolute;
     top: calc(100% + 0.5rem);
     left: -0.25rem;
@@ -160,6 +160,19 @@
       bottom: calc(100% - 0.0625rem);
       left: 1.125rem;
       clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
+    }
+    &#simulator-extra-options {
+      bottom: calc(100% + 0.5rem);
+      top: auto;
+      right: 0rem;
+      left: auto;
+      ::before {
+        right: 0.4375rem;
+        left: auto;
+        top: calc(100% - 0.0625rem);
+        bottom: auto;
+        clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+      }
     }
   }
   .simulator-option-wrapper {
@@ -304,8 +317,10 @@
       font-size: 1.25rem;
     }
   }
-  #simulator-settings {
+  #simulator-settings-wrapper {
     margin-left: auto;
-    font-variation-settings: 'FILL' 1;
+    .simulator-option:last-child .icon { /* The settings icon */
+      font-variation-settings: 'FILL' 1;
+    }
   }
 }
