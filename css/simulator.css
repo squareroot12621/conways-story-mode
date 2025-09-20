@@ -149,6 +149,7 @@
     background-color: var(--gray-10);
     border-radius: 0.625rem;
     font-size: 1.25rem;
+    filter: drop-shadow(black 0rem 0.0625rem 0.1875rem); /* Otherwise the dropdown won't stand out from the toolbar */
     &::before {
       content: '';
       width: 1.25rem;
