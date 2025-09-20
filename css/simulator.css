@@ -202,15 +202,6 @@
       font-size: calc(1.25rem + 0.25rem * var(--button-stretch));
       line-height: 1.25;
     }
-    @media (width < 22.125rem) { /* 354px */
-      *:has(~ &[open]) {
-        display: none;
-      }
-      margin-block: 0.125rem;
-      & .slider-true {
-        width: calc(var(--100vw) - 8.75rem);
-      }
-    }
     @media (width < 23.875rem) { /* 382px */
       #sidebar-open[data-visible] ~ *:has(~ &[open]) {
         display: none;
@@ -219,6 +210,15 @@
         margin-block: 0.125rem;
       }
       #sidebar-open[data-visible] ~ &[open] .slider-true {
+        width: calc(var(--100vw) - 8.75rem);
+      }
+    }
+    @media (width < 22.125rem) { /* 354px */
+      *:has(~ &[open]) {
+        display: none;
+      }
+      margin-block: 0.125rem;
+      &[open] .slider-true {
         width: calc(var(--100vw) - 8.75rem);
       }
       #sidebar-open:not([data-visible]) ~ &[open] .slider-true {
