@@ -16,6 +16,13 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
 
 function create_simulator_sidebar(sandbox, objective=null, library=null) {
+  var back_icon = create_element('span', 'arrow_back', {class: 'icon', 'aria-hidden': true})
+  var back_button = create_element('button', [back_icon, ' Back'], {class: 'back-button'})
+  var close_menu_icon = create_element('span', 'arrow_left', {class: 'icon', 'aria-hidden': true})
+  var close_menu_button = create_element(
+    'button', close_menu_icon, {class: 'invisible-button', 'aria-label': 'Close sidebar'}
+  )
+  
   if (objective !== null) {
     var mission_icon = create_element('span', 'list_alt', {class: 'icon', 'aria-hidden': true})
     var mission_heading = create_element('h3', [mission_icon, ' Mission'])
@@ -44,10 +51,6 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
     'div', [library_heading].concat(library_list), {class: 'simulator-library-wrapper'}
   )
 
-  var back_icon = create_element('span', 'arrow_back', {class: 'icon', 'aria-hidden': true})
-  var back_button = create_element('button', [back_icon, ' Back'], {class: 'back-button'})
-  var close_menu_icon = create_element('span', 'arrow_left', {class: 'icon', alt: 'Close menu'})
-  var close_menu_button = create_element('button', close_menu_icon, {class: 'invisible-button'})
   var sidebar_top = create_element('div', [back_button, close_menu_button], {class: 'simulator-sidebar-top'})
   
   var sidebar_main = create_element(
@@ -57,13 +60,13 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
   )
 
   if (!sandbox) { // Sandbox doesn't have any hints
-    var lightbulb_icon = create_element('span', 'lightbulb_2', {class: 'icon', alt: 'Show hint'})
-    var hint_button = create_element('button', lightbulb_icon, {class: 'invisible-button'})
+    var lightbulb_icon = create_element('span', 'lightbulb_2', {class: 'icon', 'aria-hidden': true})
+    var hint_button = create_element('button', lightbulb_icon, {class: 'invisible-button', 'aria-label': 'Show hint'})
     var hint_tooltip = create_element('div', 'Need a hint?', {class: 'hint-tooltip'})
     var hint_wrapper = create_element('div', [hint_button, hint_tooltip], {class: 'hint-button'})
   }
-  var reset_icon = create_element('span', 'replay', {class: 'icon', alt: 'Reset level'})
-  var reset_button = create_element('button', reset_icon, {class: 'invisible-button'})
+  var reset_icon = create_element('span', 'replay', {class: 'icon', 'aria-hidden': true})
+  var reset_button = create_element('button', reset_icon, {class: 'invisible-button', 'aria-label': 'Reset level'})
   var sidebar_bottom = create_element(
     'div', sandbox ? [reset_button] : [hint_wrapper, reset_button], {class: 'simulator-sidebar-bottom'}
   )
@@ -77,7 +80,9 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
 
 function create_simulator_main(sandbox) {  
   // The button that opens the sidebar
-  var sidebar_open = create_element('button', 'arrow_right', {class: 'simulator-toolbar-item', id: 'sidebar-open'})
+  var sidebar_open = create_element(
+    'button', 'arrow_right', {class: 'simulator-toolbar-item', id: 'sidebar-open', 'aria-label': 'Open sidebar'}
+  )
   sidebar_open.style.display = 'none'
   /* The tool selector. I can't just use <select>/<option>
      because you can't put icons in <option> elements, unfortunately. */
@@ -89,7 +94,7 @@ function create_simulator_main(sandbox) {
   ]
   var tool_array = []
   for (var {icon, name} of tools) {
-    var tool_icon = create_element('span', icon, {class: 'icon'})
+    var tool_icon = create_element('span', icon, {class: 'icon', 'aria-hidden': true})
     tool_array.push(create_element('div', [tool_icon, ' ' + name], {class: 'simulator-option', role: 'option'}))
   }
   var tool_selected = create_element('button', tools[0].icon, {class: 'simulator-toolbar-item'})
@@ -100,7 +105,9 @@ function create_simulator_main(sandbox) {
   var tool_selector = create_element('div', [tool_selected, tools_outer], {id: 'simulator-tool', role: 'listbox'})
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   // Reset, step back, step forward, and play buttons
-  var gen_0_button = create_element('button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset'})
+  var gen_0_button = create_element(
+    'button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset', 'aria-label': 'Reset to generation 0'}
+  )
   /* We can't just do scale: -1 because that'll make the GPU kick in,
      and that kills the hinting and makes everything blurry.
      So instead of letting the GPU do that, we do it ourselves with the SVG. */
@@ -114,29 +121,45 @@ function create_simulator_main(sandbox) {
     height: '1em',
     fill: 'currentColor',
   })
-  var back_button = create_element('button', back_svg, {class: 'simulator-toolbar-item', id: 'simulator-back'})
-  var step_button = create_element('button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step'})
-  var play_button = create_element('button', 'play_arrow', {class: 'simulator-toolbar-item', id: 'simulator-play'})
+  var back_button = create_element(
+    'button', back_svg, {class: 'simulator-toolbar-item', id: 'simulator-back', 'aria-label': 'Step back 1 generation'}
+  )
+  var step_button = create_element(
+    'button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step', 'aria-label': 'Step forward 1 generation'}
+  )
+  var play_button = create_element(
+    'button', 'play_arrow', {class: 'simulator-toolbar-item', id: 'simulator-play', 'aria-label': 'Play simulation'}
+  )
   // The speed slider
   var slider = create_element('input', [], {
     type: 'range',
     min: 0,
     max: 1,
     step: 'any',
-    class: 'slider-true'
+    class: 'slider-true',
+    'aria-label': '5 generations per second',
   })
   slider.value = Math.log(95/59) / Math.log(10) // Found with WolframAlpha
-  var slider_value = create_element('div', '5/s', {class: 'slider-value'})
+  var slider_value = create_element('div', '5/s', {class: 'slider-value', 'aria-hidden': true})
   var slider_wrapper = create_element(
     'div', [slider, slider_value], {class: 'slider-wrapper'}
   )
   var speed_summary = create_element(
-    'summary', 'speed', {class: 'simulator-summary simulator-toolbar-item', id: 'simulator-speed-button'}
+    'summary', 'speed', {
+      class: 'simulator-summary simulator-toolbar-item',
+      id: 'simulator-speed-button',
+    }
   )
-  var speed_wrapper = create_element('details', [speed_summary, slider_wrapper], {id: 'simulator-speed'})
+  var speed_wrapper = create_element(
+    'details', [speed_summary, slider_wrapper], {id: 'simulator-speed', 'aria-label': 'Change simulation speed'}
+  )
   // Undo and redo buttons
-  var undo_button = create_element('button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo'})
-  var redo_button = create_element('button', 'redo', {class: 'simulator-toolbar-item', id: 'simulator-redo'})
+  var undo_button = create_element(
+    'button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo', 'aria-label': 'Undo'}
+  )
+  var redo_button = create_element(
+    'button', 'redo', {class: 'simulator-toolbar-item', id: 'simulator-redo', 'aria-label': 'Redo'}
+  )
   // The top toolbar
   var toolbar_top = create_element(
     'section',
@@ -153,19 +176,26 @@ function create_simulator_main(sandbox) {
   canvas.height = canvas.clientHeight
   
   // The "generations" statistic
-  var generations_stat = create_element('div', 'Gen. 4,444', {id: 'simulator-stat-generations'})
+  var generations_stat = create_element(
+    'div', 'Gen. 4,444', {id: 'simulator-stat-generations', 'aria-label': 'Generation 4,444'}
+  )
   // The other statistics
   var extra_stat_summary = create_element(
     'summary', 'bar_chart', {class: 'simulator-summary simulator-toolbar-item', id: 'extra-stat-button'}
   )
   var population_stat = create_element('div', '4,444 cells', {id: 'simulator-stat-population'})
-  var bounding_box_stat = create_element('div', '444\u00D7444', {id: 'simulator-stat-bounding-box'})
+  var bounding_box_stat = create_element(
+    'div', '444\u00D7444', {id: 'simulator-stat-bounding-box', 'aria-label': 'Bounding box: 444 by 444'}
+  )
   var extra_stats = create_element('div', [population_stat, bounding_box_stat], {class: 'extra-stats-wrapper'})
   var extra_stat_wrapper = create_element(
-    'details', [extra_stat_summary, extra_stats], {id: 'simulator-extra-stats'}
+    'details', [extra_stat_summary, extra_stats], {id: 'simulator-extra-stats', 'aria-label': 'Toggle extra statistics'}
   )
   // The settings button
-  var settings_button = create_element('button', 'settings', {class: 'simulator-toolbar-item', id: 'simulator-settings'})
+  // TODO: Change into an options button with way more than just settings
+  var settings_button = create_element(
+    'button', 'options', {class: 'simulator-toolbar-item', id: 'simulator-options', 'aria-label': 'Toggle options'}
+  )
   // The bottom toolbar
   var toolbar_bottom = create_element(
     'section', [generations_stat, extra_stat_wrapper, settings_button], {class: 'simulator-toolbar-bottom'}
