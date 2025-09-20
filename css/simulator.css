@@ -207,7 +207,7 @@
         display: none;
       }
       #sidebar-open[data-visible] ~ &[open] {
-        margin-block: 0.125rem;
+        height: 2.25rem;
       }
       #sidebar-open[data-visible] ~ &[open] .slider-true {
         width: calc(var(--100vw) - 8.75rem);
@@ -217,7 +217,7 @@
       *:has(~ &[open]) {
         display: none;
       }
-      margin-block: 0.125rem;
+      height: 2.25rem;
       &[open] .slider-true {
         width: calc(var(--100vw) - 8.75rem);
       }
