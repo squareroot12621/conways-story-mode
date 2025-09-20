@@ -192,7 +192,7 @@ function resize_simulator() {
   var toolbar_bottom = document.getElementsByClassName('simulator-toolbar-bottom')[0]
   var toolbar_width = toolbar_top.clientWidth
   var MIN_STRETCH = 380
-  var MAX_STRETCH = 640
+  var MAX_STRETCH = 650
   if (toolbar_width < MIN_STRETCH) {
     var button_stretch = 0
   } else if (toolbar_width > MAX_STRETCH) {
