@@ -166,7 +166,7 @@
       top: auto;
       right: 0rem;
       left: auto;
-      ::before {
+      &::before {
         right: 0.4375rem;
         left: auto;
         top: calc(100% - 0.0625rem);
