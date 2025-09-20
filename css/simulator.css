@@ -214,7 +214,8 @@
       }
     }
     @media (width < 22.125rem) { /* 354px */
-      *:not(&) {
+      .simulator-toolbar-top *:not(&) {
+        /* .simulator-toolbar-top stops the entire webpage from disappearing */
         display: none;
       }
       margin-block: 0.125rem;
