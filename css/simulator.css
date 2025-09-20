@@ -319,6 +319,7 @@
   }
   #simulator-settings-wrapper {
     margin-left: auto;
+    position: relative;
     .simulator-option:last-child .icon { /* The settings icon */
       font-variation-settings: 'FILL' 1;
     }
