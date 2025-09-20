@@ -208,7 +208,7 @@
       }
       margin-block: 0.125rem;
       & .slider-true {
-        width: calc(100 * var(--vw) - 8.75rem);
+        width: calc(var(--100vw) - 8.75rem);
       }
     }
     @media (width < 23.875rem) { /* 382px */
@@ -219,10 +219,10 @@
         margin-block: 0.125rem;
       }
       #sidebar-open[data-visible] ~ &[open] .slider-true {
-        width: calc(100 * var(--vw) - 8.75rem);
+        width: calc(var(--100vw) - 8.75rem);
       }
       #sidebar-open:not([data-visible]) ~ &[open] .slider-true {
-        width: calc(100 * var(--vw) - 6.25rem);
+        width: calc(var(--100vw) - 6.25rem);
       }
     }
   }
