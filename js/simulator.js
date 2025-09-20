@@ -290,40 +290,6 @@ function create_event_handlers(sandbox) {
 
   /* Event handlers for the tools and extra options
      (they work in mostly the same way) */
-  function toggle_option_visibility(set_to=null) {
-    var display = window.getComputedStyle(current_option_wrapper).display
-    if (set_to !== null) {
-      var new_display = set_to ? 'block' : 'none'
-    } else {
-      var new_display = display === 'none' ? 'block' : 'none' // Toggle display
-    }
-    current_option_wrapper.style.display = new_display
-    if (new_display === 'none' && dropdown_type === 'tools') {
-      // Update the icon on the selector when we close it
-      for (var option of current_options) {
-        if (option.getAttribute('data-selected') !== null) {
-          current_button.innerText = option.children[0].innerText // Get the icon name
-          break
-        }
-      }
-    }
-  }
-  function select_option(dropdown_type, num, relative=false) {
-    var selected_old = current_options.map((option) => {
-      return option.getAttribute('data-selected') !== null
-    }).indexOf(true)
-    var selected_new = relative ? selected_old + num : num
-    if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
-      current_options[selected_old].toggleAttribute('data-selected')
-      current_options[selected_new].toggleAttribute('data-selected')
-    }
-  }
-  var tool_button = document.querySelector('#simulator-tool button')
-  var tool_options = document.getElementById('simulator-options')
-  var options = [...tool_options.getElementsByClassName('simulator-option')]
-  var settings_button = document.getElementById('simulator-settings')
-  var extra_option_wrapper = document.getElementById('simulator-extra-options')
-  var extra_options = [...extra_option_wrapper.getElementsByClassName('simulator-option')]
   for (let dropdown_type of ['tools', 'extras']) {
     if (dropdown_type === 'tools') {
       let current_button = document.querySelector('#simulator-tool button')
@@ -333,6 +299,39 @@ function create_event_handlers(sandbox) {
       let current_option_wrapper = document.getElementById('simulator-extra-options')
     }
     let current_options = [...current_option_wrapper.getElementsByClassName('simulator-option')]
+
+    /* HACK: Function is defined in a for loop so the variables
+       defined at the start of the for loop to be visible.
+       It shouldn't be too bad, though, because the loop only runs twice. */
+    function toggle_option_visibility(set_to=null) {
+      var display = window.getComputedStyle(current_option_wrapper).display
+      if (set_to !== null) {
+        var new_display = set_to ? 'block' : 'none'
+      } else {
+        var new_display = display === 'none' ? 'block' : 'none' // Toggle display
+      }
+      current_option_wrapper.style.display = new_display
+      if (new_display === 'none' && dropdown_type === 'tools') {
+        // Update the icon on the selector when we close it
+        for (var option of current_options) {
+          if (option.getAttribute('data-selected') !== null) {
+            current_button.innerText = option.children[0].innerText // Get the icon name
+            break
+          }
+        }
+      }
+    }
+    function select_option(dropdown_type, num, relative=false) {
+      var selected_old = current_options.map((option) => {
+        return option.getAttribute('data-selected') !== null
+      }).indexOf(true)
+      var selected_new = relative ? selected_old + num : num
+      if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
+        current_options[selected_old].toggleAttribute('data-selected')
+        current_options[selected_new].toggleAttribute('data-selected')
+      }
+    }
+    
     current_button.addEventListener('click', () => {
       toggle_option_visibility()
     })
