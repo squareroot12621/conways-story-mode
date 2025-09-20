@@ -210,6 +210,7 @@ function create_simulator_main(sandbox) {
   }
   var extra_option_wrapper = create_element('div', extra_option_array, {class: 'simulator-option-wrapper'})
   var extra_options = create_element('div', extra_option_wrapper, {id: 'simulator-extra-options'})
+  extra_options.style.display = 'none'
   var settings_wrapper = create_element(
     'div', [settings_button, extra_options], {id: 'simulator-settings-wrapper'}
   )
@@ -364,6 +365,10 @@ function create_event_handlers(sandbox) {
     speed_label.innerText = Math.round(true_speed) + '/s'
   })
 
+  // Extra option event handlers
+  var extra_options = document.getElementById('simulator-extra-options')
+  // TODO: Finish (by stealing from tool event handlers)
+  
   // CGoL class
   var cgol_object = new CGoL({
     grid_size: 128, // TODO: Increase to 256 once it stops lagging
