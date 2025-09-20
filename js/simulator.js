@@ -290,20 +290,9 @@ function create_event_handlers(sandbox) {
 
   /* Event handlers for the tools and extra options
      (they work in mostly the same way) */
-  for (let dropdown_type of ['tools', 'extras']) {
-    if (dropdown_type === 'tools') {
-      let current_button = document.querySelector('#simulator-tool button')
-      let current_option_wrapper = document.getElementById('simulator-options')
-    } else {
-      let current_button = document.getElementById('simulator-settings')
-      let current_option_wrapper = document.getElementById('simulator-extra-options')
-    }
-    let current_options = [...current_option_wrapper.getElementsByClassName('simulator-option')]
-
-    /* HACK: Function is defined in a for loop so the variables
-       defined at the start of the for loop to be visible.
-       It shouldn't be too bad, though, because the loop only runs twice. */
-    function toggle_option_visibility(set_to=null) {
+  function toggle_option_visibility_inner(required_variables, set_to=null) {
+    var {current_button, current_option_wrapper, current_options} = required_variables
+    return () => {
       var display = window.getComputedStyle(current_option_wrapper).display
       if (set_to !== null) {
         var new_display = set_to ? 'block' : 'none'
@@ -321,7 +310,10 @@ function create_event_handlers(sandbox) {
         }
       }
     }
-    function select_option(dropdown_type, num, relative=false) {
+  }
+  function select_option_inner(required_variables, dropdown_type, num, relative=false) {
+    var {current_button, current_option_wrapper, current_options} = required_variables
+    return () => {
       var selected_old = current_options.map((option) => {
         return option.getAttribute('data-selected') !== null
       }).indexOf(true)
@@ -331,6 +323,24 @@ function create_event_handlers(sandbox) {
         current_options[selected_new].toggleAttribute('data-selected')
       }
     }
+  }
+  
+  for (let dropdown_type of ['tools', 'extras']) {
+    if (dropdown_type === 'tools') {
+      let current_button = document.querySelector('#simulator-tool button')
+      let current_option_wrapper = document.getElementById('simulator-options')
+    } else {
+      let current_button = document.getElementById('simulator-settings')
+      let current_option_wrapper = document.getElementById('simulator-extra-options')
+    }
+    let current_options = [...current_option_wrapper.getElementsByClassName('simulator-option')]
+    let required_variables = {
+      current_button: current_button,
+      current_option_wrapper: current_option_wrapper,
+      current_options: current_options
+    }
+    let toggle_option_visibility = (...args) => { toggle_option_visibility_inner(required_variables, ...args) }
+    let select_option = (...args) => { select_option_inner(required_variables, ...args) }
     
     current_button.addEventListener('click', () => {
       toggle_option_visibility()
