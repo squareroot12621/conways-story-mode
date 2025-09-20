@@ -288,69 +288,87 @@ function create_event_handlers(sandbox) {
     open_menu_button.removeAttribute('data-visible')
   })
 
-  // Simulation tool event handlers
+  /* Event handlers for the tools and extra options
+     (they work in mostly the same way) */
   function toggle_option_visibility(set_to=null) {
-    var display = window.getComputedStyle(tool_options).display
+    var display = window.getComputedStyle(current_option_wrapper).display
     if (set_to !== null) {
       var new_display = set_to ? 'block' : 'none'
     } else {
       var new_display = display === 'none' ? 'block' : 'none' // Toggle display
     }
-    tool_options.style.display = new_display
-    if (new_display === 'none') {
+    current_option_wrapper.style.display = new_display
+    if (new_display === 'none' && dropdown_type === 'tools') {
       // Update the icon on the selector when we close it
-      for (var option of options) {
+      for (var option of current_options) {
         if (option.getAttribute('data-selected') !== null) {
-          tool_button.innerText = option.children[0].innerText // Get the icon name
+          current_button.innerText = option.children[0].innerText // Get the icon name
           break
         }
       }
     }
   }
-  function select_option(num, relative=false) {
-    var selected_old = options.map((option) => {
+  function select_option(dropdown_type, num, relative=false) {
+    var selected_old = current_options.map((option) => {
       return option.getAttribute('data-selected') !== null
     }).indexOf(true)
     var selected_new = relative ? selected_old + num : num
-    if (selected_new >= 0 && selected_new < options.length) { // We can't move out of the array
-      options[selected_old].toggleAttribute('data-selected')
-      options[selected_new].toggleAttribute('data-selected')
+    if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
+      current_options[selected_old].toggleAttribute('data-selected')
+      current_options[selected_new].toggleAttribute('data-selected')
     }
   }
   var tool_button = document.querySelector('#simulator-tool button')
   var tool_options = document.getElementById('simulator-options')
   var options = [...tool_options.getElementsByClassName('simulator-option')]
-  tool_button.addEventListener('click', () => {
-    toggle_option_visibility()
-  })
-  tool_button.addEventListener('blur', () => {
-    toggle_option_visibility(false)
-  })
-  tool_button.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      toggle_option_visibility()
-      event.preventDefault()
-    } else if (event.key === 'Escape') {
-      toggle_option_visibility(false)
-      event.preventDefault()
-    } else if (event.key === 'ArrowUp') {
-      select_option(-1, true)
-    } else if (event.key === 'ArrowDown') {
-      select_option(1, true)
-    } else if (event.key === 'Home') {
-      select_option(0)
-    } else if (event.key === 'End') {
-      select_option(options.length - 1)
+  var settings_button = document.getElementById('simulator-settings')
+  var extra_option_wrapper = document.getElementById('simulator-extra-options')
+  var extra_options = [...extra_option_wrapper.getElementsByClassName('simulator-option')]
+  for (var dropdown_type of ['tools', 'extras']) {
+    if (dropdown_type === 'tools') {
+      var current_button = document.querySelector('#simulator-tool button')
+      var current_option_wrapper = document.getElementById('simulator-options')
+    } else {
+      var current_button = document.getElementById('simulator-settings')
+      var current_option_wrapper = document.getElementById('simulator-extra-options')
     }
-  })
-  for (let [index, option] of options.entries()) {
-    option.addEventListener('mouseenter', () => {
-      select_option(index)
+    var current_options = [...current_option_wrapper.getElementsByClassName('simulator-option')]
+    current_button.addEventListener('click', () => {
+      toggle_option_visibility()
     })
-    option.addEventListener('click', () => {
-      select_option(index)
+    current_button.addEventListener('blur', () => {
       toggle_option_visibility(false)
     })
+    current_button.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        toggle_option_visibility()
+        event.preventDefault()
+      } else if (event.key === 'Escape') {
+        toggle_option_visibility(false)
+        event.preventDefault()
+      } else if (event.key === 'ArrowUp') {
+        select_option(-1, true)
+      } else if (event.key === 'ArrowDown') {
+        select_option(1, true)
+      } else if (event.key === 'PageUp') {
+        select_option(-5, true)
+      } else if (event.key === 'PageDown') {
+        select_option(5, true)
+      } else if (event.key === 'Home') {
+        select_option(0)
+      } else if (event.key === 'End') {
+        select_option(current_options.length - 1)
+      }
+    })
+    for (let [index, option] of current_options.entries()) {
+      option.addEventListener('mouseenter', () => {
+        select_option(index)
+      })
+      option.addEventListener('click', () => {
+        select_option(index)
+        toggle_option_visibility(false)
+      })
+    }
   }
   
   // Simulation speed event handlers
@@ -364,21 +382,6 @@ function create_event_handlers(sandbox) {
     var true_speed = (MAX_SPEED-1)/(EASE-1) * (EASE**speed_slider.value - 1) + 1
     speed_label.innerText = Math.round(true_speed) + '/s'
   })
-
-  // Extra option event handlers
-  var simulator_settings = document.getElementById('simulator-settings')
-  var extra_options = document.getElementById('simulator-extra-options')
-  simulator_settings.addEventListener('click', () => {
-    var display = window.getComputedStyle(extra_options).display
-    var new_display = display === 'none' ? 'block' : 'none' // Toggle display
-    extra_options.style.display = new_display
-  })
-  var option_list = extra_options.children[0].children
-  for (var child of option_list) {
-    child.addEventListener('click', () => {
-      extra_options.style.display = 'none' // It has to be visible already
-    })
-  }
   
   // CGoL class
   var cgol_object = new CGoL({
