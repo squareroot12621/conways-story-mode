@@ -326,12 +326,13 @@ function create_event_handlers(sandbox) {
   }
   
   for (let dropdown_type of ['tools', 'extras']) {
+    let current_button, current_option_wrapper;
     if (dropdown_type === 'tools') {
-      let current_button = document.querySelector('#simulator-tool button')
-      let current_option_wrapper = document.getElementById('simulator-options')
+      current_button = document.querySelector('#simulator-tool button')
+      current_option_wrapper = document.getElementById('simulator-options')
     } else {
-      let current_button = document.getElementById('simulator-settings')
-      let current_option_wrapper = document.getElementById('simulator-extra-options')
+      current_button = document.getElementById('simulator-settings')
+      current_option_wrapper = document.getElementById('simulator-extra-options')
     }
     let current_options = [...current_option_wrapper.getElementsByClassName('simulator-option')]
     let required_variables = {
