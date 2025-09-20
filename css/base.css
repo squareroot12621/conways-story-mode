@@ -213,7 +213,7 @@ body, button, input, kbd {
     overflow-y: auto;
     color-scheme: dark;
     position: relative; /* So absolute elements stick to the inside of this element instead of the viewport */
-    --100vw: calc(100vw - 2rem);
+    --100vw: calc(max(100vw, 20rem) - 2rem);
     --vw: calc(var(--100vw) / 100);
 }
 footer {
