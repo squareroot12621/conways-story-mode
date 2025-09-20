@@ -27,12 +27,12 @@ function create_main_menu() {
     var buttons = []
     for (var {name, icon, icon_type, info} of button_info) {
         var button_name = create_element('h2', name, {class: 'main-button-name'})
-        var button_icon = create_element('div', icon, {class: 'main-button-icon ' + icon_type})
+        var button_icon = create_element('div', icon, {class: 'main-button-icon ' + icon_type, 'aria-hidden': 'true'})
         var button_info = create_element('div', info, {class: 'main-button-info'})
         buttons.push(create_element(
             'button',
             [button_name, button_icon, button_info],
-            {class: 'main-button'},
+            {class: 'main-button', type: 'button'},
         ))
     }
     var button_wrapper = create_element('section', buttons, {class: 'main-button-wrapper'})
