@@ -324,15 +324,15 @@ function create_event_handlers(sandbox) {
   var settings_button = document.getElementById('simulator-settings')
   var extra_option_wrapper = document.getElementById('simulator-extra-options')
   var extra_options = [...extra_option_wrapper.getElementsByClassName('simulator-option')]
-  for (var dropdown_type of ['tools', 'extras']) {
+  for (let dropdown_type of ['tools', 'extras']) {
     if (dropdown_type === 'tools') {
-      var current_button = document.querySelector('#simulator-tool button')
-      var current_option_wrapper = document.getElementById('simulator-options')
+      let current_button = document.querySelector('#simulator-tool button')
+      let current_option_wrapper = document.getElementById('simulator-options')
     } else {
-      var current_button = document.getElementById('simulator-settings')
-      var current_option_wrapper = document.getElementById('simulator-extra-options')
+      let current_button = document.getElementById('simulator-settings')
+      let current_option_wrapper = document.getElementById('simulator-extra-options')
     }
-    var current_options = [...current_option_wrapper.getElementsByClassName('simulator-option')]
+    let current_options = [...current_option_wrapper.getElementsByClassName('simulator-option')]
     current_button.addEventListener('click', () => {
       toggle_option_visibility()
     })
