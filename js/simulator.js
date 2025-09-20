@@ -373,6 +373,11 @@ function create_event_handlers(sandbox) {
     var new_display = display === 'none' ? 'block' : 'none' // Toggle display
     extra_options.style.display = new_display
   })
+  for (var child of extra_options.children) {
+    child.addEventListener('click', () => {
+      extra_options.style.display = 'none' // It has to be visible already
+    })
+  }
   
   // CGoL class
   var cgol_object = new CGoL({
