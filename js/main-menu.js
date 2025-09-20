@@ -27,7 +27,7 @@ function create_main_menu() {
     var buttons = []
     for (var {name, icon, icon_type, info} of button_info) {
         var button_name = create_element('h2', name, {class: 'main-button-name'})
-        var button_icon = create_element('div', icon, {class: 'main-button-icon ' + icon_type, 'aria-hidden': 'true'})
+        var button_icon = create_element('div', icon, {class: 'main-button-icon ' + icon_type, 'aria-hidden': true})
         var button_info = create_element('div', info, {class: 'main-button-info'})
         buttons.push(create_element(
             'button',
