@@ -203,19 +203,18 @@
       line-height: 1.25;
     }
     @media (width < 23.875rem) { /* 382px */
-      #sidebar-open[data-visible] ~ *:not(&) {
+      #sidebar-open[data-visible] ~ *:has(~ &[open]) {
         display: none;
       }
-      #sidebar-open[data-visible] ~ & {
+      #sidebar-open[data-visible] ~ &[open] {
         margin-block: 0.125rem;
       }
-      #sidebar-open[data-visible] ~ & .slider-true {
+      #sidebar-open[data-visible] ~ &[open] .slider-true {
         width: calc(100vw - 10.75rem);
       }
     }
     @media (width < 22.125rem) { /* 354px */
-      .simulator-toolbar-top > *:not(&) {
-        /* .simulator-toolbar-top stops the entire webpage from disappearing */
+      *:has(~ &[open]) {
         display: none;
       }
       margin-block: 0.125rem;
