@@ -367,7 +367,11 @@ function create_event_handlers(sandbox) {
 
   // Extra option event handlers
   var extra_options = document.getElementById('simulator-extra-options')
-  // TODO: Finish (by stealing from tool event handlers)
+  extra_options.addEventListener('click', () => {
+    var display = window.getComputedStyle(extra_options).display
+    var new_display = display === 'none' ? 'block' : 'none' // Toggle display
+    extra_options.style.display = new_display
+  })
   
   // CGoL class
   var cgol_object = new CGoL({
