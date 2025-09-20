@@ -192,13 +192,30 @@ function create_simulator_main(sandbox) {
     'details', [extra_stat_summary, extra_stats], {id: 'simulator-extra-stats', 'aria-label': 'Toggle extra statistics'}
   )
   // The settings button
-  // TODO: Change into an options button with way more than just settings
+  var all_extra_options = [
+    {icon: 'undo', name: 'Undo'},
+    {icon: 'redo', name: 'Redo'},
+    {icon: 'replay', name: 'Restart'},
+    {icon: 'upload', name: 'Import RLE'},
+    {icon: 'content_copy', name: 'Copy RLE'},
+    {icon: 'settings', name: 'Settings'},
+  ]
   var settings_button = create_element(
     'button', 'more_vert', {class: 'simulator-toolbar-item', id: 'simulator-settings', 'aria-label': 'Toggle options'}
   )
+  var extra_option_array = []
+  for (var {icon, name} of all_extra_options) {
+    var option_icon = create_element('span', icon, {class: 'icon', 'aria-hidden': true})
+    extra_option_array.push(create_element('div', [option_icon, ' ' + name], {class: 'simulator-option'}))
+  }
+  var extra_option_wrapper = create_element('div', extra_option_inner, {class: 'simulator-options-wrapper'})
+  var extra_options = create_element('div', extra_option_wrapper, {id: 'simulator-extra-options'})
+  var settings_wrapper = create_element(
+    'div', [settings_button, extra_options], {id: 'simulator-settings-wrapper'}
+  )
   // The bottom toolbar
   var toolbar_bottom = create_element(
-    'section', [generations_stat, extra_stat_wrapper, settings_button], {class: 'simulator-toolbar-bottom'}
+    'section', [generations_stat, extra_stat_wrapper, settings_wrapper], {class: 'simulator-toolbar-bottom'}
   )
   
   var simulator = create_element('article', [toolbar_top, canvas, toolbar_bottom], {class: 'simulator-main'})
