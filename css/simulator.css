@@ -183,7 +183,7 @@
   .simulator-option {
     padding-inline: 0.3125rem 0.5rem;
     cursor: pointer;
-    &[data-selected] {
+    &[data-selected], #simulator-extra-options &:hover {
       background-color: var(--text-color);
       color: var(--gray-10);
     }
