@@ -203,38 +203,30 @@
       line-height: 1.25;
     }
     @media (width < 23.875rem) { /* 382px */
-      #sidebar-open[data-visible] ~ & .slider-wrapper {
-        flex-direction: column;
+      #sidebar-open[data-visible] ~ *:not(&) {
+        display: none;
+      }
+      #sidebar-open[data-visible] ~ & {
+        margin-block: 0.125rem;
       }
       #sidebar-open[data-visible] ~ & .slider-true {
-        height: 1rem;
-      }
-      #sidebar-open[data-visible] ~ & .slider-value {
-        margin: 0rem 0rem -0.25rem;
-        text-align: center;
-        font-size: 1rem;
-        width: auto;
+        width: calc(100vw - 10.75rem);
       }
     }
     @media (width < 22.125rem) { /* 354px */
-      .slider-wrapper {
-        flex-direction: column;
+      *:not(&) {
+        display: none;
       }
-      .slider-true {
-        height: 1rem;
-      }
-      .slider-value {
-        margin: 0rem 0rem -0.25rem;
-        text-align: center;
-        font-size: 1rem;
-        width: auto;
+      margin-block: 0.125rem;
+      & .slider-true {
+        width: calc(100vw - 10.75rem);
       }
     }
   }
   *:has(+ details[open]) {
     /* The details' negative margin-left
        can sometimes make it overlap the previous element,
-       so this makes said previous element appear on top. */
+       so this makes the previous element appear on top. */
     position: relative;
     z-index: 1;
   }
