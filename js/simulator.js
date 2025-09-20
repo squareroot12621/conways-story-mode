@@ -366,8 +366,9 @@ function create_event_handlers(sandbox) {
   })
 
   // Extra option event handlers
+  var simulator_settings = document.getElementById('simulator-settings')
   var extra_options = document.getElementById('simulator-extra-options')
-  extra_options.addEventListener('click', () => {
+  simulator_settings.addEventListener('click', () => {
     var display = window.getComputedStyle(extra_options).display
     var new_display = display === 'none' ? 'block' : 'none' // Toggle display
     extra_options.style.display = new_display
