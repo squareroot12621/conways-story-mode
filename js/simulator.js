@@ -194,7 +194,7 @@ function create_simulator_main(sandbox) {
   // The settings button
   // TODO: Change into an options button with way more than just settings
   var settings_button = create_element(
-    'button', 'options', {class: 'simulator-toolbar-item', id: 'simulator-options', 'aria-label': 'Toggle options'}
+    'button', 'more_vert', {class: 'simulator-toolbar-item', id: 'simulator-settings', 'aria-label': 'Toggle options'}
   )
   // The bottom toolbar
   var toolbar_bottom = create_element(
