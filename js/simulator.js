@@ -373,7 +373,8 @@ function create_event_handlers(sandbox) {
     var new_display = display === 'none' ? 'block' : 'none' // Toggle display
     extra_options.style.display = new_display
   })
-  for (var child of extra_options.children) {
+  var option_list = extra_options.children[0].children
+  for (var child of option_list) {
     child.addEventListener('click', () => {
       extra_options.style.display = 'none' // It has to be visible already
     })
