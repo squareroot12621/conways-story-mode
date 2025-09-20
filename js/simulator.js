@@ -191,12 +191,14 @@ function resize_simulator() {
   var toolbar_top = document.getElementsByClassName('simulator-toolbar-top')[0]
   var toolbar_bottom = document.getElementsByClassName('simulator-toolbar-bottom')[0]
   var toolbar_width = toolbar_top.clientWidth
-  if (toolbar_width < 380) {
+  var MIN_STRETCH = 380
+  var MAX_STRETCH = 650
+  if (toolbar_width < MIN_STRETCH) {
     var button_stretch = 0
-  } else if (toolbar_width > 600) {
+  } else if (toolbar_width > MAX_STRETCH) {
     var button_stretch = 1
   } else {
-    var button_stretch = (toolbar_width - 380) / 220
+    var button_stretch = (toolbar_width - MIN_STRETCH) / (MAX_STRETCH - MIN_STRETCH)
   }
   toolbar_top.style.setProperty('--button-stretch', button_stretch)
   toolbar_bottom.style.setProperty('--button-stretch', button_stretch)
