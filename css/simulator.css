@@ -214,7 +214,7 @@
       }
     }
     @media (width < 22.125rem) { /* 354px */
-      .simulator-toolbar-top *:not(&) {
+      .simulator-toolbar-top > *:not(&) {
         /* .simulator-toolbar-top stops the entire webpage from disappearing */
         display: none;
       }
