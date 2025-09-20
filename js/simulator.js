@@ -17,7 +17,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
 function create_simulator_sidebar(sandbox, objective=null, library=null) {
   if (objective !== null) {
-    var mission_icon = create_element('span', 'list_alt', {class: 'icon', alt: ''})
+    var mission_icon = create_element('span', 'list_alt', {class: 'icon', 'aria-hidden': true})
     var mission_heading = create_element('h3', [mission_icon, ' Mission'])
     var mission_text = []
     for (var line of objective.split('\n')) {
@@ -28,7 +28,7 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
     )
   }
   library ??= [] // TODO: Change to everything you've learned so far
-  var library_icon = create_element('span', 'menu_book', {class: 'icon', alt: ''})
+  var library_icon = create_element('span', 'menu_book', {class: 'icon', 'aria-hidden': true})
   var library_heading = create_element('h3', [library_icon, ' Library'])
   if (library.length) {
     var library_items = []
@@ -44,7 +44,7 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
     'div', [library_heading].concat(library_list), {class: 'simulator-library-wrapper'}
   )
 
-  var back_icon = create_element('span', 'arrow_back', {class: 'icon', alt: ''})
+  var back_icon = create_element('span', 'arrow_back', {class: 'icon', 'aria-hidden': true})
   var back_button = create_element('button', [back_icon, ' Back'], {class: 'back-button'})
   var close_menu_icon = create_element('span', 'arrow_left', {class: 'icon', alt: 'Close menu'})
   var close_menu_button = create_element('button', close_menu_icon, {class: 'invisible-button'})
