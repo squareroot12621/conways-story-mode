@@ -208,7 +208,7 @@ function create_simulator_main(sandbox) {
     var option_icon = create_element('span', icon, {class: 'icon', 'aria-hidden': true})
     extra_option_array.push(create_element('div', [option_icon, ' ' + name], {class: 'simulator-option'}))
   }
-  var extra_option_wrapper = create_element('div', extra_option_array, {class: 'simulator-options-wrapper'})
+  var extra_option_wrapper = create_element('div', extra_option_array, {class: 'simulator-option-wrapper'})
   var extra_options = create_element('div', extra_option_wrapper, {id: 'simulator-extra-options'})
   var settings_wrapper = create_element(
     'div', [settings_button, extra_options], {id: 'simulator-settings-wrapper'}
