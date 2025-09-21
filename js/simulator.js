@@ -159,11 +159,41 @@ function create_simulator_main(sandbox) {
   var speed_wrapper = create_element(
     'div', [speed_button, slider_outer], {id: 'simulator-speed'}
   )
+  // The zoom slider
+  var zoom_slider = create_element('input', [], {
+    type: 'range',
+    min: 0,
+    max: 1,
+    step: 'any',
+    class: 'slider-true',
+    'aria-labelledby': 'zoom-slider-label',
+  })
+  zoom_slider.value = Math.log(20) / Math.log(50)
+  var zoom_slider_value = create_element('div', 'Zoom 20', {class: 'slider-value', id: 'zoom-slider-label'})
+  var zoom_slider_inner = create_element(
+    'div', [zoom_slider, zoom_slider_value], {class: 'slider-wrapper'}
+  )
+  var zoom_slider_outer = create_element(
+    'div', zoom_slider_inner, {id: 'simulator-zoom-wrapper'}
+  )
+  zoom_slider_outer.style.display = 'none'
+  var zoom_button = create_element(
+    'button', 'zoom_in', {
+      'aria-label': 'Change zoom level',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-zoom-button',
+      type: 'button',
+    }
+  )
+  var zoom_wrapper = create_element(
+    'div', [zoom_button, zoom_slider_outer], {id: 'simulator-zoom'}
+  )
   // The top toolbar
   var toolbar_top = create_element(
     'section',
     [sidebar_open, tool_wrapper,
-     gen_0_button, back_button, step_button, play_button, speed_wrapper],
+     gen_0_button, back_button, step_button, play_button,
+     speed_wrapper, zoom_wrapper],
     {class: 'simulator-toolbar-top'},
   )
 
