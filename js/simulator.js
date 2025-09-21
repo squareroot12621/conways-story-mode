@@ -410,7 +410,7 @@ function create_event_handlers(sandbox) {
   })
   speed_slider.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      speed_wrapper.style.display = new_display
+      speed_wrapper.style.display = 'none'
       speed_button.focus()
       event.preventDefault()
     }
