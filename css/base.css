@@ -272,7 +272,7 @@ kbd {
     font-family: inherit;
 }
 
-button, summary {
+button, input[type~="button submit reset"], summary {
     --button-fg: var(--text-button-color);
     --button-bg: var(--background-button-color);
     &.primary-button {
@@ -297,6 +297,10 @@ button, summary {
         outline: 0.125rem dashed var(--button-fg);
         outline-offset: 0.1875rem;
     }
+}
+input:focus-visible {
+    outline: 0.125rem dashed var(--text-button-color);
+    outline-offset: 0.1875rem;
 }
 
 .back-button, .invisible-button {
