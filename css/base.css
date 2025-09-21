@@ -226,8 +226,7 @@ footer {
         margin-right: 0.3em;
         display: inline;
         width: 1em;
-        position: relative;
-        top: 0.1em;
+        vertical-align: -0.1em;
     }
 }
 @media (width < 36rem) {
