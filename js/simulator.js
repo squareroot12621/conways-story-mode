@@ -311,7 +311,6 @@ function create_event_handlers(sandbox) {
   }
   function select_option_inner(required_variables, num, relative=false) {
     let {current_button, current_option_wrapper, current_options, dropdown_type} = required_variables
-    console.log(current_button, current_option_wrapper, current_options) // DEBUG
     var selected_old = current_options.map((option) => {
       return option.getAttribute('data-selected') !== null
     }).indexOf(true)
@@ -342,7 +341,6 @@ function create_event_handlers(sandbox) {
     }
     let toggle_option_visibility = (...args) => toggle_option_visibility_inner(required_variables, ...args)
     let select_option = (...args) => select_option_inner(required_variables, ...args)
-    console.log(toggle_option_visibility, select_option) // DEBUG
     current_button.addEventListener('click', () => {
       toggle_option_visibility()
     })
