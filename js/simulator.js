@@ -153,19 +153,11 @@ function create_simulator_main(sandbox) {
   var speed_wrapper = create_element(
     'details', [speed_summary, slider_wrapper], {id: 'simulator-speed', 'aria-label': 'Change simulation speed'}
   )
-  // Undo and redo buttons
-  var undo_button = create_element(
-    'button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo', 'aria-label': 'Undo'}
-  )
-  var redo_button = create_element(
-    'button', 'redo', {class: 'simulator-toolbar-item', id: 'simulator-redo', 'aria-label': 'Redo'}
-  )
   // The top toolbar
   var toolbar_top = create_element(
     'section',
     [sidebar_open, tool_wrapper,
-     gen_0_button, back_button, step_button, play_button, speed_wrapper,
-     undo_button, redo_button],
+     gen_0_button, back_button, step_button, play_button, speed_wrapper],
     {class: 'simulator-toolbar-top'},
   )
 
@@ -191,10 +183,15 @@ function create_simulator_main(sandbox) {
   var extra_stat_wrapper = create_element(
     'details', [extra_stat_summary, extra_stats], {id: 'simulator-extra-stats', 'aria-label': 'Toggle extra statistics'}
   )
+  // Undo and redo buttons
+  var undo_button = create_element(
+    'button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo', 'aria-label': 'Undo'}
+  )
+  var redo_button = create_element(
+    'button', 'redo', {class: 'simulator-toolbar-item', id: 'simulator-redo', 'aria-label': 'Redo'}
+  )
   // The settings button
   var all_extra_options = [
-    {icon: 'undo', name: 'Undo'},
-    {icon: 'redo', name: 'Redo'},
     {icon: 'replay', name: 'Restart'},
     {icon: 'upload', name: 'Import RLE'},
     {icon: 'content_copy', name: 'Copy RLE'},
@@ -216,7 +213,9 @@ function create_simulator_main(sandbox) {
   )
   // The bottom toolbar
   var toolbar_bottom = create_element(
-    'section', [generations_stat, extra_stat_wrapper, settings_wrapper], {class: 'simulator-toolbar-bottom'}
+    'section',
+    [generations_stat, extra_stat_wrapper, undo_button, redo_button, settings_wrapper],
+    {class: 'simulator-toolbar-bottom'}
   )
   
   var simulator = create_element('article', [toolbar_top, canvas, toolbar_bottom], {class: 'simulator-main'})
