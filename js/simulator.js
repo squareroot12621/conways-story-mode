@@ -314,7 +314,10 @@ function create_event_handlers(sandbox) {
     console.log(current_button, current_option_wrapper, current_options) // DEBUG
     var selected_old = current_options.map((option) => {
       return option.getAttribute('data-selected') !== null
-    }).indexOf(true) ?? 0
+    }).indexOf(true)
+    if (selected_old === -1) {
+      selected_old = 0
+    }
     var selected_new = relative ? selected_old + num : num
     if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
       current_options[selected_old].toggleAttribute('data-selected')
