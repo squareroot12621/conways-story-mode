@@ -291,7 +291,7 @@ function create_event_handlers(sandbox) {
   /* Event handlers for the tools and extra options
      (they work in mostly the same way) */
   function toggle_option_visibility_inner(required_variables, set_to=null) {
-    var {current_button, current_option_wrapper, current_options} = required_variables
+    let {current_button, current_option_wrapper, current_options} = required_variables
     return () => {
       var display = window.getComputedStyle(current_option_wrapper).display
       if (set_to !== null) {
@@ -312,7 +312,7 @@ function create_event_handlers(sandbox) {
     }
   }
   function select_option_inner(required_variables, dropdown_type, num, relative=false) {
-    var {current_button, current_option_wrapper, current_options} = required_variables
+    let {current_button, current_option_wrapper, current_options} = required_variables
     return () => {
       var selected_old = current_options.map((option) => {
         return option.getAttribute('data-selected') !== null
