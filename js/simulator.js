@@ -299,13 +299,17 @@ function create_event_handlers(sandbox) {
       var new_display = display === 'none' ? 'block' : 'none' // Toggle display
     }
     current_option_wrapper.style.display = new_display
-    if (new_display === 'none' && dropdown_type === 'tools') {
-      // Update the icon on the selector when we close it
-      for (var option of current_options) {
-        if (option.getAttribute('data-selected') !== null) {
-          current_button.innerText = option.children[0].innerText // Get the icon name
-          break
+    if (new_display === 'none') {
+      if (dropdown_type === 'tools') {
+        // Update the icon on the selector when we close it
+        for (var option of current_options) {
+          if (option.getAttribute('data-selected') !== null) {
+            current_button.innerText = option.children[0].innerText // Get the icon name
+            break
+          }
         }
+      } else if (dropdown_type === 'extras') {
+        current_options.forEach((option) => option.removeAttribute('data-selected'))
       }
     }
   }
