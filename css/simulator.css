@@ -208,9 +208,11 @@
     .slider-wrapper {
       display: flex;
       padding: 0.25rem 0.5rem;
+      align-items: center;
     }
     .slider-true {
       width: 8rem;
+      height: 1.5rem;
     }
     .slider-value {
       margin-left: 0.25rem;
