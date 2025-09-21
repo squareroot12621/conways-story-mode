@@ -147,6 +147,7 @@ function create_simulator_main(sandbox) {
   var slider_outer = create_element(
     'div', slider_inner, {id: 'simulator-speed-wrapper'}
   )
+  slider_outer.style.display = 'none'
   var speed_button = create_element(
     'button', 'speed', {
       'aria-label': 'Change simulation speed',
@@ -395,10 +396,25 @@ function create_event_handlers(sandbox) {
   }
   
   // Simulation speed event handlers
-  var simulator_speed = document.getElementById('simulator-speed')
-  var simulator_speed_button = document.getElementById('simulator-speed-button')
+  var speed_button = document.getElementById('simulator-speed-button')
+  var speed_wrapper = document.getElementById('simulator-speed-wrapper')
   var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
   var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
+  speed_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(speed_wrapper).display
+    var new_display = display === 'none' ? 'block' : 'none'
+    speed_wrapper.style.display = new_display
+    if (new_display === 'block') {
+      speed_slider.focus()
+    }
+  })
+  speed_slider.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      speed_wrapper.style.display = new_display
+      speed_button.focus()
+      event.preventDefault()
+    }
+  })
   var EASE = 10 // Lower number = curve becomes more of a line
   var MAX_SPEED = 60
   speed_slider.addEventListener('input', () => {
