@@ -141,7 +141,7 @@
       top: -0.125rem;
     }
   }
-  #simulator-options, #simulator-extra-options {
+  #simulator-options, #simulator-speed-wrapper, #simulator-extra-options {
     position: absolute;
     top: calc(100% + 0.5rem);
     left: -0.25rem;
@@ -160,6 +160,13 @@
       bottom: calc(100% - 0.0625rem);
       left: 1.125rem;
       clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
+    }
+    &#simulator-speed-wrapper {
+      left: 50%;
+      transform: translate(-50%);
+      &::before {
+        left: calc(50% - 0.625rem);
+      }
     }
     &#simulator-extra-options {
       bottom: calc(100% + 0.5rem);
@@ -197,47 +204,18 @@
   #simulator-speed {
     display: flex;
     align-items: center;
-    .simulator-summary {
-      list-style-type: none;
-      border-radius: 0.625rem;
-      margin-block: calc(-1 * max(1px, round(down, 0.125rem, 1px))); /* Account for border width rounding */
-    }
     .slider-wrapper {
       display: flex;
-      margin-left: 0.125rem;
+      padding: 0.25rem 0.5rem;
     }
     .slider-true {
-      width: calc(4rem + 4rem * var(--button-stretch));
+      width: 8rem;
     }
     .slider-value {
-      margin-left: calc(0.0625rem + 0.1875rem * var(--button-stretch));
+      margin-left: 0.25rem;
       width: 2.125em;
       text-align: right;
-      font-size: calc(1.25rem + 0.25rem * var(--button-stretch));
-      line-height: 1.25;
-    }
-    @media (width < 23.875rem) { /* 382px */
-      #sidebar-open[data-visible] ~ *:has(~ &[open]) {
-        display: none;
-      }
-      #sidebar-open[data-visible] ~ &[open] {
-        height: 2.25rem;
-      }
-      #sidebar-open[data-visible] ~ &[open] .slider-true {
-        width: calc(var(--100vw) - 8.75rem);
-      }
-    }
-    @media (width < 22.125rem) { /* 354px */
-      *:has(~ &[open]) {
-        display: none;
-      }
-      height: 2.25rem;
-      &[open] .slider-true {
-        width: calc(var(--100vw) - 8.75rem);
-      }
-      #sidebar-open:not([data-visible]) ~ &[open] .slider-true {
-        width: calc(var(--100vw) - 6.25rem);
-      }
+      font-size: 1.25rem;
     }
   }
   *:has(+ details[open]) {
