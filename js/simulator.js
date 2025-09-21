@@ -419,7 +419,13 @@ function create_event_handlers(sandbox) {
   var MAX_SPEED = 60
   speed_slider.addEventListener('input', () => {
     var true_speed = (MAX_SPEED-1)/(EASE-1) * (EASE**speed_slider.value - 1) + 1
-    speed_label.innerText = Math.round(true_speed) + '/s'
+    var shown_speed = Math.round(true_speed)
+    speed_label.innerText = shown_speed + '/s'
+    if (shown_speed === 1) {
+      speed_slider.ariaLabel = '1 generation per second'
+    } else {
+      speed_slider.ariaLabel = shown_speed + ' generations per second'
+    }
   })
   
   // CGoL class
