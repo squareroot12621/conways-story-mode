@@ -253,18 +253,8 @@
     margin-inline: -0.125rem -0.5rem;
     border-radius: 1000rem;
   }
-  #simulator-undo {
+  #simulator-zoom {
     margin-left: auto;
-  }
-  @media (width < 30rem) { /* 480px */
-    #sidebar-open[data-visible] ~ #simulator-speed[open] ~ :is(#simulator-undo, #simulator-redo) {
-      display: none;
-    }
-  }
-  @media (width < 27rem) { /* 432px */
-    #simulator-speed[open] ~ :is(#simulator-undo, #simulator-redo) {
-      display: none;
-    }
   }
 
   #simulator-cgol {
@@ -317,8 +307,10 @@
       font-size: 1.25rem;
     }
   }
-  #simulator-settings-wrapper {
+  #simulator-undo {
     margin-left: auto;
+  }
+  #simulator-settings-wrapper {
     position: relative;
     .simulator-option:last-child .icon { /* The settings icon */
       font-variation-settings: 'FILL' 1;
