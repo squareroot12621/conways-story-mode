@@ -398,8 +398,8 @@ function create_event_handlers(sandbox) {
   // Simulation speed event handlers
   var speed_button = document.getElementById('simulator-speed-button')
   var speed_wrapper = document.getElementById('simulator-speed-wrapper')
-  var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
-  var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
+  var speed_slider = speed_wrapper.getElementsByClassName('slider-true')[0]
+  var speed_label = speed_wrapper.getElementsByClassName('slider-value')[0]
   speed_button.addEventListener('click', () => {
     var display = window.getComputedStyle(speed_wrapper).display
     var new_display = display === 'none' ? 'block' : 'none'
