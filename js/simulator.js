@@ -292,7 +292,8 @@ function create_event_handlers(sandbox) {
      (they work in mostly the same way) */
   function toggle_option_visibility_inner(required_variables, set_to=null) {
     let {current_button, current_option_wrapper, current_options} = required_variables
-    return () => {
+    return (set_to=null) => {
+      console.log(current_button, current_option_wrapper, current_options)
       var display = window.getComputedStyle(current_option_wrapper).display
       if (set_to !== null) {
         var new_display = set_to ? 'block' : 'none'
@@ -313,7 +314,8 @@ function create_event_handlers(sandbox) {
   }
   function select_option_inner(required_variables, dropdown_type, num, relative=false) {
     let {current_button, current_option_wrapper, current_options} = required_variables
-    return () => {
+    return (dropdown_type, num, relative=false) => {
+      console.log(current_button, current_option_wrapper, current_options)
       var selected_old = current_options.map((option) => {
         return option.getAttribute('data-selected') !== null
       }).indexOf(true)
