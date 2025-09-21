@@ -339,6 +339,7 @@ function create_event_handlers(sandbox) {
       current_button: current_button,
       current_option_wrapper: current_option_wrapper,
       current_options: current_options,
+      dropdown_type: dropdown_type,
     }
     let toggle_option_visibility = (...args) => toggle_option_visibility_inner(required_variables, ...args)
     let select_option = (...args) => select_option_inner(required_variables, ...args)
