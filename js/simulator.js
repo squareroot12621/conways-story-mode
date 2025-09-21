@@ -314,7 +314,7 @@ function create_event_handlers(sandbox) {
     console.log(current_button, current_option_wrapper, current_options) // DEBUG
     var selected_old = current_options.map((option) => {
       return option.getAttribute('data-selected') !== null
-    }).indexOf(true)
+    }).indexOf(true) ?? 0
     var selected_new = relative ? selected_old + num : num
     if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
       current_options[selected_old].toggleAttribute('data-selected')
@@ -347,8 +347,14 @@ function create_event_handlers(sandbox) {
       toggle_option_visibility(false)
     })
     current_button.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
+      if (event.key === 'Enter' || event.key === ' ') {
         toggle_option_visibility()
+        if (current_options.every((option) => option.getAttribute('data-selected') === null)) {
+          /* If the Enter key is used to open the dialog
+             and no option is selected yet,
+             automatically select the first option */
+          select_option(0)
+        }
         event.preventDefault()
       } else if (event.key === 'Escape') {
         toggle_option_visibility(false)
