@@ -322,7 +322,6 @@ function create_event_handlers(sandbox) {
     if (selected_old === -1 && relative) {
       selected_new = 0
     }
-    console.log(`Fired at ${Date.now()}, old=${selected_old}, new=${selected_new}`) // DEBUG
     if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
       current_options[selected_old]?.toggleAttribute('data-selected')
       current_options[selected_new].toggleAttribute('data-selected')
