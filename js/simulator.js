@@ -457,6 +457,34 @@ function create_event_handlers(sandbox) {
       speed_slider.ariaLabel = shown_speed + ' generations per second'
     }
   })
+
+  // Simulation zoom event handlers
+  var zoom_button = document.getElementById('simulator-zoom-button')
+  var zoom_wrapper = document.getElementById('simulator-zoom-wrapper')
+  var zoom_slider = zoom_wrapper.getElementsByClassName('slider-true')[0]
+  var zoom_label = zoom_wrapper.getElementsByClassName('slider-value')[0]
+  zoom_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(zoom_wrapper).display
+    var new_display = display === 'none' ? 'block' : 'none'
+    zoom_wrapper.style.display = new_display
+    if (new_display === 'block') {
+      zoom_slider.focus()
+    }
+  })
+  zoom_slider.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      zoom_wrapper.style.display = 'none'
+      zoom_button.focus()
+      event.preventDefault()
+    }
+  })
+  var MIN_ZOOM = 1
+  var MAX_ZOOM = 50
+  zoom_slider.addEventListener('input', () => {
+    var true_zoom = (MAX_ZOOM/MIN_ZOOM)**zoom_slider.value * MIN_ZOOM
+    var shown_zoom = Math.round(true_zoom)
+    zoom_label.innerText = 'Zoom ' + shown_zoom
+  })
   
   // CGoL class
   var cgol_object = new CGoL({
