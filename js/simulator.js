@@ -310,6 +310,7 @@ function create_event_handlers(sandbox) {
     }
   }
   function select_option_inner(required_variables, num, relative=false) {
+    console.log(`Fired at ${Date.now()}`) // DEBUG
     let {current_button, current_option_wrapper, current_options, dropdown_type} = required_variables
     var selected_old = current_options.map((option) => {
       return option.getAttribute('data-selected') !== null
