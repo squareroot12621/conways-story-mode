@@ -204,6 +204,7 @@
   #simulator-speed {
     display: flex;
     align-items: center;
+    position: relative;
     .slider-wrapper {
       display: flex;
       padding: 0.25rem 0.5rem;
