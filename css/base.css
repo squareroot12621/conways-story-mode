@@ -298,9 +298,10 @@ button, input[type~="button submit reset"], summary {
         outline-offset: 0.1875rem;
     }
 }
-input:focus-visible {
+input:focus-visible { /* Needed for type="range" at the minimum */
     outline: 0.125rem dashed var(--text-button-color);
     outline-offset: 0.1875rem;
+    border-radius: 0.5rem;
 }
 
 .back-button, .invisible-button {
