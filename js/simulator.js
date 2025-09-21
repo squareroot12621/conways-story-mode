@@ -428,6 +428,7 @@ function create_event_handlers(sandbox) {
   // Simulation speed event handlers
   var speed_button = document.getElementById('simulator-speed-button')
   var speed_wrapper = document.getElementById('simulator-speed-wrapper')
+  var speed_outer = document.getElementById('simulator-speed')
   var speed_slider = speed_wrapper.getElementsByClassName('slider-true')[0]
   var speed_label = speed_wrapper.getElementsByClassName('slider-value')[0]
   speed_button.addEventListener('click', () => {
@@ -445,6 +446,9 @@ function create_event_handlers(sandbox) {
       event.preventDefault()
     }
   })
+  speed_outer.addEventListener('focusout', () => {
+    speed_wrapper.style.display = 'none'
+  })
   var EASE = 10 // Lower number = curve becomes more of a line
   var MAX_SPEED = 60
   speed_slider.addEventListener('input', () => {
@@ -461,6 +465,7 @@ function create_event_handlers(sandbox) {
   // Simulation zoom event handlers
   var zoom_button = document.getElementById('simulator-zoom-button')
   var zoom_wrapper = document.getElementById('simulator-zoom-wrapper')
+  var zoom_outer = document.getElementById('simulator-zoom')
   var zoom_slider = zoom_wrapper.getElementsByClassName('slider-true')[0]
   var zoom_label = zoom_wrapper.getElementsByClassName('slider-value')[0]
   zoom_button.addEventListener('click', () => {
@@ -477,6 +482,9 @@ function create_event_handlers(sandbox) {
       zoom_button.focus()
       event.preventDefault()
     }
+  })
+  zoom_outer.addEventListener('focusout', () => {
+    zoom_wrapper.style.display = 'none'
   })
   var MIN_ZOOM = 1
   var MAX_ZOOM = 50
