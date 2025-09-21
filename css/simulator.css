@@ -173,7 +173,7 @@
       right: -0.25rem;
       left: auto;
       &::before {
-        right: calc(0.5625rem + 0.1875 * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
+        right: calc(0.5625rem + 0.1875rem * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
         left: auto;
       }
     }
@@ -183,7 +183,7 @@
       right: -0.25rem;
       left: auto;
       &::before {
-        right: calc(0.5625rem + 0.1875 * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
+        right: calc(0.5625rem + 0.1875rem * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
         left: auto;
         top: calc(100% - 0.0625rem);
         bottom: auto;
