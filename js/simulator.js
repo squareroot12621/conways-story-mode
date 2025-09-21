@@ -292,43 +292,39 @@ function create_event_handlers(sandbox) {
      (they work in mostly the same way) */
   function toggle_option_visibility_inner(required_variables, set_to=null) {
     let {current_button, current_option_wrapper, current_options} = required_variables
-    return (set_to=null) => {
-      console.log(current_button, current_option_wrapper, current_options) // DEBUG
-      var display = window.getComputedStyle(current_option_wrapper).display
-      if (set_to !== null) {
-        var new_display = set_to ? 'block' : 'none'
-      } else {
-        var new_display = display === 'none' ? 'block' : 'none' // Toggle display
-      }
-      current_option_wrapper.style.display = new_display
-      if (new_display === 'none' && dropdown_type === 'tools') {
-        // Update the icon on the selector when we close it
-        for (var option of current_options) {
-          if (option.getAttribute('data-selected') !== null) {
-            current_button.innerText = option.children[0].innerText // Get the icon name
-            break
-          }
+    console.log(current_button, current_option_wrapper, current_options) // DEBUG
+    var display = window.getComputedStyle(current_option_wrapper).display
+    if (set_to !== null) {
+      var new_display = set_to ? 'block' : 'none'
+    } else {
+      var new_display = display === 'none' ? 'block' : 'none' // Toggle display
+    }
+    current_option_wrapper.style.display = new_display
+    if (new_display === 'none' && dropdown_type === 'tools') {
+      // Update the icon on the selector when we close it
+      for (var option of current_options) {
+        if (option.getAttribute('data-selected') !== null) {
+          current_button.innerText = option.children[0].innerText // Get the icon name
+          break
         }
       }
     }
   }
   function select_option_inner(required_variables, dropdown_type, num, relative=false) {
     let {current_button, current_option_wrapper, current_options} = required_variables
-    return (dropdown_type, num, relative=false) => {
-      console.log(current_button, current_option_wrapper, current_options) // DEBUG
-      var selected_old = current_options.map((option) => {
-        return option.getAttribute('data-selected') !== null
-      }).indexOf(true)
-      var selected_new = relative ? selected_old + num : num
-      if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
-        current_options[selected_old].toggleAttribute('data-selected')
-        current_options[selected_new].toggleAttribute('data-selected')
-      }
+    console.log(current_button, current_option_wrapper, current_options) // DEBUG
+    var selected_old = current_options.map((option) => {
+      return option.getAttribute('data-selected') !== null
+    }).indexOf(true)
+    var selected_new = relative ? selected_old + num : num
+    if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
+      current_options[selected_old].toggleAttribute('data-selected')
+      current_options[selected_new].toggleAttribute('data-selected')
     }
   }
   
   for (let dropdown_type of ['tools', 'extras']) {
-    let current_button, current_option_wrapper;
+    let current_button, current_option_wrapper
     if (dropdown_type === 'tools') {
       current_button = document.querySelector('#simulator-tool button')
       current_option_wrapper = document.getElementById('simulator-options')
@@ -340,7 +336,7 @@ function create_event_handlers(sandbox) {
     let required_variables = {
       current_button: current_button,
       current_option_wrapper: current_option_wrapper,
-      current_options: current_options
+      current_options: current_options,
     }
     let toggle_option_visibility = (...args) => toggle_option_visibility_inner(required_variables, ...args)
     let select_option = (...args) => select_option_inner(required_variables, ...args)
