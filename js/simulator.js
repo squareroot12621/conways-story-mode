@@ -315,13 +315,12 @@ function create_event_handlers(sandbox) {
       return option.getAttribute('data-selected') !== null
     }).indexOf(true)
     var selected_new = relative ? selected_old + num : num
-    if (selected_old === -1) {
-      selected_old = 0
-      selected_new = relative ? 0 : selected_new
+    if (selected_old === -1 && relative) {
+      selected_new = 0
     }
     console.log(`Fired at ${Date.now()}, old=${selected_old}, new=${selected_new}`) // DEBUG
     if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
-      current_options[selected_old].toggleAttribute('data-selected')
+      current_options[selected_old]?.toggleAttribute('data-selected')
       current_options[selected_new].toggleAttribute('data-selected')
     }
   }
