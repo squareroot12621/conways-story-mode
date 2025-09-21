@@ -162,10 +162,11 @@
       clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
     }
     &#simulator-speed-wrapper {
-      left: 50%;
+      left: calc(50% - var(--pushback));
       transform: translate(-50%);
+      --pushback: calc(1.75rem * (1 - var(--button-stretch)));
       &::before {
-        left: calc(50% - 0.625rem);
+        left: calc(50% - 0.625rem + var(--pushback));
       }
     }
     &#simulator-extra-options {
