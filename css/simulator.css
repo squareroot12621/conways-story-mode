@@ -158,7 +158,7 @@
       display: block;
       position: absolute;
       bottom: calc(100% - 0.0625rem);
-      left: 1.125rem;
+      left: calc(0.765625rem + 0.359375rem * var(--button-stretch)); /* 1.125 with --button-stretch = 1 */
       clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
     }
     &#simulator-speed-wrapper {
@@ -173,7 +173,7 @@
       right: -0.25rem;
       left: auto;
       &::before {
-        right: 0.75rem;
+        right: calc(0.5625rem + 0.1875 * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
         left: auto;
       }
     }
@@ -183,7 +183,7 @@
       right: -0.25rem;
       left: auto;
       &::before {
-        right: 0.75rem;
+        right: calc(0.5625rem + 0.1875 * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
         left: auto;
         top: calc(100% - 0.0625rem);
         bottom: auto;
