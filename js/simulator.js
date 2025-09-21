@@ -446,9 +446,9 @@ function create_event_handlers(sandbox) {
       event.preventDefault()
     }
   })
-  speed_outer.addEventListener('focusout', () => {
+  speed_outer.addEventListener('blur', () => {
     speed_wrapper.style.display = 'none'
-  })
+  }, true)
   var EASE = 10 // Lower number = curve becomes more of a line
   var MAX_SPEED = 60
   speed_slider.addEventListener('input', () => {
@@ -483,9 +483,9 @@ function create_event_handlers(sandbox) {
       event.preventDefault()
     }
   })
-  zoom_outer.addEventListener('focusout', () => {
+  zoom_outer.addEventListener('blur', () => {
     zoom_wrapper.style.display = 'none'
-  })
+  }, true)
   var MIN_ZOOM = 1
   var MAX_ZOOM = 50
   zoom_slider.addEventListener('input', () => {
