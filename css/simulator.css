@@ -164,10 +164,10 @@
     &#simulator-extra-options {
       bottom: calc(100% + 0.5rem);
       top: auto;
-      right: 0rem;
+      right: -0.25rem;
       left: auto;
       &::before {
-        right: 0.4375rem;
+        right: 0.75rem;
         left: auto;
         top: calc(100% - 0.0625rem);
         bottom: auto;
