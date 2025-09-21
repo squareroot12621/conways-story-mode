@@ -340,8 +340,8 @@ function create_event_handlers(sandbox) {
       current_option_wrapper: current_option_wrapper,
       current_options: current_options
     }
-    let toggle_option_visibility = (...args) => { toggle_option_visibility_inner(required_variables, ...args) }
-    let select_option = (...args) => { select_option_inner(required_variables, ...args) }
+    let toggle_option_visibility = (...args) => toggle_option_visibility_inner(required_variables, ...args)
+    let select_option = (...args) => select_option_inner(required_variables, ...args)
     
     current_button.addEventListener('click', () => {
       toggle_option_visibility()
