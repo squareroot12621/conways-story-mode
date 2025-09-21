@@ -141,17 +141,22 @@ function create_simulator_main(sandbox) {
   })
   slider.value = Math.log(95/59) / Math.log(10) // Found with WolframAlpha
   var slider_value = create_element('div', '5/s', {class: 'slider-value', 'aria-hidden': true})
-  var slider_wrapper = create_element(
+  var slider_inner = create_element(
     'div', [slider, slider_value], {class: 'slider-wrapper'}
   )
-  var speed_summary = create_element(
-    'summary', 'speed', {
-      class: 'simulator-summary simulator-toolbar-item',
+  var slider_outer = create_element(
+    'div', slider_inner, {id: 'simulator-speed-wrapper'}
+  )
+  var speed_button = create_element(
+    'button', 'speed', {
+      'aria-label': 'Change simulation speed',
+      class: 'simulator-toolbar-item',
       id: 'simulator-speed-button',
+      type: 'button',
     }
   )
   var speed_wrapper = create_element(
-    'details', [speed_summary, slider_wrapper], {id: 'simulator-speed', 'aria-label': 'Change simulation speed'}
+    'div', [speed_button, slider_outer], {id: 'simulator-speed'}
   )
   // The top toolbar
   var toolbar_top = create_element(
