@@ -229,7 +229,7 @@ footer {
         vertical-align: -0.1em;
     }
 }
-@media (width < 36rem) {
+@media (width < 30rem) {
     .footer-inner {
         width: 100%;
         text-align: center;
