@@ -153,6 +153,7 @@ function create_simulator_main(sandbox) {
       'aria-label': 'Change simulation speed',
       class: 'simulator-toolbar-item',
       id: 'simulator-speed-button',
+      tabindex: 0, // Fix a bug on Safari
       type: 'button',
     }
   )
@@ -182,6 +183,7 @@ function create_simulator_main(sandbox) {
       'aria-label': 'Change zoom level',
       class: 'simulator-toolbar-item',
       id: 'simulator-zoom-button',
+      tabindex: 0, // Fix a bug on Safari
       type: 'button',
     }
   )
@@ -433,15 +435,10 @@ function create_event_handlers(sandbox) {
   var speed_label = speed_wrapper.getElementsByClassName('slider-value')[0]
   speed_button.addEventListener('click', () => {
     var display = window.getComputedStyle(speed_wrapper).display
-    /* Safari, by default, doesn't focus buttons when they're clicked.
-       This makes the blur and click events cancel each other out,
-       so we have to detect that and stop the second one. */
-    if (!(display === 'none' && document.activeElement !== speed_button)) {
-      var new_display = display === 'none' ? 'block' : 'none'
-      speed_wrapper.style.display = new_display
-      if (new_display === 'block') {
-        speed_slider.focus()
-      }
+    var new_display = display === 'none' ? 'block' : 'none'
+    speed_wrapper.style.display = new_display
+    if (new_display === 'block') {
+      speed_slider.focus()
     }
   })
   speed_slider.addEventListener('keydown', (event) => {
@@ -478,15 +475,10 @@ function create_event_handlers(sandbox) {
   var zoom_label = zoom_wrapper.getElementsByClassName('slider-value')[0]
   zoom_button.addEventListener('click', () => {
     var display = window.getComputedStyle(zoom_wrapper).display
-    /* Safari, by default, doesn't focus buttons when they're clicked.
-       This makes the blur and click events cancel each other out,
-       so we have to detect that and stop the second one. */
-    if (!(display === 'none' && document.activeElement !== zoom_button)) {
-      var new_display = display === 'none' ? 'block' : 'none'
-      zoom_wrapper.style.display = new_display
-      if (new_display === 'block') {
-        zoom_slider.focus()
-      }
+    var new_display = display === 'none' ? 'block' : 'none'
+    zoom_wrapper.style.display = new_display
+    if (new_display === 'block') {
+      zoom_slider.focus()
     }
   })
   zoom_slider.addEventListener('keydown', (event) => {
