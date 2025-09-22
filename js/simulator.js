@@ -432,11 +432,11 @@ function create_event_handlers(sandbox) {
   var speed_slider = speed_wrapper.getElementsByClassName('slider-true')[0]
   var speed_label = speed_wrapper.getElementsByClassName('slider-value')[0]
   speed_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(speed_wrapper).display
     /* Safari, by default, doesn't focus buttons when they're clicked.
        This makes the blur and click events cancel each other out,
        so we have to detect that and stop the second one. */
-    if (document.activeElement === speed_button) {
-      var display = window.getComputedStyle(speed_wrapper).display
+    if (!(display === 'none' && document.activeElement !== speed_button)) {
       var new_display = display === 'none' ? 'block' : 'none'
       speed_wrapper.style.display = new_display
       if (new_display === 'block') {
@@ -477,11 +477,11 @@ function create_event_handlers(sandbox) {
   var zoom_slider = zoom_wrapper.getElementsByClassName('slider-true')[0]
   var zoom_label = zoom_wrapper.getElementsByClassName('slider-value')[0]
   zoom_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(zoom_wrapper).display
     /* Safari, by default, doesn't focus buttons when they're clicked.
        This makes the blur and click events cancel each other out,
        so we have to detect that and stop the second one. */
-    if (document.activeElement === zoom_button) {
-      var display = window.getComputedStyle(zoom_wrapper).display
+    if (!(display === 'none' && document.activeElement !== zoom_button)) {
       var new_display = display === 'none' ? 'block' : 'none'
       zoom_wrapper.style.display = new_display
       if (new_display === 'block') {
