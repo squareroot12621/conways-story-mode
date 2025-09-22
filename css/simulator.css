@@ -184,6 +184,7 @@
       &::before {
         top: calc(100% - 0.0625rem);
         bottom: auto;
+        left: calc(0.5625rem + 0.1875rem * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
         clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
       }
     }
