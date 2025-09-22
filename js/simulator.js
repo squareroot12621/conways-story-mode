@@ -264,7 +264,7 @@ function create_simulator_main(sandbox) {
   // The bottom toolbar
   var toolbar_bottom = create_element(
     'section',
-    [generations_stat, extra_stat_wrapper, undo_button, redo_button, settings_wrapper],
+    [generations_stat, extra_stats_wrapper, undo_button, redo_button, settings_wrapper],
     {class: 'simulator-toolbar-bottom'}
   )
   
