@@ -141,31 +141,61 @@ function create_simulator_main(sandbox) {
   })
   slider.value = Math.log(95/59) / Math.log(10) // Found with WolframAlpha
   var slider_value = create_element('div', '5/s', {class: 'slider-value', 'aria-hidden': true})
-  var slider_wrapper = create_element(
+  var slider_inner = create_element(
     'div', [slider, slider_value], {class: 'slider-wrapper'}
   )
-  var speed_summary = create_element(
-    'summary', 'speed', {
-      class: 'simulator-summary simulator-toolbar-item',
+  var slider_outer = create_element(
+    'div', slider_inner, {id: 'simulator-speed-wrapper'}
+  )
+  slider_outer.style.display = 'none'
+  var speed_button = create_element(
+    'button', 'speed', {
+      'aria-label': 'Change simulation speed',
+      class: 'simulator-toolbar-item',
       id: 'simulator-speed-button',
+      tabindex: 0, // Fix a bug on Safari
+      type: 'button',
     }
   )
   var speed_wrapper = create_element(
-    'details', [speed_summary, slider_wrapper], {id: 'simulator-speed', 'aria-label': 'Change simulation speed'}
+    'div', [speed_button, slider_outer], {id: 'simulator-speed'}
   )
-  // Undo and redo buttons
-  var undo_button = create_element(
-    'button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo', 'aria-label': 'Undo'}
+  // The zoom slider
+  var zoom_slider = create_element('input', [], {
+    type: 'range',
+    min: 0,
+    max: 1,
+    step: 'any',
+    class: 'slider-true',
+    'aria-labelledby': 'zoom-slider-label',
+  })
+  zoom_slider.value = Math.log(20) / Math.log(50)
+  var zoom_slider_value = create_element('div', 'Zoom 20', {class: 'slider-value', id: 'zoom-slider-label'})
+  var zoom_slider_inner = create_element(
+    'div', [zoom_slider, zoom_slider_value], {class: 'slider-wrapper'}
   )
-  var redo_button = create_element(
-    'button', 'redo', {class: 'simulator-toolbar-item', id: 'simulator-redo', 'aria-label': 'Redo'}
+  var zoom_slider_outer = create_element(
+    'div', zoom_slider_inner, {id: 'simulator-zoom-wrapper'}
+  )
+  zoom_slider_outer.style.display = 'none'
+  var zoom_button = create_element(
+    'button', 'zoom_in', {
+      'aria-label': 'Change zoom level',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-zoom-button',
+      tabindex: 0, // Fix a bug on Safari
+      type: 'button',
+    }
+  )
+  var zoom_wrapper = create_element(
+    'div', [zoom_button, zoom_slider_outer], {id: 'simulator-zoom'}
   )
   // The top toolbar
   var toolbar_top = create_element(
     'section',
     [sidebar_open, tool_wrapper,
-     gen_0_button, back_button, step_button, play_button, speed_wrapper,
-     undo_button, redo_button],
+     gen_0_button, back_button, step_button, play_button,
+     speed_wrapper, zoom_wrapper],
     {class: 'simulator-toolbar-top'},
   )
 
@@ -180,21 +210,38 @@ function create_simulator_main(sandbox) {
     'div', 'Gen. 4,444', {id: 'simulator-stat-generations', 'aria-label': 'Generation 4,444'}
   )
   // The other statistics
-  var extra_stat_summary = create_element(
-    'summary', 'bar_chart', {class: 'simulator-summary simulator-toolbar-item', id: 'extra-stat-button'}
-  )
   var population_stat = create_element('div', '4,444 cells', {id: 'simulator-stat-population'})
   var bounding_box_stat = create_element(
     'div', '444\u00D7444', {id: 'simulator-stat-bounding-box', 'aria-label': 'Bounding box: 444 by 444'}
   )
-  var extra_stats = create_element('div', [population_stat, bounding_box_stat], {class: 'extra-stats-wrapper'})
-  var extra_stat_wrapper = create_element(
-    'details', [extra_stat_summary, extra_stats], {id: 'simulator-extra-stats', 'aria-label': 'Toggle extra statistics'}
+  var extra_stats_inner = create_element(
+    'div', [population_stat, bounding_box_stat], {class: 'extra-stats-inner'}
+  )
+  var extra_stats_outer = create_element(
+    'div', extra_stats_inner, {id: 'extra-stats-wrapper'}
+  )
+  extra_stats_outer.style.display = 'none'
+  var extra_stats_button = create_element(
+    'button', 'bar_chart', {
+      'aria-label': 'Toggle extra statistics',
+      class: 'simulator-toolbar-item',
+      id: 'extra-stats-button',
+      tabindex: 0, // Fix a bug on Safari
+      type: 'button',
+    }
+  )
+  var extra_stats_wrapper = create_element(
+    'div', [extra_stats_button, extra_stats_outer], {id: 'simulator-extra-stats'}
+  )
+  // Undo and redo buttons
+  var undo_button = create_element(
+    'button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo', 'aria-label': 'Undo'}
+  )
+  var redo_button = create_element(
+    'button', 'redo', {class: 'simulator-toolbar-item', id: 'simulator-redo', 'aria-label': 'Redo'}
   )
   // The settings button
   var all_extra_options = [
-    {icon: 'undo', name: 'Undo'},
-    {icon: 'redo', name: 'Redo'},
     {icon: 'replay', name: 'Restart'},
     {icon: 'upload', name: 'Import RLE'},
     {icon: 'content_copy', name: 'Copy RLE'},
@@ -216,7 +263,9 @@ function create_simulator_main(sandbox) {
   )
   // The bottom toolbar
   var toolbar_bottom = create_element(
-    'section', [generations_stat, extra_stat_wrapper, settings_wrapper], {class: 'simulator-toolbar-bottom'}
+    'section',
+    [generations_stat, extra_stats_wrapper, undo_button, redo_button, settings_wrapper],
+    {class: 'simulator-toolbar-bottom'}
   )
   
   var simulator = create_element('article', [toolbar_top, canvas, toolbar_bottom], {class: 'simulator-main'})
@@ -391,15 +440,90 @@ function create_event_handlers(sandbox) {
   }
   
   // Simulation speed event handlers
-  var simulator_speed = document.getElementById('simulator-speed')
-  var simulator_speed_button = document.getElementById('simulator-speed-button')
-  var speed_slider = simulator_speed.getElementsByClassName('slider-true')[0]
-  var speed_label = simulator_speed.getElementsByClassName('slider-value')[0]
+  var speed_button = document.getElementById('simulator-speed-button')
+  var speed_wrapper = document.getElementById('simulator-speed-wrapper')
+  var speed_outer = document.getElementById('simulator-speed')
+  var speed_slider = speed_wrapper.getElementsByClassName('slider-true')[0]
+  var speed_label = speed_wrapper.getElementsByClassName('slider-value')[0]
+  speed_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(speed_wrapper).display
+    var new_display = display === 'none' ? 'block' : 'none'
+    speed_wrapper.style.display = new_display
+    if (new_display === 'block') {
+      speed_slider.focus()
+    }
+  })
+  speed_slider.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      speed_wrapper.style.display = 'none'
+      speed_button.focus()
+      event.preventDefault()
+    }
+  })
+  speed_outer.addEventListener('blur', (event) => {
+    var focused_element = event.relatedTarget
+    if (focused_element !== speed_button && focused_element !== speed_slider) {
+      speed_wrapper.style.display = 'none'
+    }
+  }, true)
   var EASE = 10 // Lower number = curve becomes more of a line
   var MAX_SPEED = 60
   speed_slider.addEventListener('input', () => {
     var true_speed = (MAX_SPEED-1)/(EASE-1) * (EASE**speed_slider.value - 1) + 1
-    speed_label.innerText = Math.round(true_speed) + '/s'
+    var shown_speed = Math.round(true_speed)
+    speed_label.innerText = shown_speed + '/s'
+    if (shown_speed === 1) {
+      speed_slider.ariaLabel = '1 generation per second'
+    } else {
+      speed_slider.ariaLabel = shown_speed + ' generations per second'
+    }
+  })
+
+  // Simulation zoom event handlers
+  var zoom_button = document.getElementById('simulator-zoom-button')
+  var zoom_wrapper = document.getElementById('simulator-zoom-wrapper')
+  var zoom_outer = document.getElementById('simulator-zoom')
+  var zoom_slider = zoom_wrapper.getElementsByClassName('slider-true')[0]
+  var zoom_label = zoom_wrapper.getElementsByClassName('slider-value')[0]
+  zoom_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(zoom_wrapper).display
+    var new_display = display === 'none' ? 'block' : 'none'
+    zoom_wrapper.style.display = new_display
+    if (new_display === 'block') {
+      zoom_slider.focus()
+    }
+  })
+  zoom_slider.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      zoom_wrapper.style.display = 'none'
+      zoom_button.focus()
+      event.preventDefault()
+    }
+  })
+  zoom_outer.addEventListener('blur', () => {
+    var focused_element = event.relatedTarget
+    if (focused_element !== zoom_button && focused_element !== zoom_slider) {
+      zoom_wrapper.style.display = 'none'
+    }
+  }, true)
+  var MIN_ZOOM = 1
+  var MAX_ZOOM = 50
+  zoom_slider.addEventListener('input', () => {
+    var true_zoom = (MAX_ZOOM/MIN_ZOOM)**zoom_slider.value * MIN_ZOOM
+    var shown_zoom = Math.round(true_zoom)
+    zoom_label.innerText = 'Zoom ' + shown_zoom
+  })
+
+  // Simulation extra stat event handlers
+  var extra_stats_button = document.getElementById('extra-stats-button')
+  var extra_stats_wrapper = document.getElementById('extra-stats-wrapper')
+  extra_stats_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(extra_stats_wrapper).display
+    var new_display = display === 'none' ? 'block' : 'none'
+    extra_stats_wrapper.style.display = new_display
+  })
+  extra_stats_button.addEventListener('blur', () => {
+    extra_stats_wrapper.style.display = 'none'
   })
   
   // CGoL class

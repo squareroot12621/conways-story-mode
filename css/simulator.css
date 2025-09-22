@@ -141,7 +141,8 @@
       top: -0.125rem;
     }
   }
-  #simulator-options, #simulator-extra-options {
+  #simulator-options, #simulator-speed-wrapper, #simulator-zoom-wrapper,
+  #extra-stats-wrapper, #simulator-extra-options {
     position: absolute;
     top: calc(100% + 0.5rem);
     left: -0.25rem;
@@ -158,16 +159,42 @@
       display: block;
       position: absolute;
       bottom: calc(100% - 0.0625rem);
-      left: 1.125rem;
+      left: calc(0.765625rem + 0.359375rem * var(--button-stretch)); /* 1.125 with --button-stretch = 1 */
       clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
+    }
+    &#simulator-speed-wrapper {
+      left: calc(50% - var(--pushback));
+      transform: translate(-50%);
+      --pushback: calc(1.75rem * (1 - var(--button-stretch)));
+      &::before {
+        left: calc(50% - 0.625rem + var(--pushback));
+      }
+    }
+    &#simulator-zoom-wrapper {
+      right: -0.25rem;
+      left: auto;
+      &::before {
+        right: calc(0.5625rem + 0.1875rem * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
+        left: auto;
+      }
+    }
+    &#extra-stats-wrapper {
+      bottom: calc(100% + 0.5rem);
+      top: auto;
+      &::before {
+        top: calc(100% - 0.0625rem);
+        bottom: auto;
+        left: calc(0.5625rem + 0.1875rem * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
+        clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+      }
     }
     &#simulator-extra-options {
       bottom: calc(100% + 0.5rem);
       top: auto;
-      right: 0rem;
+      right: -0.25rem;
       left: auto;
       &::before {
-        right: 0.4375rem;
+        right: calc(0.5625rem + 0.1875rem * var(--button-stretch)); /* 0.75rem with --button-stretch = 1 */
         left: auto;
         top: calc(100% - 0.0625rem);
         bottom: auto;
@@ -194,77 +221,31 @@
   #simulator-back svg {
     max-width: none;
   }
-  #simulator-speed {
+  #simulator-speed, #simulator-zoom {
     display: flex;
     align-items: center;
-    .simulator-summary {
-      list-style-type: none;
-      border-radius: 0.625rem;
-      margin-block: calc(-1 * max(1px, round(down, 0.125rem, 1px))); /* Account for border width rounding */
-    }
+    position: relative;
     .slider-wrapper {
       display: flex;
-      margin-left: 0.125rem;
+      padding: 0.25rem 0.5rem;
+      align-items: center;
     }
     .slider-true {
-      width: calc(4rem + 4rem * var(--button-stretch));
+      width: 8rem;
+      height: 1.5rem;
     }
     .slider-value {
-      margin-left: calc(0.0625rem + 0.1875rem * var(--button-stretch));
+      margin-left: 0.25rem;
       width: 2.125em;
+      #simulator-zoom & {
+        width: 4.375em;
+      }
       text-align: right;
-      font-size: calc(1.25rem + 0.25rem * var(--button-stretch));
-      line-height: 1.25;
-    }
-    @media (width < 23.875rem) { /* 382px */
-      #sidebar-open[data-visible] ~ *:has(~ &[open]) {
-        display: none;
-      }
-      #sidebar-open[data-visible] ~ &[open] {
-        height: 2.25rem;
-      }
-      #sidebar-open[data-visible] ~ &[open] .slider-true {
-        width: calc(var(--100vw) - 8.75rem);
-      }
-    }
-    @media (width < 22.125rem) { /* 354px */
-      *:has(~ &[open]) {
-        display: none;
-      }
-      height: 2.25rem;
-      &[open] .slider-true {
-        width: calc(var(--100vw) - 8.75rem);
-      }
-      #sidebar-open:not([data-visible]) ~ &[open] .slider-true {
-        width: calc(var(--100vw) - 6.25rem);
-      }
+      font-size: 1.25rem;
     }
   }
-  *:has(+ details[open]) {
-    /* The details' negative margin-left
-       can sometimes make it overlap the previous element,
-       so this makes the previous element appear on top. */
-    position: relative;
-    z-index: 1;
-  }
-  details[open] {
-    background-color: var(--black);
-    padding-inline: 0.125rem 0.5rem;
-    margin-inline: -0.125rem -0.5rem;
-    border-radius: 1000rem;
-  }
-  #simulator-undo {
+  #simulator-zoom {
     margin-left: auto;
-  }
-  @media (width < 30rem) { /* 480px */
-    #sidebar-open[data-visible] ~ #simulator-speed[open] ~ :is(#simulator-undo, #simulator-redo) {
-      display: none;
-    }
-  }
-  @media (width < 27rem) { /* 432px */
-    #simulator-speed[open] ~ :is(#simulator-undo, #simulator-redo) {
-      display: none;
-    }
   }
 
   #simulator-cgol {
@@ -296,29 +277,18 @@
   #simulator-stat-generations {
     margin-right: 0.5rem;
     font-size: 1.25rem;
-    @media (width < 28.25rem) {
-      &:has(~ #simulator-extra-stats[open]) {
-        display: none;
-      }
-    }
   }
   #simulator-extra-stats {
-    display: flex;
-    align-items: center;
-    .simulator-summary {
-      list-style-type: none;
-      border-radius: 0.625rem;
-      margin-block: calc(-1 * max(1px, round(down, 0.125rem, 1px))); /* Account for border width rounding */
-    }
-    .extra-stats-wrapper {
-      display: flex;
-      margin-left: 0.125rem;
-      gap: 0.75rem;
-      font-size: 1.25rem;
-    }
+    position: relative;
+  }
+  .extra-stats-inner {
+    padding: 0.25rem 0.5rem;
+    font-size: 1.25rem;
+  }
+  #simulator-undo {
+    margin-left: auto;
   }
   #simulator-settings-wrapper {
-    margin-left: auto;
     position: relative;
     .simulator-option:last-child .icon { /* The settings icon */
       font-variation-settings: 'FILL' 1;
