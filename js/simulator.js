@@ -210,16 +210,28 @@ function create_simulator_main(sandbox) {
     'div', 'Gen. 4,444', {id: 'simulator-stat-generations', 'aria-label': 'Generation 4,444'}
   )
   // The other statistics
-  var extra_stat_summary = create_element(
-    'summary', 'bar_chart', {class: 'simulator-summary simulator-toolbar-item', id: 'extra-stat-button'}
-  )
   var population_stat = create_element('div', '4,444 cells', {id: 'simulator-stat-population'})
   var bounding_box_stat = create_element(
     'div', '444\u00D7444', {id: 'simulator-stat-bounding-box', 'aria-label': 'Bounding box: 444 by 444'}
   )
-  var extra_stats = create_element('div', [population_stat, bounding_box_stat], {class: 'extra-stats-wrapper'})
-  var extra_stat_wrapper = create_element(
-    'details', [extra_stat_summary, extra_stats], {id: 'simulator-extra-stats', 'aria-label': 'Toggle extra statistics'}
+  var extra_stats_inner = create_element(
+    'div', [population_stat, bounding_box_stat], {class: 'extra-stats-inner'}
+  )
+  var extra_stats_outer = create_element(
+    'div', extra_stats_inner, {id: 'extra-stats-wrapper'}
+  )
+  extra_stats_outer.style.display = 'none'
+  var extra_stats_button = create_element(
+    'button', 'bar_chart', {
+      'aria-label': 'Toggle extra statistics',
+      class: 'simulator-toolbar-item',
+      id: 'extra-stats-button',
+      tabindex: 0, // Fix a bug on Safari
+      type: 'button',
+    }
+  )
+  var extra_stats_wrapper = create_element(
+    'div', [extra_stats_button, extra_stats_outer], {id: 'simulator-extra-stats'}
   )
   // Undo and redo buttons
   var undo_button = create_element(
@@ -500,6 +512,18 @@ function create_event_handlers(sandbox) {
     var true_zoom = (MAX_ZOOM/MIN_ZOOM)**zoom_slider.value * MIN_ZOOM
     var shown_zoom = Math.round(true_zoom)
     zoom_label.innerText = 'Zoom ' + shown_zoom
+  })
+
+  // Simulation extra stat event handlers
+  var extra_stats_button = document.getElementById('extra-stats-button')
+  var extra_stats_wrapper = document.getElementById('extra-stats-wrapper')
+  extra_stats_button.addEventListener('click', () => {
+    var display = window.getComputedStyle(extra_stats_wrapper).display
+    var new_display = display === 'none' ? 'block' : 'none'
+    extra_stats_wrapper.style.display = new_display
+  })
+  extra_stats_button.addEventListener('blur', () => {
+    extra_stats_wrapper.style.display = 'none'
   })
   
   // CGoL class
