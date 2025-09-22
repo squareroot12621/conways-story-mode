@@ -178,6 +178,15 @@
         left: auto;
       }
     }
+    &#extra-stats-wrapper {
+      bottom: calc(100% + 0.5rem);
+      top: auto;
+      &::before {
+        top: calc(100% - 0.0625rem);
+        bottom: auto;
+        clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+      }
+    }
     &#simulator-extra-options {
       bottom: calc(100% + 0.5rem);
       top: auto;
@@ -267,11 +276,9 @@
   #simulator-stat-generations {
     margin-right: 0.5rem;
     font-size: 1.25rem;
-    @media (width < 28.25rem) {
-      &:has(~ #simulator-extra-stats[open]) {
-        display: none;
-      }
-    }
+  }
+  #simulator-extra-stats {
+    position: relative;
   }
   .extra-stats-inner {
     padding: 0.25rem 0.5rem;
