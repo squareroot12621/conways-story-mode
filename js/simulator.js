@@ -446,8 +446,8 @@ function create_event_handlers(sandbox) {
       event.preventDefault()
     }
   })
-  speed_outer.addEventListener('blur', () => {
-    var focused_element = document.activeElement
+  speed_outer.addEventListener('blur', (event) => {
+    var focused_element = event.relatedTarget
     if (focused_element !== speed_button && focused_element !== speed_slider) {
       speed_wrapper.style.display = 'none'
     }
