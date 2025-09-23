@@ -97,12 +97,19 @@ function create_simulator_main(sandbox) {
     var tool_icon = create_element('span', icon, {class: 'icon', 'aria-hidden': true})
     tool_array.push(create_element('div', [tool_icon, ' ' + name], {class: 'simulator-option', role: 'option'}))
   }
-  var tool_selected = create_element('button', tools[0].icon, {class: 'simulator-toolbar-item'})
+  var tool_selected = create_element('button', tools[0].icon, {
+    class: 'simulator-toolbar-item',
+    tabindex: 0, // Fix a bug on Safari
+  })
   var tools_inner = create_element('div', tool_array, {class: 'simulator-option-wrapper'})
   var tools_outer = create_element('div', tools_inner, {id: 'simulator-options'})
   tools_outer.style.display = 'none'
   tool_array[0].toggleAttribute('data-selected')
-  var tool_selector = create_element('div', [tool_selected, tools_outer], {id: 'simulator-tool', role: 'listbox'})
+  var tool_selector = create_element('div', [tool_selected, tools_outer], {
+    id: 'simulator-tool',
+    role: 'listbox',
+    'aria-label': 'Currently using Draw. Change tool:' // TODO: Change this when a new one is selected
+  })
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   // Reset, step back, step forward, and play buttons
   var gen_0_button = create_element(
@@ -248,7 +255,12 @@ function create_simulator_main(sandbox) {
     {icon: 'settings', name: 'Settings'},
   ]
   var settings_button = create_element(
-    'button', 'more_vert', {class: 'simulator-toolbar-item', id: 'simulator-settings', 'aria-label': 'Toggle options'}
+    'button', 'more_vert', {
+      class: 'simulator-toolbar-item',
+      id: 'simulator-settings',
+      'aria-label': 'Toggle options',
+      tabindex: 0, // Fix a bug on Safari
+    }
   )
   var extra_option_array = []
   for (var {icon, name} of all_extra_options) {
