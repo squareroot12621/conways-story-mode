@@ -365,7 +365,10 @@ function create_event_handlers(sandbox) {
         // Update the icon on the selector when we close it
         for (var option of current_options) {
           if (option.getAttribute('data-selected') !== null) {
-            current_button.innerText = option.children[0].innerText // Get the icon name
+            var icon_name = option.children[0].innerText
+            var tool_name = option.lastChild.data.trim()
+            current_button.innerText = icon_name
+            current_button.parentElement.ariaLabel = tool_name
             break
           }
         }
