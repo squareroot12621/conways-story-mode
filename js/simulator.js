@@ -366,9 +366,10 @@ function create_event_handlers(sandbox) {
         for (var option of current_options) {
           if (option.getAttribute('data-selected') !== null) {
             var icon_name = option.children[0].innerText
-            var tool_name = option.lastChild.data.trim()
             current_button.innerText = icon_name
-            current_button.parentElement.ariaLabel = tool_name
+            var tool_name = option.lastChild.data.trim()
+            var aria_label = `Currently using ${tool_name}. Change tool:`
+            current_button.parentElement.ariaLabel = aria_label
             break
           }
         }
