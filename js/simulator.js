@@ -286,6 +286,13 @@ function create_simulator_main(sandbox) {
 }
 
 
+function resize_canvas() {
+  // Resize the canvas so it doesn't get stretched weirdly
+  var canvas = document.getElementById('simulator-cgol')
+  canvas.width = canvas.clientWidth
+  canvas.height = canvas.clientHeight
+}
+
 function resize_simulator() {
   // Change direction of menu arrows
   var root = document.getElementById('conways-story-mode')
@@ -312,10 +319,7 @@ function resize_simulator() {
   toolbar_top.style.setProperty('--button-stretch', button_stretch)
   toolbar_bottom.style.setProperty('--button-stretch', button_stretch)
   
-  // Resize the canvas so it doesn't get stretched weirdly
-  var canvas = document.getElementById('simulator-cgol')
-  canvas.width = canvas.clientWidth
-  canvas.height = canvas.clientHeight
+  resize_canvas()
 }
 
 
@@ -342,11 +346,13 @@ function create_event_handlers(sandbox) {
     document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
     open_menu_button.style.display = 'block'
     open_menu_button.setAttribute('data-visible', '')
+    resize_canvas()
   })
   open_menu_button.addEventListener('click', () => {
     document.getElementsByClassName('simulator-sidebar')[0].style.display = 'flex'
     open_menu_button.style.display = 'none'
     open_menu_button.removeAttribute('data-visible')
+    resize_canvas()
   })
 
   /* Event handlers for the tools and extra options
