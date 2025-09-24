@@ -352,7 +352,7 @@ class CGoL {
     ctx.fillStyle = 'white'
     ctx.font = '20px sans-serif'
     var last_animation_frame = this.#last_animation_frame?.toString() ?? 'N/A'
-    ctx.fillText(last_animation_frame, 50, 50)
+    ctx.fillText(last_animation_frame, 50, 150)
     // END DEBUG
     
     // TODO: Gridlines
