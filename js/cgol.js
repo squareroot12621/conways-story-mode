@@ -306,7 +306,7 @@ class CGoL {
     this.zoom = CGoL.#round_zoom(zoom)
   }
 
-  #round_zoom(zoom) {
+  static #round_zoom(zoom) {
     if (zoom < 4) {
       return zoom
     } else if (zoom < 8) {
