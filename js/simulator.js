@@ -551,7 +551,7 @@ function create_event_handlers(sandbox) {
   // CGoL class
   var cgol_object = new CGoL({
     grid_size: 128, // TODO: Increase to 256 once it stops lagging
-    pattern: 'x = 3, y = 3, rule = B3/S23\n3o$2bo$bo!',
+    pattern: 'x = 3, y = 3, rule = B3/S23\n3o$2bo$bo2$.ABCDEFGHIJKLMNOPQRSTUVWXY!',
     canvas: document.getElementById('simulator-cgol'),
     zoom: 20,
   })
