@@ -347,11 +347,29 @@ class CGoL {
     var x, y
     for (var i = 0; i < grid_size; ++i) {
       for (var j = 0; j < grid_size; ++j) {
-        var cell = this.board[i*grid_size + j]
-        if (!cell) {
-          continue
+        var cell_position = i*grid_size + j
+        var cell = this.board[cell_position]
+        var cell_type = this.cell_types[cell_position]
+        var cell_type_id = cell_type*2 + cell
+        switch (cell_type_id)
+          case 0: // We don't need to be drawing empty cells
+            continue
+          case 1: ctx.fillStyle = '#FFFFFF'; break;
+          case 2: ctx.fillStyle = '#76160A'; break;
+          case 3: ctx.fillStyle = '#FF978A'; break;
+          case 4: ctx.fillStyle = '#08361A'; break;
+          case 5: ctx.fillStyle = '#33FF5C'; break;
+          case 6: ctx.fillStyle = '#635B08'; break;
+          case 7: ctx.fillStyle = '#FFEE33'; break;
+          case 8: ctx.fillStyle = '#0A397F'; break;
+          case 9: ctx.fillStyle = '#8FC9FF'; break;
+          case 10: case 12: case 14: case 16: case 18: case 20: case 22: case 24:
+            ctx.fillStyle = '#640A7F'
+            break
+          case 11: case 13: case 15: case 17: case 19: case 21: case 23: case 25:
+            ctx.fillStyle = '#E799FF'
+            break
         }
-        ctx.fillStyle = 'white'
         var left_x = j * cell_size | 0
         var right_x = (j + 1) * cell_size | 0
         var width = right_x - left_x
