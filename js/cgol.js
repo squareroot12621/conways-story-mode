@@ -1,6 +1,8 @@
 class CGoL {
   #ctx
   #last_draw_time
+  #last_width
+  #last_height
   #last_animation_frame
   #cached_picture
   
@@ -41,6 +43,8 @@ class CGoL {
     this.x_offset = options.x_offset ?? 0
     this.y_offset = options.y_offset ?? 0
     this.zoom = options.zoom ?? 8
+    this.#last_width = this.canvas.width
+    this.#last_height = this.canvas.height
 
     this.#last_draw_time = -Infinity
     this.#last_animation_frame = null
@@ -307,10 +311,19 @@ class CGoL {
     if (timestamp === null || timestamp === undefined) {
       this.#draw_inner(options)
     } else {
-      if (timestamp - this.#last_draw_time >= 1000) {
+      var cache_expired = timestamp - this.#last_draw_time >= 1000
+      // TODO: Make the cache interval changeable using the speed slider
+      var changed_size = this.canvas.width !== this.#last_width
+                         || this.canvas.height !== this.#last_height
+      if (cache_expired || changed_size) {
         this.#draw_inner(options)
-        this.#last_draw_time = timestamp
-        // TODO: Make the cache interval changeable using the speed slider
+        if (cache_expired) {
+          this.#last_draw_time = timestamp
+        }
+        if (changed_size) {
+          this.#last_width = this.canvas.width
+          this.#last_height = this.canvas.height
+        }
       } else {
         this.#ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
