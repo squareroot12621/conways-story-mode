@@ -237,11 +237,9 @@ class CGoL {
             case 'o':
               cell_number = 1
               break
-            case /[A-Y]/.test(cell):
+            default:
               cell_number = cell.codePointAt(0) - 64
               break
-            default:
-              throw SyntaxError(`Unknown cell ${cell}`)
           }
           current_line = current_line.concat(Array(count).fill(cell_number))
           row_width += count
