@@ -37,15 +37,16 @@ class CGoL {
       })
     }
     this.#compile_pattern()
+    
     // Graphical stuff
     this.canvas = options.canvas
     this.#ctx = options.canvas.getContext('2d')
     this.x_offset = options.x_offset ?? 0
     this.y_offset = options.y_offset ?? 0
-    this.zoom = options.zoom ?? 8
+    this.zoom = CGoL.#round_zoom(options.zoom ?? 8)
+    
     this.#last_width = this.canvas.width
     this.#last_height = this.canvas.height
-
     this.#last_draw_time = -Infinity
     this.#last_animation_frame = null
     this.#cached_picture = null
@@ -302,7 +303,19 @@ class CGoL {
   move_to(x, y, zoom) {
     this.x_offset = x
     this.y_offset = y
-    this.zoom = zoom
+    this.zoom = CGoL.#round_zoom(zoom)
+  }
+
+  #round_zoom(zoom) {
+    if (zoom < 4) {
+      return zoom
+    } else if (zoom < 8) {
+      return Math.round(zoom * 16) / 16
+    } else if (zoom < 16) {
+      return Math.round(zoom * 8) / 8
+    } else {
+      return Math.round(zoom * 4) / 4
+    }
   }
 
   draw(options={}, timestamp) {
