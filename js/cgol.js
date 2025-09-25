@@ -351,7 +351,7 @@ class CGoL {
         var cell = this.board[cell_position]
         var cell_type = this.cell_types[cell_position]
         var cell_type_id = cell_type*2 + cell
-        switch (cell_type_id)
+        switch (cell_type_id) {
           case 0: // We don't need to be drawing empty cells
             continue
           case 1: ctx.fillStyle = '#FFFFFF'; break;
