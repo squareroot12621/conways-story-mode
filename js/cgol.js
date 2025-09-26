@@ -348,6 +348,8 @@ class CGoL {
   }
   
   #draw_inner(options={}) {
+    var start_time = performance.now() // DEBUG
+    
     var ctx = this.#ctx
     var canvas = this.canvas
     var grid_size = this.grid_size
@@ -390,6 +392,13 @@ class CGoL {
         ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
       }
     }
+
+    // START DEBUG
+    ctx.font = '30px sans-serif'
+    ctx.fillStyle = 'white'
+    var time_ms = Math.round((performance.now() - start_time) * 1000 * 1000) / 1000
+    ctx.fillText(`${time_ms} ms`, 50, 150)
+    // END DEBUG
     
     // TODO: Gridlines
     // TODO: Colorblind symbols
