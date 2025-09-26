@@ -396,7 +396,7 @@ class CGoL {
     // START DEBUG
     ctx.font = '30px sans-serif'
     ctx.fillStyle = 'white'
-    var time_ms = Math.round((performance.now() - start_time) * 1000 * 1000) / 1000
+    var time_ms = Math.round((performance.now() - start_time) * 1000) / 1000
     ctx.fillText(`${time_ms} ms`, 50, 150)
     // END DEBUG
     
