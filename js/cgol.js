@@ -390,15 +390,8 @@ class CGoL {
         ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
       }
     }
-    // START DEBUG
-    ctx.fillStyle = 'white'
-    ctx.font = '20px sans-serif'
-    var last_animation_frame = this.#last_animation_frame?.toString() ?? 'N/A'
-    ctx.fillText(last_animation_frame, 50, 150)
-    // END DEBUG
     
     // TODO: Gridlines
-    // TODO: Different cell colors
     // TODO: Colorblind symbols
     this.#cached_picture = ctx.getImageData(0, 0, canvas.width, canvas.height)
   }
