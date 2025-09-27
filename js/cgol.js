@@ -363,8 +363,8 @@ class CGoL {
     var last_color, last_i
     for (var y = 0; y < canvas.height; ++y) {
       for (var x = 0; x < canvas.width; ++x) {
-        var i = (x - true_x_offset) / cell_size | 0
-        var j = (y - true_y_offset) / cell_size | 0
+        var i = (x + true_x_offset) / cell_size | 0
+        var j = (y + true_y_offset) / cell_size | 0
         var cell_position = i*grid_size + j
         var cell = this.board[cell_position]
         var cell_type = this.cell_types[cell_position]
