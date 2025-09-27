@@ -395,7 +395,7 @@ class CGoL {
         } else {
           fill_style = last_color
         }
-        buffer[y*canvas.width + x] = fill_style
+        buffer[x*canvas.height + y] = fill_style
       }
     }
     ctx.putImageData(image_data, 0, 0)
