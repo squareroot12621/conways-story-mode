@@ -359,7 +359,7 @@ class CGoL {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     /* Uint32Array idea stolen from https://stackoverflow.com/a/58485681 */
     const image_data = ctx.createImageData(canvas.width, canvas.height, {pixelFormat: 'rgba-unorm8'})
-    var buffer = new Uint32Array(data.data.buffer)
+    var buffer = new Uint32Array(image_data.data.buffer)
     for (var i = 0; i < grid_size; ++i) {
       for (var j = 0; j < grid_size; ++j) {
         var cell_position = i*grid_size + j
