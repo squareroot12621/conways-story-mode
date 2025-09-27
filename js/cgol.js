@@ -357,41 +357,47 @@ class CGoL {
     var true_x_offset = this.x_offset + (grid_size*cell_size - canvas.width) / 2
     var true_y_offset = this.y_offset + (grid_size*cell_size - canvas.height) / 2
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    var x, y
+    /* Uint32Array idea stolen from https://stackoverflow.com/a/58485681 */
+    const image_data = ctx.createImageData(canvas.width, canvas.height, {pixelFormat: 'rgba-unorm8'})
+    var buffer = new Uint32Array(data.data.buffer)
     for (var i = 0; i < grid_size; ++i) {
       for (var j = 0; j < grid_size; ++j) {
         var cell_position = i*grid_size + j
         var cell = this.board[cell_position]
         var cell_type = this.cell_types[cell_position]
         var cell_type_id = cell_type*2 + cell
+        var fill_style
         switch (cell_type_id) {
-          case 0: // We don't need to be drawing empty cells
-            continue
-          case 1: ctx.fillStyle = '#FFFFFF'; break;
-          case 2: ctx.fillStyle = '#76160A'; break;
-          case 3: ctx.fillStyle = '#FF978A'; break;
-          case 4: ctx.fillStyle = '#08361A'; break;
-          case 5: ctx.fillStyle = '#33FF5C'; break;
-          case 6: ctx.fillStyle = '#635B08'; break;
-          case 7: ctx.fillStyle = '#FFEE33'; break;
-          case 8: ctx.fillStyle = '#0A397F'; break;
-          case 9: ctx.fillStyle = '#8FC9FF'; break;
+          // Channel order is 0xAABBGGRR
+          case 0: fill_style = 0xFF000000; break; // RGB = #000000
+          case 1: fill_style = 0xFFFFFFFF; break; // RGB = #FFFFFF
+          case 2: fill_style = 0xFF0A1676; break; // RGB = #76160A
+          case 3: fill_style = 0xFF8A97FF; break; // RGB = #FF978A
+          case 4: fill_style = 0xFF1A3608; break; // RGB = #08361A
+          case 5: fill_style = 0xFF5CFF33; break; // RGB = #33FF5C
+          case 6: fill_style = 0xFF085B63; break; // RGB = #635B08
+          case 7: fill_style = 0xFF33EEFF; break; // RGB = #FFEE33
+          case 8: fill_style = 0xFF7F390A; break; // RGB = #0A397F
+          case 9: fill_style = 0xFFFFC98F; break; // RGB = #8FC9FF
           case 10: case 12: case 14: case 16: case 18: case 20: case 22: case 24:
-            ctx.fillStyle = '#640A7F'
+            fill_style = 0xFF7F0A64 // RGB = #640A7F
             break
           case 11: case 13: case 15: case 17: case 19: case 21: case 23: case 25:
-            ctx.fillStyle = '#E799FF'
+            fill_style = 0xFFFF99E7 // RGB = #E799FF
             break
         }
         var left_x = j * cell_size | 0
         var right_x = (j + 1) * cell_size | 0
-        var width = right_x - left_x
         var top_y = i * cell_size | 0
         var bottom_y = (i + 1) * cell_size | 0
-        var height = bottom_y - top_y
-        ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
+        for (var x = left_x - true_x_offset; x < right_x - true_x_offset; ++x) {
+          for (var y = top_y - true_y_offset; y < bottom_y - true_y_offset; ++y) {
+            buffer[y*canvas.width + x] = fill_style
+          }
+        }
       }
     }
+    ctx.putImageData(image_data, 0, 0)
 
     // START DEBUG
     ctx.font = '30px sans-serif'
