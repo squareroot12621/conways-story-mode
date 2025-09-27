@@ -360,7 +360,7 @@ class CGoL {
     /* Uint32Array idea stolen from https://stackoverflow.com/a/58485681 */
     const image_data = ctx.createImageData(canvas.width, canvas.height, {pixelFormat: 'rgba-unorm8'})
     var buffer = new Uint32Array(image_data.data.buffer)
-    var last_color, last_i
+    var last_color, last_j
     for (var y = 0; y < canvas.height; ++y) {
       for (var x = 0; x < canvas.width; ++x) {
         var i = (y + true_y_offset) / cell_size | 0
@@ -370,7 +370,7 @@ class CGoL {
         var cell_type = this.cell_types[cell_position]
         var cell_type_id = cell_type*2 + cell
         var fill_style
-        if (last_i !== i) {
+        if (last_j !== j) {
           switch (cell_type_id) {
             // Channel order is 0xAABBGGRR
             case 0: fill_style = 0xFF000000; break; // RGB = #000000
@@ -391,7 +391,7 @@ class CGoL {
               break
           }
           last_color = fill_style
-          last_i = i
+          last_j = j
         } else {
           fill_style = last_color
         }
