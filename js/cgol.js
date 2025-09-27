@@ -360,44 +360,42 @@ class CGoL {
     /* Uint32Array idea stolen from https://stackoverflow.com/a/58485681 */
     const image_data = ctx.createImageData(canvas.width, canvas.height, {pixelFormat: 'rgba-unorm8'})
     var buffer = new Uint32Array(image_data.data.buffer)
-    for (var i = 0; i < grid_size; ++i) {
-      for (var j = 0; j < grid_size; ++j) {
+    var last_color, last_i
+    for (var y = 0; y < canvas.height; ++y) {
+      for (var x = 0; x < canvas.width; ++x) {
+        var i = (x - true_x_offset) / cell_size | 0
+        var j = (y - true_y_offset) / cell_size | 0
         var cell_position = i*grid_size + j
         var cell = this.board[cell_position]
         var cell_type = this.cell_types[cell_position]
         var cell_type_id = cell_type*2 + cell
         var fill_style
-        switch (cell_type_id) {
-          // Channel order is 0xAABBGGRR
-          case 0: fill_style = 0xFF000000; break; // RGB = #000000
-          case 1: fill_style = 0xFFFFFFFF; break; // RGB = #FFFFFF
-          case 2: fill_style = 0xFF0A1676; break; // RGB = #76160A
-          case 3: fill_style = 0xFF8A97FF; break; // RGB = #FF978A
-          case 4: fill_style = 0xFF1A3608; break; // RGB = #08361A
-          case 5: fill_style = 0xFF5CFF33; break; // RGB = #33FF5C
-          case 6: fill_style = 0xFF085B63; break; // RGB = #635B08
-          case 7: fill_style = 0xFF33EEFF; break; // RGB = #FFEE33
-          case 8: fill_style = 0xFF7F390A; break; // RGB = #0A397F
-          case 9: fill_style = 0xFFFFC98F; break; // RGB = #8FC9FF
-          case 10: case 12: case 14: case 16: case 18: case 20: case 22: case 24:
-            fill_style = 0xFF7F0A64 // RGB = #640A7F
-            break
-          case 11: case 13: case 15: case 17: case 19: case 21: case 23: case 25:
-            fill_style = 0xFFFF99E7 // RGB = #E799FF
-            break
-        }
-        var left_x = j * cell_size | 0
-        var right_x = (j + 1) * cell_size | 0
-        var top_y = i * cell_size | 0
-        var bottom_y = (i + 1) * cell_size | 0
-        for (var x = left_x - true_x_offset; x < right_x - true_x_offset; ++x) {
-          if (x === left_x - true_x_offset) {
-            console.log(top_y, bottom_y) // DEBUG
+        if (last_i !== i) {
+          switch (cell_type_id) {
+            // Channel order is 0xAABBGGRR
+            case 0: fill_style = 0xFF000000; break; // RGB = #000000
+            case 1: fill_style = 0xFFFFFFFF; break; // RGB = #FFFFFF
+            case 2: fill_style = 0xFF0A1676; break; // RGB = #76160A
+            case 3: fill_style = 0xFF8A97FF; break; // RGB = #FF978A
+            case 4: fill_style = 0xFF1A3608; break; // RGB = #08361A
+            case 5: fill_style = 0xFF5CFF33; break; // RGB = #33FF5C
+            case 6: fill_style = 0xFF085B63; break; // RGB = #635B08
+            case 7: fill_style = 0xFF33EEFF; break; // RGB = #FFEE33
+            case 8: fill_style = 0xFF7F390A; break; // RGB = #0A397F
+            case 9: fill_style = 0xFFFFC98F; break; // RGB = #8FC9FF
+            case 10: case 12: case 14: case 16: case 18: case 20: case 22: case 24:
+              fill_style = 0xFF7F0A64 // RGB = #640A7F
+              break
+            case 11: case 13: case 15: case 17: case 19: case 21: case 23: case 25:
+              fill_style = 0xFFFF99E7 // RGB = #E799FF
+              break
           }
-          for (var y = top_y - true_y_offset; y < bottom_y - true_y_offset; ++y) {
-            buffer[y*canvas.width + x] = fill_style
-          }
+          last_color = fill_style
+          last_i = i
+        } else {
+          fill_style = last_color
         }
+        buffer[y*canvas.width + x] = fill_style
       }
     }
     ctx.putImageData(image_data, 0, 0)
