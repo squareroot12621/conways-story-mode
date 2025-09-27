@@ -391,6 +391,9 @@ class CGoL {
         var top_y = i * cell_size | 0
         var bottom_y = (i + 1) * cell_size | 0
         for (var x = left_x - true_x_offset; x < right_x - true_x_offset; ++x) {
+          if (x === left_x - true_x_offset) {
+            console.log(top_y, bottom_y) // DEBUG
+          }
           for (var y = top_y - true_y_offset; y < bottom_y - true_y_offset; ++y) {
             buffer[y*canvas.width + x] = fill_style
           }
