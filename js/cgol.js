@@ -370,12 +370,13 @@ class CGoL {
         var cell = this.board[cell_position]
         var cell_type = this.cell_types[cell_position]
         var cell_type_id = cell_type*2 + cell
+        if (!cell_type_id) {
+          continue // Don't draw empty cells
+        }
         var fill_style
         if (last_j !== j) {
-          last_j = j
           switch (cell_type_id) {
             // Channel order is 0xAABBGGRR
-            case 0: continue // Don't draw empty cells
             case 1: fill_style = 0xFFFFFFFF; break; // RGB = #FFFFFF
             case 2: fill_style = 0xFF0A1676; break; // RGB = #76160A
             case 3: fill_style = 0xFF8A97FF; break; // RGB = #FF978A
@@ -393,6 +394,7 @@ class CGoL {
               break
           }
           last_color = fill_style
+          last_j = j
         } else {
           fill_style = last_color
         }
