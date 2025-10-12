@@ -1,6 +1,8 @@
 import {update_tooltip_locations} from './level-select.js'
 import {resize_simulator} from './simulator.js'
 
+var images = {}
+
 function create_element(tag, content=[], attributes={}) {
     var svg_element_list = [
         'animate', 'animateMotion', 'animateTransform',
@@ -115,4 +117,4 @@ function throttle(func, wait) {
   }
 }
 
-export {create_element, update_root, resize_root, throttle}
+export {images, create_element, update_root, resize_root, throttle}
