@@ -358,8 +358,8 @@ class CGoL {
       var canvas_height = canvas.height
       var grid_size = this.grid_size
       var cell_size = this.zoom
-      var true_x_offset = this.x_offset + (grid_size*cell_size - canvas.width) / 2
-      var true_y_offset = this.y_offset + (grid_size*cell_size - canvas.height) / 2
+      var true_x_offset = this.x_offset + (grid_size*cell_size - canvas.width) / 2 | 0
+      var true_y_offset = this.y_offset + (grid_size*cell_size - canvas.height) / 2 | 0
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       /* Uint32Array idea stolen from https://stackoverflow.com/a/58485681 */
       const image_data = ctx.createImageData(canvas.width, canvas.height, {pixelFormat: 'rgba-unorm8'})
@@ -405,8 +405,8 @@ class CGoL {
       var canvas = this.canvas
       var grid_size = this.grid_size
       var cell_size = this.zoom
-      var true_x_offset = this.x_offset + (grid_size*cell_size - canvas.width) / 2
-      var true_y_offset = this.y_offset + (grid_size*cell_size - canvas.height) / 2
+      var true_x_offset = this.x_offset + (grid_size*cell_size - canvas.width) / 2 | 0
+      var true_y_offset = this.y_offset + (grid_size*cell_size - canvas.height) / 2 | 0
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       var x, y
       for (var i = 0; i < grid_size; ++i) {
