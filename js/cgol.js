@@ -4,6 +4,7 @@ class CGoL {
   #last_width
   #last_height
   #last_animation_frame
+  #changed_pattern
   #cached_picture
   
   constructor(options={}) {
@@ -49,6 +50,7 @@ class CGoL {
     this.#last_height = this.canvas.height
     this.#last_draw_time = -Infinity
     this.#last_animation_frame = null
+    this.#changed_pattern = false
     this.#cached_picture = null
     /* Make sure the canvas doesn't keep requesting animation frames after it's destroyed
        https://stackoverflow.com/questions/20156453/how-to-detect-element-being-added-removed-from-dom-element */
@@ -304,6 +306,7 @@ class CGoL {
     this.x_offset = x
     this.y_offset = y
     this.zoom = CGoL.#round_zoom(zoom)
+    this.#changed_pattern = true
   }
 
   static #round_zoom(zoom) {
@@ -326,7 +329,7 @@ class CGoL {
       // TODO: Make the cache interval changeable using the speed slider
       var changed_size = this.canvas.width !== this.#last_width
                          || this.canvas.height !== this.#last_height
-      if (cache_expired || changed_size) {
+      if (cache_expired || changed_size || this.#changed_pattern) {
         this.#draw_inner(options)
         if (cache_expired) {
           this.#last_draw_time = timestamp
@@ -335,6 +338,7 @@ class CGoL {
           this.#last_width = this.canvas.width
           this.#last_height = this.canvas.height
         }
+        this.#changed_pattern = false
       } else {
         this.#ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
