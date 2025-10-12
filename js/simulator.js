@@ -324,6 +324,14 @@ function resize_simulator() {
 
 
 function create_event_handlers(sandbox) {
+  // Make the CGoL object
+  var cgol_object = new CGoL({
+    grid_size: 128, // TODO: Increase to 256 once it stops lagging
+    pattern: 'x = 3, y = 3, rule = B3/S23\n3o$2bo$bo2$.ABCDEFGHIJKLMNOPQRSTUVWXY!',
+    canvas: document.getElementById('simulator-cgol'),
+    zoom: 20,
+  })
+  
   // Sidebar event handlers
   var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
   var [back_button, close_menu_button] = sidebar_top.children
@@ -354,7 +362,7 @@ function create_event_handlers(sandbox) {
     open_menu_button.removeAttribute('data-visible')
     resize_canvas()
   })
-
+  
   /* Event handlers for the tools and extra options
      (they work in mostly the same way) */
   function toggle_option_visibility_inner(required_variables, set_to=null) {
@@ -534,6 +542,7 @@ function create_event_handlers(sandbox) {
     var true_zoom = (MAX_ZOOM/MIN_ZOOM)**zoom_slider.value * MIN_ZOOM
     var shown_zoom = Math.round(true_zoom)
     zoom_label.innerText = 'Zoom ' + shown_zoom
+    cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, true_zoom)
   })
 
   // Simulation extra stat event handlers
@@ -548,13 +557,7 @@ function create_event_handlers(sandbox) {
     extra_stats_wrapper.style.display = 'none'
   })
   
-  // CGoL class
-  var cgol_object = new CGoL({
-    grid_size: 128, // TODO: Increase to 256 once it stops lagging
-    pattern: 'x = 3, y = 3, rule = B3/S23\n3o$2bo$bo2$.ABCDEFGHIJKLMNOPQRSTUVWXY!',
-    canvas: document.getElementById('simulator-cgol'),
-    zoom: 20,
-  })
+  // Draw the CGoL simulation
   var now = document.timeline.currentTime
   cgol_object.draw({}, now) // Using now instead of null is a TEST for requestAnimationFrame
 }
