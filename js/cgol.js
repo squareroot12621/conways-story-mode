@@ -354,8 +354,8 @@ class CGoL {
     var canvas = this.canvas
     var grid_size = this.grid_size
     var cell_size = this.zoom
-    var pattern_center_x = (this.pattern_x+this.pattern_width) / 2
-    var pattern_center_y = (this.pattern_y+this.pattern_height) / 2
+    var pattern_center_x = this.pattern_x + this.pattern_width/2
+    var pattern_center_y = this.pattern_y + this.pattern_height/2
     var true_x_offset = this.x_offset + pattern_center_x*cell_size - canvas.width/2 | 0
     var true_y_offset = this.y_offset + pattern_center_y*cell_size - canvas.height/2 | 0
     ctx.clearRect(0, 0, canvas.width, canvas.height)
