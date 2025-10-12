@@ -1,4 +1,4 @@
-import {create_element, update_root} from './utilities.js'
+import {create_element, update_root, images} from './utilities.js'
 
 function create_loading_screen() {
     var loading_progress = create_element(
@@ -71,7 +71,43 @@ function update_glider_canvas() {
 }
 
 async function load_assets() {
-    // CONTINUE
+    // Load the cell icons
+    const id_to_name_table = {
+        2: 'delete-off',
+        3: 'delete-on',
+        4: 'create-off',
+        5: 'create-on',
+        6: 'important-off',
+        7: 'important-on',
+        8: 'unchangeable-off',
+        9: 'unchangeable-on',
+        10: 'connect-n-off',
+        11: 'connect-n-on',
+        12: 'connect-ne-off',
+        13: 'connect-ne-on',
+        14: 'connect-e-off',
+        15: 'connect-e-on',
+        16: 'connect-se-off',
+        17: 'connect-se-on',
+        18: 'connect-s-off',
+        19: 'connect-s-on',
+        20: 'connect-sw-off',
+        21: 'connect-sw-on',
+        22: 'connect-w-off',
+        23: 'connect-w-on',
+        24: 'connect-nw-off',
+        25: 'connect-nw-on',
+    } // 0 and 1 don't get icons
+    var promises = Object.values(id_to_name_table).map((name) => {
+        return fetch(`../../images/cell-icons/${name}.svg`)
+    })
+    var responses = await Promise.all(promises)
+    var ids = Object.keys(id_to_name_table)
+    for (var response of responses) {
+        var blob = await response.blob()
+        var id = ids.shift()
+        images[`cell-icon-${id}`] = blob
+    }
 }
 
 export {create_loading_screen, load_assets}
