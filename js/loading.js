@@ -99,7 +99,7 @@ async function load_assets() {
         25: 'connect-nw-on',
     } // 0 and 1 don't get icons
     var promises = Object.values(id_to_name_table).map((name) => {
-        return fetch(`../../images/cell-icons/${name}.svg`)
+        return fetch(`https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode/images/cell-icons/${name}.svg`)
     })
     var responses = await Promise.all(promises)
     var ids = Object.keys(id_to_name_table)
