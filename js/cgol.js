@@ -352,6 +352,11 @@ class CGoL {
   }
   
   #draw_inner(options={}) {
+    var colorblind = options.colorblind ?? false
+    var show_grid = options.grid ?? true
+
+    // TODO: Have the colorblind symbols already loaded
+    
     var start_time = performance.now() // DEBUG
 
     var ctx = this.#ctx
