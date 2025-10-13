@@ -366,8 +366,8 @@ class CGoL {
     var cell_size = this.zoom
     var pattern_center_x = this.pattern_x + this.pattern_width/2
     var pattern_center_y = this.pattern_y + this.pattern_height/2
-    var true_x_offset = this.x_offset + pattern_center_x*cell_size - canvas.width/2 | 0
-    var true_y_offset = this.y_offset + pattern_center_y*cell_size - canvas.height/2 | 0
+    var true_x_offset = (this.x_offset + pattern_center_x*cell_size - canvas.width/2) | 0
+    var true_y_offset = (this.y_offset + pattern_center_y*cell_size - canvas.height/2) | 0
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     var x, y
     for (var i = 0; i < grid_size; ++i) {
@@ -395,13 +395,13 @@ class CGoL {
             ctx.fillStyle = '#E799FF'
             break
         }
-        var left_x = j * cell_size | 0
-        var right_x = (j + 1) * cell_size | 0
+        var left_x = (j * cell_size - true_x_offset) | 0
+        var right_x = ((j + 1) * cell_size - true_x_offset) | 0
         var width = right_x - left_x
-        var top_y = i * cell_size | 0
-        var bottom_y = (i + 1) * cell_size | 0
+        var top_y = (i * cell_size - true_y_offset) | 0
+        var bottom_y = ((i + 1) * cell_size - true_y_offset) | 0
         var height = bottom_y - top_y
-        ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
+        ctx.fillRect(left_x, top_y, width, height)
         if (cell_type) { // cell_type_id >= 2
           ctx.drawImage(images[`cell-icon-${cell_type_id}`], left_x, top_y, width, height)
           console.log(`cell-icon-${cell_type_id}`) // DEBUG
