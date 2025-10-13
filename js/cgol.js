@@ -1,3 +1,5 @@
+import {images} from './utilities.js'
+
 class CGoL {
   #ctx
   #last_draw_time
@@ -354,8 +356,7 @@ class CGoL {
   #draw_inner(options={}) {
     var colorblind = options.colorblind ?? false
     var show_grid = options.grid ?? true
-
-    // TODO: Have the colorblind symbols already loaded
+    colorblind = true // DEBUG
     
     var start_time = performance.now() // DEBUG
 
@@ -403,6 +404,8 @@ class CGoL {
         ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
       }
     }
+
+    ctx.drawImage(images['cell-icon-2'], 100, 200) // DEBUG
 
     // START DEBUG
     ctx.font = '30px sans-serif'
