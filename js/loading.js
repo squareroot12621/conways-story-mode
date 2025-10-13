@@ -105,9 +105,12 @@ async function load_assets() {
     var ids = Object.keys(id_to_name_table)
     for (var response of responses) {
         var blob = await response.blob()
-        var image = await createImageBitmap(blob)
+        var url = URL.createObjectURL(blob)
+        var image = create_element('img', [], {src: url, width: 128, height: 128})
+        var bitmap = await createImageBitmap(image)
         var id = ids.shift()
-        images[`cell-icon-${id}`] = image
+        images[`cell-icon-${id}`] = bitmap
+        URL.removeObjectURL(url)
     }
 }
 
