@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
     <style>
       .cls-1 {
         fill: none;
-        stroke: #e799ff;
+        stroke: #640a7f;
         stroke-miterlimit: 10;
         stroke-width: 10px;
       }
     </style>
   </defs>
-  <line class="cls-1" x1="75" y1="25" x2="20" y2="80"/>
-  <polyline class="cls-1" points="30 25 75 25 75 70"/>
+  <line class="cls-1" x1="80" y1="50" x2="15" y2="50"/>
+  <polyline class="cls-1" points="50 20 80 50 50 80"/>
 </svg>
