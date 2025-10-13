@@ -402,9 +402,8 @@ class CGoL {
         var bottom_y = ((i + 1) * cell_size - true_y_offset) | 0
         var height = bottom_y - top_y
         ctx.fillRect(left_x, top_y, width, height)
-        if (cell_type) { // cell_type_id >= 2
+        if (cell_type) { // cell_type_id >= 2 implies cell_type >= 1, meaning cell_type is truthy
           ctx.drawImage(images[`cell-icon-${cell_type_id}`], left_x, top_y, width, height)
-          console.log(`cell-icon-${cell_type_id}`) // DEBUG
         }
       }
     }
