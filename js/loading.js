@@ -106,10 +106,9 @@ async function load_assets() {
     for (var response of responses) {
         var blob = await response.blob()
         var url = URL.createObjectURL(blob)
-        var image = create_element('img', [], {src: url, width: 128, height: 128})
-        var bitmap = await createImageBitmap(image)
+        var image = create_element('img', [], {src: url, width: 50, height: 50})
         var id = ids.shift()
-        images[`cell-icon-${id}`] = bitmap
+        images[`cell-icon-${id}`] = image
         URL.removeObjectURL(url)
     }
 }
