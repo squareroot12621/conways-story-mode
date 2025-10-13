@@ -402,10 +402,11 @@ class CGoL {
         var bottom_y = (i + 1) * cell_size | 0
         var height = bottom_y - top_y
         ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
+        if (cell_type) { // cell_type_id >= 2
+          ctx.drawImage(images[`cell-icon-${cell_type_id}`], left_x, top_y, width, height)
+        }
       }
     }
-
-    ctx.drawImage(images['cell-icon-2'], 100, 200, 50, 50) // DEBUG
 
     // START DEBUG
     ctx.font = '30px sans-serif'
