@@ -404,6 +404,7 @@ class CGoL {
         ctx.fillRect(left_x - true_x_offset, top_y - true_y_offset, width, height)
         if (cell_type) { // cell_type_id >= 2
           ctx.drawImage(images[`cell-icon-${cell_type_id}`], left_x, top_y, width, height)
+          console.log(`cell-icon-${cell_type_id}`) // DEBUG
         }
       }
     }
