@@ -355,8 +355,9 @@ class CGoL {
   
   #draw_inner(options={}) {
     var colorblind = options.colorblind ?? false
-    var show_grid = options.grid ?? true
     colorblind = true // DEBUG
+    var can_use_symbols = colorblind && this.zoom >= 6
+    var show_grid = options.grid ?? true
     
     var start_time = performance.now() // DEBUG
 
@@ -382,7 +383,7 @@ class CGoL {
           case 1: ctx.fillStyle = '#FFFFFF'; break;
           case 2: ctx.fillStyle = '#76160A'; break;
           case 3: ctx.fillStyle = '#FF978A'; break;
-          case 4: ctx.fillStyle = '#08361A'; break;
+          case 4: ctx.fillStyle = '#08631A'; break;
           case 5: ctx.fillStyle = '#33FF5C'; break;
           case 6: ctx.fillStyle = '#635B08'; break;
           case 7: ctx.fillStyle = '#FFEE33'; break;
@@ -402,7 +403,10 @@ class CGoL {
         var bottom_y = ((i + 1) * cell_size - true_y_offset) | 0
         var height = bottom_y - top_y
         ctx.fillRect(left_x, top_y, width, height)
-        if (cell_type) { // cell_type_id >= 2 implies cell_type >= 1, meaning cell_type is truthy
+        if (can_use_symbols && cell_type) {
+          /* Explanation of the bare cell_type:
+             cell_type_id has to be >= 2 in order to use symbols.
+             This implies cell_type >= 1, meaning cell_type is truthy. */
           ctx.drawImage(images[`cell-icon-${cell_type_id}`], left_x, top_y, width, height)
         }
       }
