@@ -405,7 +405,7 @@ class CGoL {
       }
     }
 
-    ctx.drawImage(images['cell-icon-2'], 100, 200) // DEBUG
+    ctx.drawImage(images['cell-icon-2'], 100, 200, 50, 50) // DEBUG
 
     // START DEBUG
     ctx.font = '30px sans-serif'
