@@ -109,7 +109,6 @@ async function load_assets() {
         var image = create_element('img', [], {src: url, width: 50, height: 50})
         var id = ids.shift()
         images[`cell-icon-${id}`] = image
-        URL.revokeObjectURL(url)
     }
 }
 
