@@ -70,7 +70,16 @@ function update_glider_canvas() {
     glider_canvas.setAttribute('data-frame', (current_frame + 1) % 30)
 }
 
+function update_progress(percentage) {
+    var loading_progress = document.getElementById('loading-progress')
+    var loading_container = document.getElementsByClassName('loading-container')[0]
+    loading_progress.innerText = `${Math.round(percentage * 100)}%`
+    loading_container.style.setProperty('--loading-percentage', percentage)
+}
+
 async function load_assets() {
+    var tasks_done = 0
+    const tasks_to_do = 24
     // Load the cell icons
     const id_to_name_table = {
         2: 'delete-off',
@@ -109,6 +118,8 @@ async function load_assets() {
         var image = create_element('img', [], {src: url, width: 50, height: 50})
         var id = ids.shift()
         images[`cell-icon-${id}`] = image
+        ++tasks_done
+        update_progress(tasks_done / tasks_to_do)
     }
 }
 
