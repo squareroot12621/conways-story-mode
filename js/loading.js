@@ -120,7 +120,7 @@ async function load_assets() {
         images[`cell-icon-${id}`] = image
         ++tasks_done
         update_progress(tasks_done / tasks_to_do)
-        await Promise((resolve) => setInterval(() => resolve(1), 200)) // DEBUG
+        await new Promise((resolve) => setInterval(() => resolve(1), 200)) // DEBUG
     }
 }
 
