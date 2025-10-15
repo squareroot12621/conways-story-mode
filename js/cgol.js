@@ -52,7 +52,8 @@ class CGoL {
     this.zoom = CGoL.#round_zoom(options.zoom ?? 8)
 
     // Offscreen canvas for drawing the grid
-    this.#grid_canvas = new OffscreenCanvas(CGoL.#grid_canvas_size(this.zoom))
+    var grid_canvas_size = CGoL.#grid_canvas_size(this.zoom)
+    this.#grid_canvas = new OffscreenCanvas(grid_canvas_size, grid_canvas_size)
     this.#grid_ctx = this.#grid_canvas.getContext('2d')
 
     // Cache stuff
