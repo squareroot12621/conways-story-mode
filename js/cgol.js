@@ -385,6 +385,7 @@ class CGoL {
     colorblind = true // DEBUG
     var can_use_symbols = colorblind && this.zoom >= 6
     var show_grid = options.grid ?? true
+    var can_use_grid = show_grid && this.zoom >= 4
     
     var start_time = performance.now() // DEBUG
 
@@ -397,7 +398,6 @@ class CGoL {
     var true_x_offset = (this.x_offset + pattern_center_x*cell_size - canvas.width/2) | 0
     var true_y_offset = (this.y_offset + pattern_center_y*cell_size - canvas.height/2) | 0
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    var x, y
     for (var i = 0; i < grid_size; ++i) {
       for (var j = 0; j < grid_size; ++j) {
         var cell_position = i*grid_size + j
@@ -437,6 +437,12 @@ class CGoL {
           ctx.drawImage(images[`cell-icon-${cell_type_id}`], left_x, top_y, width, height)
         }
       }
+    }
+
+    // Draw the grid
+    if (can_use_grid) {
+      // TODO: Gridlines. To position the gridlines, we can't use simple %,
+      // so we have to do something with Math.ceil().
     }
 
     // START DEBUG
