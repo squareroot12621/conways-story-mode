@@ -2,10 +2,13 @@ import {images} from './utilities.js'
 
 class CGoL {
   #ctx
+  #grid_canvas
+  #grid_ctx
   #last_draw_time
   #last_width
   #last_height
   #last_animation_frame
+  #changed_camera
   #changed_pattern
   #cached_picture
   
@@ -47,11 +50,17 @@ class CGoL {
     this.x_offset = options.x_offset ?? 0
     this.y_offset = options.y_offset ?? 0
     this.zoom = CGoL.#round_zoom(options.zoom ?? 8)
-    
+
+    // Offscreen canvas for drawing the grid
+    this.#grid_canvas = new OffscreenCanvas(CGoL.#grid_canvas_size(this.zoom))
+    this.#grid_ctx = this.#grid_canvas.getContext('2d')
+
+    // Cache stuff
     this.#last_width = this.canvas.width
     this.#last_height = this.canvas.height
     this.#last_draw_time = -Infinity
     this.#last_animation_frame = null
+    this.#changed_camera = false
     this.#changed_pattern = false
     this.#cached_picture = null
     /* Make sure the canvas doesn't keep requesting animation frames after it's destroyed
@@ -323,6 +332,18 @@ class CGoL {
     }
   }
 
+  static #grid_canvas_size(zoom) {
+    if (zoom < 4) {
+      return 1 // It doesn't make sense to draw a grid if it would obscure the cells
+    } else if (zoom < 8) {
+      return zoom * 16
+    } else if (zoom < 16) {
+      return zoom * 8
+    } else {
+      return zoom * 4
+    }
+  }
+
   draw(options={}, timestamp) {
     if (timestamp === null || timestamp === undefined) {
       this.#draw_inner(options)
@@ -331,7 +352,7 @@ class CGoL {
       // TODO: Make the cache interval changeable using the speed slider
       var changed_size = this.canvas.width !== this.#last_width
                          || this.canvas.height !== this.#last_height
-      if (cache_expired || changed_size || this.#changed_pattern) {
+      if (cache_expired || changed_size || this.#changed_camera || this.#changed_pattern) {
         this.#draw_inner(options)
         if (cache_expired) {
           this.#last_draw_time = timestamp
@@ -339,6 +360,11 @@ class CGoL {
         if (changed_size) {
           this.#last_width = this.canvas.width
           this.#last_height = this.canvas.height
+        }
+        if (this.#changed_camera) {
+          this.#changed_camera = false
+          // Because the camera changed, the gridlines need to be updated as well
+          this.#grid_canvas.width = this.#grid_canvas.height = CGoL.#grid_canvas_size(this.zoom)
         }
         this.#changed_pattern = false
       } else {
@@ -420,7 +446,6 @@ class CGoL {
     // END DEBUG
     
     // TODO: Gridlines
-    // TODO: Colorblind symbols
     this.#cached_picture = ctx.getImageData(0, 0, canvas.width, canvas.height)
   }
 }
