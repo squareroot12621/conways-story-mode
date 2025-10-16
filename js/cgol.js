@@ -462,6 +462,10 @@ class CGoL {
         grid_ctx.stroke()
         y += cell_size
       }
+      // START DEBUG
+      grid_ctx.stroke_style = "#FFFF00"
+      grid_ctx.strokeRect(0, 0, grid_canvas.width - 1, grid_canvas.height - 1)
+      // END DEBUG
       // Put the grid on the main canvas
       const pattern = ctx.createPattern(grid_canvas, 'repeat')
       ctx.fillStyle = pattern
