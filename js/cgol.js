@@ -318,7 +318,7 @@ class CGoL {
     this.x_offset = x
     this.y_offset = y
     this.zoom = CGoL.#round_zoom(zoom)
-    this.#changed_pattern = true
+    this.#changed_camera = true
   }
 
   static #round_zoom(zoom) {
