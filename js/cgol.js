@@ -441,8 +441,10 @@ class CGoL {
 
     // Draw the grid
     if (can_use_grid) {
-      // TODO: Gridlines. To position the gridlines, we can't use simple %,
-      // so we have to do something with Math.ceil().
+      // Modulo doesn't work like this with negative numbers
+      var x = (Math.ceil(true_x_offset / cell_size) * cell_size - true_x_offset) | 0
+      var y = (Math.ceil(true_y_offset / cell_size) * cell_size - true_y_offset) | 0
+      // CONTINUE
     }
 
     // START DEBUG
