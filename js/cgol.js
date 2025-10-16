@@ -354,7 +354,6 @@ class CGoL {
       var changed_size = this.canvas.width !== this.#last_width
                          || this.canvas.height !== this.#last_height
       if (cache_expired || changed_size || this.#changed_camera || this.#changed_pattern) {
-        this.#draw_inner(options)
         if (cache_expired) {
           this.#last_draw_time = timestamp
         }
@@ -368,6 +367,7 @@ class CGoL {
           this.#grid_canvas.width = this.#grid_canvas.height = CGoL.#grid_canvas_size(this.zoom)
         }
         this.#changed_pattern = false
+        this.#draw_inner(options)
       } else {
         this.#ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
