@@ -385,7 +385,7 @@ class CGoL {
     colorblind = true // DEBUG
     var can_use_symbols = colorblind && this.zoom >= 6
     var show_grid = options.grid ?? true
-    var can_use_grid = show_grid && this.zoom >= 4
+    var can_use_grid = show_grid && this.zoom >= 6
     
     var start_time = performance.now() // DEBUG
 
@@ -462,10 +462,6 @@ class CGoL {
         grid_ctx.stroke()
         y += cell_size
       }
-      // START DEBUG
-      grid_ctx.strokeStyle = "#FFFF00"
-      grid_ctx.strokeRect(0, 0, grid_canvas.width - 1, grid_canvas.height - 1)
-      // END DEBUG
       // Put the grid on the main canvas
       const pattern = ctx.createPattern(grid_canvas, 'repeat')
       ctx.fillStyle = pattern
@@ -479,7 +475,6 @@ class CGoL {
     ctx.fillText(`${time_ms} ms`, 50, 150)
     // END DEBUG
     
-    // TODO: Gridlines
     this.#cached_picture = ctx.getImageData(0, 0, canvas.width, canvas.height)
   }
 }
