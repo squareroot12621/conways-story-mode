@@ -444,7 +444,8 @@ class CGoL {
       var grid_canvas = this.#grid_canvas
       var grid_ctx = this.#grid_ctx
       grid_ctx.clearRect(0, 0, grid_canvas.width, grid_canvas.height)
-      grid_ctx.strokeStyle = "#808080"
+      var grid_color = Math.round(180 - 2000 / (cell_size + 10))
+      grid_ctx.strokeStyle = `rgb(${grid_color}, ${grid_color}, ${grid_color})`
       // Modulo doesn't work like this with negative numbers
       var x = Math.ceil(true_x_offset / cell_size) * cell_size - true_x_offset
       while (x < grid_canvas.width) {
