@@ -441,10 +441,31 @@ class CGoL {
 
     // Draw the grid
     if (can_use_grid) {
+      var grid_canvas = this.#grid_canvas
+      var grid_ctx = this.#grid_ctx
+      grid_ctx
+      grid_ctx.strokeStyle = "#808080"
       // Modulo doesn't work like this with negative numbers
-      var x = (Math.ceil(true_x_offset / cell_size) * cell_size - true_x_offset) | 0
-      var y = (Math.ceil(true_y_offset / cell_size) * cell_size - true_y_offset) | 0
-      // CONTINUE
+      var x = Math.ceil(true_x_offset / cell_size) * cell_size - true_x_offset
+      while (x < grid_canvas.width) {
+        grid_ctx.beginPath()
+        grid_ctx.moveTo(x | 0, 0)
+        grid_ctx.lineTo(x | 0, grid_canvas.height)
+        grid_ctx.stroke()
+        x += cell_size
+      }
+      var y = Math.ceil(true_y_offset / cell_size) * cell_size - true_y_offset
+      while (y < grid_canvas.height) {
+        grid_ctx.beginPath()
+        grid_ctx.moveTo(0, y | 0)
+        grid_ctx.lineTo(grid_canvas.width, y | 0)
+        grid_ctx.stroke()
+        y += cell_size
+      }
+      // Put the grid on the main canvas
+      const pattern = ctx.createPattern(grid_canvas, 'repeat')
+      ctx.fillStyle = pattern
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
     }
 
     // START DEBUG
