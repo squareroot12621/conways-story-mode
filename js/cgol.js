@@ -402,11 +402,41 @@ class CGoL {
     var true_x_offset = (this.x_offset + pattern_center_x*cell_size - canvas.width/2) | 0
     var true_y_offset = (this.y_offset + pattern_center_y*cell_size - canvas.height/2) | 0
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    var draw_left_x = Math.floor(true_x_offset / cell_size)
-    var draw_right_x = Math.ceil((true_x_offset + canvas.width) / cell_size)
-    var draw_top_y = Math.floor(true_y_offset / cell_size)
-    var draw_bottom_y = Math.ceil((true_y_offset + canvas.height) / cell_size)
-    console.log(draw_left_x, draw_right_x, draw_top_y, draw_bottom_y) // DEBUG
+
+    // Draw the border
+    if (can_use_symbols) {
+      grid_ctx.clearRect(0, 0, grid_canvas.width, grid_canvas.height)
+      grid_ctx.fillStyle = '#0A397F'
+      grid_ctx.fillRect(0, 0, grid_canvas.width, grid_canvas.height)
+      var original_x = Math.floor(true_x_offset / cell_size) * cell_size - true_x_offset
+      var original_y = Math.floor(true_y_offset / cell_size) * cell_size - true_y_offset
+      for (var y = original_y; y < grid_canvas.height; y += cell_size) {
+        for (var x = original_x; x < grid_canvas.width; x += cell_size) {
+          var left_x = x | 0
+          var right_x = (x + cell_size) | 0
+          var width = right_x - left_x
+          var top_y = y | 0
+          var bottom_y = (y + cell_size) | 0
+          var height = bottom_y - top_y
+          grid_ctx.drawImage(images['cell-icon-8'], left_x, top_y, width, height)
+        }
+      }
+      const border_pattern = ctx.createPattern(grid_canvas)
+      ctx.fillStyle = border_pattern
+    } else {
+      ctx.fillStyle = '#0A397F'
+    }
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = '#000000'
+    ctx.fillRect((-true_x_offset) | 0,
+                 (-true_x_offset + grid_size*cell_size) | 0,
+                 (-true_y_offset) | 0,
+                 (-true_y_offset + grid_size*cell_size) | 0)
+    
+    var draw_left_x = Math.max(0, Math.floor(true_x_offset / cell_size))
+    var draw_right_x = Math.min(grid_size-1, Math.ceil((true_x_offset + canvas.width) / cell_size))
+    var draw_top_y = Math.max(0, Math.floor(true_y_offset / cell_size))
+    var draw_bottom_y = Math.min(grid_size-1, Math.ceil((true_y_offset + canvas.height) / cell_size))
     for (var i = draw_top_y; i < draw_bottom_y; ++i) {
       for (var j = draw_left_x; j < draw_right_x; ++j) {
         if (i < 0 || i >= grid_size || j < 0 || j >= grid_size) {
