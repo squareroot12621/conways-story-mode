@@ -389,6 +389,10 @@ class CGoL {
     
     var start_time = performance.now() // DEBUG
 
+    /* TODO: Replace the naïve bounds-checking algorithm
+       (which is very slow if there's a lot of edge)
+       with another createPattern solution. */
+    
     var ctx = this.#ctx
     var canvas = this.canvas
     var grid_size = this.grid_size
