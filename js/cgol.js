@@ -398,12 +398,20 @@ class CGoL {
     var true_x_offset = (this.x_offset + pattern_center_x*cell_size - canvas.width/2) | 0
     var true_y_offset = (this.y_offset + pattern_center_y*cell_size - canvas.height/2) | 0
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    for (var i = 0; i < grid_size; ++i) {
-      for (var j = 0; j < grid_size; ++j) {
-        var cell_position = i*grid_size + j
-        var cell = this.board[cell_position]
-        var cell_type = this.cell_types[cell_position]
-        var cell_type_id = cell_type*2 + cell
+    var draw_left_x = Math.floor(true_x_offset / cell_size)
+    var draw_right_x = Math.ceil((true_x_offset + canvas.width) / cell_size)
+    var draw_top_y = Math.floor(true_y_offset / cell_size)
+    var draw_bottom_y = Math.ceil((true_y_offset + canvas.height) / cell_size)
+    for (var i = draw_left_x; i < draw_right_x; ++i) {
+      for (var j = draw_top_y; j < draw_bottom_y; ++j) {
+        if (i < 0 || i >= grid_size || j < 0 || j >= grid_size) {
+          var cell_type_id = 8 // Unchangeable off
+        } else {
+          var cell_position = i*grid_size + j
+          var cell = this.board[cell_position]
+          var cell_type = this.cell_types[cell_position]
+          var cell_type_id = cell_type*2 + cell
+        }
         switch (cell_type_id) {
           case 0: // We don't need to be drawing empty cells
             continue
