@@ -403,8 +403,8 @@ class CGoL {
     var draw_top_y = Math.floor(true_y_offset / cell_size)
     var draw_bottom_y = Math.ceil((true_y_offset + canvas.height) / cell_size)
     console.log(draw_left_x, draw_right_x, draw_top_y, draw_bottom_y) // DEBUG
-    for (var i = draw_left_x; i < draw_right_x; ++i) {
-      for (var j = draw_top_y; j < draw_bottom_y; ++j) {
+    for (var i = draw_top_y; i < draw_bottom_y; ++i) {
+      for (var j = draw_left_x; j < draw_right_x; ++j) {
         if (i < 0 || i >= grid_size || j < 0 || j >= grid_size) {
           var cell_type = 4
           var cell_type_id = 8 // Unchangeable off
