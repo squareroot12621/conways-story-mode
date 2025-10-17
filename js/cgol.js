@@ -393,8 +393,10 @@ class CGoL {
        (which is very slow if there's a lot of edge)
        with another createPattern solution. */
     
-    var ctx = this.#ctx
     var canvas = this.canvas
+    var ctx = this.#ctx
+    var grid_canvas = this.#grid_canvas
+    var grid_ctx = this.#grid_ctx
     var grid_size = this.grid_size
     var cell_size = this.zoom
     var pattern_center_x = this.pattern_x + this.pattern_width/2
@@ -485,8 +487,6 @@ class CGoL {
 
     // Draw the grid
     if (can_use_grid) {
-      var grid_canvas = this.#grid_canvas
-      var grid_ctx = this.#grid_ctx
       grid_ctx.clearRect(0, 0, grid_canvas.width, grid_canvas.height)
       var grid_color = Math.round(180 - 2000 / (cell_size + 10))
       grid_ctx.strokeStyle = `rgb(${grid_color}, ${grid_color}, ${grid_color})`
