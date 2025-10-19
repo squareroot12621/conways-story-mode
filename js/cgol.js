@@ -411,7 +411,13 @@ class CGoL {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Draw the border
-    if (can_use_symbols) {
+    var draw_left_x = Math.floor(true_x_offset / cell_size)
+    var draw_right_x = Math.ceil((true_x_offset + canvas.width) / cell_size)
+    var draw_top_y = Math.floor(true_y_offset / cell_size)
+    var draw_bottom_y = Math.ceil((true_y_offset + canvas.height) / cell_size)
+    var border_visible = draw_left_x < 0 || draw_right_x >= grid_size
+                         || draw_top_y < 0 || draw_bottom_y >= grid_size
+    if (can_use_symbols && border_visible) {
       grid_ctx.clearRect(0, 0, grid_canvas.width, grid_canvas.height)
       grid_ctx.fillStyle = '#0A397F'
       grid_ctx.fillRect(0, 0, grid_canvas.width, grid_canvas.height)
@@ -443,10 +449,10 @@ class CGoL {
     var height = bottom_y - top_y
     ctx.fillRect(left_x, top_y, width, height)
     
-    var draw_left_x = Math.max(0, Math.floor(true_x_offset / cell_size))
-    var draw_right_x = Math.min(grid_size-1, Math.ceil((true_x_offset + canvas.width) / cell_size))
-    var draw_top_y = Math.max(0, Math.floor(true_y_offset / cell_size))
-    var draw_bottom_y = Math.min(grid_size-1, Math.ceil((true_y_offset + canvas.height) / cell_size))
+    var draw_left_x = Math.max(0, draw_left_x)
+    var draw_right_x = Math.min(grid_size-1, draw_right_x)
+    var draw_top_y = Math.max(0, draw_top_y)
+    var draw_bottom_y = Math.min(grid_size-1, draw_bottom_y)
     for (var i = draw_top_y; i < draw_bottom_y; ++i) {
       for (var j = draw_left_x; j < draw_right_x; ++j) {
         if (i < 0 || i >= grid_size || j < 0 || j >= grid_size) {
