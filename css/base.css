@@ -74,9 +74,9 @@
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
-    vertical-align: -0.24em;
-    user-select: none;
+    vertical-align: -0.14em;
     -webkit-user-select: none;
+    user-select: none;
 }
 .icon-alt {
     /* No, this can't be the same class as .icon.
@@ -284,8 +284,8 @@ button, input[type~="button submit reset"], summary {
         --button-bg: var(--background-error-color);
     }
     appearance: none;
-    user-select: none;
     -webkit-user-select: none;
+    user-select: none;
     border: 0.125rem solid var(--button-fg);
     border-radius: 0.625rem;
     cursor: pointer;
