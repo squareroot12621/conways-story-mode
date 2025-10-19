@@ -423,7 +423,7 @@ class CGoL {
           grid_ctx.drawImage(images['cell-icon-8'], left_x, top_y, width, height)
         }
       }
-      const border_pattern = ctx.createPattern(grid_canvas)
+      const border_pattern = ctx.createPattern(grid_canvas, 'repeat')
       ctx.fillStyle = border_pattern
     } else {
       ctx.fillStyle = '#0A397F'
