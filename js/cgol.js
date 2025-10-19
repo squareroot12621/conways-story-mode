@@ -324,24 +324,29 @@ class CGoL {
   static #round_zoom(zoom) {
     if (zoom < 4) {
       return zoom
-    } else if (zoom < 8) {
-      return Math.round(zoom * 16) / 16
-    } else if (zoom < 16) {
-      return Math.round(zoom * 8) / 8
     } else {
-      return Math.round(zoom * 4) / 4
+      var fudge_factor = CGoL.#zoom_fudge_factor(zoom)
+      return Math.round(zoom * fudge_factor) / fudge_factor
     }
   }
 
   static #grid_canvas_size(zoom) {
     if (zoom < 4) {
       return 1 // It doesn't make sense to draw a grid if it would obscure the cells
-    } else if (zoom < 8) {
-      return zoom * 16
-    } else if (zoom < 16) {
-      return zoom * 8
     } else {
-      return zoom * 4
+      return zoom * CGoL.#zoom_fudge_factor(zoom)
+    }
+  }
+
+  static #zoom_fudge_factor(zoom) {
+    if (zoom < 4) {
+      return null
+    } else if (zoom < 8) {
+      return 16
+    } else if (zoom < 16) {
+      return 8
+    } else {
+      return 4
     }
   }
 
