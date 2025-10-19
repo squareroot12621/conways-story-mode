@@ -430,10 +430,13 @@ class CGoL {
     }
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = '#000000'
-    ctx.fillRect((-true_x_offset) | 0,
-                 (-true_x_offset + grid_size*cell_size) | 0,
-                 (-true_y_offset) | 0,
-                 (-true_y_offset + grid_size*cell_size) | 0)
+    var left_x = (-true_x_offset) | 0
+    var right_x = (-true_x_offset + grid_size*cell_size) | 0
+    var width = right_x - left_x
+    var top_y = (-true_y_offset) | 0
+    var bottom_y = (-true_y_offset + grid_size*cell_size) | 0
+    var height = bottom_y - top_y
+    ctx.fillRect(left_x, top_y, width, height)
     
     var draw_left_x = Math.max(0, Math.floor(true_x_offset / cell_size))
     var draw_right_x = Math.min(grid_size-1, Math.ceil((true_x_offset + canvas.width) / cell_size))
