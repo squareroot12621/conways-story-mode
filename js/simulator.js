@@ -468,6 +468,12 @@ function create_event_handlers(sandbox) {
       })
     }
   }
+
+  // Reset, step back, step forward, play
+  var step_forward_button = document.getElementById('simulator-step')
+  step_forward_button.addEventListener('click', () => {
+    cgol_object.step_forward()
+  })
   
   // Simulation speed event handlers
   var speed_button = document.getElementById('simulator-speed-button')
