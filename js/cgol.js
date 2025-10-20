@@ -318,29 +318,28 @@ class CGoL {
 
   step_forward() {
     ++this.generation
-    for (var y = 0; y < this.grid_size; ++y) {
-      for (var x = 0; x < this.grid_size; ++x) {
-        var neighbors = 0
-        for ([dx, dy] of [
-          [-1, -1], [-1, 0], [-1, 1],
-          [0, -1], [0, 1],
-          [1, -1], [1, 0], [1, 1],
-        ]) {
-          var cx = x + dx
-          var cy = y + dy
-          if (cx >= 0 && cx < this.grid_size
-              && cy >= 0 && cy < this.grid_size) {
-            neighbors += board[cy*this.grid_size + cx] & 1
-          }
-        }
-        var current_cell = board[y*this.grid_size + x]
-        if ((current_cell && neighbors == 2) || neighbors == 3) {
-          board[y*this.grid_size + x] |= 2
-        } else {
-          board[y*this.grid_size + x] &= 253
+    this.board = this.board.map((current_cell, index, old_board) => {
+      var x = index % this.grid_size
+      var y = index / this.grid_size | 0
+      var neighbors = 0
+      for ([dx, dy] of [
+        [-1, -1], [-1, 0], [-1, 1],
+        [0, -1], [0, 1],
+        [1, -1], [1, 0], [1, 1],
+      ]) {
+        var cx = x + dx
+        var cy = y + dy
+        if (cx >= 0 && cx < this.grid_size
+            && cy >= 0 && cy < this.grid_size) {
+          neighbors += old_board[cy*this.grid_size + cx]
         }
       }
-    }
+      if ((current_cell && neighbors == 2) || neighbors == 3) {
+        return 1
+      } else {
+        return 0
+      }
+    })
   }
   
   move_to(x, y, zoom) {
