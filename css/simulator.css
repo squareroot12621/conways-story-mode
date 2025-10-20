@@ -279,6 +279,7 @@
   #simulator-stat-generations {
     margin-right: 0.5rem;
     font-size: 1.25rem;
+    min-width: 6.625rem;
   }
   #simulator-extra-stats {
     position: relative;
