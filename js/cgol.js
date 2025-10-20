@@ -322,7 +322,7 @@ class CGoL {
       var x = index % this.grid_size
       var y = index / this.grid_size | 0
       var neighbors = 0
-      for ([dx, dy] of [
+      for (var [dx, dy] of [
         [-1, -1], [-1, 0], [-1, 1],
         [0, -1], [0, 1],
         [1, -1], [1, 0], [1, 1],
