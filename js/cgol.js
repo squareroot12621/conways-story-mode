@@ -318,6 +318,7 @@ class CGoL {
 
   step_forward() {
     ++this.generation
+    this.#changed_pattern = true
     this.board = this.board.map((current_cell, index, old_board) => {
       var x = index % this.grid_size
       var y = index / this.grid_size | 0
