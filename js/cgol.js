@@ -479,9 +479,9 @@ class CGoL {
     ctx.fillRect(left_x, top_y, width, height)
     
     var draw_left_x = Math.max(0, draw_left_x)
-    var draw_right_x = Math.min(grid_size-1, draw_right_x)
+    var draw_right_x = Math.min(grid_size, draw_right_x)
     var draw_top_y = Math.max(0, draw_top_y)
-    var draw_bottom_y = Math.min(grid_size-1, draw_bottom_y)
+    var draw_bottom_y = Math.min(grid_size, draw_bottom_y)
     for (var i = draw_top_y; i < draw_bottom_y; ++i) {
       for (var j = draw_left_x; j < draw_right_x; ++j) {
         if (i < 0 || i >= grid_size || j < 0 || j >= grid_size) {
