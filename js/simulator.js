@@ -501,10 +501,10 @@ function create_event_handlers(sandbox) {
     var playing = cgol_object.playing
     if (playing) {
       cgol_object.pause()
-      play_button.replaceChildren('pause')
+      play_button.replaceChildren('play_arrow')
     } else {
       cgol_object.play()
-      play_button.replaceChildren('play_arrow')
+      play_button.replaceChildren('pause')
     }
   })
   
