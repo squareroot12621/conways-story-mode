@@ -490,10 +490,22 @@ function create_event_handlers(sandbox) {
     generations_element.replaceChildren(`Gen. ${generation_text}`)
     generations_element.ariaLabel = `Generation ${generation_text}`
   }
+  
   var step_forward_button = document.getElementById('simulator-step')
+  var play_button = document.getElementById('simulator-play')
   step_forward_button.addEventListener('click', () => {
     cgol_object.step_forward()
     update_generations(cgol_object.generation)
+  })
+  play_button.addEventListener('click', () => {
+    var playing = cgol_object.playing
+    if (playing) {
+      cgol_object.pause()
+      play_button.replaceChildren('pause')
+    } else {
+      cgol_object.play()
+      play_button.replaceChildren('play_arrow')
+    }
   })
   
   // Simulation speed event handlers
