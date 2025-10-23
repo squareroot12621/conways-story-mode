@@ -49,7 +49,7 @@ class CGoL {
     this.generation = 0
     this.playing = options.autoplay ?? false
     this.speed = options.speed ?? 5
-    this.#last_tick_time = 0
+    this.#last_tick_time = performance.now()
     
     // Graphical stuff
     this.canvas = options.canvas
@@ -402,12 +402,14 @@ class CGoL {
       // TODO: Make the cache interval changeable using the speed slider
       var changed_size = this.canvas.width !== this.#last_width
                          || this.canvas.height !== this.#last_height
-      var time_since_tick = timestamp - this.#last_tick_time
-      var time_between_ticks = 1000/this.speed
-      var step_forward_needed = time_since_tick >= time_between_ticks
-      if (step_forward_needed) {
-        this.step_forward()
-        this.#last_tick_time += time_between_ticks
+      if (this.playing) {
+        var time_since_tick = timestamp - this.#last_tick_time
+        var time_between_ticks = 1000/this.speed
+        var step_forward_needed = time_since_tick >= time_between_ticks
+        if (step_forward_needed) {
+          this.step_forward()
+          this.#last_tick_time += time_between_ticks
+        }
       }
       if (cache_expired
           || changed_size
