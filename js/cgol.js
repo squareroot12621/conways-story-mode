@@ -1,6 +1,7 @@
 import {images} from './utilities.js'
 
 class CGoL {
+  #last_tick_time
   #ctx
   #grid_canvas
   #grid_ctx
@@ -42,8 +43,13 @@ class CGoL {
         flip_x: object.flip_x ?? false,
       })
     }
-    this.#compile_pattern()
+    this.compile_pattern()
+
+    // Simulation stuff
     this.generation = 0
+    this.playing = options.autoplay ?? false
+    this.speed = options.speed ?? 5
+    this.#last_tick_time = 0
     
     // Graphical stuff
     this.canvas = options.canvas
@@ -277,7 +283,7 @@ class CGoL {
     return output
   }
 
-  #compile_pattern() {
+  compile_pattern() {
     this.board = Array(this.grid_size * this.grid_size).fill(0)
     this.cell_types = Array(this.grid_size * this.grid_size).fill(0)
     /* Cell types:
@@ -342,6 +348,15 @@ class CGoL {
       }
     })
   }
+
+  play() {
+    this.playing = true
+    this.#last_tick_time = performance.now()
+  }
+
+  pause() {
+    this.playing = false
+  }
   
   move_to(x, y, zoom) {
     this.x_offset = x
@@ -387,7 +402,17 @@ class CGoL {
       // TODO: Make the cache interval changeable using the speed slider
       var changed_size = this.canvas.width !== this.#last_width
                          || this.canvas.height !== this.#last_height
-      if (cache_expired || changed_size || this.#changed_camera || this.#changed_pattern) {
+      var time_since_tick = timestamp - this.#last_tick_time
+      var time_between_ticks = 1000/this.speed
+      var step_forward_needed = time_since_tick >= time_between_ticks
+      if (step_forward_needed) {
+        this.step_forward()
+        this.#last_tick_time += time_between_ticks
+      }
+      if (cache_expired
+          || changed_size
+          || this.#changed_camera
+          || this.#changed_pattern) {
         if (cache_expired) {
           this.#last_draw_time = timestamp
         }
@@ -416,16 +441,11 @@ class CGoL {
   
   #draw_inner(options={}) {
     var colorblind = options.colorblind ?? false
-    colorblind = true // DEBUG
     var can_use_symbols = colorblind && this.zoom >= 6
     var show_grid = options.grid ?? true
     var can_use_grid = show_grid && this.zoom >= 6
     
     var start_time = performance.now() // DEBUG
-
-    /* TODO: Replace the naïve bounds-checking algorithm
-       (which is very slow if there's a lot of edge)
-       with another createPattern solution. */
     
     var canvas = this.canvas
     var ctx = this.#ctx
