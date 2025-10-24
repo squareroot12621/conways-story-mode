@@ -49,7 +49,12 @@ class CGoL {
     this.generation = 0
     this.playing = options.autoplay ?? false
     this.speed = options.speed ?? 5
-    this.#last_tick_time = performance.now()
+    this.#last_tick_time = document.timeline.currentTime
+    this.#stat_counters = {
+      generation: options.generation_counter ?? null,
+      population: options.population_counter ?? null,
+      bounding_box: options.bounding_box_counter ?? null,
+    }
     
     // Graphical stuff
     this.canvas = options.canvas
@@ -322,6 +327,37 @@ class CGoL {
     this.original_board = [...this.board]
   }
 
+  get population() {
+    var population = 0
+    for (i = 0; i < this.board.length; ++i) {
+      population += this.board[i]
+    }
+    return population
+  }
+  set population(value) {
+    throw TypeError("Can't assign to population")
+  }
+  get bounding_box() {
+    var left_x = right_x = top_y = bottom_y = 0
+    var x, y
+    for (i = 0; i < this.board.length; ++i) {
+      if (this.board[i]) {
+        x = i % grid_size
+        y = i / grid_size | 0
+        left_x = Math.min(x, left_x)
+        right_x = Math.max(x, right_x)
+        top_y = Math.min(y, top_y)
+        bottom_y = y // It'll always be more than the previous bottom_y
+      }
+    }
+    var width = right_x - left_x + 1
+    var height = bottom_y - top_y + 1
+    return [width, height]
+  }
+  set bounding_box(value) {
+    throw TypeError("Can't assign to bounding_box")
+  }
+  
   step_forward() {
     ++this.generation
     this.#changed_pattern = true
@@ -347,6 +383,7 @@ class CGoL {
         return 0
       }
     })
+    this.#update_stats()
   }
 
   play() {
@@ -394,6 +431,51 @@ class CGoL {
     }
   }
 
+  static #convert_to_string(number, short=false) {
+    if (number >= 10 ** 18) {
+      var output = number.toExponential(short ? 2 : 5)
+    } else if (!short || number < 10_000) {
+      var text = number.toString()
+      var output = ''
+      for (var i = text.length; i > 0; i -= 3) {
+        output = text.slice(Math.max(0, i-3), i) + (output ? ',' : '') + output
+      }
+    } else (number < 10 ** 18) {
+      /* The toString method is more reliable than Math.floor(Math.log10(number) / 3)
+         for numbers very close to the boundary, like 10**18 - 4031. */
+      var log_1000 = (number.toString().length-1) / 3
+      var letter = '-KMBTQ'[log_1000]
+      var digits = (number / 1000**log_1000).toPrecision(3)
+      var output = digits + letter
+    }
+    return output
+  }
+
+  #update_stats() {
+    // Update the generation
+    var generation_element = this.#stat_counters.generation
+    if (generation_element) {
+      var generation_text = CGoL.#convert_to_string(this.generation, true)
+      generations_element.replaceChildren(`Gen. ${generation_text}`)
+      generations_element.ariaLabel = `Generation ${generation_text}`
+    }
+    // Update the population
+    var population_element = this.#stat_counters.population
+    if (population_element) {
+      var population_text = CGoL.#convert_to_string(this.population)
+      population_element.replaceChildren(`${population_text} cells`)
+    }
+    // Update the bounding box
+    var bounding_box_element = this.#stat_counters.bounding_box
+    if (bounding_box_element) {
+      var [bounding_width, bounding_height] = this.bounding_box
+      var bounding_width_text = CGoL.#convert_to_string(bounding_width)
+      var bounding_height_text = CGoL.#convert_to_string(bounding_height)
+      bounding_box_element.replaceChildren(`${bounding_width_text}\u00D7${bounding_height_text}`)
+      bounding_box_element.ariaLabel = `Bounding box: ${bounding_width_text} by ${bounding_height_text}`
+    }
+  }
+  
   draw(options={}, timestamp) {
     if (timestamp === null || timestamp === undefined) {
       this.#draw_inner(options)
