@@ -2,6 +2,7 @@ import {images} from './utilities.js'
 
 class CGoL {
   #last_tick_time
+  #stat_counters
   #ctx
   #grid_canvas
   #grid_ctx
