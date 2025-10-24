@@ -384,7 +384,7 @@ class CGoL {
         return 0
       }
     })
-    this.#update_stats()
+    #update_stats()
   }
 
   play() {
