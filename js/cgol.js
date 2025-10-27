@@ -89,6 +89,8 @@ class CGoL {
       document.getElementById('conways-story-mode'),
       {childList: true, subtree: true},
     )
+
+    this.#update_stats()
   }
 
   static #normalize_rule(rule) {
