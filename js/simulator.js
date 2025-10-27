@@ -330,6 +330,9 @@ function create_event_handlers(sandbox) {
     pattern: 'x = 3, y = 3, rule = B3/S23\n3o$2bo$bo2$.ABCDEFGHIJKLMNOPQRSTUVWXY!',
     canvas: document.getElementById('simulator-cgol'),
     zoom: 20,
+    generation_counter: document.getElementById('simulator-stat-generations'),
+    population_counter: document.getElementById('simulator-stat-population'),
+    bounding_box_counter: document.getElementById('simulator-stat-bounding-box'),
   })
   
   // Sidebar event handlers
@@ -576,10 +579,6 @@ function create_event_handlers(sandbox) {
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
-  cgol_object.draw({
-    generation_counter: document.getElementById('simulator-stat-generations'),
-    population_counter: document.getElementById('simulator-stat-population'),
-    bounding_box_counter: document.getElementById('simulator-stat-bounding-box'),
-  }, now) // Using now instead of null is a TEST for requestAnimationFrame
+  cgol_object.draw({}, now) // Using now instead of null is a TEST for requestAnimationFrame
 }
 export {create_cgol_simulator, resize_simulator}
