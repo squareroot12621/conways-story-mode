@@ -397,6 +397,13 @@ class CGoL {
   pause() {
     this.playing = false
   }
+
+  reset_to_generation_0() {
+    this.playing = false
+    this.#changed_pattern = true
+    this.board = [...this.original_board]
+    this.#update_stats()
+  }
   
   move_to(x, y, zoom) {
     this.x_offset = x
