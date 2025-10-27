@@ -470,32 +470,10 @@ function create_event_handlers(sandbox) {
   }
 
   // Reset, step back, step forward, play
-  function update_generations(gens) {
-    // Format the generation number
-    if (gens < 1_000) {
-      var generation_text = gens.toString()
-    } else if (gens < 10_000) {
-      var generation_text = `${Math.floor(gens / 1000)},${gens % 1000}`
-    } else if (gens < 10 ** 18) {
-      /* The toString method is more reliable than Math.floor(Math.log10(gens) / 3)
-         for numbers very close to the boundary, like 10**18 - 4031. */
-      var log_1000 = (gens.toString().length-1) / 3
-      var letter = '-KMBTQ'[log_1000]
-      var digits = (gens / 1000**log_1000).toPrecision(3)
-      var generation_text = digits + letter
-    } else {
-      var generation_text = gens.toExponential(2)
-    }
-    var generations_element = document.getElementById('simulator-stat-generations')
-    generations_element.replaceChildren(`Gen. ${generation_text}`)
-    generations_element.ariaLabel = `Generation ${generation_text}`
-  }
-  
   var step_forward_button = document.getElementById('simulator-step')
   var play_button = document.getElementById('simulator-play')
   step_forward_button.addEventListener('click', () => {
     cgol_object.step_forward()
-    update_generations(cgol_object.generation)
   })
   play_button.addEventListener('click', () => {
     var playing = cgol_object.playing
