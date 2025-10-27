@@ -217,9 +217,9 @@ function create_simulator_main(sandbox) {
     'div', 'Gen. 0', {id: 'simulator-stat-generations', 'aria-label': 'Generation 0'}
   )
   // The other statistics
-  var population_stat = create_element('div', '4,444 cells', {id: 'simulator-stat-population'})
+  var population_stat = create_element('div', '0 cells', {id: 'simulator-stat-population'})
   var bounding_box_stat = create_element(
-    'div', '444\u00D7444', {id: 'simulator-stat-bounding-box', 'aria-label': 'Bounding box: 444 by 444'}
+    'div', '0\u00D70', {id: 'simulator-stat-bounding-box', 'aria-label': 'Bounding box: 0 by 0'}
   )
   var extra_stats_inner = create_element(
     'div', [population_stat, bounding_box_stat], {class: 'extra-stats-inner'}
