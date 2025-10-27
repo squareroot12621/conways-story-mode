@@ -343,8 +343,8 @@ class CGoL {
     var x, y
     for (var i = 0; i < this.board.length; ++i) {
       if (this.board[i]) {
-        x = i % grid_size
-        y = i / grid_size | 0
+        x = i % this.grid_size
+        y = i / this.grid_size | 0
         left_x = Math.min(x, left_x)
         right_x = Math.max(x, right_x)
         top_y = Math.min(y, top_y)
