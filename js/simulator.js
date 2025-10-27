@@ -473,24 +473,33 @@ function create_event_handlers(sandbox) {
   }
 
   // Reset, step back, step forward, play
+  function set_playing(new_playing, only_button=false) {
+    if (new_playing) {
+      if (!only_button) {
+        cgol_object.play()
+      }
+      play_button.replaceChildren('pause')
+    } else {
+      if (!only_button) {
+        cgol_object.pause()
+      }
+      play_button.replaceChildren('play_arrow')
+    }
+  }
+  
   var reset_generation_button = document.getElementById('simulator-reset')
   var step_forward_button = document.getElementById('simulator-step')
   var play_button = document.getElementById('simulator-play')
   reset_generation_button.addEventListener('click', () => {
     cgol_object.reset_to_generation_0()
+    set_playing(false, true)
   })
   step_forward_button.addEventListener('click', () => {
     cgol_object.step_forward()
+    set_playing(false)
   })
   play_button.addEventListener('click', () => {
-    var playing = cgol_object.playing
-    if (playing) {
-      cgol_object.pause()
-      play_button.replaceChildren('play_arrow')
-    } else {
-      cgol_object.play()
-      play_button.replaceChildren('pause')
-    }
+    set_playing(!cgol_object.playing)
   })
   
   // Simulation speed event handlers
