@@ -457,8 +457,8 @@ class CGoL {
     var generation_element = this.#stat_counters.generation
     if (generation_element) {
       var generation_text = CGoL.#convert_to_string(this.generation, true)
-      generations_element.replaceChildren(`Gen. ${generation_text}`)
-      generations_element.ariaLabel = `Generation ${generation_text}`
+      generation_element.replaceChildren(`Gen. ${generation_text}`)
+      generation_element.ariaLabel = `Generation ${generation_text}`
     }
     // Update the population
     var population_element = this.#stat_counters.population
