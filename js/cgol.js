@@ -330,7 +330,7 @@ class CGoL {
 
   get population() {
     var population = 0
-    for (i = 0; i < this.board.length; ++i) {
+    for (var i = 0; i < this.board.length; ++i) {
       population += this.board[i]
     }
     return population
@@ -341,7 +341,7 @@ class CGoL {
   get bounding_box() {
     var left_x = right_x = top_y = bottom_y = 0
     var x, y
-    for (i = 0; i < this.board.length; ++i) {
+    for (var i = 0; i < this.board.length; ++i) {
       if (this.board[i]) {
         x = i % grid_size
         y = i / grid_size | 0
