@@ -464,7 +464,9 @@ class CGoL {
     var population_element = this.#stat_counters.population
     if (population_element) {
       var population_text = CGoL.#convert_to_string(this.population)
-      population_element.replaceChildren(`${population_text} cells`)
+      population_element.replaceChildren(
+        this.population === 1 ? '1 cell' : `${population_text} cells`
+      )
     }
     // Update the bounding box
     var bounding_box_element = this.#stat_counters.bounding_box
