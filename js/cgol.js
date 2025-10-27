@@ -441,7 +441,7 @@ class CGoL {
       for (var i = text.length; i > 0; i -= 3) {
         output = text.slice(Math.max(0, i-3), i) + (output ? ',' : '') + output
       }
-    } else (number < 10 ** 18) {
+    } else { // short && number >= 10_000 && number < 10 ** 18
       /* The toString method is more reliable than Math.floor(Math.log10(number) / 3)
          for numbers very close to the boundary, like 10**18 - 4031. */
       var log_1000 = (number.toString().length-1) / 3
