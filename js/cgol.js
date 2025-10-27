@@ -400,6 +400,7 @@ class CGoL {
 
   reset_to_generation_0() {
     this.playing = false
+    this.generation = 0
     this.#changed_pattern = true
     this.board = [...this.original_board]
     this.#update_stats()
