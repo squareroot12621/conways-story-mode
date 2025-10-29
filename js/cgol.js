@@ -3,6 +3,8 @@ import {images} from './utilities.js'
 class CGoL {
   #last_tick_time
   #stat_counters
+  #max_snapshots
+  #snapshots
   #ctx
   #grid_canvas
   #grid_ctx
@@ -56,6 +58,8 @@ class CGoL {
       population: options.population_counter ?? null,
       bounding_box: options.bounding_box_counter ?? null,
     }
+    this.#max_snapshots = options.max_snapshots ?? 100
+    // this.#snapshots is already defined by this.compile_pattern()
     
     // Graphical stuff
     this.canvas = options.canvas
@@ -327,7 +331,7 @@ class CGoL {
         }
       }
     }
-    this.original_board = [...this.board]
+    this.#snapshots = {0: [...this.board]}
   }
 
   get population() {
@@ -402,8 +406,13 @@ class CGoL {
     this.playing = false
     this.generation = 0
     this.#changed_pattern = true
-    this.board = [...this.original_board]
+    this.board = [...this.#snapshots[0]]
+    this.#snapshots = {0: this.#snapshots[0]} // TODO: Make sure this isn't a memory leak
     this.#update_stats()
+  }
+
+  step_back() {
+    // TODO: Step back, or recalculate from 0 if the snapshots are used up
   }
   
   move_to(x, y, zoom) {
