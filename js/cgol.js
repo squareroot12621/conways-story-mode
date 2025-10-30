@@ -391,6 +391,12 @@ class CGoL {
       }
     })
     this.#update_stats()
+    // Update snapshots
+    this.#snapshots[this.generation] = [...this.board]
+    var old_generation = this.generation - this.#max_snapshots
+    if (old_generation > 0) {
+      delete this.#snapshots[old_generation]
+    }
   }
 
   play() {
@@ -407,7 +413,7 @@ class CGoL {
     this.generation = 0
     this.#changed_pattern = true
     this.board = [...this.#snapshots[0]]
-    this.#snapshots = {0: this.#snapshots[0]} // TODO: Make sure this isn't a memory leak
+    this.#snapshots = {0: this.#snapshots[0]}
     this.#update_stats()
   }
 
