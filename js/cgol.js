@@ -418,7 +418,19 @@ class CGoL {
   }
 
   step_back() {
-    // TODO: Step back, or recalculate from 0 if the snapshots are used up
+    this.playing = false
+    var new_generation = this.generation - 1
+    var snapshot = this.#snapshots[new_generation]
+    if (snapshot) {
+      this.board = [...snapshot]
+      delete this.#snapshots[this.generation]
+      this.generation = new_generation
+    } else { // Uh oh, we couldn't find a snapshot
+      this.reset_to_generation_0()
+      for (var i = 0; i < new_generation; ++i) {
+        this.step_forward()
+      }
+    }
   }
   
   move_to(x, y, zoom) {
