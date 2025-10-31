@@ -488,10 +488,15 @@ function create_event_handlers(sandbox) {
   }
   
   var reset_generation_button = document.getElementById('simulator-reset')
+  var step_backward_button = document.getElementById('simulator-back')
   var step_forward_button = document.getElementById('simulator-step')
   var play_button = document.getElementById('simulator-play')
   reset_generation_button.addEventListener('click', () => {
     cgol_object.reset_to_generation_0()
+    set_playing(false, true)
+  })
+  step_backward_button.addEventListener('click', () => {
+    cgol_object.step_back()
     set_playing(false, true)
   })
   step_forward_button.addEventListener('click', () => {
