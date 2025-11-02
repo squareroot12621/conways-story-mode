@@ -419,6 +419,7 @@ class CGoL {
 
   step_back() {
     this.playing = false
+    this.#changed_pattern = true
     var new_generation = this.generation - 1
     var snapshot = this.#snapshots[new_generation]
     if (snapshot) {
@@ -431,6 +432,7 @@ class CGoL {
         this.step_forward()
       }
     }
+    this.#update_stats()
   }
   
   move_to(x, y, zoom) {
