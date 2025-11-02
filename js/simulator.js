@@ -510,7 +510,7 @@ function create_event_handlers(sandbox) {
   })
   play_button.addEventListener('click', () => {
     set_playing(!cgol_object.playing)
-    step_backward_button.disabled = cgol_object.generation > 0
+    step_backward_button.disabled = cgol_object.generation === 0
   })
   
   // Simulation speed event handlers
