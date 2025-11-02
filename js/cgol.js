@@ -418,6 +418,9 @@ class CGoL {
   }
 
   step_back() {
+    if (this.generation <= 0) { // We can't step back from 0
+      return undefined
+    }
     this.playing = false
     this.#changed_pattern = true
     var new_generation = this.generation - 1
