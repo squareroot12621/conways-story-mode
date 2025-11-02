@@ -286,12 +286,17 @@ button, input[type~="button submit reset"], summary {
     appearance: none;
     -webkit-user-select: none;
     user-select: none;
-    border: 0.125rem solid var(--button-fg);
-    border-radius: 0.625rem;
-    cursor: pointer;
     background-color: var(--button-bg);
+    cursor: pointer;
+    border-radius: 0.625rem;
+    border: 0.125rem solid var(--button-fg);
     color: var(--button-fg);
-    &:hover {
+    &[disabled], &[aria-disabled="true"] {
+        border-color: color-mix(in srgb, var(--button-fg) 60%, var(--button-bg));
+        color: color-mix(in srgb, var(--button-fg) 60%, var(--button-bg));
+        cursor: not-allowed;
+    }
+    &:hover:not([disabled]):not([aria-disabled="true"]) {
         background-color: var(--button-fg);
         color: var(--button-bg);
     }
