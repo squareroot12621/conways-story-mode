@@ -494,17 +494,23 @@ function create_event_handlers(sandbox) {
   reset_generation_button.addEventListener('click', () => {
     cgol_object.reset_to_generation_0()
     set_playing(false, true)
+    step_backward_button.disabled = true
   })
   step_backward_button.addEventListener('click', () => {
     cgol_object.step_back()
     set_playing(false, true)
+    if (cgol_object.generation === 0) {
+      step_backward_button.disabled = true
+    }
   })
   step_forward_button.addEventListener('click', () => {
     cgol_object.step_forward()
     set_playing(false)
+    step_backward_button.disabled = false
   })
   play_button.addEventListener('click', () => {
     set_playing(!cgol_object.playing)
+    step_backward_button.disabled = cgol_object.generation > 0
   })
   
   // Simulation speed event handlers
