@@ -57,6 +57,7 @@ class CGoL {
       generation: options.generation_counter ?? null,
       population: options.population_counter ?? null,
       bounding_box: options.bounding_box_counter ?? null,
+      tick_handler: options.tick_handler ?? null, // Custom function for when the generation changes
     }
     this.#max_snapshots = options.max_snapshots ?? 100
     // this.#snapshots is already defined by this.compile_pattern()
@@ -518,6 +519,11 @@ class CGoL {
       var bounding_height_text = CGoL.#convert_to_string(bounding_height)
       bounding_box_element.replaceChildren(`${bounding_width_text}\u00D7${bounding_height_text}`)
       bounding_box_element.ariaLabel = `Bounding box: ${bounding_width_text} by ${bounding_height_text}`
+    }
+    // Run the tick handler
+    var tick_handler = this.#stat_counters.tick_handler
+    if (tick_handler) {
+      tick_handler()
     }
   }
   
