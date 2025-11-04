@@ -132,7 +132,7 @@ function create_simulator_main(sandbox) {
     class: 'simulator-toolbar-item',
     id: 'simulator-back',
     'aria-label': 'Step back 1 generation',
-    disabled: true, // We're at generation 0 right now so we can't step back
+    disabled: '', // We're at generation 0 right now so we can't step back
   })
   var step_button = create_element(
     'button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step', 'aria-label': 'Step forward 1 generation'}
@@ -338,7 +338,7 @@ function create_event_handlers(sandbox) {
     bounding_box_counter: document.getElementById('simulator-stat-bounding-box'),
     tick_handler: () => {
       var step_backward_button = document.getElementById('simulator-back')
-      step_backward_button.disabled = cgol_object.generation === 0
+      step_backward_button.disabled = this.generation === 0
     },
   })
   
