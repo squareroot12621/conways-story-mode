@@ -523,7 +523,7 @@ class CGoL {
     // Run the tick handler
     var tick_handler = this.#stat_counters.tick_handler
     if (tick_handler) {
-      tick_handler()
+      tick_handler.apply(this)
     }
   }
   
