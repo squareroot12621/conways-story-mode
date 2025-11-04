@@ -128,9 +128,12 @@ function create_simulator_main(sandbox) {
     height: '1em',
     fill: 'currentColor',
   })
-  var back_button = create_element(
-    'button', back_svg, {class: 'simulator-toolbar-item', id: 'simulator-back', 'aria-label': 'Step back 1 generation'}
-  )
+  var back_button = create_element('button', back_svg, {
+    class: 'simulator-toolbar-item',
+    id: 'simulator-back',
+    'aria-label': 'Step back 1 generation',
+    disabled: true, // We're at generation 0 right now so we can't step back
+  })
   var step_button = create_element(
     'button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step', 'aria-label': 'Step forward 1 generation'}
   )
@@ -333,6 +336,10 @@ function create_event_handlers(sandbox) {
     generation_counter: document.getElementById('simulator-stat-generations'),
     population_counter: document.getElementById('simulator-stat-population'),
     bounding_box_counter: document.getElementById('simulator-stat-bounding-box'),
+    tick_handler: () => {
+      var step_backward_button = document.getElementById('simulator-back')
+      step_backward_button.disabled = cgol_object.generation === 0
+    },
   })
   
   // Sidebar event handlers
@@ -488,29 +495,22 @@ function create_event_handlers(sandbox) {
   }
   
   var reset_generation_button = document.getElementById('simulator-reset')
-  var step_backward_button = document.getElementById('simulator-back')
   var step_forward_button = document.getElementById('simulator-step')
   var play_button = document.getElementById('simulator-play')
   reset_generation_button.addEventListener('click', () => {
     cgol_object.reset_to_generation_0()
     set_playing(false, true)
-    step_backward_button.disabled = true
   })
   step_backward_button.addEventListener('click', () => {
     cgol_object.step_back()
     set_playing(false, true)
-    if (cgol_object.generation === 0) {
-      step_backward_button.disabled = true
-    }
   })
   step_forward_button.addEventListener('click', () => {
     cgol_object.step_forward()
     set_playing(false)
-    step_backward_button.disabled = false
   })
   play_button.addEventListener('click', () => {
     set_playing(!cgol_object.playing)
-    step_backward_button.disabled = cgol_object.generation === 0
   })
   
   // Simulation speed event handlers
