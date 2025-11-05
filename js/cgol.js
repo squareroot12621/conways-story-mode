@@ -692,16 +692,16 @@ class CGoL {
       var x = Math.ceil(true_x_offset / cell_size) * cell_size - true_x_offset
       while (x < grid_canvas.width) {
         grid_ctx.beginPath()
-        grid_ctx.moveTo(x|0 + 0.5, 0)
-        grid_ctx.lineTo(x|0 + 0.5, grid_canvas.height)
+        grid_ctx.moveTo((x|0) + 0.5, 0)
+        grid_ctx.lineTo((x|0) + 0.5, grid_canvas.height)
         grid_ctx.stroke()
         x += cell_size
       }
       var y = Math.ceil(true_y_offset / cell_size) * cell_size - true_y_offset
       while (y < grid_canvas.height) {
         grid_ctx.beginPath()
-        grid_ctx.moveTo(0, y|0 + 0.5)
-        grid_ctx.lineTo(grid_canvas.width, y|0 + 0.5)
+        grid_ctx.moveTo(0, (y|0) + 0.5)
+        grid_ctx.lineTo(grid_canvas.width, (y|0) + 0.5)
         grid_ctx.stroke()
         y += cell_size
       }
