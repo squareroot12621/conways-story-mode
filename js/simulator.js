@@ -336,9 +336,9 @@ function create_event_handlers(sandbox) {
     generation_counter: document.getElementById('simulator-stat-generations'),
     population_counter: document.getElementById('simulator-stat-population'),
     bounding_box_counter: document.getElementById('simulator-stat-bounding-box'),
-    tick_handler: () => {
+    tick_handler: (cgol_object) => {
       var step_backward_button = document.getElementById('simulator-back')
-      step_backward_button.disabled = this.generation === 0
+      step_backward_button.disabled = cgol_object.generation === 0
     },
   })
   
