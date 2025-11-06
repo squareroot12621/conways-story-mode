@@ -442,6 +442,7 @@ function create_event_handlers(sandbox) {
       toggle_option_visibility(false)
     })
     current_button.addEventListener('keydown', (event) => {
+      event.preventDefault()
       if (event.key === 'Enter' || event.key === ' ') {
         toggle_option_visibility()
         if (current_options.every((option) => option.getAttribute('data-selected') === null)) {
@@ -450,10 +451,8 @@ function create_event_handlers(sandbox) {
              automatically select the first option */
           select_option(0)
         }
-        event.preventDefault()
       } else if (event.key === 'Escape') {
         toggle_option_visibility(false)
-        event.preventDefault()
       } else if (event.key === 'ArrowUp') {
         select_option(-1, true)
       } else if (event.key === 'ArrowDown') {
