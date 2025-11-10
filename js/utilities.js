@@ -48,6 +48,11 @@ function update_root(...elements) {
 }
 
 function resize_root() {
+    /* Set the height of the body-wrapper
+       (fixes a bug on Chrome where 100vh is too tall) */
+    var body_wrapper = document.getElementsByClassName('body-wrapper')[0]
+    body_wrapper.style.height = window.innerHeight + 'px'
+    
     // Add a data-portrait attribute to #conways-story-mode
     var root = document.getElementById('conways-story-mode')
     root.setAttribute('data-portrait', (root.clientWidth <= root.clientHeight).toString())
