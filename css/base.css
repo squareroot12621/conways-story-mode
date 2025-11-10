@@ -198,12 +198,10 @@ body {
 body, button, input, kbd {
     font-size: inherit;
 }
-html, body, .body-wrapper {
-    height: 100%;
-}
 .body-wrapper {
     display: flex;
     flex-direction: column;
+    height: 100svh;
     min-width: 20rem;
     min-height: 40rem;
 }
