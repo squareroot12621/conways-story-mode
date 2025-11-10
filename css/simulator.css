@@ -264,6 +264,8 @@
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
     touch-action: none; /* Double tap should not zoom */
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   .simulator-toolbar-bottom {
