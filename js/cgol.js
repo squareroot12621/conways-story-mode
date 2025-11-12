@@ -5,6 +5,8 @@ class CGoL {
   #stat_counters
   #max_back_snapshots
   #back_snapshots
+  #max_undo_snapshots
+  #undo_snapshots
   #ctx
   #grid_canvas
   #grid_ctx
@@ -59,8 +61,10 @@ class CGoL {
       bounding_box: options.bounding_box_counter ?? null,
       tick_handler: options.tick_handler ?? null, // Custom function for when the generation changes
     }
-    this.#max_back_snapshots = options.max_snapshots ?? 100
-    // this.#back_snapshots is already defined by this.compile_pattern()
+    this.#max_back_snapshots = options.max_back_snapshots ?? 100
+    this.#max_undo_snapshots = options.max_undo_snapshots ?? 50
+    /* this.#back_snapshots and this.#undo_snapshots
+       are already defined by this.compile_pattern() */
     
     // Graphical stuff
     this.canvas = options.canvas
@@ -333,6 +337,8 @@ class CGoL {
       }
     }
     this.#back_snapshots = {0: [...this.board]}
+    this.#undo_snapshots = []
+    this.#set_state(null)
   }
 
   get population() {
@@ -364,6 +370,16 @@ class CGoL {
   }
   set bounding_box(value) {
     throw TypeError("Can't assign to bounding_box")
+  }
+
+  #set_state(action) {
+    this.#undo_snapshots.shift()
+    this.#undo_snapshots.push({
+      action: action,
+      board: [...this.board],
+      generation: this.generation,
+      // TODO: Add objects
+    })
   }
   
   step_forward() {
