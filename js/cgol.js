@@ -3,8 +3,8 @@ import {images} from './utilities.js'
 class CGoL {
   #last_tick_time
   #stat_counters
-  #max_snapshots
-  #snapshots
+  #max_back_snapshots
+  #back_snapshots
   #ctx
   #grid_canvas
   #grid_ctx
@@ -59,8 +59,8 @@ class CGoL {
       bounding_box: options.bounding_box_counter ?? null,
       tick_handler: options.tick_handler ?? null, // Custom function for when the generation changes
     }
-    this.#max_snapshots = options.max_snapshots ?? 100
-    // this.#snapshots is already defined by this.compile_pattern()
+    this.#max_back_snapshots = options.max_snapshots ?? 100
+    // this.#back_snapshots is already defined by this.compile_pattern()
     
     // Graphical stuff
     this.canvas = options.canvas
@@ -332,7 +332,7 @@ class CGoL {
         }
       }
     }
-    this.#snapshots = {0: [...this.board]}
+    this.#back_snapshots = {0: [...this.board]}
   }
 
   get population() {
@@ -393,10 +393,10 @@ class CGoL {
     })
     this.#update_stats()
     // Update snapshots
-    this.#snapshots[this.generation] = [...this.board]
-    var old_generation = this.generation - this.#max_snapshots
+    this.#back_snapshots[this.generation] = [...this.board]
+    var old_generation = this.generation - this.#max_back_snapshots
     if (old_generation > 0) {
-      delete this.#snapshots[old_generation]
+      delete this.#back_snapshots[old_generation]
     }
   }
 
@@ -414,7 +414,7 @@ class CGoL {
     this.generation = 0
     this.#changed_pattern = true
     this.board = [...this.#snapshots[0]]
-    this.#snapshots = {0: this.#snapshots[0]}
+    this.#back_snapshots = {0: this.#back_snapshots[0]}
     this.#update_stats()
   }
 
@@ -425,10 +425,10 @@ class CGoL {
     this.playing = false
     this.#changed_pattern = true
     var new_generation = this.generation - 1
-    var snapshot = this.#snapshots[new_generation]
+    var snapshot = this.#back_snapshots[new_generation]
     if (snapshot) {
       this.board = [...snapshot]
-      delete this.#snapshots[this.generation]
+      delete this.#back_snapshots[this.generation]
       this.generation = new_generation
     } else { // Uh oh, we couldn't find a snapshot
       this.reset_to_generation_0()
