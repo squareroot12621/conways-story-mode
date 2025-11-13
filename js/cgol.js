@@ -7,6 +7,7 @@ class CGoL {
   #back_snapshots
   #max_undo_snapshots
   #undo_snapshots
+  #current_undo_state
   #ctx
   #grid_canvas
   #grid_ctx
@@ -63,7 +64,8 @@ class CGoL {
     }
     this.#max_back_snapshots = options.max_back_snapshots ?? 100
     this.#max_undo_snapshots = options.max_undo_snapshots ?? 50
-    /* this.#back_snapshots and this.#undo_snapshots
+    /* this.#back_snapshots, this.#undo_snapshots,
+       and this.#current_undo_state
        are already defined by this.compile_pattern() */
     
     // Graphical stuff
@@ -338,6 +340,7 @@ class CGoL {
     }
     this.#back_snapshots = {0: [...this.board]}
     this.#undo_snapshots = []
+    this.#current_undo_state = -1
     this.#set_state(null)
   }
 
@@ -373,13 +376,47 @@ class CGoL {
   }
 
   #set_state(action) {
-    this.#undo_snapshots.shift()
+    /* TODO: Add state merging (same action)
+       and state canceling (value and value_2 are 0) */
+    
+    /* Remove the other branch of undos, if necessary.
+       This can happen if you undo something and then do an action normally. */
+    if (this.#current_undo_state < this.#undo_snapshots.length - 1) {
+      this.#undo_snapshots.splice(this.#current_undo_state + 1)
+    }
+    // If the array is longer than #max_undo_snapshots, remove the first element.
+    if (this.#undo_snapshots.length >= this.#max_undo_snapshots) {
+      this.#undo_snapshots.shift()
+      --this.#current_undo_state
+    }
+    // Make the state and push it into the snapshot array.
     this.#undo_snapshots.push({
       action: action,
       board: [...this.board],
       generation: this.generation,
-      // TODO: Add objects
+      objects: structuredClone(this.objects),
     })
+    ++this.#current_undo_state
+  }
+
+  #undo() {
+    if (this.#current_undo_state > 0) {
+      --this.#current_undo_state
+      var snapshot = this.#undo_snapshots[this.#current_undo_state]
+      this.board = snapshot.board
+      this.generation = snapshot.generation
+      this.objects = snapshot.objects
+    }
+  }
+
+  #redo() {
+    if (this.#current_undo_state < this.#undo_snapshots.length - 1) {
+      ++this.#current_undo_state
+      var snapshot = this.#undo_snapshots[this.#current_undo_state]
+      this.board = snapshot.board
+      this.generation = snapshot.generation
+      this.objects = snapshot.objects
+    }
   }
   
   step_forward() {
