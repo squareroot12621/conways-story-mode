@@ -341,7 +341,7 @@ class CGoL {
     this.#back_snapshots = {0: [...this.board]}
     this.#undo_snapshots = []
     this.#current_undo_state = -1
-    this.#set_state(null)
+    this.#set_state(null, 1, 0)
   }
 
   get population() {
