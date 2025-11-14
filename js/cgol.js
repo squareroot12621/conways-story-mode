@@ -375,47 +375,67 @@ class CGoL {
     throw TypeError("Can't assign to bounding_box")
   }
 
-  #set_state(action) {
-    /* TODO: Add state merging (same action)
-       and state canceling (value and value_2 are 0) */
-    
+  #set_state(action, value1, value2) {
     /* Remove the other branch of undos, if necessary.
        This can happen if you undo something and then do an action normally. */
     if (this.#current_undo_state < this.#undo_snapshots.length - 1) {
       this.#undo_snapshots.splice(this.#current_undo_state + 1)
+    }
+    // Make the state and push it into the snapshot array.
+    this.#undo_snapshots.push({
+      action: action,
+      // Values get merged when the actions are the same.
+      value1: value1,
+      value2: value2,
+      /* cancelable stops nested merging from happening.
+         Example: Move up, rotate clockwise, rotate counterclockwise, move down.
+         The rotations should merge, but not the moves. */
+      cancelable: true,
+      board: [...this.board],
+      generation: this.generation,
+      objects: structuredClone(this.objects),
+    })
+    ++this.#current_undo_state
+    // Merge the states, if possible.
+    var unmerged_state = this.#undo_snapshots[this.#undo_snapshots.length - 3]
+    var previous_state = this.#undo_snapshots[this.#undo_snapshots.length - 2]
+    var new_state = this.#undo_snapshots[this.#undo_snapshots.length - 1]
+    if (action === previous_state.action && previous_state.cancelable) {
+      unmerged_state.cancelable = false
+      new_state.value1 += previous_state.value1
+      new_state.value2 += previous_state.value2
+      // Remove previous_state.
+      this.#undo_snapshots.splice(this.#undo_snapshots.length - 2, 1)
+      --this.#current_undo_state
+      if (new_state.value1 === 0 && new_state.value2 === 0) {
+        this.#undo_snapshots.pop()
+        --this.#current_undo_state
+      }
     }
     // If the array is longer than #max_undo_snapshots, remove the first element.
     if (this.#undo_snapshots.length >= this.#max_undo_snapshots) {
       this.#undo_snapshots.shift()
       --this.#current_undo_state
     }
-    // Make the state and push it into the snapshot array.
-    this.#undo_snapshots.push({
-      action: action,
-      board: [...this.board],
-      generation: this.generation,
-      objects: structuredClone(this.objects),
-    })
-    ++this.#current_undo_state
   }
 
+  #get_state(index=null) {
+    index ??= this.#current_undo_state
+    var snapshot = this.#undo_snapshots[index]
+    this.board = snapshot.board
+    this.generation = snapshot.generation
+    this.objects = snapshot.objects
+  }
   #undo() {
     if (this.#current_undo_state > 0) {
       --this.#current_undo_state
-      var snapshot = this.#undo_snapshots[this.#current_undo_state]
-      this.board = snapshot.board
-      this.generation = snapshot.generation
-      this.objects = snapshot.objects
+      this.#get_state()
     }
   }
-
   #redo() {
     if (this.#current_undo_state < this.#undo_snapshots.length - 1) {
       ++this.#current_undo_state
-      var snapshot = this.#undo_snapshots[this.#current_undo_state]
-      this.board = snapshot.board
-      this.generation = snapshot.generation
-      this.objects = snapshot.objects
+      this.#get_state()
     }
   }
   
