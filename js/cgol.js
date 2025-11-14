@@ -486,7 +486,7 @@ class CGoL {
     this.playing = false
     this.generation = 0
     this.#changed_pattern = true
-    this.board = [...this.#snapshots[0]]
+    this.board = [...this.#back_snapshots[0]]
     this.#back_snapshots = {0: this.#back_snapshots[0]}
     this.#update_stats()
   }
