@@ -400,14 +400,19 @@ class CGoL {
     var unmerged_state = this.#undo_snapshots[this.#undo_snapshots.length - 3]
     var previous_state = this.#undo_snapshots[this.#undo_snapshots.length - 2]
     var new_state = this.#undo_snapshots[this.#undo_snapshots.length - 1]
-    if (action === previous_state.action && previous_state.cancelable) {
-      unmerged_state.cancelable = false
+    if (previous_state && previous_state.cancelable
+        && action === previous_state.action) {
+      if (unmerged_state) {
+        unmerged_state.cancelable = false
+      }
       new_state.value1 += previous_state.value1
       new_state.value2 += previous_state.value2
       // Remove previous_state.
       this.#undo_snapshots.splice(this.#undo_snapshots.length - 2, 1)
       --this.#current_undo_state
-      if (new_state.value1 === 0 && new_state.value2 === 0) {
+      if (new_state.value1 === 0 && new_state.value2 === 0
+          // Edge case if this.#max_undo_snapshots is really low
+          && this.#undo_snapshots.length > 1) {
         this.#undo_snapshots.pop()
         --this.#current_undo_state
       }
