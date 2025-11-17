@@ -444,12 +444,14 @@ class CGoL {
     if (this.can_undo()) {
       --this.#current_undo_state
       this.#get_state()
+      this.#update_stats()
     }
   }
   #redo() {
     if (this.can_redo()) {
       ++this.#current_undo_state
       this.#get_state()
+      this.#update_stats()
     }
   }
   
