@@ -613,6 +613,18 @@ function create_event_handlers(sandbox) {
   extra_stats_button.addEventListener('blur', () => {
     extra_stats_wrapper.style.display = 'none'
   })
+
+  // Undo and redo event handlers
+  var undo_button = document.getElementById('simulator-undo')
+  var redo_button = document.getElementById('simulator-redo')
+  undo_button.addEventListener('click', () => {
+    set_playing(false)
+    cgol_object.undo()
+  })
+  redo_button.addEventListener('click', () => {
+    set_playing(false)
+    cgol_object.redo()
+  })
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
