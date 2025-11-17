@@ -434,14 +434,20 @@ class CGoL {
     this.generation = snapshot.generation
     this.objects = snapshot.objects
   }
+  can_undo() {
+    return this.#current_undo_state > 0
+  }
+  can_redo() {
+    return this.#current_undo_state < this.#undo_snapshots.length - 1
+  }
   #undo() {
-    if (this.#current_undo_state > 0) {
+    if (this.can_undo()) {
       --this.#current_undo_state
       this.#get_state()
     }
   }
   #redo() {
-    if (this.#current_undo_state < this.#undo_snapshots.length - 1) {
+    if (this.can_redo()) {
       ++this.#current_undo_state
       this.#get_state()
     }
