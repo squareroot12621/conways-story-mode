@@ -375,7 +375,10 @@ class CGoL {
     throw TypeError("Can't assign to bounding_box")
   }
 
-  #set_state(action, value1, value2) {
+  #set_state(action, value1, value2, control1, control2) {
+    control1 ??= (a) => a
+    control2 ??= (b) => b
+    
     /* Remove the other branch of undos, if necessary.
        This can happen if you undo something and then do an action normally. */
     if (this.#current_undo_state < this.#undo_snapshots.length - 1) {
@@ -405,8 +408,8 @@ class CGoL {
       if (unmerged_state) {
         unmerged_state.cancelable = false
       }
-      new_state.value1 += previous_state.value1
-      new_state.value2 += previous_state.value2
+      new_state.value1 = control1(new_state.value1 + previous_state.value1)
+      new_state.value2 = control2(new_state.value2 + previous_state.value2)
       // Remove previous_state.
       this.#undo_snapshots.splice(this.#undo_snapshots.length - 2, 1)
       --this.#current_undo_state
@@ -469,6 +472,7 @@ class CGoL {
         return 0
       }
     })
+    #set_state('step', 1, 0)
     this.#update_stats()
     // Update snapshots
     this.#back_snapshots[this.generation] = [...this.board]
@@ -488,10 +492,12 @@ class CGoL {
   }
 
   reset_to_generation_0() {
+    var last_generation = this.generation
     this.playing = false
     this.generation = 0
     this.#changed_pattern = true
     this.board = [...this.#back_snapshots[0]]
+    #set_state('step', -last_generation, 0)
     this.#back_snapshots = {0: this.#back_snapshots[0]}
     this.#update_stats()
   }
@@ -514,6 +520,7 @@ class CGoL {
         this.step_forward()
       }
     }
+    #set_state('step', -1, 0)
     this.#update_stats()
   }
   
