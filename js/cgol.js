@@ -442,14 +442,14 @@ class CGoL {
   can_redo() {
     return this.#current_undo_state < this.#undo_snapshots.length - 1
   }
-  #undo() {
+  undo() {
     if (this.can_undo()) {
       --this.#current_undo_state
       this.#get_state()
       this.#update_stats()
     }
   }
-  #redo() {
+  redo() {
     if (this.can_redo()) {
       ++this.#current_undo_state
       this.#get_state()
