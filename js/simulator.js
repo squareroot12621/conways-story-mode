@@ -346,7 +346,11 @@ function create_event_handlers(sandbox) {
       // Update the step back button
       var step_backward_button = document.getElementById('simulator-back')
       step_backward_button.disabled = cgol_object.generation === 0
-      // TODO: Update the undo and redo buttons
+      // Update the undo and redo buttons
+      var undo_button = document.getElementById('simulator-undo')
+      undo_button.disabled = !cgol_object.can_undo()
+      var redo_button = document.getElementById('simulator-redo')
+      redo_button.disabled = !cgol_object.can_redo()
     },
   })
   
