@@ -472,7 +472,7 @@ class CGoL {
         return 0
       }
     })
-    #set_state('step', 1, 0)
+    this.#set_state('step', 1, 0)
     this.#update_stats()
     // Update snapshots
     this.#back_snapshots[this.generation] = [...this.board]
@@ -497,7 +497,7 @@ class CGoL {
     this.generation = 0
     this.#changed_pattern = true
     this.board = [...this.#back_snapshots[0]]
-    #set_state('step', -last_generation, 0)
+    this.#set_state('step', -last_generation, 0)
     this.#back_snapshots = {0: this.#back_snapshots[0]}
     this.#update_stats()
   }
@@ -520,7 +520,7 @@ class CGoL {
         this.step_forward()
       }
     }
-    #set_state('step', -1, 0)
+    this.#set_state('step', -1, 0)
     this.#update_stats()
   }
   
