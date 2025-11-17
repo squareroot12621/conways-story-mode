@@ -244,12 +244,18 @@ function create_simulator_main(sandbox) {
     'div', [extra_stats_button, extra_stats_outer], {id: 'simulator-extra-stats'}
   )
   // Undo and redo buttons
-  var undo_button = create_element(
-    'button', 'undo', {class: 'simulator-toolbar-item', id: 'simulator-undo', 'aria-label': 'Undo'}
-  )
-  var redo_button = create_element(
-    'button', 'redo', {class: 'simulator-toolbar-item', id: 'simulator-redo', 'aria-label': 'Redo'}
-  )
+  var undo_button = create_element('button', 'undo', {
+    class: 'simulator-toolbar-item',
+    id: 'simulator-undo',
+    'aria-label': 'Undo',
+    disabled: '', // We haven't done anything yet so we can't undo
+  })
+  var redo_button = create_element('button', 'redo', {
+    class: 'simulator-toolbar-item',
+    id: 'simulator-redo',
+    'aria-label': 'Redo',
+    disabled: '', // We haven't done anything yet so we can't redo
+  })
   // The settings button
   var all_extra_options = [
     {icon: 'replay', name: 'Restart'},
@@ -337,8 +343,10 @@ function create_event_handlers(sandbox) {
     population_counter: document.getElementById('simulator-stat-population'),
     bounding_box_counter: document.getElementById('simulator-stat-bounding-box'),
     tick_handler: (cgol_object) => {
+      // Update the step back button
       var step_backward_button = document.getElementById('simulator-back')
       step_backward_button.disabled = cgol_object.generation === 0
+      // TODO: Update the undo and redo buttons
     },
   })
   
