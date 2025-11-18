@@ -338,6 +338,7 @@ class CGoL {
         }
       }
     }
+    this.#changed_pattern = true
     this.#back_snapshots = {0: [...this.board]}
     this.#undo_snapshots = []
     this.#current_undo_state = -1
@@ -425,9 +426,6 @@ class CGoL {
       this.#undo_snapshots.shift()
       --this.#current_undo_state
     }
-
-    console.log(`States updated! Current length ${this.#undo_snapshots.length}, current state ${this.#current_undo_state}.`) // DEBUG
-    console.log(this.#undo_snapshots.at(-1)) // DEBUG
   }
 
   #get_state(index=null) {
@@ -448,6 +446,7 @@ class CGoL {
       --this.#current_undo_state
       this.#get_state()
       this.#update_stats()
+      this.#changed_pattern = true
     }
   }
   redo() {
@@ -455,6 +454,7 @@ class CGoL {
       ++this.#current_undo_state
       this.#get_state()
       this.#update_stats()
+      this.#changed_pattern = true
     }
   }
   
