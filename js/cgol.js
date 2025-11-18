@@ -427,6 +427,7 @@ class CGoL {
     }
 
     console.log(`States updated! Current length ${this.#undo_snapshots.length}, current state ${this.#current_undo_state}.`) // DEBUG
+    console.log(this.#undo_snapshots.at(-1)) // DEBUG
   }
 
   #get_state(index=null) {
