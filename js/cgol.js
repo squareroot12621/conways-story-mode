@@ -49,7 +49,6 @@ class CGoL {
         flip_x: object.flip_x ?? false,
       })
     }
-    this.compile_pattern()
 
     // Simulation stuff
     this.generation = 0
@@ -101,6 +100,7 @@ class CGoL {
       {childList: true, subtree: true},
     )
 
+    this.compile_pattern()
     this.#update_stats()
   }
 
