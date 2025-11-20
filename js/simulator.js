@@ -108,7 +108,8 @@ function create_simulator_main(sandbox) {
   var tool_selector = create_element('div', [tool_selected, tools_outer], {
     id: 'simulator-tool',
     role: 'listbox',
-    'aria-label': 'Currently using Draw. Change tool:' // TODO: Change this when a new one is selected
+    'data-tool': 'draw',
+    'aria-label': 'Currently using Draw. Change tool:'
   })
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   // Reset, step back, step forward, and play buttons
@@ -406,6 +407,8 @@ function create_event_handlers(sandbox) {
             var tool_name = option.lastChild.data.trim()
             var aria_label = `Currently using ${tool_name}. Change tool:`
             current_button.parentElement.ariaLabel = aria_label
+            // TODO: Use toLocaleLowerCase for different languages
+            current_button.parentElement.setAttribute('data-tool', tool_name.toLowerCase())
             break
           }
         }
