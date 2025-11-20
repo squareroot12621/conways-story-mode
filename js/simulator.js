@@ -631,9 +631,14 @@ function create_event_handlers(sandbox) {
     set_playing(false)
     cgol_object.redo()
   })
+
+  // Panning event handlers
+  cgol_object.addEventListener('mousemove', () => {
+    // TODO: Add data-last-x and data-last-y
+  })
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
-  cgol_object.draw({}, now) // Using now instead of null is a TEST for requestAnimationFrame
+  cgol_object.draw({}, now)
 }
 export {create_cgol_simulator, resize_simulator}
