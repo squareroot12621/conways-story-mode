@@ -407,8 +407,11 @@ function create_event_handlers(sandbox) {
             var tool_name = option.lastChild.data.trim()
             var aria_label = `Currently using ${tool_name}. Change tool:`
             current_button.parentElement.ariaLabel = aria_label
-            // TODO: Use toLocaleLowerCase for different languages
-            current_button.parentElement.setAttribute('data-tool', tool_name.toLowerCase())
+            /* The data-tool name shouldn't be translated,
+               so we're getting it ourselves based on the child index. */
+            var child_index = [...current_options.children].indexOf(option)
+            var tool_name_untranslated = ['draw', 'object', 'select', 'pan'][child_index]
+            current_button.parentElement.setAttribute('data-tool', tool_name_untranslated)
             break
           }
         }
