@@ -643,11 +643,11 @@ function create_event_handlers(sandbox) {
   }
 
   function mouse_down_event_handler(event) {
-    update_last_mouse_position()
+    update_last_mouse_position(event)
   }
 
   function mouse_move_event_handler(event) {
-    update_last_mouse_position()
+    update_last_mouse_position(event)
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'pan') { // Panning
