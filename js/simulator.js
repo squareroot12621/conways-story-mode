@@ -683,13 +683,13 @@ function create_event_handlers(sandbox) {
   }
 
   // Add the event listeners
-  const THROTTLE_MILLISECONDS = 30
+  const THROTTLE_MILLISECONDS = 16
   canvas.addEventListener('mousedown', throttle((event) => { mouse_down_event_handler(event, false) }, THROTTLE_MILLISECONDS))
   canvas.addEventListener('touchstart', throttle((event) => { mouse_down_event_handler(event, true) }, THROTTLE_MILLISECONDS))
   canvas.addEventListener('mousemove', throttle((event) => { mouse_move_event_handler(event, false) }, THROTTLE_MILLISECONDS))
   canvas.addEventListener('touchmove', throttle((event) => { mouse_move_event_handler(event, true) }, THROTTLE_MILLISECONDS))
 
-  canvas.addEventListener('wheel', throttle((event) => { wheel_event_handler(event) }, 30))
+  canvas.addEventListener('wheel', throttle((event) => { wheel_event_handler(event) }, THROTTLE_MILLISECONDS))
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
