@@ -640,8 +640,9 @@ function create_event_handlers(sandbox) {
     canvas.setAttribute('data-last-x', event.pageX)
     canvas.setAttribute('data-last-y', event.pageY)
   }
-  canvas.addEventListener('mousedown', update_last_mouse_position)
-  canvas.addEventListener('mousemove', update_last_mouse_position)
+  update_last_mouse_position_throttled = throttle(update_last_mouse_position, 30)
+  canvas.addEventListener('mousedown', update_last_mouse_position_throttled)
+  canvas.addEventListener('mousemove', update_last_mouse_position_throttled)
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
