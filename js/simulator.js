@@ -642,24 +642,24 @@ function create_event_handlers(sandbox) {
     canvas.setAttribute('data-last-y', event.pageY)
   }
 
-  function mouse_down_event_handler(event) {
+  function mouse_down_event_handler(event, touch=false) {
     update_last_mouse_position(event)
   }
 
-  function mouse_move_event_handler(event) {
+  function mouse_move_event_handler(event, touch=false) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'pan') { // Panning
-      if (event.button === 0) { // Left mouse button or one-finger touch
+      // Left mouse button or touchscreen
+      if ((!touch && event.buttons & 1) || touch) {
         var new_x = event.pageX
         var new_y = event.pageY
         var change_x = new_x - parseFloat(canvas.getAttribute('data-last-x'))
         var change_y = new_y - parseFloat(canvas.getAttribute('data-last-y'))
-        var zoom_level = cgol_object.zoom
         cgol_object.move_to(
           cgol_object.x_offset - change_x,
           cgol_object.y_offset - change_y,
-          zoom_level,
+          cgol_object.zoom,
         )
       }
     }
@@ -667,8 +667,22 @@ function create_event_handlers(sandbox) {
     update_last_mouse_position(event)
   }
   
-  canvas.addEventListener('mousedown', throttle(mouse_down_event_handler, 30))
-  canvas.addEventListener('mousemove', throttle(mouse_move_event_handler, 30))
+  canvas.addEventListener(
+    'mousedown',
+    throttle((event) => { mouse_down_event_handler(event, false) }, 30),
+  )
+  canvas.addEventListener(
+    'touchstart',
+    throttle((event) => { mouse_down_event_handler(event, true) }, 30),
+  )
+  canvas.addEventListener(
+    'mousemove',
+    throttle((event) => { mouse_move_event_handler(event, false) }, 30),
+  )
+  canvas.addEventListener(
+    'touchmove',
+    throttle((event) => { mouse_move_event_handler(event, true) }, 30),
+  )
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
