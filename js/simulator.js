@@ -650,7 +650,7 @@ function create_event_handlers(sandbox) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'pan') { // Panning
-      if (event.buttons & 1) { // Left button down
+      if (event.button === 0) { // Left mouse button or one-finger touch
         var new_x = event.pageX
         var new_y = event.pageY
         var change_x = new_x - parseFloat(canvas.getAttribute('data-last-x'))
