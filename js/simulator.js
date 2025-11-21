@@ -640,7 +640,7 @@ function create_event_handlers(sandbox) {
     canvas.setAttribute('data-last-x', event.pageX)
     canvas.setAttribute('data-last-y', event.pageY)
   }
-  update_last_mouse_position_throttled = throttle(update_last_mouse_position, 30)
+  var update_last_mouse_position_throttled = throttle(update_last_mouse_position, 30)
   canvas.addEventListener('mousedown', update_last_mouse_position_throttled)
   canvas.addEventListener('mousemove', update_last_mouse_position_throttled)
   
