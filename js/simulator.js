@@ -652,7 +652,6 @@ function create_event_handlers(sandbox) {
     var change_x = new_x - parseFloat(canvas.getAttribute('data-last-x'))
     var change_y = new_y - parseFloat(canvas.getAttribute('data-last-y'))
     var zoom_level = cgol_object.zoom
-    .x_offset .y_offset
     cgol_object.move_to(-change_x, -change_y, zoom_level)
   })
   
