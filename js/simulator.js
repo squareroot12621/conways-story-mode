@@ -647,12 +647,18 @@ function create_event_handlers(sandbox) {
   
   // Panning event handler
   canvas.addEventListener('mousemove', (event) => {
-    var new_x = event.pageX
-    var new_y = event.pageY
-    var change_x = new_x - parseFloat(canvas.getAttribute('data-last-x'))
-    var change_y = new_y - parseFloat(canvas.getAttribute('data-last-y'))
-    var zoom_level = cgol_object.zoom
-    cgol_object.move_to(-change_x, -change_y, zoom_level)
+    if (event.buttons & 1) { // Left button down
+      var new_x = event.pageX
+      var new_y = event.pageY
+      var change_x = new_x - parseFloat(canvas.getAttribute('data-last-x'))
+      var change_y = new_y - parseFloat(canvas.getAttribute('data-last-y'))
+      var zoom_level = cgol_object.zoom
+      cgol_object.move_to(
+        cgol_object.x_offset - change_x,
+        cgol_object.y_offset - change_y,
+        zoom_level,
+      )
+    }
   })
   
   // Draw the CGoL simulation
