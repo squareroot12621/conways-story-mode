@@ -599,8 +599,8 @@ function create_event_handlers(sandbox) {
       zoom_wrapper.style.display = 'none'
     }
   }, true)
-  var MIN_ZOOM = 1
-  var MAX_ZOOM = 50
+  const MIN_ZOOM = 1
+  const MAX_ZOOM = 50
   zoom_slider.addEventListener('input', () => {
     var true_zoom = (MAX_ZOOM/MIN_ZOOM)**zoom_slider.value * MIN_ZOOM
     var shown_zoom = Math.round(true_zoom)
@@ -674,7 +674,7 @@ function create_event_handlers(sandbox) {
     
     // Zoom in and out, regardless of mode
     var zoom_multiplier = 2 ** (-scroll_y / 400)
-    var new_zoom = cgol_object.zoom * zoom_multiplier
+    var new_zoom = Math.min(Math.max(cgol_object.zoom * zoom_multiplier, MIN_ZOOM), MAX_ZOOM)
     cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, new_zoom)
   }
 
