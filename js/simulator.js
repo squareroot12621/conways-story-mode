@@ -676,6 +676,8 @@ function create_event_handlers(sandbox) {
     var zoom_multiplier = 2 ** (-scroll_y / 400)
     var new_zoom = Math.min(Math.max(cgol_object.zoom * zoom_multiplier, MIN_ZOOM), MAX_ZOOM)
     cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, new_zoom)
+    var shown_zoom = Math.round(new_zoom)
+    zoom_label.innerText = 'Zoom ' + shown_zoom
   }
 
   // Add the event listeners
