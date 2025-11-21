@@ -667,23 +667,25 @@ function create_event_handlers(sandbox) {
     
     update_last_mouse_position(event)
   }
-  
-  canvas.addEventListener(
-    'mousedown',
-    throttle((event) => { mouse_down_event_handler(event, false) }, 30),
-  )
-  canvas.addEventListener(
-    'touchstart',
-    throttle((event) => { mouse_down_event_handler(event, true) }, 30),
-  )
-  canvas.addEventListener(
-    'mousemove',
-    throttle((event) => { mouse_move_event_handler(event, false) }, 30),
-  )
-  canvas.addEventListener(
-    'touchmove',
-    throttle((event) => { mouse_move_event_handler(event, true) }, 30),
-  )
+
+  function wheel_event_handler(event) {
+    var delta_multiplier = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 18 : 1
+    var scroll_y = event.deltaY * delta_multiplier
+    
+    // Zoom in and out, regardless of mode
+    var zoom_multiplier = 2 ** (-scroll_y / 400)
+    var new_zoom = cgol_object.zoom * zoom_multiplier
+    cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, new_zoom)
+  }
+
+  // Add the event listeners
+  const THROTTLE_MILLISECONDS = 30
+  canvas.addEventListener('mousedown', throttle((event) => { mouse_down_event_handler(event, false) }, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('touchstart', throttle((event) => { mouse_down_event_handler(event, true) }, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('mousemove', throttle((event) => { mouse_move_event_handler(event, false) }, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('touchmove', throttle((event) => { mouse_move_event_handler(event, true) }, THROTTLE_MILLISECONDS))
+
+  canvas.addEventListener('wheel', throttle((event) => { wheel_event_handler(event) }, 30))
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
