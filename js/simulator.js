@@ -641,25 +641,33 @@ function create_event_handlers(sandbox) {
     canvas.setAttribute('data-last-x', event.pageX)
     canvas.setAttribute('data-last-y', event.pageY)
   }
-  var update_last_mouse_position_throttled = throttle(update_last_mouse_position, 30)
-  canvas.addEventListener('mousedown', update_last_mouse_position_throttled)
-  canvas.addEventListener('mousemove', update_last_mouse_position_throttled)
-  
-  // Panning event handler
-  canvas.addEventListener('mousemove', (event) => {
-    if (event.buttons & 1) { // Left button down
-      var new_x = event.pageX
-      var new_y = event.pageY
-      var change_x = new_x - parseFloat(canvas.getAttribute('data-last-x'))
-      var change_y = new_y - parseFloat(canvas.getAttribute('data-last-y'))
-      var zoom_level = cgol_object.zoom
-      cgol_object.move_to(
-        cgol_object.x_offset - change_x,
-        cgol_object.y_offset - change_y,
-        zoom_level,
-      )
+
+  function mouse_down_event_handler(event) {
+    update_last_mouse_position()
+  }
+
+  function mouse_move_event_handler(event) {
+    update_last_mouse_position()
+    var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
+    
+    if (tool === 'pan') { // Panning
+      if (event.buttons & 1) { // Left button down
+        var new_x = event.pageX
+        var new_y = event.pageY
+        var change_x = new_x - parseFloat(canvas.getAttribute('data-last-x'))
+        var change_y = new_y - parseFloat(canvas.getAttribute('data-last-y'))
+        var zoom_level = cgol_object.zoom
+        cgol_object.move_to(
+          cgol_object.x_offset - change_x,
+          cgol_object.y_offset - change_y,
+          zoom_level,
+        )
+      }
     }
-  })
+  }
+  
+  canvas.addEventListener('mousedown', throttle(mouse_down_event_handler, 30))
+  canvas.addEventListener('mousemove', throttle(mouse_move_event_handler, 30))
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
