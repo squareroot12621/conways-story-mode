@@ -632,10 +632,16 @@ function create_event_handlers(sandbox) {
     cgol_object.redo()
   })
 
+  // All event handlers for canvas
+  var canvas = document.getElementById('simulator-cgol')
+  
   // Panning event handlers
-  cgol_object.addEventListener('mousemove', () => {
-    // TODO: Add data-last-x and data-last-y
-  })
+  function update_last_mouse_position(event) {
+    canvas.setAttribute('data-last-x', event.pageX)
+    canvas.setAttribute('data-last-y', event.pageY)
+  }
+  canvas.addEventListener('mousedown', update_last_mouse_position)
+  canvas.addEventListener('mousemove', update_last_mouse_position)
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
