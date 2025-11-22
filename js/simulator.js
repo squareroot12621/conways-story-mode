@@ -681,10 +681,11 @@ function create_event_handlers(sandbox) {
       var true_y_offset = ((cgol_object.y_offset+pattern_center_y) * cell_size - canvas.height/2) | 0
       var last_x = parseFloat(canvas.getAttribute('data-last-x'))
       var last_y = parseFloat(canvas.getAttribute('data-last-y'))
-      var x0 = ((last_x + true_x_offset) / cell_size) | 0
-      var y0 = ((last_y + true_y_offset) / cell_size) | 0
-      var x1 = ((event.pageX-bounding_box.x + true_x_offset) / cell_size) | 0
-      var y1 = ((event.pageY-bounding_box.y + true_y_offset) / cell_size) | 0
+      // TODO: Re-add Math.floor
+      var x0 = ((last_x-bounding_box.x + true_x_offset) / cell_size)
+      var y0 = ((last_y-bounding_box.y + true_y_offset) / cell_size)
+      var x1 = ((event.pageX-bounding_box.x + true_x_offset) / cell_size)
+      var y1 = ((event.pageY-bounding_box.y + true_y_offset) / cell_size)
       console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
       // TODO: Bresenham's line algorithm
     } else if (tool === 'pan') { // Panning
