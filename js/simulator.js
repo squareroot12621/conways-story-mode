@@ -685,6 +685,7 @@ function create_event_handlers(sandbox) {
       var y0 = ((last_y + true_y_offset) / cell_size) | 0
       var x1 = ((event.pageX-bounding_box.x + true_x_offset) / cell_size) | 0
       var y1 = ((event.pageY-bounding_box.y + true_y_offset) / cell_size) | 0
+      console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
       // TODO: Bresenham's line algorithm
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
