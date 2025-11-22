@@ -35,13 +35,15 @@ class CGoL {
     )
     this.rule = options.rule ?? parsed.rule ?? 'B3/S23'
     this.pattern = parsed.pattern
+    this.pattern_center_x = parsed.center_x
+    this.pattern_center_y = parsed.center_y
     this.objects = []
     for (var object of options.objects ?? []) {
       var parsed_object = CGoL.parse_rle(object.pattern)
       this.objects.push({
         pattern: parsed_object.pattern,
-        x: (object.x ?? 0) + this.pattern_x,
-        y: (object.y ?? 0) + this.pattern_y,
+        x: (object.x ?? 0) + (options.pattern_x ?? 0),
+        y: (object.y ?? 0) + (options.pattern_y ?? 0),
         width: parsed_object.width,
         height: parsed_object.height,
         rotation: object.rotation ?? 0, // 0 = upright, 1 = 90 degrees CW
@@ -323,10 +325,11 @@ class CGoL {
     output.pattern = grid
     output.width = fullsize ? this.grid_size : max_row_width
     output.height = grid.length
+    output.center_x = (output.width - (fullsize ? pad_right-pad_left : 0)) / 2 + x_offset
+    output.center_y = (output.height - (fullsize ? pad_bottom-pad_top : 0)) / 2 + y_offset
     return output
   }
 
-  // TODO: Remove this.pattern_x and _y
   compile_pattern() {
     this.board = Array(this.grid_size * this.grid_size).fill(0)
     this.cell_types = Array(this.grid_size * this.grid_size).fill(0)
@@ -344,10 +347,10 @@ class CGoL {
        10 = connecting SW
        11 = connecting W
        12 = connecting NW */
-    for (var y = 0; y < this.pattern_height; ++y) {
-      for (var x = 0; x < this.pattern_width; ++x) {
+    for (var y = 0; y < this.grid_size; ++y) {
+      for (var x = 0; x < this.grid_size; ++x) {
         var cell = this.pattern[y][x]
-        var board_position = (y+this.pattern_y) * this.grid_size + (x+this.pattern_x)
+        var board_position = y * this.grid_size + x
         this.board[board_position] = cell % 2
         this.cell_types[board_position] = Math.floor(cell / 2)
       }
@@ -709,10 +712,8 @@ class CGoL {
     var grid_ctx = this.#grid_ctx
     var grid_size = this.grid_size
     var cell_size = this.zoom
-    var pattern_center_x = this.pattern_x + this.pattern_width/2
-    var pattern_center_y = this.pattern_y + this.pattern_height/2
-    var true_x_offset = ((this.x_offset+pattern_center_x) * cell_size - canvas.width/2) | 0
-    var true_y_offset = ((this.y_offset+pattern_center_y) * cell_size - canvas.height/2) | 0
+    var true_x_offset = ((this.x_offset+this.pattern_center_x) * cell_size - canvas.width/2) | 0
+    var true_y_offset = ((this.y_offset+this.pattern_center_y) * cell_size - canvas.height/2) | 0
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Draw the border
