@@ -700,8 +700,7 @@ function create_event_handlers(sandbox) {
           for (++x0; x0 <= x1; ++x0) {
             y0 += slope
             if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
-              cell = x0 + Math.round(y0) * grid_size
-              cgol_object.board[cell] ^= 1
+              cgol_object.pattern[Math.round(y0)][x0] ^= 1
             }
           }
         } else {
@@ -709,12 +708,11 @@ function create_event_handlers(sandbox) {
           for (++y0; y0 <= y1; ++y0) {
             x0 += 1/slope
             if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
-              cell = x0 + Math.round(y0) * grid_size
-              cgol_object.board[cell] ^= 1
+              cgol_object.pattern[y0][Math.round(x0)] ^= 1
             }
           }
         }
-        // TODO: Fix cgol_object.pattern not being grid_size by grid_size
+        cgol_object.compile_pattern()
       }
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
