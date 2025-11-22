@@ -672,7 +672,21 @@ function create_event_handlers(sandbox) {
   function mouse_move_event_handler(event, touch=false) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
-    if (tool === 'pan') { // Panning
+    if (tool === 'draw') { // Drawing
+      var bounding_box = canvas.getBoundingClientRect()
+      var cell_size = cgol_object.zoom
+      var pattern_center_x = cgol_object.pattern_x + cgol_object.pattern_width/2
+      var pattern_center_y = cgol_object.pattern_y + cgol_object.pattern_height/2
+      var true_x_offset = ((cgol_object.x_offset+pattern_center_x) * cell_size - canvas.width/2) | 0
+      var true_y_offset = ((cgol_object.y_offset+pattern_center_y) * cell_size - canvas.height/2) | 0
+      var last_x = parseFloat(canvas.getAttribute('data-last-x'))
+      var last_y = parseFloat(canvas.getAttribute('data-last-y'))
+      var x0 = ((last_x + true_x_offset) / cell_size) | 0
+      var y0 = ((last_y + true_y_offset) / cell_size) | 0
+      var x1 = ((event.pageX-bounding_box.x + true_x_offset) / cell_size) | 0
+      var y1 = ((event.pageY-bounding_box.y + true_y_offset) / cell_size) | 0
+      // TODO: Bresenham's line algorithm
+    } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
       if ((!touch && event.buttons & 1) || touch) {
         var new_x = event.pageX
