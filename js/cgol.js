@@ -30,6 +30,7 @@ class CGoL {
     var parsed = CGoL.parse_rle(this.intermediate_rle)
     this.rule = options.rule ?? parsed.rule ?? 'B3/S23'
     this.pattern = parsed.pattern
+    // TODO: Apply this to parse_rle (specifically with fullscreen)
     this.pattern_x = options.pattern_x ?? 0
     this.pattern_x += Math.floor((this.grid_size - parsed.width) / 2)
     this.pattern_y = options.pattern_y ?? 0
@@ -224,7 +225,7 @@ class CGoL {
     }
   }
   
-  static parse_rle(rle) {
+  static parse_rle(rle, fullsize=false) {
     var output = {rule: null}
     var lines = []
     for (var line of rle.split('\n')) {
@@ -292,12 +293,24 @@ class CGoL {
     grid.push(current_line)
     grid = grid.concat(Array(count - 1).fill([]))
     max_row_width = Math.max(row_width, max_row_width)
+    pad_left = fullscreen ? Math.floor((this.grid_size-max_row_width) / 2) : 0
+    pad_right = fullscreen ? Math.ceil((this.grid_size-max_row_width) / 2) : 0
     // Pad the rows with zeroes
     for (var [index, row] of grid.entries()) {
-      grid[index] = row.concat(Array(max_row_width - row.length).fill(0))
+      var pad_right_row = pad_right + max_row_width - row.length
+      grid[index] = Array(pad_left).fill(0).concat(row, Array(pad_right_row).fill(0))
+    }
+    // Pad the top and bottom if fullscreen is set
+    pad_top = fullscreen ? Math.floor((this.grid_size-Array.length) / 2) : 0
+    pad_bottom = fullscreen ? Math.ceil((this.grid_size-Array.length) / 2) : 0
+    for (var i = 0; i < pad_top; ++i) {
+      grid.unshift(new Array(this.grid_size).fill(0))
+    }
+    for (var i = 0; i < pad_bottom; ++i) {
+      grid.push(new Array(this.grid_size).fill(0))
     }
     output.pattern = grid
-    output.width = max_row_width
+    output.width = fullscreen ? this.grid_size : max_row_width
     output.height = grid.length
     return output
   }
