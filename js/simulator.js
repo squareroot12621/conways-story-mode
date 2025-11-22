@@ -412,6 +412,8 @@ function create_event_handlers(sandbox) {
             var child_index = current_options.indexOf(option)
             var tool_name_untranslated = ['draw', 'object', 'select', 'pan'][child_index]
             current_button.parentElement.setAttribute('data-tool', tool_name_untranslated)
+            // Also change the cursor type because the tool changed
+            update_cursor()
             break
           }
         }
@@ -636,14 +638,33 @@ function create_event_handlers(sandbox) {
   // All event handlers for canvas
   var canvas = document.getElementById('simulator-cgol')
   
-  // Add data-last-x and data-last-y
   function update_last_mouse_position(event) {
     canvas.setAttribute('data-last-x', event.pageX)
     canvas.setAttribute('data-last-y', event.pageY)
   }
+  function update_cursor() {
+    var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
+    var cursor_type
+    switch (tool) {
+      case 'draw':
+        cursor_type = 'default'
+        break
+      case 'object':
+        cursor_type = 'default'
+        break
+      case 'select':
+        cursor_type = 'cell'
+        break
+      case 'pan':
+        cursor_type = 'grabbing'
+        break
+    }
+    canvas.style.cursor = cursor_type
+  }
 
   function mouse_down_event_handler(event, touch=false) {
     update_last_mouse_position(event)
+    update_cursor()
   }
 
   function mouse_move_event_handler(event, touch=false) {
@@ -668,6 +689,11 @@ function create_event_handlers(sandbox) {
     update_last_mouse_position(event)
   }
 
+  function mouse_up_event_handler(event, touch=false) {
+    update_last_mouse_position(event)
+    update_cursor()
+  }
+
   function wheel_event_handler(event) {
     var delta_multiplier = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 18 : 1
     var scroll_y = event.deltaY * delta_multiplier
@@ -688,6 +714,8 @@ function create_event_handlers(sandbox) {
   canvas.addEventListener('touchstart', throttle((event) => { mouse_down_event_handler(event, true) }, THROTTLE_MILLISECONDS))
   canvas.addEventListener('mousemove', throttle((event) => { mouse_move_event_handler(event, false) }, THROTTLE_MILLISECONDS))
   canvas.addEventListener('touchmove', throttle((event) => { mouse_move_event_handler(event, true) }, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('mouseup', throttle((event) => { mouse_up_event_handler(event, false) }, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('touchend', throttle((event) => { mouse_up_event_handler(event, true) }, THROTTLE_MILLISECONDS))
 
   canvas.addEventListener('wheel', throttle((event) => { wheel_event_handler(event) }, THROTTLE_MILLISECONDS))
   
