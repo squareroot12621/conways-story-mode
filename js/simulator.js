@@ -644,7 +644,7 @@ function create_event_handlers(sandbox) {
   }
   function update_cursor() {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
-    var mouse_down = canvas.getAttribute('data-mouse-down') === ''
+    var mouse_down = canvas.hasAttribute('data-mouse-down')
     var cursor_type
     switch (tool) {
       case 'draw':
@@ -673,45 +673,48 @@ function create_event_handlers(sandbox) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
-      var bounding_box = canvas.getBoundingClientRect()
-      var cell_size = cgol_object.zoom
-      var grid_size = cgol_object.grid_size
-      var pattern_center_x = cgol_object.pattern_x + cgol_object.pattern_width/2
-      var pattern_center_y = cgol_object.pattern_y + cgol_object.pattern_height/2
-      var true_x_offset = ((cgol_object.x_offset+pattern_center_x) * cell_size - canvas.width/2) | 0
-      var true_y_offset = ((cgol_object.y_offset+pattern_center_y) * cell_size - canvas.height/2) | 0
-      var last_x = parseFloat(canvas.getAttribute('data-last-x'))
-      var last_y = parseFloat(canvas.getAttribute('data-last-y'))
-      var x0 = Math.floor((last_x-bounding_box.x + true_x_offset) / cell_size)
-      var y0 = Math.floor((last_y-bounding_box.y + true_y_offset) / cell_size)
-      var x1 = Math.floor((event.pageX-bounding_box.x + true_x_offset) / cell_size)
-      var y1 = Math.floor((event.pageY-bounding_box.y + true_y_offset) / cell_size)
-      console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
-      // Bresenham's line algorithm
-      if (x1 < x0 || y1 < y0) {
-        // Swap coordinates to try to go south and east
-        [x1, x0, y1, y0] = [x0, x1, y0, y1]
-      }
-      var slope = (y1 - y0) / (x1 - x0)
-      var cell
-      if (Math.abs(slope) <= 1) {
-        // Horizontal line
-        for (++x0; x0 <= x1; ++x0) {
-          y0 += slope
-          if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
-            cell = x0 + Math.round(y0) * grid_size
-            cgol_object.board[cell] ^= 1
+      if (canvas.hasAttribute('data-mouse-down')) {
+        var bounding_box = canvas.getBoundingClientRect()
+        var cell_size = cgol_object.zoom
+        var grid_size = cgol_object.grid_size
+        var pattern_center_x = cgol_object.pattern_x + cgol_object.pattern_width/2
+        var pattern_center_y = cgol_object.pattern_y + cgol_object.pattern_height/2
+        var true_x_offset = ((cgol_object.x_offset+pattern_center_x) * cell_size - canvas.width/2) | 0
+        var true_y_offset = ((cgol_object.y_offset+pattern_center_y) * cell_size - canvas.height/2) | 0
+        var last_x = parseFloat(canvas.getAttribute('data-last-x'))
+        var last_y = parseFloat(canvas.getAttribute('data-last-y'))
+        var x0 = Math.floor((last_x-bounding_box.x + true_x_offset) / cell_size)
+        var y0 = Math.floor((last_y-bounding_box.y + true_y_offset) / cell_size)
+        var x1 = Math.floor((event.pageX-bounding_box.x + true_x_offset) / cell_size)
+        var y1 = Math.floor((event.pageY-bounding_box.y + true_y_offset) / cell_size)
+        console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
+        // Bresenham's line algorithm
+        if (x1 < x0 || y1 < y0) {
+          // Swap coordinates to try to go south and east
+          [x1, x0, y1, y0] = [x0, x1, y0, y1]
+        }
+        var slope = (y1 - y0) / (x1 - x0)
+        var cell
+        if (Math.abs(slope) <= 1) {
+          // Horizontal line
+          for (++x0; x0 <= x1; ++x0) {
+            y0 += slope
+            if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
+              cell = x0 + Math.round(y0) * grid_size
+              cgol_object.board[cell] ^= 1
+            }
+          }
+        } else {
+          // Vertical line
+          for (++y0; y0 <= y1; ++y0) {
+            x0 += 1/slope
+            if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
+              cell = x0 + Math.round(y0) * grid_size
+              cgol_object.board[cell] ^= 1
+            }
           }
         }
-      } else {
-        // Vertical line
-        for (++y0; y0 <= y1; ++y0) {
-          x0 += 1/slope
-          if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
-            cell = x0 + Math.round(y0) * grid_size
-            cgol_object.board[cell] ^= 1
-          }
-        }
+        // TODO: Fix cgol_object.pattern not being grid_size by grid_size
       }
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
