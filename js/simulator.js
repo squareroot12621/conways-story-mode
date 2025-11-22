@@ -644,6 +644,7 @@ function create_event_handlers(sandbox) {
   }
   function update_cursor() {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
+    var mouse_down = canvas.getAttribute('data-mouse-down') === ''
     var cursor_type
     switch (tool) {
       case 'draw':
@@ -656,7 +657,7 @@ function create_event_handlers(sandbox) {
         cursor_type = 'cell'
         break
       case 'pan':
-        cursor_type = 'grabbing'
+        cursor_type = mouse_down ? 'grabbing' : 'grab'
         break
     }
     canvas.style.cursor = cursor_type
@@ -664,6 +665,7 @@ function create_event_handlers(sandbox) {
 
   function mouse_down_event_handler(event, touch=false) {
     update_last_mouse_position(event)
+    canvas.setAttribute('data-mouse-down', '')
     update_cursor()
   }
 
@@ -691,6 +693,7 @@ function create_event_handlers(sandbox) {
 
   function mouse_up_event_handler(event, touch=false) {
     update_last_mouse_position(event)
+    canvas.removeAttribute('data-mouse-down')
     update_cursor()
   }
 
