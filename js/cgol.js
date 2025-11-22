@@ -27,16 +27,14 @@ class CGoL {
       this.border = Math.floor((this.grid_size-1) / 2)
     }
     this.intermediate_rle = options.pattern ?? '.'
-    var parsed = CGoL.parse_rle(this.intermediate_rle)
+    var parsed = CGoL.parse_rle(
+      this.intermediate_rle,
+      true,
+      options.pattern_x ?? 0,
+      options.pattern_y ?? 0,
+    )
     this.rule = options.rule ?? parsed.rule ?? 'B3/S23'
     this.pattern = parsed.pattern
-    // TODO: Apply this to parse_rle (specifically with fullscreen)
-    this.pattern_x = options.pattern_x ?? 0
-    this.pattern_x += Math.floor((this.grid_size - parsed.width) / 2)
-    this.pattern_y = options.pattern_y ?? 0
-    this.pattern_y += Math.floor((this.grid_size - parsed.height) / 2)
-    this.pattern_width = parsed.width
-    this.pattern_height = parsed.height
     this.objects = []
     for (var object of options.objects ?? []) {
       var parsed_object = CGoL.parse_rle(object.pattern)
@@ -225,7 +223,7 @@ class CGoL {
     }
   }
   
-  static parse_rle(rle, fullsize=false) {
+  static parse_rle(rle, fullsize=false, x_offset=0, y_offset=0) {
     var output = {rule: null}
     var lines = []
     for (var line of rle.split('\n')) {
@@ -293,28 +291,42 @@ class CGoL {
     grid.push(current_line)
     grid = grid.concat(Array(count - 1).fill([]))
     max_row_width = Math.max(row_width, max_row_width)
-    pad_left = fullscreen ? Math.floor((this.grid_size-max_row_width) / 2) : 0
-    pad_right = fullscreen ? Math.ceil((this.grid_size-max_row_width) / 2) : 0
     // Pad the rows with zeroes
     for (var [index, row] of grid.entries()) {
-      var pad_right_row = pad_right + max_row_width - row.length
-      grid[index] = Array(pad_left).fill(0).concat(row, Array(pad_right_row).fill(0))
+      grid[index] = row.concat(Array(max_row_width - row.length).fill(0))
     }
-    // Pad the top and bottom if fullscreen is set
-    pad_top = fullscreen ? Math.floor((this.grid_size-Array.length) / 2) : 0
-    pad_bottom = fullscreen ? Math.ceil((this.grid_size-Array.length) / 2) : 0
-    for (var i = 0; i < pad_top; ++i) {
-      grid.unshift(new Array(this.grid_size).fill(0))
-    }
-    for (var i = 0; i < pad_bottom; ++i) {
-      grid.push(new Array(this.grid_size).fill(0))
+    /* If fullsize is set, pad grid some more
+       until the size of the pattern is the same as grid_size */
+    if (fullsize) {
+      pad_left = Math.floor((this.grid_size-max_row_width) / 2) + x_offset
+      pad_right = Math.ceil((this.grid_size-max_row_width) / 2) - x_offset
+      pad_top = Math.floor((this.grid_size-Array.length) / 2) + x_offset
+      pad_bottom = Math.ceil((this.grid_size-Array.length) / 2) - x_offset
+      for (var [index, row] of grid.entries()) {
+        /* The Math.max(..., 0) is there to stop errors
+           from occurring due to Array(negative_number).
+           However, the grid needs to be sliced anyway
+           because otherwise it will be bigger than this.grid_size. */
+        grid[index] = Array(Math.max(pad_left, 0)).fill(0).concat(
+                        row.slice(Math.max(-pad_left, 0), Math.max(-pad_left, 0) + grid_size),
+                        Array(Math.max(pad_right, 0)).fill(0),
+                      )
+      }
+      for (var i = 0; i < pad_top; ++i) {
+        grid.unshift(new Array(this.grid_size).fill(0))
+      }
+      for (var i = 0; i < pad_bottom; ++i) {
+        grid.push(new Array(this.grid_size).fill(0))
+      }
+      grid = grid.slice(Math.max(-pad_top, 0), Math.max(-pad_top, 0) + grid_size)
     }
     output.pattern = grid
-    output.width = fullscreen ? this.grid_size : max_row_width
+    output.width = fullsize ? this.grid_size : max_row_width
     output.height = grid.length
     return output
   }
 
+  // TODO: Remove this.pattern_x and _y
   compile_pattern() {
     this.board = Array(this.grid_size * this.grid_size).fill(0)
     this.cell_types = Array(this.grid_size * this.grid_size).fill(0)
