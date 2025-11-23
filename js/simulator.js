@@ -711,6 +711,7 @@ function create_event_handlers(sandbox) {
               x0 += 1/slope
               if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
                 cgol_object.pattern[y0][Math.round(x0)] ^= 1
+                console.log(`    (${x0}, ${y0})`) // DEBUG
               }
             }
           }
