@@ -319,15 +319,15 @@ class CGoL {
                       )
       }
       for (var i = 0; i < pad_top; ++i) {
-        grid.unshift(new Array(this.grid_size).fill(0))
+        grid.unshift(new Array(grid_size).fill(0))
       }
       for (var i = 0; i < pad_bottom; ++i) {
-        grid.push(new Array(this.grid_size).fill(0))
+        grid.push(new Array(grid_size).fill(0))
       }
       grid = grid.slice(Math.max(-pad_top, 0), Math.max(-pad_top, 0) + grid_size)
     }
     output.pattern = grid
-    output.width = fullsize ? this.grid_size : max_row_width
+    output.width = fullsize ? grid_size : max_row_width
     output.height = grid.length
     output.center_x = (output.width - (fullsize ? pad_right-pad_left : 0)) / 2 + x_offset
     output.center_y = (output.height - (fullsize ? pad_bottom-pad_top : 0)) / 2 + y_offset
