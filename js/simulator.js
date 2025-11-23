@@ -713,7 +713,11 @@ function create_event_handlers(sandbox) {
               y0 += slope
             }
             for (; iterations > 0; --iterations) {
-              if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size) {
+              /* We add the - 0.5 to the y0 check because of rounding.
+                 If y0 is cgol_object.grid_size - 0.1,
+                 it is less than cgol_object.grid_size, but gets rounded to it.
+                 This causes an error when we index into cgol_object.pattern. */
+              if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size - 0.5) {
                 cgol_object.pattern[Math.round(y0)][x0] ^= 1
               }
               ++x0
@@ -727,7 +731,11 @@ function create_event_handlers(sandbox) {
               x0 += 1/slope
             }
             for (; iterations > 0; --iterations) {
-              if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size) {
+              /* We add - 0.5 to the x0 check here for the same reason,
+                 but now the error manifests itself
+                 as an increase in the length of the array,
+                 which is WAY more sneaky. */
+              if (x0 >= 0 && x0 < cgol_object.grid_size - 0.5 && y0 >= 0 && y0 < cgol_object.grid_size) {
                 cgol_object.pattern[y0][Math.round(x0)] ^= 1
               }
               ++y0
