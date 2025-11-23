@@ -663,6 +663,17 @@ function create_event_handlers(sandbox) {
     canvas.style.cursor = cursor_type
   }
 
+  function page_to_board_coordinates(x, y) {
+    var bounding_box = canvas.getBoundingClientRect()
+    var cell_size = cgol_object.zoom
+    var grid_size = cgol_object.grid_size
+    var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
+    var true_y_offset = ((cgol_object.y_offset+cgol_object.pattern_center_y) * cell_size - canvas.height/2) | 0
+    var output_x = Math.floor((x-bounding_box.x + true_x_offset) / cell_size)
+    var output_y = Math.floor((y-bounding_box.y + true_y_offset) / cell_size)
+    return {x: output_x, y: output_y}
+  }
+
   function mouse_down_event_handler(event, touch=false) {
     update_last_mouse_position(event)
     canvas.setAttribute('data-mouse-down', '')
@@ -674,17 +685,14 @@ function create_event_handlers(sandbox) {
     
     if (tool === 'draw') { // Drawing
       if (canvas.hasAttribute('data-mouse-down')) {
-        var bounding_box = canvas.getBoundingClientRect()
-        var cell_size = cgol_object.zoom
-        var grid_size = cgol_object.grid_size
-        var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
-        var true_y_offset = ((cgol_object.y_offset+cgol_object.pattern_center_y) * cell_size - canvas.height/2) | 0
         var last_x = parseFloat(canvas.getAttribute('data-last-x'))
         var last_y = parseFloat(canvas.getAttribute('data-last-y'))
-        var x0 = Math.floor((last_x-bounding_box.x + true_x_offset) / cell_size)
-        var y0 = Math.floor((last_y-bounding_box.y + true_y_offset) / cell_size)
-        var x1 = Math.floor((event.pageX-bounding_box.x + true_x_offset) / cell_size)
-        var y1 = Math.floor((event.pageY-bounding_box.y + true_y_offset) / cell_size)
+        var coords0 = page_to_board_coordinates(last_x, last_y)
+        var x0 = coords0.x
+        var y0 = coords0.y
+        var coords1 = page_to_board_coordinates(event.pageX, event.pageY)
+        var x1 = coords1.x
+        var y1 = coords1.y
         // Bresenham's line algorithm
         if (x0 !== x1 || y0 !== y1) {
           cgol_object.pattern[y0][x0] ^= 2 // DEBUG
@@ -692,13 +700,19 @@ function create_event_handlers(sandbox) {
           if (x1 - x0 < y0 - y1) {
             // Swap coordinates to try to go south and east
             [x1, x0, y1, y0] = [x0, x1, y0, y1]
+            var swapped = true
+          } else {
+            var swapped = false
           }
           console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
           var slope = (y1 - y0) / (x1 - x0)
-          var cell
           if (Math.abs(slope) <= 1) {
             // Horizontal line
-            for (++x0; x0 <= x1; ++x0) {
+            if (!swapped) {
+              ++x0
+            }
+            for (var iterations = x1 - x0; iterations > 0; --iterations) {
+              ++x0
               y0 += slope
               if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
                 cgol_object.pattern[Math.round(y0)][x0] ^= 1
@@ -707,7 +721,11 @@ function create_event_handlers(sandbox) {
             }
           } else {
             // Vertical line
-            for (++y0; y0 <= y1; ++y0) {
+            if (!swapped) {
+              ++y0
+            }
+            for (var iterations = y1 - y0; iterations > 0; --iterations) {
+              ++y0
               x0 += 1/slope
               if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
                 cgol_object.pattern[y0][Math.round(x0)] ^= 1
