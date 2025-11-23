@@ -310,7 +310,7 @@ class CGoL {
            However, the grid needs to be sliced anyway
            because otherwise it will be bigger than this.grid_size. */
         grid[index] = Array(Math.max(pad_left, 0)).fill(0).concat(
-                        row.slice(Math.max(-pad_left, 0), Math.max(-pad_left, 0) + grid_size),
+                        row.slice(Math.min(-pad_left, 0), Math.min(-pad_left, 0) + grid_size),
                         Array(Math.max(pad_right, 0)).fill(0),
                       )
       }
