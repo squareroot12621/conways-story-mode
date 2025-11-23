@@ -695,7 +695,6 @@ function create_event_handlers(sandbox) {
         var y1 = coords1.y
         // Bresenham's line algorithm
         if (x0 !== x1 || y0 !== y1) {
-          cgol_object.pattern[y0][x0] ^= 2 // DEBUG
           // Only follow the algorithm if the coordinates changed
           if (x1 - x0 < y0 - y1 || (x1 - x0 === y0 - y1 && x1 < x0)) {
             /* Swap coordinates to try to go south and east.
@@ -705,7 +704,6 @@ function create_event_handlers(sandbox) {
           } else {
             var swapped = false
           }
-          console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
           var slope = (y1 - y0) / (x1 - x0)
           if (Math.abs(slope) <= 1) {
             // Horizontal line
@@ -717,7 +715,6 @@ function create_event_handlers(sandbox) {
             for (; iterations > 0; --iterations) {
               if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size) {
                 cgol_object.pattern[Math.round(y0)][x0] ^= 1
-                console.log(`    (${x0}, ${y0})`) // DEBUG
               }
               ++x0
               y0 += slope
@@ -732,7 +729,6 @@ function create_event_handlers(sandbox) {
             for (; iterations > 0; --iterations) {
               if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size) {
                 cgol_object.pattern[y0][Math.round(x0)] ^= 1
-                console.log(`    (${x0}, ${y0})`) // DEBUG
               }
               ++y0
               x0 += 1/slope
