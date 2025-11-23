@@ -314,7 +314,7 @@ class CGoL {
            However, the grid needs to be sliced anyway
            because otherwise it will be bigger than this.grid_size. */
         grid[index] = Array(Math.max(pad_left, 0)).fill(0).concat(
-                        row.slice(Math.min(-pad_left, 0), Math.min(-pad_left, 0) + grid_size),
+                        row.slice(Math.max(-pad_left, 0), Math.max(-pad_left, 0) + grid_size),
                         Array(Math.max(pad_right, 0)).fill(0),
                       )
       }
@@ -324,7 +324,7 @@ class CGoL {
       for (var i = 0; i < pad_bottom; ++i) {
         grid.push(new Array(this.grid_size).fill(0))
       }
-      grid = grid.slice(Math.min(-pad_top, 0), Math.min(-pad_top, 0) + grid_size)
+      grid = grid.slice(Math.max(-pad_top, 0), Math.max(-pad_top, 0) + grid_size)
     }
     output.pattern = grid
     output.width = fullsize ? this.grid_size : max_row_width
