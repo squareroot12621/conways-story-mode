@@ -708,10 +708,11 @@ function create_event_handlers(sandbox) {
           var slope = (y1 - y0) / (x1 - x0)
           if (Math.abs(slope) <= 1) {
             // Horizontal line
+            var iterations = x1 - x0
             if (!swapped) {
               ++x0
             }
-            for (var iterations = x1 - x0; iterations > 0; --iterations) {
+            for (; iterations > 0; --iterations) {
               ++x0
               y0 += slope
               if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size) {
@@ -721,10 +722,11 @@ function create_event_handlers(sandbox) {
             }
           } else {
             // Vertical line
+            var iterations = y1 - y0
             if (!swapped) {
               ++y0
             }
-            for (var iterations = y1 - y0; iterations > 0; --iterations) {
+            for (; iterations > 0; --iterations) {
               ++y0
               x0 += 1/slope
               if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size) {
