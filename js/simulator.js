@@ -697,8 +697,9 @@ function create_event_handlers(sandbox) {
         if (x0 !== x1 || y0 !== y1) {
           cgol_object.pattern[y0][x0] ^= 2 // DEBUG
           // Only follow the algorithm if the coordinates changed
-          if (x1 - x0 < y0 - y1) {
-            // Swap coordinates to try to go south and east
+          if (x1 - x0 < y0 - y1 || (x1 - x0 === y0 - y1 && x1 < x0)) {
+            /* Swap coordinates to try to go south and east.
+               If there's a tie, prefer NE over SW. */
             [x1, x0, y1, y0] = [x0, x1, y0, y1]
             var swapped = true
           } else {
