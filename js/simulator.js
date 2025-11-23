@@ -677,10 +677,8 @@ function create_event_handlers(sandbox) {
         var bounding_box = canvas.getBoundingClientRect()
         var cell_size = cgol_object.zoom
         var grid_size = cgol_object.grid_size
-        var pattern_center_x = cgol_object.pattern_x + cgol_object.pattern_width/2
-        var pattern_center_y = cgol_object.pattern_y + cgol_object.pattern_height/2
-        var true_x_offset = ((cgol_object.x_offset+pattern_center_x) * cell_size - canvas.width/2) | 0
-        var true_y_offset = ((cgol_object.y_offset+pattern_center_y) * cell_size - canvas.height/2) | 0
+        var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
+        var true_y_offset = ((cgol_object.y_offset+cgol_object.pattern_center_y) * cell_size - canvas.height/2) | 0
         var last_x = parseFloat(canvas.getAttribute('data-last-x'))
         var last_y = parseFloat(canvas.getAttribute('data-last-y'))
         var x0 = Math.floor((last_x-bounding_box.x + true_x_offset) / cell_size)
@@ -689,30 +687,33 @@ function create_event_handlers(sandbox) {
         var y1 = Math.floor((event.pageY-bounding_box.y + true_y_offset) / cell_size)
         console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
         // Bresenham's line algorithm
-        if (x1 < x0 || y1 < y0) {
-          // Swap coordinates to try to go south and east
-          [x1, x0, y1, y0] = [x0, x1, y0, y1]
-        }
-        var slope = (y1 - y0) / (x1 - x0)
-        var cell
-        if (Math.abs(slope) <= 1) {
-          // Horizontal line
-          for (++x0; x0 <= x1; ++x0) {
-            y0 += slope
-            if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
-              cgol_object.pattern[Math.round(y0)][x0] ^= 1
+        if (x0 !== x1 || y0 !== y1) {
+          // Only follow the algorithm if the coordinates changed
+          if (x1 < x0 || y1 < y0) {
+            // Swap coordinates to try to go south and east
+            [x1, x0, y1, y0] = [x0, x1, y0, y1]
+          }
+          var slope = (y1 - y0) / (x1 - x0)
+          var cell
+          if (Math.abs(slope) <= 1) {
+            // Horizontal line
+            for (++x0; x0 <= x1; ++x0) {
+              y0 += slope
+              if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
+                cgol_object.pattern[Math.round(y0)][x0] ^= 1
+              }
+            }
+          } else {
+            // Vertical line
+            for (++y0; y0 <= y1; ++y0) {
+              x0 += 1/slope
+              if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
+                cgol_object.pattern[y0][Math.round(x0)] ^= 1
+              }
             }
           }
-        } else {
-          // Vertical line
-          for (++y0; y0 <= y1; ++y0) {
-            x0 += 1/slope
-            if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
-              cgol_object.pattern[y0][Math.round(x0)] ^= 1
-            }
-          }
+          cgol_object.compile_pattern()
         }
-        cgol_object.compile_pattern()
       }
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
