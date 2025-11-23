@@ -30,6 +30,7 @@ class CGoL {
     var parsed = CGoL.parse_rle(
       this.intermediate_rle,
       true,
+      this.grid_size,
       options.pattern_x ?? 0,
       options.pattern_y ?? 0,
     )
@@ -225,7 +226,7 @@ class CGoL {
     }
   }
   
-  static parse_rle(rle, fullsize=false, x_offset=0, y_offset=0) {
+  static parse_rle(rle, fullsize=false, grid_size=null, x_offset=0, y_offset=0) {
     var output = {rule: null}
     var lines = []
     for (var line of rle.split('\n')) {
@@ -300,10 +301,13 @@ class CGoL {
     /* If fullsize is set, pad grid some more
        until the size of the pattern is the same as grid_size */
     if (fullsize) {
-      var pad_left = Math.floor((this.grid_size-max_row_width) / 2) + x_offset
-      var pad_right = Math.ceil((this.grid_size-max_row_width) / 2) - x_offset
-      var pad_top = Math.floor((this.grid_size-Array.length) / 2) + x_offset
-      var pad_bottom = Math.ceil((this.grid_size-Array.length) / 2) - x_offset
+      if (grid_size == null) { // Also catches undefined
+        throw TypeError('grid_size must be this.grid_size')
+      }
+      var pad_left = Math.floor((grid_size-max_row_width) / 2) + x_offset
+      var pad_right = Math.ceil((grid_size-max_row_width) / 2) - x_offset
+      var pad_top = Math.floor((grid_size-grid.length) / 2) + y_offset
+      var pad_bottom = Math.ceil((grid_size-grid.length) / 2) - y_offset
       for (var [index, row] of grid.entries()) {
         /* The Math.max(..., 0) is there to stop errors
            from occurring due to Array(negative_number).
