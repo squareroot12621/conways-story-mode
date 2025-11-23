@@ -300,10 +300,10 @@ class CGoL {
     /* If fullsize is set, pad grid some more
        until the size of the pattern is the same as grid_size */
     if (fullsize) {
-      pad_left = Math.floor((this.grid_size-max_row_width) / 2) + x_offset
-      pad_right = Math.ceil((this.grid_size-max_row_width) / 2) - x_offset
-      pad_top = Math.floor((this.grid_size-Array.length) / 2) + x_offset
-      pad_bottom = Math.ceil((this.grid_size-Array.length) / 2) - x_offset
+      var pad_left = Math.floor((this.grid_size-max_row_width) / 2) + x_offset
+      var pad_right = Math.ceil((this.grid_size-max_row_width) / 2) - x_offset
+      var pad_top = Math.floor((this.grid_size-Array.length) / 2) + x_offset
+      var pad_bottom = Math.ceil((this.grid_size-Array.length) / 2) - x_offset
       for (var [index, row] of grid.entries()) {
         /* The Math.max(..., 0) is there to stop errors
            from occurring due to Array(negative_number).
