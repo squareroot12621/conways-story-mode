@@ -714,7 +714,7 @@ function create_event_handlers(sandbox) {
             for (var iterations = x1 - x0; iterations > 0; --iterations) {
               ++x0
               y0 += slope
-              if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
+              if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size) {
                 cgol_object.pattern[Math.round(y0)][x0] ^= 1
                 console.log(`    (${x0}, ${y0})`) // DEBUG
               }
@@ -727,7 +727,7 @@ function create_event_handlers(sandbox) {
             for (var iterations = y1 - y0; iterations > 0; --iterations) {
               ++y0
               x0 += 1/slope
-              if (x0 >= 0 && x0 < grid_size && y0 >= 0 && y0 < grid_size) {
+              if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size) {
                 cgol_object.pattern[y0][Math.round(x0)] ^= 1
                 console.log(`    (${x0}, ${y0})`) // DEBUG
               }
