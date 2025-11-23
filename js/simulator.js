@@ -709,8 +709,9 @@ function create_event_handlers(sandbox) {
           if (Math.abs(slope) <= 1) {
             // Horizontal line
             var iterations = x1 - x0
-            if (swapped) {
+            if (!swapped) {
               ++x0
+              y0 += slope
             }
             for (; iterations > 0; --iterations) {
               ++x0
@@ -723,8 +724,9 @@ function create_event_handlers(sandbox) {
           } else {
             // Vertical line
             var iterations = y1 - y0
-            if (swapped) {
+            if (!swapped) {
               ++y0
+              x0 += 1/slope
             }
             for (; iterations > 0; --iterations) {
               ++y0
