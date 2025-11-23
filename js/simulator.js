@@ -685,7 +685,6 @@ function create_event_handlers(sandbox) {
         var y0 = Math.floor((last_y-bounding_box.y + true_y_offset) / cell_size)
         var x1 = Math.floor((event.pageX-bounding_box.x + true_x_offset) / cell_size)
         var y1 = Math.floor((event.pageY-bounding_box.y + true_y_offset) / cell_size)
-        console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
         // Bresenham's line algorithm
         if (x0 !== x1 || y0 !== y1) {
           cgol_object.pattern[y0][x0] ^= 2 // DEBUG
@@ -694,6 +693,7 @@ function create_event_handlers(sandbox) {
             // Swap coordinates to try to go south and east
             [x1, x0, y1, y0] = [x0, x1, y0, y1]
           }
+          console.log(`(${x0}, ${y0}), (${x1}, ${y1})`) // DEBUG
           var slope = (y1 - y0) / (x1 - x0)
           var cell
           if (Math.abs(slope) <= 1) {
