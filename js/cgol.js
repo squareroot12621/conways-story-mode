@@ -324,7 +324,7 @@ class CGoL {
       for (var i = 0; i < pad_bottom; ++i) {
         grid.push(new Array(this.grid_size).fill(0))
       }
-      grid = grid.slice(Math.max(-pad_top, 0), Math.max(-pad_top, 0) + grid_size)
+      grid = grid.slice(Math.min(-pad_top, 0), Math.min(-pad_top, 0) + grid_size)
     }
     output.pattern = grid
     output.width = fullsize ? this.grid_size : max_row_width
