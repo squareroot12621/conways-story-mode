@@ -683,6 +683,7 @@ function create_event_handlers(sandbox) {
       if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
         cgol_object.pattern[y][x] ^= 1
         drawing_cell_type = cgol_object.pattern[y][x] & 1
+        cgol_object.compile_pattern()
       } else {
         drawing_cell_type = 1
       }
