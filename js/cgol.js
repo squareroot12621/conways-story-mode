@@ -103,7 +103,6 @@ class CGoL {
     )
 
     this.compile_pattern()
-    this.#update_stats()
   }
 
   static #normalize_rule(rule) {
@@ -375,6 +374,8 @@ class CGoL {
     this.#undo_snapshots = []
     this.#current_undo_state = -1
     this.#set_state(null, 1, 0)
+    
+    this.#update_stats()
   }
 
   get population() {
