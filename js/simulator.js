@@ -638,13 +638,15 @@ function create_event_handlers(sandbox) {
   // All event handlers for canvas
   var canvas = document.getElementById('simulator-cgol')
   
+  var last_x, last_y
+  var mouse_down = false
+  var drawing_cell_type = 0
   function update_last_mouse_position(event) {
-    canvas.setAttribute('data-last-x', event.pageX)
-    canvas.setAttribute('data-last-y', event.pageY)
+    last_x = event.pageX
+    last_y = event.pageY
   }
   function update_cursor() {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
-    var mouse_down = canvas.hasAttribute('data-mouse-down')
     var cursor_type
     switch (tool) {
       case 'draw':
@@ -675,8 +677,19 @@ function create_event_handlers(sandbox) {
   }
 
   function mouse_down_event_handler(event, touch=false) {
+    var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
+    if (tool === 'draw') { // Drawing
+      var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
+      if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
+        cgol_object.pattern[y][x] ^= 1
+        drawing_cell_type = cgol_object.pattern[y][x] & 1
+      } else {
+        drawing_cell_type = 1
+      }
+    }
+    
     update_last_mouse_position(event)
-    canvas.setAttribute('data-mouse-down', '')
+    mouse_down = true
     update_cursor()
   }
 
@@ -684,9 +697,7 @@ function create_event_handlers(sandbox) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
-      if (canvas.hasAttribute('data-mouse-down')) {
-        var last_x = parseFloat(canvas.getAttribute('data-last-x'))
-        var last_y = parseFloat(canvas.getAttribute('data-last-y'))
+      if (mouse_down) {
         var coords0 = page_to_board_coordinates(last_x, last_y)
         var x0 = coords0.x
         var y0 = coords0.y
@@ -718,7 +729,8 @@ function create_event_handlers(sandbox) {
                  it is less than cgol_object.grid_size, but gets rounded to it.
                  This causes an error when we index into cgol_object.pattern. */
               if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size - 0.5) {
-                cgol_object.pattern[Math.round(y0)][x0] ^= 1
+                cgol_object.pattern[Math.round(y0)][x0] =
+                  (cgol_object.pattern[Math.round(y0)][x0] & ~1) | drawing_cell_type
               }
               ++x0
               y0 += slope
@@ -736,7 +748,8 @@ function create_event_handlers(sandbox) {
                  as an increase in the length of the array,
                  which is WAY more sneaky. */
               if (x0 >= 0 && x0 < cgol_object.grid_size - 0.5 && y0 >= 0 && y0 < cgol_object.grid_size) {
-                cgol_object.pattern[y0][Math.round(x0)] ^= 1
+                cgol_object.pattern[y0][Math.round(x0)] =
+                  (cgol_object.pattern[y0][Math.round(x0)] & ~1) | drawing_cell_type
               }
               ++y0
               x0 += 1/slope
@@ -750,8 +763,8 @@ function create_event_handlers(sandbox) {
       if ((!touch && event.buttons & 1) || touch) {
         var new_x = event.pageX
         var new_y = event.pageY
-        var change_x = new_x - parseFloat(canvas.getAttribute('data-last-x'))
-        var change_y = new_y - parseFloat(canvas.getAttribute('data-last-y'))
+        var change_x = new_x - last_x
+        var change_y = new_y - last_y
         var zoom_level = cgol_object.zoom
         cgol_object.move_to(
           cgol_object.x_offset - change_x/zoom_level,
@@ -766,7 +779,7 @@ function create_event_handlers(sandbox) {
 
   function mouse_up_event_handler(event, touch=false) {
     update_last_mouse_position(event)
-    canvas.removeAttribute('data-mouse-down')
+    mouse_down = false
     update_cursor()
   }
 
