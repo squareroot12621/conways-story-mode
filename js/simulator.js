@@ -681,9 +681,8 @@ function create_event_handlers(sandbox) {
     if (tool === 'draw') { // Drawing
       var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
       if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
-        cgol_object.pattern[y][x] ^= 1
-        drawing_cell_type = cgol_object.pattern[y][x] & 1
-        cgol_object.compile_pattern()
+        drawing_cell_type = cgol_object.pattern[y][x] ^ 1 & 1
+        cgol_object.edit_cells([[x, y]], (c) => c & ~1 | drawing_cell_type)
       } else {
         drawing_cell_type = 1
       }
@@ -705,6 +704,7 @@ function create_event_handlers(sandbox) {
         var coords1 = page_to_board_coordinates(event.pageX, event.pageY)
         var x1 = coords1.x
         var y1 = coords1.y
+        var cells_to_change = []
         // Bresenham's line algorithm
         if (x0 !== x1 || y0 !== y1) {
           // Only follow the algorithm if the coordinates changed
@@ -730,8 +730,7 @@ function create_event_handlers(sandbox) {
                  it is less than cgol_object.grid_size, but gets rounded to it.
                  This causes an error when we index into cgol_object.pattern. */
               if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size - 0.5) {
-                cgol_object.pattern[Math.round(y0)][x0] =
-                  (cgol_object.pattern[Math.round(y0)][x0] & ~1) | drawing_cell_type
+                cells_to_change.push([x0, Math.round(y0)])
               }
               ++x0
               y0 += slope
@@ -749,14 +748,14 @@ function create_event_handlers(sandbox) {
                  as an increase in the length of the array,
                  which is WAY more sneaky. */
               if (x0 >= 0 && x0 < cgol_object.grid_size - 0.5 && y0 >= 0 && y0 < cgol_object.grid_size) {
-                cgol_object.pattern[y0][Math.round(x0)] =
-                  (cgol_object.pattern[y0][Math.round(x0)] & ~1) | drawing_cell_type
+                cells_to_change.push([Math.round(x0), y0])
               }
               ++y0
               x0 += 1/slope
             }
           }
-          cgol_object.compile_pattern()
+          var cell_change_function = drawing_cell_type ? (c) => c|1 : (c) => c&~1
+          cgol_object.edit_cells(cells_to_change, cell_change_function)
         }
       }
     } else if (tool === 'pan') { // Panning
