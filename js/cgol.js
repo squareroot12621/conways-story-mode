@@ -379,6 +379,10 @@ class CGoL {
   }
 
   edit_cells(cell_array, change_to) {
+    if (cell_array.length === 0) {
+      return undefined
+    }
+    
     var change_to_is_function = change_to instanceof Function
     if (this.generation === 0) {
       for (var [x, y] of cell_array) {
@@ -398,6 +402,8 @@ class CGoL {
     this.#set_state('cell', 1, 0, (a) => Math.min(a, 1))
 
     this.#update_stats()
+
+    return undefined
   }
 
   get population() {
