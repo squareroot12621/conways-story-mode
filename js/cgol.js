@@ -19,6 +19,7 @@ class CGoL {
   #changed_camera
   #changed_pattern
   #cached_picture
+  #recalculating
   
   constructor(options={}) {
     // CGoL stuff
@@ -92,7 +93,6 @@ class CGoL {
     this.#changed_pattern = false
     this.#cached_picture = null
     this.#recalculating = false
-    this.#recalculating_board = null
     /* Make sure the canvas doesn't keep requesting animation frames after it's destroyed
        https://stackoverflow.com/questions/20156453/how-to-detect-element-being-added-removed-from-dom-element */
     const observer = new MutationObserver(() => {
@@ -607,7 +607,6 @@ class CGoL {
       var last_generation = this.generation
       this.generation = safe_generation
       this.#recalculating = true
-      this.#recalculating_board = [...this.board]
       this.board = [...this.#back_snapshots[safe_generation]]
       this.#set_state('step', safe_generation - last_generation, 0)
       // Then step forward until we get to the target generation
