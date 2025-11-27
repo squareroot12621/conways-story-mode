@@ -384,9 +384,9 @@ class CGoL {
     
     var change_to_is_function = change_to instanceof Function
     if (this.generation === 0) {
-      console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
       for (var [x, y] of cell_array) {
         var new_cell = change_to_is_function ? change_to(this.pattern[y][x]) : change_to
+        console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
         this.pattern[y][x] = new_cell
       }
       console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
