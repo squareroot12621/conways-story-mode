@@ -65,9 +65,10 @@ class CGoL {
     }
     this.#max_back_snapshots = options.max_back_snapshots ?? 100
     this.#max_undo_snapshots = options.max_undo_snapshots ?? 50
-    /* this.#back_snapshots, this.#undo_snapshots,
-       and this.#current_undo_state
-       are already defined by this.compile_pattern() */
+    this.#undo_snapshots = []
+    this.#current_undo_state = -1
+    this.#set_state(null, 1, 0)
+    // this.#back_snapshots is already defined by this.compile_pattern()
     
     // Graphical stuff
     this.canvas = options.canvas
@@ -371,9 +372,6 @@ class CGoL {
     }
     this.#changed_pattern = true
     this.#back_snapshots = {0: [...this.board]}
-    this.#undo_snapshots = []
-    this.#current_undo_state = -1
-    this.#set_state(null, 1, 0)
     
     this.#update_stats()
   }
