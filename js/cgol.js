@@ -500,6 +500,7 @@ class CGoL {
     var snapshot = this.#undo_snapshots[index]
     this.board = snapshot.board
     this.generation = snapshot.generation
+    console.log(`Current generation: ${snapshot.generation}`) // DEBUG
     this.pattern = snapshot.pattern
     this.objects = snapshot.objects
   }
