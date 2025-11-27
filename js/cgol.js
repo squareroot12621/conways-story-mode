@@ -475,6 +475,7 @@ class CGoL {
       // Remove previous_state.
       this.#undo_snapshots.splice(this.#undo_snapshots.length - 2, 1)
       --this.#current_undo_state
+      console.log('merged') // DEBUG
       if (new_state.value1 === 0 && new_state.value2 === 0
           // Edge case if this.#max_undo_snapshots is really low
           && this.#undo_snapshots.length > 1) {
