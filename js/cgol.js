@@ -5,6 +5,7 @@ class CGoL {
   #stat_counters
   #max_back_snapshots
   #back_snapshots
+  #safe_back_generations
   #max_undo_snapshots
   #undo_snapshots
   #current_undo_state
@@ -64,6 +65,7 @@ class CGoL {
       tick_handler: options.tick_handler ?? null, // Custom function for when the generation changes
     }
     this.#max_back_snapshots = options.max_back_snapshots ?? 100
+    this.#safe_back_generations = new Set([0])
     this.#max_undo_snapshots = options.max_undo_snapshots ?? 50
     this.#undo_snapshots = []
     this.#current_undo_state = -1 // Gets incremented by #set_state()
@@ -397,6 +399,7 @@ class CGoL {
         this.board[cell_position] = new_cell % 2
         this.cell_types[cell_position] = Math.floor(new_cell / 2)
       }
+      this.#safe_back_generations.add(this.generation)
     }
     this.#changed_pattern = true
     this.#back_snapshots[this.generation] = [...this.board]
@@ -461,6 +464,7 @@ class CGoL {
       generation: this.generation,
       pattern: structuredClone(this.pattern),
       objects: structuredClone(this.objects),
+      safe_back_generations: structuredClone(this.#safe_back_generations),
     })
     ++this.#current_undo_state
     
@@ -499,6 +503,7 @@ class CGoL {
     this.generation = snapshot.generation
     this.pattern = structuredClone(snapshot.pattern)
     this.objects = structuredClone(snapshot.objects)
+    this.#safe_back_generations = structuredClone(this.#safe_back_generations)
   }
   can_undo() {
     return this.#current_undo_state > 0
@@ -553,7 +558,7 @@ class CGoL {
     // Update snapshots
     this.#back_snapshots[this.generation] = [...this.board]
     var old_generation = this.generation - this.#max_back_snapshots
-    if (old_generation > 0) {
+    if (!this.#safe_back_generations.has(old_generation)) {
       delete this.#back_snapshots[old_generation]
     }
   }
@@ -575,6 +580,8 @@ class CGoL {
     this.board = [...this.#back_snapshots[0]]
     this.#set_state('step', -last_generation, 0)
     this.#back_snapshots = {0: this.#back_snapshots[0]}
+    this.#safe_back_generations.clear()
+    this.#safe_back_generations.add(0)
     this.#update_stats()
   }
 
@@ -590,13 +597,21 @@ class CGoL {
       this.board = [...snapshot]
       delete this.#back_snapshots[this.generation]
       this.generation = new_generation
+      this.#set_state('step', -1, 0)
     } else { // Uh oh, we couldn't find a snapshot
-      this.reset_to_generation_0()
+      // Reset to the last safe generation
+      var safe_generation = Math.max(...this.#safe_back_generations)
+      var last_generation = this.generation
+      this.playing = false
+      this.generation = safe_generation
+      this.#changed_pattern = true
+      this.board = [...this.#back_snapshots[safe_generation]]
+      this.#set_state('step', safe_generation - last_generation, 0)
+      // Then step forward until we get to the target generation
       for (var i = 0; i < new_generation; ++i) {
         this.step_forward()
       }
     }
-    this.#set_state('step', -1, 0)
     this.#update_stats()
   }
   
