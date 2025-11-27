@@ -489,6 +489,10 @@ class CGoL {
       this.#undo_snapshots.shift()
       --this.#current_undo_state
     }
+
+    // DEBUG
+    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0)))
+    console.log('Board: ' + this.#undo_snapshots.map((x) => x.board.reduce((a, c) => a + c, 0)))
   }
 
   #get_state(index=null) {
