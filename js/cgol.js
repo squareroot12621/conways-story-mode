@@ -501,11 +501,11 @@ class CGoL {
   #get_state(index=null) {
     index ??= this.#current_undo_state
     var snapshot = this.#undo_snapshots[index]
-    this.board = snapshot.board
+    this.board = [...snapshot.board]
     this.generation = snapshot.generation
     console.log(`Current generation: ${snapshot.generation}`) // DEBUG
-    this.pattern = snapshot.pattern
-    this.objects = snapshot.objects
+    this.pattern = structuredClone(snapshot.pattern)
+    this.objects = structuredClone(snapshot.objects)
     // DEBUG
     console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0)))
     console.log('Board: ' + this.#undo_snapshots.map((x) => x.board.reduce((a, c) => a + c, 0)))
