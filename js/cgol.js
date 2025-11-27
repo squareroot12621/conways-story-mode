@@ -392,8 +392,10 @@ class CGoL {
     } else {
       for (var [x, y] of cell_array) {
         var cell_position = y*this.grid_size + x
-        var new_cell = change_to_is_function ? change_to(this.board[cell_position]) : change_to
-        this.board[cell_position] = new_cell
+        var old_cell = this.board[cell_position] + 2*this.cell_types[cell_position]
+        var new_cell = change_to_is_function ? change_to(old_cell) : change_to
+        this.board[cell_position] = new_cell % 2
+        this.cell_types[cell_position] = Math.floor(new_cell / 2)
       }
     }
     this.#changed_pattern = true
@@ -444,7 +446,6 @@ class CGoL {
        This can happen if you undo something and then do an action normally. */
     if (this.#current_undo_state < this.#undo_snapshots.length - 1) {
       this.#undo_snapshots.splice(this.#current_undo_state + 1)
-      console.log('branch deleted') // DEBUG
     }
     // Make the state and push it into the snapshot array.
     this.#undo_snapshots.push({
