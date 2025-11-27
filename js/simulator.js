@@ -681,10 +681,10 @@ function create_event_handlers(sandbox) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     if (tool === 'draw') { // Drawing
       var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
+      temporarily_paused = cgol_object.playing
+      cgol_object.pause()
       if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
         drawing_cell_type = cgol_object.board[y*cgol_object.grid_size + x] ^ 1 & 1
-        temporarily_paused = cgol_object.playing
-        cgol_object.pause()
         cgol_object.edit_cells([[x, y]], (c) => c & ~1 | drawing_cell_type)
       } else {
         drawing_cell_type = 1
