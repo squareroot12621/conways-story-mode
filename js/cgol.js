@@ -503,6 +503,9 @@ class CGoL {
     console.log(`Current generation: ${snapshot.generation}`) // DEBUG
     this.pattern = snapshot.pattern
     this.objects = snapshot.objects
+    // DEBUG
+    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0)))
+    console.log('Board: ' + this.#undo_snapshots.map((x) => x.board.reduce((a, c) => a + c, 0)))
   }
   can_undo() {
     return this.#current_undo_state > 0
