@@ -725,6 +725,7 @@ class CGoL {
         this.#ctx.putImageData(this.#cached_picture, 0, 0)
       }
       this.#last_animation_frame = requestAnimationFrame((t) => this.draw(options, t))
+      console.log(this.#undo_snapshots.map((_, i) => i === this.#current_undo_state)) // DEBUG
     }
   }
 
