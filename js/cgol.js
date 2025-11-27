@@ -457,6 +457,7 @@ class CGoL {
       cancelable: true,
       board: [...this.board],
       generation: this.generation,
+      pattern: structuredClone(this.pattern),
       objects: structuredClone(this.objects),
     })
     ++this.#current_undo_state
@@ -493,6 +494,7 @@ class CGoL {
     var snapshot = this.#undo_snapshots[index]
     this.board = snapshot.board
     this.generation = snapshot.generation
+    this.pattern = snapshot.pattern
     this.objects = snapshot.objects
   }
   can_undo() {
