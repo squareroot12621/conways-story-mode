@@ -386,10 +386,8 @@ class CGoL {
     if (this.generation === 0) {
       for (var [x, y] of cell_array) {
         var new_cell = change_to_is_function ? change_to(this.pattern[y][x]) : change_to
-        console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
         this.pattern[y][x] = new_cell
       }
-      console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
       this.compile_pattern()
     } else {
       for (var [x, y] of cell_array) {
@@ -492,10 +490,6 @@ class CGoL {
       this.#undo_snapshots.shift()
       --this.#current_undo_state
     }
-
-    // DEBUG
-    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0)))
-    console.log('Board: ' + this.#undo_snapshots.map((x) => x.board.reduce((a, c) => a + c, 0)))
   }
 
   #get_state(index=null) {
@@ -503,12 +497,8 @@ class CGoL {
     var snapshot = this.#undo_snapshots[index]
     this.board = [...snapshot.board]
     this.generation = snapshot.generation
-    console.log(`Current generation: ${snapshot.generation}`) // DEBUG
     this.pattern = structuredClone(snapshot.pattern)
     this.objects = structuredClone(snapshot.objects)
-    // DEBUG
-    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0)))
-    console.log('Board: ' + this.#undo_snapshots.map((x) => x.board.reduce((a, c) => a + c, 0)))
   }
   can_undo() {
     return this.#current_undo_state > 0
