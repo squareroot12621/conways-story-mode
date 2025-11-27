@@ -684,7 +684,7 @@ function create_event_handlers(sandbox) {
       if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
         drawing_cell_type = cgol_object.pattern[y][x] ^ 1 & 1
         temporarily_paused = cgol_object.playing
-        cgol_object.playing = false
+        cgol_object.pause()
         cgol_object.edit_cells([[x, y]], (c) => c & ~1 | drawing_cell_type)
       } else {
         drawing_cell_type = 1
@@ -784,8 +784,10 @@ function create_event_handlers(sandbox) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
-      cgol_object.playing = temporarily_paused
-      temporarily_paused = false
+      if (temporarily_paused) {
+        cgol_object.play()
+        temporarily_paused = false
+      }
     }
     
     update_last_mouse_position(event)
