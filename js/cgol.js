@@ -336,8 +336,6 @@ class CGoL {
   }
 
   compile_pattern() {
-    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
-    
     this.board = Array(this.grid_size * this.grid_size).fill(0)
     this.cell_types = Array(this.grid_size * this.grid_size).fill(0)
     /* Cell types:
@@ -375,12 +373,8 @@ class CGoL {
     }
     this.#changed_pattern = true
     this.#back_snapshots = {0: [...this.board]}
-
-    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
     
     this.#update_stats()
-
-    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
   }
 
   edit_cells(cell_array, change_to) {
@@ -390,10 +384,12 @@ class CGoL {
     
     var change_to_is_function = change_to instanceof Function
     if (this.generation === 0) {
+      console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
       for (var [x, y] of cell_array) {
         var new_cell = change_to_is_function ? change_to(this.pattern[y][x]) : change_to
         this.pattern[y][x] = new_cell
       }
+      console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
       this.compile_pattern()
     } else {
       for (var [x, y] of cell_array) {
