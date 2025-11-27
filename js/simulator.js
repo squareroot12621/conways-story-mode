@@ -641,6 +641,7 @@ function create_event_handlers(sandbox) {
   var last_x, last_y
   var mouse_down = false
   var drawing_cell_type = 0
+  var temporarily_paused = false
   function update_last_mouse_position(event) {
     last_x = event.pageX
     last_y = event.pageY
@@ -682,6 +683,8 @@ function create_event_handlers(sandbox) {
       var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
       if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
         drawing_cell_type = cgol_object.pattern[y][x] ^ 1 & 1
+        temporarily_paused = cgol_object.playing
+        cgol_object.playing = false
         cgol_object.edit_cells([[x, y]], (c) => c & ~1 | drawing_cell_type)
       } else {
         drawing_cell_type = 1
@@ -778,6 +781,13 @@ function create_event_handlers(sandbox) {
   }
 
   function mouse_up_event_handler(event, touch=false) {
+    var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
+    
+    if (tool === 'draw') { // Drawing
+      cgol_object.playing = temporarily_paused
+      temporarily_paused = false
+    }
+    
     update_last_mouse_position(event)
     mouse_down = false
     update_cursor()
