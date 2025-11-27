@@ -439,6 +439,8 @@ class CGoL {
   }
 
   #set_state(action, value1, value2, control1, control2) {
+    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
+    
     control1 ??= (a) => a
     control2 ??= (b) => b
     
@@ -463,6 +465,9 @@ class CGoL {
       objects: structuredClone(this.objects),
     })
     ++this.#current_undo_state
+
+    console.log('Pattern: ' + this.#undo_snapshots.map((x) => x.pattern.flat().reduce((a, c) => a + c%2, 0))) // DEBUG
+    
     // Merge the states, if possible.
     var unmerged_state = this.#undo_snapshots[this.#undo_snapshots.length - 3]
     var previous_state = this.#undo_snapshots[this.#undo_snapshots.length - 2]
