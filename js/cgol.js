@@ -91,6 +91,8 @@ class CGoL {
     this.#changed_camera = false
     this.#changed_pattern = false
     this.#cached_picture = null
+    this.#recalculating = false
+    this.#recalculating_board = null
     /* Make sure the canvas doesn't keep requesting animation frames after it's destroyed
        https://stackoverflow.com/questions/20156453/how-to-detect-element-being-added-removed-from-dom-element */
     const observer = new MutationObserver(() => {
@@ -598,21 +600,28 @@ class CGoL {
       delete this.#back_snapshots[this.generation]
       this.generation = new_generation
       this.#set_state('step', -1, 0)
+      this.#update_stats()
     } else { // Uh oh, we couldn't find a snapshot
       // Reset to the last safe generation
       var safe_generation = Math.max(...this.#safe_back_generations)
       var last_generation = this.generation
-      this.playing = false
       this.generation = safe_generation
-      this.#changed_pattern = true
+      this.#recalculating = true
+      this.#recalculating_board = [...this.board]
       this.board = [...this.#back_snapshots[safe_generation]]
       this.#set_state('step', safe_generation - last_generation, 0)
       // Then step forward until we get to the target generation
-      for (var i = 0; i < new_generation; ++i) {
-        this.step_forward()
-      }
+      new Promise((resolve, reject) => {
+        for (var i = safe_generation; i < new_generation; ++i) {
+          this.step_forward()
+        }
+        resolve(undefined)
+      }).then((_) => {
+        this.#recalculating = false
+        this.#changed_pattern = true
+        this.#update_stats()
+      })
     }
-    this.#update_stats()
   }
   
   move_to(x, y, zoom) {
@@ -723,7 +732,8 @@ class CGoL {
       if (cache_expired
           || changed_size
           || this.#changed_camera
-          || this.#changed_pattern) {
+          || this.#changed_pattern
+          || this.#recalculating) {
         if (cache_expired) {
           this.#last_draw_time = timestamp
         }
@@ -885,6 +895,25 @@ class CGoL {
       ctx.fillRect(0, 0, canvas.width, canvas.height)
     }
 
+    // Draw the spinner when recalculating
+    var current_time = performance.now() / 1000
+    const spins_per_second = 0.8
+    const spinner_angle_fraction = 0.8
+    if (this.#recalculating) {
+      ctx.strokeStyle = 'white'
+      ctx.lineWidth = 5
+      ctx.beginPath()
+      ctx.arc(
+        canvas.width / 2,
+        canvas.height / 2,
+        40,
+        current_time * spins_per_second * 2*Math.PI,
+        (current_time * spins_per_second + spinner_angle_fraction) * 2*Math.PI,
+        false,
+      )
+      ctx.stroke()
+    }
+    
     // START DEBUG
     ctx.font = '30px sans-serif'
     ctx.fillStyle = 'white'
