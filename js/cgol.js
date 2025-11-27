@@ -66,8 +66,7 @@ class CGoL {
     this.#max_back_snapshots = options.max_back_snapshots ?? 100
     this.#max_undo_snapshots = options.max_undo_snapshots ?? 50
     this.#undo_snapshots = []
-    this.#current_undo_state = -1
-    this.#set_state(null, 1, 0)
+    this.#current_undo_state = -1 // Gets incremented by #set_state()
     // this.#back_snapshots is already defined by this.compile_pattern()
     
     // Graphical stuff
@@ -104,6 +103,8 @@ class CGoL {
     )
 
     this.compile_pattern()
+    this.#set_state(null, 1, 0)
+    this.#update_stats()
   }
 
   static #normalize_rule(rule) {
