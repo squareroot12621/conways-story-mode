@@ -610,13 +610,11 @@ class CGoL {
       this.board = [...this.#back_snapshots[safe_generation]]
       this.#set_state('step', safe_generation - last_generation, 0)
       // Then step forward until we get to the target generation
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          for (var i = safe_generation; i < new_generation; ++i) {
-            this.step_forward()
-          }
-          resolve(undefined)
-        }, 0)
+      new Promise(async (resolve, reject) => {
+        for (var i = safe_generation; i < new_generation; ++i) {
+          await this.step_forward()
+        }
+        resolve(undefined)
       }).then((_) => {
         this.#recalculating = false
         this.#changed_pattern = true
