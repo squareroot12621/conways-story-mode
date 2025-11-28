@@ -625,7 +625,7 @@ class CGoL {
     /* Adapted from https://stackoverflow.com/a/719599 by Helgi,
        licensed under CC BY-SA 4.0 */
     const iterations_per_batch = 4
-    for (i = 0; i < iterations_per_batch && i < iterations; ++i) {
+    for (var i = 0; i < iterations_per_batch && i < iterations; ++i) {
       this.step_forward()
     }
     iterations -= iterations_per_batch
