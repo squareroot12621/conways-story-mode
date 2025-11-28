@@ -1,7 +1,6 @@
 import {create_element, update_root} from './utilities.js'
 
 function get_error_info(error) {
-    var error_type = error?.type ?? 'No type available'
     /* If we don't have an Error,
        try to turn it into something that is an Error */
     var error_new = error
@@ -12,9 +11,10 @@ function get_error_info(error) {
             error_new = error.reason
         }
     }
-    var error_string = error_new.toString()
+    var error_name = error_new?.name ?? 'No name available'
+    var error_string = error_new?.message ?? 'No message available'
     var error_stack = error_new?.stack ?? 'No stack available'
-    var error_info_text = [error_type, error_string, error_stack].join('\n')
+    var error_info_text = [error_name, error_string, error_stack].join('\n')
     return {info: error_info_text, error: error_new}
 }
 
