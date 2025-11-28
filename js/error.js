@@ -12,7 +12,7 @@ function get_error_info(error) {
         }
     }
     var error_name = error_new?.name ?? 'No name available'
-    var error_string = error_new?.message ?? 'No message available'
+    var error_string = error?.message ?? error_new?.message ?? 'No message available'
     var error_stack = error_new?.stack ?? 'No stack available'
     var error_info_text = [error_name, error_string, error_stack].join('\n')
     return {info: error_info_text, error: error_new}
