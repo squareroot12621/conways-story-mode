@@ -907,11 +907,17 @@ class CGoL {
       ctx.fillRect(0, 0, canvas.width, canvas.height)
     }
 
-    // Draw the spinner when recalculating
-    var current_time = performance.now() / 1000
-    const spins_per_second = 0.8
-    const spinner_angle_fraction = 0.8
+    // Draw the spinner (and a rectangle that covers the screen) when recalculating
     if (this.#recalculating) {
+      // Translucent rectangle
+      const cover_opacity = 0.5
+      ctx.fillStyle = `rgba(0 0 0 / ${cover_opacity})`
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+        
+      // Spinner
+      var current_time = performance.now() / 1000
+      const spins_per_second = 0.8
+      const spinner_angle_fraction = 0.8
       ctx.strokeStyle = 'white'
       ctx.lineWidth = 5
       ctx.beginPath()
