@@ -610,16 +610,29 @@ class CGoL {
       this.board = [...this.#back_snapshots[safe_generation]]
       this.#set_state('step', safe_generation - last_generation, 0)
       // Then step forward until we get to the target generation
-      new Promise(async (resolve, reject) => {
-        for (var i = safe_generation; i < new_generation; ++i) {
-          await this.step_forward()
+      this.#step_forward_fast(
+        new_generation - safe_generation,
+        () => {
+          this.#recalculating = false
+          this.#changed_pattern = true
+          this.#update_stats()
         }
-        resolve(undefined)
-      }).then((_) => {
-        this.#recalculating = false
-        this.#changed_pattern = true
-        this.#update_stats()
-      })
+      )
+    }
+  }
+
+  #step_forward_fast(iterations, callback) {
+    /* Adapted from https://stackoverflow.com/a/719599 by Helgi,
+       licensed under CC BY-SA 4.0 */
+    const iterations_per_batch = 4
+    for (i = 0; i < iterations_per_batch && i < iterations; ++i) {
+      this.step_forward()
+    }
+    iterations -= iterations_per_batch
+    if (iterations > 0) {
+      setTimeout(() => this.#step_forward_fast(iterations, callback), 0)
+    } else {
+      callback()
     }
   }
   
