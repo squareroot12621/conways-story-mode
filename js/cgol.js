@@ -58,6 +58,15 @@ class CGoL {
     this.generation = 0
     this.playing = options.autoplay ?? false
     this.speed = options.speed ?? 5
+    /* selection.left and selection.top are inclusive,
+       while selection.right and selection.bottom are exclusive. */
+    this.selection = {
+      left: floor(this.pattern_center_x),
+      right: floor(this.pattern_center_x) + 1,
+      top: floor(this.pattern_center_y),
+      bottom: floor(this.pattern_center_y) + 1,
+      visible: false,
+    }
     this.#last_tick_time = document.timeline.currentTime
     this.#stat_counters = {
       generation: options.generation_counter ?? null,
