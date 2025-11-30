@@ -61,10 +61,10 @@ class CGoL {
     /* The ranges [selection.left, selection.right]
        and [selection.top, selection.bottom] are inclusive. */
     this.selection = {
-      left: floor(this.pattern_center_x),
-      right: floor(this.pattern_center_x),
-      top: floor(this.pattern_center_y),
-      bottom: floor(this.pattern_center_y),
+      left: Math.floor(this.pattern_center_x),
+      right: Math.floor(this.pattern_center_x),
+      top: Math.floor(this.pattern_center_y),
+      bottom: Math.floor(this.pattern_center_y),
       visible: false,
     }
     this.#last_tick_time = document.timeline.currentTime
