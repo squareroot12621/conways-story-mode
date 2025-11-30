@@ -934,7 +934,7 @@ class CGoL {
       ctx.lineJoin = 'round'
       ctx.strokeStyle = 'black'
       ctx.strokeRect(left_x, top_y, width, height)
-      ctx.strokeStyle = 'white'
+      ctx.strokeStyle = '#FFF050'
       ctx.setLineDash([dash_width_px, dash_width_px])
       ctx.lineDashOffset = performance.now()/1000 * rotations_per_second * dash_width_px
                            % (2*dash_width_px)
