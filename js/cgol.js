@@ -421,6 +421,11 @@ class CGoL {
     return undefined
   }
 
+  update_selection(new_selection) {
+    this.selection = new_selection
+    this.#changed_pattern = true
+  }
+
   get population() {
     var population = 0
     for (var i = 0; i < this.board.length; ++i) {
