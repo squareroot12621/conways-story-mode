@@ -928,7 +928,7 @@ class CGoL {
       ctx.fillStyle = '#40404040'
       ctx.fillRect(left_x, top_y, width, height)
 
-      const ideal_dash_width_px = 6
+      var ideal_dash_width_px = Math.max(1.7 * this.zoom**0.5, 1)
       var selection_perimeter = 2 * (right_x-left_x + bottom_y-top_y)
       var dashes_in_selection = Math.max(Math.round(selection_perimeter / (2*ideal_dash_width_px)), 1)
       var dash_width_px = selection_perimeter / dashes_in_selection / 2
@@ -937,7 +937,7 @@ class CGoL {
       ctx.lineJoin = 'round'
       ctx.strokeStyle = 'black'
       ctx.strokeRect(left_x, top_y, width, height)
-      ctx.strokeStyle = '#FFF050'
+      ctx.strokeStyle = '#FFF080'
       ctx.setLineDash([dash_width_px, dash_width_px])
       ctx.lineDashOffset = performance.now()/1000 * rotations_per_second * dash_width_px
                            % (2*dash_width_px)
