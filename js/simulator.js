@@ -671,11 +671,19 @@ function create_event_handlers(sandbox) {
   function page_to_board_coordinates(x, y) {
     var bounding_box = canvas.getBoundingClientRect()
     var cell_size = cgol_object.zoom
-    var grid_size = cgol_object.grid_size
     var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
     var true_y_offset = ((cgol_object.y_offset+cgol_object.pattern_center_y) * cell_size - canvas.height/2) | 0
     var output_x = Math.floor((x-bounding_box.x + true_x_offset) / cell_size)
     var output_y = Math.floor((y-bounding_box.y + true_y_offset) / cell_size)
+    return {x: output_x, y: output_y}
+  }
+
+  function board_to_canvas_coordinates(i, j) {
+    var cell_size = cgol_object.zoom
+    var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
+    var true_y_offset = ((cgol_object.y_offset+cgol_object.pattern_center_y) * cell_size - canvas.height/2) | 0
+    var output_x = (i * cell_size - true_x_offset) | 0
+    var output_y = (j * cell_size - true_x_offset) | 0
     return {x: output_x, y: output_y}
   }
 
