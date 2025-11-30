@@ -931,6 +931,7 @@ class CGoL {
       const dash_width_px = 6
       const rotations_per_second = 1.5
       ctx.lineWidth = 3
+      ctx.lineJoin = 'round'
       ctx.strokeStyle = 'black'
       ctx.strokeRect(left_x, top_y, width, height)
       ctx.strokeStyle = 'white'
@@ -939,6 +940,7 @@ class CGoL {
                            % (2*dash_width_px)
       ctx.strokeRect(left_x, top_y, width, height)
       ctx.setLineDash([])
+      ctx.lineJoin = 'miter'
     }
 
     // Draw the spinner (and a rectangle that covers the screen) when recalculating
