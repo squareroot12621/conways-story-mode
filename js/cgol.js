@@ -58,13 +58,13 @@ class CGoL {
     this.generation = 0
     this.playing = options.autoplay ?? false
     this.speed = options.speed ?? 5
-    /* selection.left and selection.top are inclusive,
-       while selection.right and selection.bottom are exclusive. */
+    /* The ranges [selection.left, selection.right]
+       and [selection.top, selection.bottom] are inclusive. */
     this.selection = {
       left: floor(this.pattern_center_x),
-      right: floor(this.pattern_center_x) + 1,
+      right: floor(this.pattern_center_x),
       top: floor(this.pattern_center_y),
-      bottom: floor(this.pattern_center_y) + 1,
+      bottom: floor(this.pattern_center_y),
       visible: false,
     }
     this.#last_tick_time = document.timeline.currentTime
@@ -914,6 +914,20 @@ class CGoL {
       const pattern = ctx.createPattern(grid_canvas, 'repeat')
       ctx.fillStyle = pattern
       ctx.fillRect(0, 0, canvas.width, canvas.height)
+    }
+
+    // Draw the selection
+    if (this.selection.visible || true) { // DEBUG
+      var left_x = (this.selection.left * cell_size - true_x_offset) | 0
+      var right_x = (this.selection.right * cell_size - true_x_offset) | 0
+      var width = right_x - left_x
+      var top_y = (this.selection.top * cell_size - true_y_offset) | 0
+      var bottom_y = (this.selection.bottom * cell_size - true_y_offset) | 0
+      var height = bottom_y - top_y
+      ctx.fillStyle = '#40404040'
+      ctx.fillRect(left_x, top_y, width, height)
+
+      // TODO: Add the border
     }
 
     // Draw the spinner (and a rectangle that covers the screen) when recalculating
