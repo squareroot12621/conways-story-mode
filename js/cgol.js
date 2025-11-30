@@ -919,10 +919,10 @@ class CGoL {
     // Draw the selection
     if (this.selection.visible || true) { // DEBUG
       var left_x = (this.selection.left * cell_size - true_x_offset) | 0
-      var right_x = (this.selection.right * cell_size - true_x_offset) | 0
+      var right_x = ((this.selection.right+1) * cell_size - true_x_offset) | 0
       var width = right_x - left_x
       var top_y = (this.selection.top * cell_size - true_y_offset) | 0
-      var bottom_y = (this.selection.bottom * cell_size - true_y_offset) | 0
+      var bottom_y = ((this.selection.bottom+1) * cell_size - true_y_offset) | 0
       var height = bottom_y - top_y
       ctx.fillStyle = '#40404040'
       ctx.fillRect(left_x, top_y, width, height)
@@ -933,6 +933,7 @@ class CGoL {
       ctx.strokeStyle = 'white'
       ctx.setLineDash([6, 6])
       ctx.strokeRect(left_x, top_y, width, height)
+      ctx.setLineDash([])
     }
 
     // Draw the spinner (and a rectangle that covers the screen) when recalculating
