@@ -709,6 +709,7 @@ function create_event_handlers(sandbox) {
 
   function mouse_move_event_handler(event, touch=false) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
+    mouse_down = (!event.touch && event.buttons > 0) || event.touch
     
     if (tool === 'draw') { // Drawing
       if (mouse_down) {
@@ -773,13 +774,15 @@ function create_event_handlers(sandbox) {
         }
       }
     } else if (tool === 'select') { // Selecting
-      var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
-      cgol_object.selection = {
-        left: Math.min(x, selection_start.x),
-        right: Math.max(x, selection_start.x),
-        top: Math.min(y, selection_start.y),
-        bottom: Math.max(y, selection_start.y),
-        visible: true,
+      if (mouse_down) {
+        var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
+        cgol_object.selection = {
+          left: Math.min(x, selection_start.x),
+          right: Math.max(x, selection_start.x),
+          top: Math.min(y, selection_start.y),
+          bottom: Math.max(y, selection_start.y),
+          visible: true,
+        }
       }
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
