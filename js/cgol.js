@@ -926,12 +926,15 @@ class CGoL {
       var height = bottom_y - top_y
       ctx.fillStyle = '#40404040'
       ctx.fillRect(left_x, top_y, width, height)
-      
+
+      const dash_width_px = 6
+      const rotations_per_second = 1.5
       ctx.lineWidth = 3
       ctx.strokeStyle = 'black'
       ctx.strokeRect(left_x, top_y, width, height)
       ctx.strokeStyle = 'white'
-      ctx.setLineDash([6, 6])
+      ctx.setLineDash([dash_width_px, dash_width_px])
+      ctx.lineDashOffset = performance.now()/1000 * seconds_per_rotation % (2*dash_width_px)
       ctx.strokeRect(left_x, top_y, width, height)
       ctx.setLineDash([])
     }
