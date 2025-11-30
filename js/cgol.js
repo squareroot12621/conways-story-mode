@@ -738,7 +738,7 @@ class CGoL {
       this.#draw_inner(options)
     } else {
       var cache_expired = timestamp - this.#last_draw_time >= 1000
-                          || this.selection.visible || true // DEBUG
+                          || this.selection.visible
       // TODO: Make the cache interval changeable using the speed slider
       var changed_size = this.canvas.width !== this.#last_width
                          || this.canvas.height !== this.#last_height
@@ -918,7 +918,7 @@ class CGoL {
     }
 
     // Draw the selection
-    if (this.selection.visible || true) { // DEBUG
+    if (this.selection.visible) {
       var left_x = (this.selection.left * cell_size - true_x_offset) | 0
       var right_x = ((this.selection.right+1) * cell_size - true_x_offset) | 0
       var width = right_x - left_x
