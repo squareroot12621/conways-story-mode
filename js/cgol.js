@@ -926,8 +926,13 @@ class CGoL {
       var height = bottom_y - top_y
       ctx.fillStyle = '#40404040'
       ctx.fillRect(left_x, top_y, width, height)
-
-      // TODO: Add the border
+      
+      ctx.lineWidth = 3
+      ctx.strokeStyle = 'black'
+      ctx.strokeRect(left_x, top_y, width, height)
+      ctx.strokeStyle = 'white'
+      ctx.setLineDash([6, 6])
+      ctx.strokeRect(left_x, top_y, width, height)
     }
 
     // Draw the spinner (and a rectangle that covers the screen) when recalculating
