@@ -928,7 +928,10 @@ class CGoL {
       ctx.fillStyle = '#40404040'
       ctx.fillRect(left_x, top_y, width, height)
 
-      const dash_width_px = 6
+      const ideal_dash_width_px = 6
+      var selection_perimeter = 2 * (right_x-left_x + bottom_y-top_y)
+      var dashes_in_selection = Math.max(Math.round(selection_perimeter / (2*ideal_dash_width_px)), 1)
+      var dash_width_px = selection_perimeter / dashes_in_selection
       const rotations_per_second = 1.5
       ctx.lineWidth = 3
       ctx.lineJoin = 'round'
