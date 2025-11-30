@@ -642,6 +642,7 @@ function create_event_handlers(sandbox) {
   var mouse_down = false
   var drawing_cell_type = 0
   var temporarily_paused = false
+  var selection_start = {x: null, y: null}
   function update_last_mouse_position(event) {
     last_x = event.pageX
     last_y = event.pageY
@@ -688,6 +689,16 @@ function create_event_handlers(sandbox) {
         cgol_object.edit_cells([[x, y]], (c) => c & ~1 | drawing_cell_type)
       } else {
         drawing_cell_type = 1
+      }
+    } else if (tool === 'select') { // Selecting
+      var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
+      selection_start = {x: x, y: y}
+      cgol_object.selection = {
+        left: x,
+        right: x,
+        top: y,
+        bottom: y,
+        visible: false,
       }
     }
     
@@ -760,6 +771,15 @@ function create_event_handlers(sandbox) {
           var cell_change_function = drawing_cell_type ? (c) => c|1 : (c) => c&~1
           cgol_object.edit_cells(cells_to_change, cell_change_function)
         }
+      }
+    } else if (tool === 'select') { // Selecting
+      var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
+      cgol_object.selection = {
+        left: Math.min(x, selection_start.x),
+        right: Math.max(x, selection_start.x),
+        top: Math.min(y, selection_start.y),
+        bottom: Math.max(y, selection_start.y),
+        visible: true,
       }
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
