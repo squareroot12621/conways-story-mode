@@ -693,13 +693,13 @@ function create_event_handlers(sandbox) {
     } else if (tool === 'select') { // Selecting
       var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
       selection_start = {x: x, y: y}
-      cgol_object.selection = {
+      cgol_object.update_selection({
         left: x,
         right: x,
         top: y,
         bottom: y,
         visible: false,
-      }
+      })
     }
     
     update_last_mouse_position(event)
@@ -776,13 +776,13 @@ function create_event_handlers(sandbox) {
     } else if (tool === 'select') { // Selecting
       if (mouse_down) {
         var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
-        cgol_object.selection = {
+        cgol_object.update_selection({
           left: Math.min(x, selection_start.x),
           right: Math.max(x, selection_start.x),
           top: Math.min(y, selection_start.y),
           bottom: Math.max(y, selection_start.y),
           visible: true,
-        }
+        })
       }
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
