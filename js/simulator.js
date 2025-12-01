@@ -817,13 +817,21 @@ function create_event_handlers(sandbox) {
     } else if (tool === 'select') { // Selecting
       if (mouse_down) {
         var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
-        cgol_object.update_selection({
-          left: Math.min(x, selection_start.x),
-          right: Math.max(x, selection_start.x),
-          top: Math.min(y, selection_start.y),
-          bottom: Math.max(y, selection_start.y),
-          visible: true,
-        })
+        var move_distance = Math.hypot(selection_start.x - x, selection_start.y - y)
+        var moved_significantly = move_distance >= 3
+        /* This whole moved_significantly thing is here
+           because moving the cursor 2 pixels
+           shouldn't cause a selection to automatically appear,
+           especially if you're trying to remove one already. */
+        if (moved_significantly || cgol_object.selection.visible) {
+          cgol_object.update_selection({
+            left: Math.min(x, selection_start.x),
+            right: Math.max(x, selection_start.x),
+            top: Math.min(y, selection_start.y),
+            bottom: Math.max(y, selection_start.y),
+            visible: true,
+          })
+        }
       }
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
@@ -852,6 +860,23 @@ function create_event_handlers(sandbox) {
         cgol_object.play()
         temporarily_paused = false
       }
+    } else if (tool === 'select') { // Selecting
+      var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+      var simulator_selection_move = document.getElementById('simulator-selection-move')
+      var toolbar_position = board_to_canvas_coordinates(
+        (cgol_object.selection.left + cgol_object.selection.right) / 2,
+        cgol_object.selection.top,
+      )
+      var move_position = board_to_canvas_coordinates(
+        cgol_object.selection.right,
+        cgol_object.selection.top,
+      )
+      simulator_selection_toolbar.style.display = 'block'
+      simulator_selection_toolbar.style.left = toolbar_position.x
+      simulator_selection_toolbar.style.top = toolbar_position.y
+      simulator_selection_move.style.display = 'block'
+      simulator_selection_move.style.left = move_position.x
+      simulator_selection_move.style.top = move_position.y
     }
     
     update_last_mouse_position(event)
