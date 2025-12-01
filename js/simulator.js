@@ -872,11 +872,11 @@ function create_event_handlers(sandbox) {
         cgol_object.selection.top,
       )
       simulator_selection_toolbar.style.display = 'block'
-      simulator_selection_toolbar.style.left = toolbar_position.x
-      simulator_selection_toolbar.style.top = toolbar_position.y
+      simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
+      simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
       simulator_selection_move.style.display = 'block'
-      simulator_selection_move.style.left = move_position.x
-      simulator_selection_move.style.top = move_position.y
+      simulator_selection_move.style.left = move_position.x + 'px'
+      simulator_selection_move.style.top = move_position.y + 'px'
     }
     
     update_last_mouse_position(event)
