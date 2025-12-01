@@ -721,7 +721,7 @@ function create_event_handlers(sandbox) {
     var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
     var true_y_offset = ((cgol_object.y_offset+cgol_object.pattern_center_y) * cell_size - canvas.height/2) | 0
     var output_x = (i * cell_size - true_x_offset) | 0
-    var output_y = (j * cell_size - true_x_offset) | 0
+    var output_y = (j * cell_size - true_y_offset) | 0
     return {x: output_x, y: output_y}
   }
 
