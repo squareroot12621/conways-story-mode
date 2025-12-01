@@ -870,20 +870,25 @@ function create_event_handlers(sandbox) {
     } else if (tool === 'select') { // Selecting
       var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
       var simulator_selection_move = document.getElementById('simulator-selection-move')
-      var toolbar_position = board_to_canvas_coordinates(
-        (cgol_object.selection.left + cgol_object.selection.right) / 2,
-        cgol_object.selection.top,
-      )
-      var move_position = board_to_canvas_coordinates(
-        cgol_object.selection.right,
-        cgol_object.selection.top,
-      )
-      simulator_selection_toolbar.style.display = 'block'
-      simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
-      simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
-      simulator_selection_move.style.display = 'block'
-      simulator_selection_move.style.left = move_position.x + 'px'
-      simulator_selection_move.style.top = move_position.y + 'px'
+      if (cgol_object.selection.visible) {
+        var toolbar_position = board_to_canvas_coordinates(
+          (cgol_object.selection.left + cgol_object.selection.right) / 2,
+          cgol_object.selection.top,
+        )
+        var move_position = board_to_canvas_coordinates(
+          cgol_object.selection.right,
+          cgol_object.selection.top,
+        )
+        simulator_selection_toolbar.style.display = 'block'
+        simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
+        simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
+        simulator_selection_move.style.display = 'block'
+        simulator_selection_move.style.left = move_position.x + 'px'
+        simulator_selection_move.style.top = move_position.y + 'px'
+      } else {
+        simulator_selection_toolbar.style.display = 'none'
+        simulator_selection_move.style.display = 'none'
+      }
     }
     
     update_last_mouse_position(event)
