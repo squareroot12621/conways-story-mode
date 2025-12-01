@@ -669,13 +669,19 @@ function create_event_handlers(sandbox) {
   
   // All event handlers for canvas
   var canvas = document.getElementById('simulator-cgol')
-  
+
+  var first_x, first_y
   var last_x, last_y
   var mouse_down = false
   var ignore_event = false
   var drawing_cell_type = 0
   var temporarily_paused = false
   var selection_start = {x: null, y: null}
+
+  function update_first_mouse_position(event) {
+    first_x = event.pageX
+    first_y = event.pageY
+  }
   function update_last_mouse_position(event) {
     last_x = event.pageX
     last_y = event.pageY
@@ -742,7 +748,8 @@ function create_event_handlers(sandbox) {
         visible: false,
       })
     }
-    
+
+    update_first_mouse_position(event)
     update_last_mouse_position(event)
     mouse_down = true
     update_cursor()
@@ -817,7 +824,7 @@ function create_event_handlers(sandbox) {
     } else if (tool === 'select') { // Selecting
       if (mouse_down) {
         var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
-        var move_distance = Math.hypot(selection_start.x - x, selection_start.y - y)
+        var move_distance = Math.hypot(first_x - event.pageX, first_y - event.pageY)
         var moved_significantly = move_distance >= 3
         /* This whole moved_significantly thing is here
            because moving the cursor 2 pixels
