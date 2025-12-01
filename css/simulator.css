@@ -315,6 +315,9 @@
     background-color: var(--gray-10);
     font-size: 1.25rem;
     padding: 0.125rem 0.375rem;
+    button {
+      line-height: 1.5;
+    }
   }
 
   #simulator-selection-move {
