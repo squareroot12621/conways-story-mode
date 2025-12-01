@@ -876,11 +876,11 @@ function create_event_handlers(sandbox) {
       var simulator_selection_move = document.getElementById('simulator-selection-move')
       if (cgol_object.selection.visible) {
         var toolbar_position = board_to_canvas_coordinates(
-          (cgol_object.selection.left + cgol_object.selection.right) / 2,
+          (cgol_object.selection.left + cgol_object.selection.right + 1) / 2,
           cgol_object.selection.top,
         )
         var move_position = board_to_canvas_coordinates(
-          cgol_object.selection.right,
+          cgol_object.selection.right + 1,
           cgol_object.selection.top,
         )
         simulator_selection_toolbar.style.display = 'block'
