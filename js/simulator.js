@@ -612,6 +612,24 @@ function create_event_handlers(sandbox) {
   var zoom_outer = document.getElementById('simulator-zoom')
   var zoom_slider = zoom_wrapper.getElementsByClassName('slider-true')[0]
   var zoom_label = zoom_wrapper.getElementsByClassName('slider-value')[0]
+  
+  function set_zoom(new_zoom, slider_value=false) {
+    const MIN_ZOOM = 1
+    const MAX_ZOOM = 50
+    if (slider_value) {
+      var true_zoom = (MAX_ZOOM/MIN_ZOOM)**new_zoom * MIN_ZOOM
+      var slider_value = new_zoom
+    } else {
+      var true_zoom = new_zoom
+      var slider_value = Math.log(new_zoom/MIN_ZOOM) / Math.log(MAX_ZOOM/MIN_ZOOM)
+    }
+    var shown_zoom = Math.round(true_zoom)
+    zoom_label.innerText = 'Zoom ' + shown_zoom
+    zoom_slider.value = slider_value
+    cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, true_zoom)
+    update_floating_toolbars()
+  }
+  
   zoom_button.addEventListener('click', () => {
     var display = window.getComputedStyle(zoom_wrapper).display
     var new_display = display === 'none' ? 'block' : 'none'
@@ -633,14 +651,7 @@ function create_event_handlers(sandbox) {
       zoom_wrapper.style.display = 'none'
     }
   }, true)
-  const MIN_ZOOM = 1
-  const MAX_ZOOM = 50
-  zoom_slider.addEventListener('input', () => {
-    var true_zoom = (MAX_ZOOM/MIN_ZOOM)**zoom_slider.value * MIN_ZOOM
-    var shown_zoom = Math.round(true_zoom)
-    zoom_label.innerText = 'Zoom ' + shown_zoom
-    cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, true_zoom)
-  })
+  zoom_slider.addEventListener('input', () => set_zoom(zoom_slider.value, true))
 
   // Simulation extra stat event handlers
   var extra_stats_button = document.getElementById('extra-stats-button')
@@ -705,6 +716,26 @@ function create_event_handlers(sandbox) {
     }
     canvas.style.cursor = cursor_type
   }
+  function update_floating_toolbars() {
+    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+    var simulator_selection_move = document.getElementById('simulator-selection-move')
+    if (cgol_object.selection.visible) {
+      var toolbar_position = board_to_canvas_coordinates(
+        (cgol_object.selection.left + cgol_object.selection.right + 1) / 2,
+        cgol_object.selection.top,
+      )
+      var move_position = board_to_canvas_coordinates(
+        cgol_object.selection.right + 1,
+        cgol_object.selection.top,
+      )
+      simulator_selection_toolbar.style.display = 'block'
+      simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
+      simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
+      simulator_selection_move.style.display = 'block'
+      simulator_selection_move.style.left = move_position.x + 'px'
+      simulator_selection_move.style.top = move_position.y + 'px'
+    }
+  }
 
   function page_to_board_coordinates(x, y) {
     var bounding_box = canvas.getBoundingClientRect()
@@ -715,7 +746,6 @@ function create_event_handlers(sandbox) {
     var output_y = Math.floor((y-bounding_box.y + true_y_offset) / cell_size)
     return {x: output_x, y: output_y}
   }
-
   function board_to_canvas_coordinates(i, j) {
     var cell_size = cgol_object.zoom
     var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
@@ -872,24 +902,7 @@ function create_event_handlers(sandbox) {
         temporarily_paused = false
       }
     } else if (tool === 'select') { // Selecting
-      var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-      var simulator_selection_move = document.getElementById('simulator-selection-move')
-      if (cgol_object.selection.visible) {
-        var toolbar_position = board_to_canvas_coordinates(
-          (cgol_object.selection.left + cgol_object.selection.right + 1) / 2,
-          cgol_object.selection.top,
-        )
-        var move_position = board_to_canvas_coordinates(
-          cgol_object.selection.right + 1,
-          cgol_object.selection.top,
-        )
-        simulator_selection_toolbar.style.display = 'block'
-        simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
-        simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
-        simulator_selection_move.style.display = 'block'
-        simulator_selection_move.style.left = move_position.x + 'px'
-        simulator_selection_move.style.top = move_position.y + 'px'
-      }
+      update_floating_toolbars()
     }
     
     update_last_mouse_position(event)
@@ -905,11 +918,7 @@ function create_event_handlers(sandbox) {
     // Zoom in and out, regardless of mode
     var zoom_multiplier = 2 ** (-scroll_y / 400)
     var new_zoom = Math.min(Math.max(cgol_object.zoom * zoom_multiplier, MIN_ZOOM), MAX_ZOOM)
-    cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, new_zoom)
-    // Update the zoom slider and label
-    zoom_slider.value = Math.log(new_zoom/MIN_ZOOM) / Math.log(MAX_ZOOM/MIN_ZOOM)
-    var shown_zoom = Math.round(new_zoom)
-    zoom_label.innerText = 'Zoom ' + shown_zoom
+    set_zoom(new_zoom)
   }
 
   // Add the event listeners
