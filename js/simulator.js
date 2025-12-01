@@ -747,6 +747,10 @@ function create_event_handlers(sandbox) {
         bottom: y,
         visible: false,
       })
+      var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+      var simulator_selection_move = document.getElementById('simulator-selection-move')
+      simulator_selection_toolbar.style.display = 'none'
+      simulator_selection_move.style.display = 'none'
     }
 
     update_first_mouse_position(event)
@@ -885,9 +889,6 @@ function create_event_handlers(sandbox) {
         simulator_selection_move.style.display = 'block'
         simulator_selection_move.style.left = move_position.x + 'px'
         simulator_selection_move.style.top = move_position.y + 'px'
-      } else {
-        simulator_selection_toolbar.style.display = 'none'
-        simulator_selection_move.style.display = 'none'
       }
     }
     
