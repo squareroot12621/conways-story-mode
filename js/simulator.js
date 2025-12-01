@@ -887,6 +887,7 @@ function create_event_handlers(sandbox) {
           cgol_object.y_offset - change_y/zoom_level,
           zoom_level,
         )
+        update_floating_toolbars()
       }
     }
     
