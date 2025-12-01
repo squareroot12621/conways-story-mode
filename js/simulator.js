@@ -215,6 +215,34 @@ function create_simulator_main(sandbox) {
   // Resize the canvas so it doesn't get stretched weirdly
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
+
+  // Delete selection button
+  var delete_selection_button = create_element(
+    'button', 'delete', {
+      'aria-label': 'Delete selection',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-delete',
+      type: 'button',
+    }
+  )
+  // The floating toolbar when a selection is made
+  var selection_toolbar = create_element(
+    'section',
+    [delete_selection_button],
+    {class: 'simulator-selection-toolbar'},
+  )
+  selection_toolbar.style.display = 'none'
+
+  // The floating "move selection" button
+  var selection_move = create_element(
+    'button', 'open_with', {
+      'aria-label': 'Move selection',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-move',
+      type: 'button',
+    }
+  )
+  selection_move.style.display = 'none'
   
   // The "generations" statistic
   var generations_stat = create_element(
@@ -290,7 +318,11 @@ function create_simulator_main(sandbox) {
     {class: 'simulator-toolbar-bottom'}
   )
   
-  var simulator = create_element('article', [toolbar_top, canvas, toolbar_bottom], {class: 'simulator-main'})
+  var simulator = create_element(
+    'article',
+    [toolbar_top, canvas, selection_toolbar, selection_move, toolbar_bottom],
+    {class: 'simulator-main'},
+  )
 
   return simulator
 }
