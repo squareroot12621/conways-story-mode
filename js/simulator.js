@@ -612,10 +612,10 @@ function create_event_handlers(sandbox) {
   var zoom_outer = document.getElementById('simulator-zoom')
   var zoom_slider = zoom_wrapper.getElementsByClassName('slider-true')[0]
   var zoom_label = zoom_wrapper.getElementsByClassName('slider-value')[0]
+  const MIN_ZOOM = 1
+  const MAX_ZOOM = 50
   
   function set_zoom(new_zoom, slider_value=false) {
-    const MIN_ZOOM = 1
-    const MAX_ZOOM = 50
     if (slider_value) {
       var true_zoom = (MAX_ZOOM/MIN_ZOOM)**new_zoom * MIN_ZOOM
       var slider_value = new_zoom
