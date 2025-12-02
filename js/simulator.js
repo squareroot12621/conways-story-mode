@@ -684,7 +684,6 @@ function create_event_handlers(sandbox) {
   var first_x, first_y
   var last_x, last_y
   var mouse_down = false
-  var ignore_event = false
   var drawing_cell_type = 0
   var temporarily_paused = false
   var selection_start = {x: null, y: null}
@@ -791,7 +790,7 @@ function create_event_handlers(sandbox) {
 
   function mouse_move_event_handler(event, touch=false) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
-    mouse_down = ((!event.touch && event.buttons > 0) || event.touch) && !ignore_event
+    mouse_down = (!event.touch && event.buttons > 0) || event.touch
     
     if (tool === 'draw') { // Drawing
       if (mouse_down) {
@@ -908,7 +907,6 @@ function create_event_handlers(sandbox) {
     
     update_last_mouse_position(event)
     mouse_down = false
-    ignore_event = false
     update_cursor()
   }
 
@@ -932,13 +930,6 @@ function create_event_handlers(sandbox) {
   canvas.addEventListener('touchend', throttle((event) => { mouse_up_event_handler(event, true) }, THROTTLE_MILLISECONDS))
 
   canvas.addEventListener('wheel', throttle((event) => { wheel_event_handler(event) }, THROTTLE_MILLISECONDS))
-  
-  canvas.addEventListener('mouseenter', (event) => {
-    if (event.relatedTarget === document.getElementById('simulator-options')
-        || event.relatedTarget === document.getElementById('simulator-selection-move')) {
-      ignore_event = true
-    }
-  })
 
   // Event handlers for the "move selection" button
   var move_selection_button = document.getElementById('simulator-selection-move')
