@@ -934,7 +934,8 @@ function create_event_handlers(sandbox) {
   canvas.addEventListener('wheel', throttle((event) => { wheel_event_handler(event) }, THROTTLE_MILLISECONDS))
   
   canvas.addEventListener('mouseenter', (event) => {
-    if (event.relatedTarget === document.getElementById('simulator-options')) {
+    if (event.relatedTarget === document.getElementById('simulator-options')
+        || event.relatedTarget === document.getElementById('simulator-selection-move')) {
       ignore_event = true
     }
   })
