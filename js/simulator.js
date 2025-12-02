@@ -943,14 +943,14 @@ function create_event_handlers(sandbox) {
   var move_selection_button = document.getElementById('simulator-selection-move')
   var drag_offset_x, drag_offset_y
   function move_selection_mouse_down(event) {
-    x_offset = event.pageX - move_selection_button.offsetLeft
-    y_offset = event.pageY - move_selection_button.offsetTop
+    drag_offset_x = event.pageX - move_selection_button.offsetLeft
+    drag_offset_y = event.pageY - move_selection_button.offsetTop
   }
   function move_selection_mouse_move(event) {
     var touch = event.pointerType === 'pen' || event.pointerType === 'touch'
     if (event.buttons || touch) {
-      move_selection_button.style.left = (event.pageX - x_offset) + 'px'
-      move_selection_button.style.top = (event.pageY - y_offset) + 'px'
+      move_selection_button.style.left = (event.pageX - drag_offset_x) + 'px'
+      move_selection_button.style.top = (event.pageY - drag_offset_y) + 'px'
     }
   }
   move_selection_button.addEventListener('pointerdown', move_selection_mouse_down)
