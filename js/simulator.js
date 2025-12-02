@@ -946,7 +946,7 @@ function create_event_handlers(sandbox) {
   function move_selection_mouse_down(event) {
     drag_offset_x = event.pageX - move_selection_button.offsetLeft
     drag_offset_y = event.pageY - move_selection_button.offsetTop
-    move_selection_button.setPointerCapture()
+    move_selection_button.setPointerCapture(event.pointerId)
   }
   function move_selection_mouse_move(event) {
     var touch = event.pointerType === 'pen' || event.pointerType === 'touch'
@@ -956,7 +956,7 @@ function create_event_handlers(sandbox) {
     }
   }
   function move_selection_mouse_up(event) {
-    move_selection_button.releasePointerCapture()
+    move_selection_button.releasePointerCapture(event.pointerId)
   }
   move_selection_button.addEventListener('pointerdown', move_selection_mouse_down)
   move_selection_button.addEventListener('pointermove', move_selection_mouse_move)
