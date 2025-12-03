@@ -420,7 +420,7 @@ function create_event_handlers(sandbox) {
   
   /* Event handlers for the tools and extra options
      (they work in mostly the same way) */
-  function toggle_option_visibility_inner(required_variables, set_to=null) {
+  function toggle_option_visibility_inner(required_variables, set_to=null, event=null) {
     let {current_button, current_option_wrapper, current_options, dropdown_type} = required_variables
     var display = window.getComputedStyle(current_option_wrapper).display
     if (set_to !== null) {
@@ -451,6 +451,12 @@ function create_event_handlers(sandbox) {
         }
       } else if (dropdown_type === 'extras') {
         current_options.forEach((option) => option.removeAttribute('data-selected'))
+      }
+      if (event) {
+        current_button.setPointerCapture(event.pointerId)
+        current_button.addEventListener('pointerup', (new_event) => {
+          current_button.releasePointerCapture(new_event.pointerId)
+        }, {once: true})
       }
     }
   }
@@ -487,22 +493,16 @@ function create_event_handlers(sandbox) {
     }
     let toggle_option_visibility = (...args) => toggle_option_visibility_inner(required_variables, ...args)
     let select_option = (...args) => select_option_inner(required_variables, ...args)
-    current_button.addEventListener('click', () => {
-      toggle_option_visibility()
+    current_button.addEventListener('click', (event) => {
+      toggle_option_visibility(null, event)
     })
-    current_button.addEventListener('blur', () => {
-      toggle_option_visibility(false)
-    })
-    current_button.addEventListener('pointerdown', (event) => {
-      current_button.setPointerCapture(event.pointerId)
-    })
-    current_button.addEventListener('pointerup', (event) => {
-      current_button.releasePointerCapture(event.pointerId)
+    current_button.addEventListener('blur', (event) => {
+      toggle_option_visibility(false, event)
     })
     current_button.addEventListener('keydown', (event) => {
       event.preventDefault()
       if (event.key === 'Enter' || event.key === ' ') {
-        toggle_option_visibility()
+        toggle_option_visibility(null, null)
         if (current_options.every((option) => option.getAttribute('data-selected') === null)) {
           /* If the Enter key is used to open the dialog
              and no option is selected yet,
@@ -510,7 +510,7 @@ function create_event_handlers(sandbox) {
           select_option(0)
         }
       } else if (event.key === 'Escape') {
-        toggle_option_visibility(false)
+        toggle_option_visibility(false, null)
       } else if (event.key === 'ArrowUp') {
         select_option(-1, true)
       } else if (event.key === 'ArrowDown') {
@@ -529,9 +529,9 @@ function create_event_handlers(sandbox) {
       option.addEventListener('mouseenter', () => {
         select_option(index)
       })
-      option.addEventListener('click', () => {
+      option.addEventListener('click', (event) => {
         select_option(index)
-        toggle_option_visibility(false)
+        toggle_option_visibility(false, event)
       })
     }
   }
