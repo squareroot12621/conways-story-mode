@@ -493,6 +493,12 @@ function create_event_handlers(sandbox) {
     current_button.addEventListener('blur', () => {
       toggle_option_visibility(false)
     })
+    current_button.addEventListener('pointerdown', (event) => {
+      current_button.setPointerCapture(event.pointerId)
+    })
+    current_button.addEventListener('pointerup', (event) => {
+      current_button.releasePointerCapture(event.pointerId)
+    })
     current_button.addEventListener('keydown', (event) => {
       event.preventDefault()
       if (event.key === 'Enter' || event.key === ' ') {
