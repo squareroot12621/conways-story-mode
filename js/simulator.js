@@ -497,7 +497,7 @@ function create_event_handlers(sandbox) {
       toggle_option_visibility(null, event)
     })
     current_button.addEventListener('blur', (event) => {
-      toggle_option_visibility(false, event)
+      toggle_option_visibility(false, null)
     })
     current_button.addEventListener('keydown', (event) => {
       event.preventDefault()
