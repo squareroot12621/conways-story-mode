@@ -369,20 +369,12 @@ class CGoL {
       for (var x = 0; x < this.grid_size; ++x) {
         var cell = this.pattern[y][x]
         var board_position = y * this.grid_size + x
-        this.board[board_position] = cell % 2
-        this.cell_types[board_position] = Math.floor(cell / 2)
+        this.board[board_position] = cell & 1
+        this.cell_types[board_position] = cell >> 1
       }
     }
-    for (var object of this.objects) {
-      // TODO: Add flip_x and rotation
-      for (var y = 0; y < object.height; ++y) {
-        for (var x = 0; x < object.width; ++x) {
-          var cell = object[y][x]
-          var board_position = (y+object.y) * this.grid_size + (x+object.x)
-          this.board[board_position] = cell % 2
-          this.cell_types[board_position] = Math.floor(cell / 2)
-        }
-      }
+    for (var object = 0; object < this.objects.length; ++object) {
+      this.bake_object(object)
     }
     this.#changed_pattern = true
     this.#back_snapshots = {0: [...this.board]}
@@ -419,6 +411,34 @@ class CGoL {
     this.#update_stats()
 
     return undefined
+  }
+
+  extract_selection_to_object() {
+    var pattern = []
+    for (var y = this.selection.top; y <= this.selection.bottom; ++y) {
+      pattern.push(this.board.slice(this.selection.left, this.selection.right+1))
+    }
+    this.objects.unshift({
+      pattern: pattern,
+      x: this.selection.left,
+      y: this.selection.top,
+      width: this.selection.right+1 - this.selection.left,
+      height: this.selection.bottom+1 - this.selection.top,
+      rotation: 0,
+      flip_x: false,
+    })
+  }
+
+  bake_object(index=0) {
+    // TODO: Add flip_x and rotation
+    for (var y = 0; y < object.height; ++y) {
+      for (var x = 0; x < object.width; ++x) {
+        var cell = object[y][x]
+        var board_position = (y+object.y) * this.grid_size + (x+object.x)
+        this.board[board_position] |= cell & 1
+        this.cell_types[board_position] = cell >> 1 || this.cell_types[board_position]
+      }
+    }
   }
 
   update_selection(new_selection) {
