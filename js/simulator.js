@@ -950,6 +950,7 @@ function create_event_handlers(sandbox) {
     original_selection_x = cgol_object.selection.left
     original_selection_y = cgol_object.selection.top
     move_selection_button.setPointerCapture(event.pointerId)
+    cgol_object.extract_selection_to_object()
   }
   function move_selection_mouse_move(event) {
     var touch = event.pointerType === 'pen' || event.pointerType === 'touch'
