@@ -430,6 +430,7 @@ class CGoL {
   }
 
   bake_object(index=0) {
+    var object = this.objects[index]
     // TODO: Add flip_x and rotation
     for (var y = 0; y < object.height; ++y) {
       for (var x = 0; x < object.width; ++x) {
