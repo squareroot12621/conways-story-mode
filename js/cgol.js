@@ -434,7 +434,7 @@ class CGoL {
     // TODO: Add flip_x and rotation
     for (var y = 0; y < object.height; ++y) {
       for (var x = 0; x < object.width; ++x) {
-        var cell = object[y][x]
+        var cell = object.pattern[y][x]
         var board_position = (y+object.y) * this.grid_size + (x+object.x)
         this.board[board_position] |= cell & 1
         this.cell_types[board_position] = cell >> 1 || this.cell_types[board_position]
