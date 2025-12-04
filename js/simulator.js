@@ -760,7 +760,8 @@ function create_event_handlers(sandbox) {
     return {x: output_x, y: output_y}
   }
 
-  function mouse_down_event_handler(event, touch=false) {
+  function mouse_down_event_handler(event) {
+    var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     if (tool === 'draw') { // Drawing
       var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
@@ -794,9 +795,11 @@ function create_event_handlers(sandbox) {
     update_cursor()
   }
 
-  function mouse_move_event_handler(event, touch=false) {
+  function mouse_move_event_handler(event) {
+    var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
+    var buttons = touch ? 1 : event.buttons
+    mouse_down = buttons > 0
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
-    mouse_down = (!event.touch && event.buttons > 0) || event.touch
     
     if (tool === 'draw') { // Drawing
       if (mouse_down) {
@@ -881,7 +884,7 @@ function create_event_handlers(sandbox) {
       }
     } else if (tool === 'pan') { // Panning
       // Left mouse button or touchscreen
-      if ((!touch && event.buttons & 1) || touch) {
+      if (buttons & 1) {
         var new_x = event.pageX
         var new_y = event.pageY
         var change_x = new_x - last_x
@@ -899,7 +902,8 @@ function create_event_handlers(sandbox) {
     update_last_mouse_position(event)
   }
 
-  function mouse_up_event_handler(event, touch=false) {
+  function mouse_up_event_handler(event) {
+    var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
@@ -928,14 +932,10 @@ function create_event_handlers(sandbox) {
 
   // Add the event listeners
   const THROTTLE_MILLISECONDS = 16
-  canvas.addEventListener('mousedown', throttle((event) => { mouse_down_event_handler(event, false) }, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('touchstart', throttle((event) => { mouse_down_event_handler(event, true) }, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('mousemove', throttle((event) => { mouse_move_event_handler(event, false) }, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('touchmove', throttle((event) => { mouse_move_event_handler(event, true) }, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('mouseup', throttle((event) => { mouse_up_event_handler(event, false) }, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('touchend', throttle((event) => { mouse_up_event_handler(event, true) }, THROTTLE_MILLISECONDS))
-
-  canvas.addEventListener('wheel', throttle((event) => { wheel_event_handler(event) }, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('pointerdown', throttle(mouse_down_event_handler, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('pointermove', throttle(mouse_move_event_handler, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('pointerup', throttle(mouse_up_event_handler, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('wheel', throttle(wheel_event_handler, THROTTLE_MILLISECONDS))
 
   // Event handlers for the "move selection" button
   var move_selection_button = document.getElementById('simulator-selection-move')
