@@ -961,10 +961,12 @@ function create_event_handlers(sandbox) {
       var delta_y = Math.round((event.pageY - drag_original_y) / cell_size)
       cgol_object.objects[0].x = original_selection_x + delta_x
       cgol_object.objects[0].y = original_selection_y + delta_y
-      cgol_object.selection.left += delta_x
-      cgol_object.selection.right += delta_x
-      cgol_object.selection.top += delta_y
-      cgol_object.selection.bottom += delta_y
+      var selection_width = cgol_object.selection.right+1 - cgol_object.selection.left
+      var selection_height = cgol_object.selection.bottom+1 - cgol_object.selection.top
+      cgol_object.selection.left = original_selection_x + delta_x
+      cgol_object.selection.right = original_selection_x + selection_width + delta_x
+      cgol_object.selection.top = original_selection_y + delta_y
+      cgol_object.selection.bottom = original_selection_y + selection_height + delta_y
       // Update the button
       var offset_left = drag_original_x - drag_offset_x
       var offset_top = drag_original_y - drag_offset_y
