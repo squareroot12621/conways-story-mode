@@ -51,6 +51,7 @@ class CGoL {
         height: parsed_object.height,
         rotation: object.rotation ?? 0, // 0 = upright, 1 = 90 degrees CW
         flip_x: object.flip_x ?? false,
+        moving: false,
       })
     }
 
@@ -442,6 +443,7 @@ class CGoL {
       height: this.selection.bottom+1 - this.selection.top,
       rotation: 0,
       flip_x: false,
+      moving: false,
     })
   }
 
@@ -888,17 +890,21 @@ class CGoL {
     var draw_right_x = Math.min(grid_size, draw_right_x)
     var draw_top_y = Math.max(0, draw_top_y)
     var draw_bottom_y = Math.min(grid_size, draw_bottom_y)
+    var moving_objects = this.objects.filter((obj) => obj.moving)
     for (var i = draw_top_y; i < draw_bottom_y; ++i) {
       for (var j = draw_left_x; j < draw_right_x; ++j) {
-        if (i < 0 || i >= grid_size || j < 0 || j >= grid_size) {
-          var cell_type = 4
-          var cell_type_id = 8 // Unchangeable off
-        } else {
-          var cell_position = i*grid_size + j
-          var cell = this.board[cell_position]
-          var cell_type = this.cell_types[cell_position]
-          var cell_type_id = cell_type*2 + cell
+        var cell_position = i*grid_size + j
+        var cell = this.board[cell_position]
+        var cell_type = this.cell_types[cell_position]
+        for (var obj of moving_objects) {
+          if (j >= obj.x && j < obj.x + obj.width
+              && i >= obj.y && i < obj.y + obj.height) {
+            var object_cell = obj.pattern[i - obj.y][j - obj.x]
+            cell |= object_cell & 1
+            cell_type = object_cell >> 1 || cell_type
+          }
         }
+        var cell_type_id = (cell_type << 1) | cell
         switch (cell_type_id) {
           case 0: // We don't need to be drawing empty cells
             continue
