@@ -968,11 +968,7 @@ function create_event_handlers(sandbox) {
       cgol_object.selection.right = original_selection_x + selection_width + delta_x
       cgol_object.selection.top = original_selection_y + delta_y
       cgol_object.selection.bottom = original_selection_y + selection_height + delta_y
-      // Update the button
-      var offset_left = drag_original_x - drag_offset_x
-      var offset_top = drag_original_y - drag_offset_y
-      move_selection_button.style.left = (offset_left + delta_x * cell_size) + 'px'
-      move_selection_button.style.top = (offset_top + delta_y * cell_size) + 'px'
+      update_floating_toolbars()
     }
   }
   function move_selection_mouse_up(event) {
