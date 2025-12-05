@@ -429,7 +429,7 @@ class CGoL {
     })
   }
 
-  bake_object(index=0) {
+  bake_object(index=0, destructive=false) {
     var object = this.objects[index]
     // TODO: Add flip_x and rotation
     for (var y = 0; y < object.height; ++y) {
@@ -439,6 +439,9 @@ class CGoL {
         this.board[board_position] |= cell & 1
         this.cell_types[board_position] = cell >> 1 || this.cell_types[board_position]
       }
+    }
+    if (destructive) {
+      this.objects.splice(index, 1)
     }
   }
 
