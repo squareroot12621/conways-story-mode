@@ -962,8 +962,8 @@ function create_event_handlers(sandbox) {
       var selection_height = cgol_object.selection.bottom - cgol_object.selection.top
       var delta_x = Math.round((event.pageX - drag_original_x) / cell_size)
       var delta_y = Math.round((event.pageY - drag_original_y) / cell_size)
-      var new_x = Math.min(Math.max(original_selection_x+delta_x, 0), this.grid_size-selection_width)
-      var new_y = Math.min(Math.max(original_selection_y+delta_y, 0), this.grid_size-selection_height)
+      var new_x = Math.min(Math.max(original_selection_x+delta_x, 0), cgol_object.grid_size-selection_width)
+      var new_y = Math.min(Math.max(original_selection_y+delta_y, 0), cgol_object.grid_size-selection_height)
       cgol_object.objects[0].x = new_x
       cgol_object.objects[0].y = new_y
       cgol_object.selection.left = new_x
