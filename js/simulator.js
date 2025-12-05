@@ -958,16 +958,18 @@ function create_event_handlers(sandbox) {
     if (event.buttons || touch) {
       // Update cgol_object
       var cell_size = cgol_object.zoom
-      var delta_x = Math.round((event.pageX - drag_original_x) / cell_size)
-      var delta_y = Math.round((event.pageY - drag_original_y) / cell_size)
-      cgol_object.objects[0].x = original_selection_x + delta_x
-      cgol_object.objects[0].y = original_selection_y + delta_y
       var selection_width = cgol_object.selection.right - cgol_object.selection.left
       var selection_height = cgol_object.selection.bottom - cgol_object.selection.top
-      cgol_object.selection.left = original_selection_x + delta_x
-      cgol_object.selection.right = original_selection_x + selection_width + delta_x
-      cgol_object.selection.top = original_selection_y + delta_y
-      cgol_object.selection.bottom = original_selection_y + selection_height + delta_y
+      var delta_x = Math.round((event.pageX - drag_original_x) / cell_size)
+      var delta_y = Math.round((event.pageY - drag_original_y) / cell_size)
+      var new_x = Math.min(Math.max(original_selection_x+delta_x, 0), this.grid_size-selection_width)
+      var new_y = Math.min(Math.max(original_selection_y+delta_y, 0), this.grid_size-selection_height)
+      cgol_object.objects[0].x = new_x
+      cgol_object.objects[0].y = new_y
+      cgol_object.selection.left = new_x
+      cgol_object.selection.right = new_x + selection_width
+      cgol_object.selection.top = new_y
+      cgol_object.selection.bottom = new_y + selection_height
       update_floating_toolbars()
     }
   }
