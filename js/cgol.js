@@ -416,10 +416,23 @@ class CGoL {
   extract_selection_to_object() {
     var pattern = []
     for (var y = this.selection.top; y <= this.selection.bottom; ++y) {
-      pattern.push(this.board.slice(
+      pattern.push([])
+      for (var x = this.selection.left; x <= this.selection.right; ++x) {
+        var board_position = y*this.grid_size + x
+        pattern[pattern.length-1].push(
+          this.board[board_position] + 2*this.cell_types[board_position]
+        )
+      }
+      this.board.fill(
+        0,
         y*this.grid_size + this.selection.left,
         y*this.grid_size + this.selection.right+1,
-      ))
+      )
+      this.cell_types.fill(
+        0,
+        y*this.grid_size + this.selection.left,
+        y*this.grid_size + this.selection.right+1,
+      )
     }
     this.objects.unshift({
       pattern: pattern,
