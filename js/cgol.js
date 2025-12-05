@@ -424,6 +424,7 @@ class CGoL {
           this.board[board_position] + 2*this.cell_types[board_position]
         )
       }
+      this.pattern[y].fill(0, this.selection.left, this.selection.right+1)
       this.board.fill(
         0,
         y*this.grid_size + this.selection.left,
@@ -445,6 +446,7 @@ class CGoL {
       flip_x: false,
       moving: false,
     })
+    this.#changed_pattern = true
   }
 
   bake_object(index=0, destructive=false) {
