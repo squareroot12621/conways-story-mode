@@ -943,10 +943,10 @@ function create_event_handlers(sandbox) {
   var drag_original_x, drag_original_y
   var original_selection_x, original_selection_y
   function move_selection_mouse_down(event) {
-    drag_original_x = move_selection_button.offsetLeft
-    drag_original_y = move_selection_button.offsetTop
-    drag_offset_x = event.pageX - drag_original_x
-    drag_offset_y = event.pageY - drag_original_y
+    drag_original_x = event.pageX
+    drag_original_y = event.pageY
+    drag_offset_x = event.pageX - move_selection_button.offsetLeft
+    drag_offset_y = event.pageY - move_selection_button.offsetTop
     original_selection_x = cgol_object.selection.left
     original_selection_y = cgol_object.selection.top
     move_selection_button.setPointerCapture(event.pointerId)
@@ -955,9 +955,10 @@ function create_event_handlers(sandbox) {
   function move_selection_mouse_move(event) {
     var touch = event.pointerType === 'pen' || event.pointerType === 'touch'
     if (event.buttons || touch) {
+      console.log('moved selection') // DEBUG
       var cell_size = cgol_object.zoom
-      var delta_x = Math.round(((event.pageX - drag_offset_x) - drag_original_x) / cell_size)
-      var delta_y = Math.round(((event.pageX - drag_offset_y) - drag_original_y) / cell_size)
+      var delta_x = Math.round((event.pageX - drag_original_x) / cell_size)
+      var delta_y = Math.round((event.pageY - drag_original_y) / cell_size)
       cgol_object.objects[0].x = original_selection_x + delta_x
       cgol_object.objects[0].y = original_selection_y + delta_y
       move_selection_button.style.left = (event.pageX - drag_offset_x) + 'px'
