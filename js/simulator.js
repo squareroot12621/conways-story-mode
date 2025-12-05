@@ -937,6 +937,19 @@ function create_event_handlers(sandbox) {
   canvas.addEventListener('pointerup', throttle(mouse_up_event_handler, THROTTLE_MILLISECONDS))
   canvas.addEventListener('wheel', throttle(wheel_event_handler, THROTTLE_MILLISECONDS))
 
+  // Event handlers for the floating toolbar
+  
+  // Delete button
+  var delete_selection_button = document.getElementById('simulator-selection-delete')
+  delete_selection_button.addEventListener('click', () => {
+    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
+      var starting_x = y*cgol_object.grid_size + cgol_object.selection.left
+      var ending_x = y*cgol_object.grid_size + cgol_object.selection.right+1
+      cgol_object.board.fill(0, starting_x, ending_x)
+      cgol_object.cell_types.fill(0, starting_x, ending_x)
+    }
+  })
+  
   // Event handlers for the "move selection" button
   var move_selection_button = document.getElementById('simulator-selection-move')
   var drag_offset_x, drag_offset_y
