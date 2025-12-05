@@ -947,6 +947,7 @@ function create_event_handlers(sandbox) {
       var ending_x = y*cgol_object.grid_size + cgol_object.selection.right+1
       cgol_object.board.fill(0, starting_x, ending_x)
       cgol_object.cell_types.fill(0, starting_x, ending_x)
+      cgol_object.selection.visible = false
     }
   })
   
