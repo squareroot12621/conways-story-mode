@@ -942,13 +942,14 @@ function create_event_handlers(sandbox) {
   // Delete button
   var delete_selection_button = document.getElementById('simulator-selection-delete')
   delete_selection_button.addEventListener('click', () => {
+    cgol_object.selection.visible = false
+    var cells_to_remove = []
     for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
-      var starting_x = y*cgol_object.grid_size + cgol_object.selection.left
-      var ending_x = y*cgol_object.grid_size + cgol_object.selection.right+1
-      cgol_object.board.fill(0, starting_x, ending_x)
-      cgol_object.cell_types.fill(0, starting_x, ending_x)
-      cgol_object.selection.visible = false
+      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+        cells_to_remove.push([x, y])
+      }
     }
+    cgol_object.edit_cells(cells_to_remove, 0)
   })
   
   // Event handlers for the "move selection" button
