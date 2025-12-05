@@ -955,14 +955,21 @@ function create_event_handlers(sandbox) {
   function move_selection_mouse_move(event) {
     var touch = event.pointerType === 'pen' || event.pointerType === 'touch'
     if (event.buttons || touch) {
-      console.log('moved selection') // DEBUG
+      // Update cgol_object
       var cell_size = cgol_object.zoom
       var delta_x = Math.round((event.pageX - drag_original_x) / cell_size)
       var delta_y = Math.round((event.pageY - drag_original_y) / cell_size)
       cgol_object.objects[0].x = original_selection_x + delta_x
       cgol_object.objects[0].y = original_selection_y + delta_y
-      move_selection_button.style.left = (event.pageX - drag_offset_x) + 'px'
-      move_selection_button.style.top = (event.pageY - drag_offset_y) + 'px'
+      cgol_object.selection.left += delta_x
+      cgol_object.selection.right += delta_x
+      cgol_object.selection.top += delta_y
+      cgol_object.selection.bottom += delta_y
+      // Update the button
+      var offset_left = drag_original_x - drag_offset_x
+      var offset_top = drag_original_y - drag_offset_y
+      move_selection_button.style.left = (offset_left + delta_x * cell_size) + 'px'
+      move_selection_button.style.top = (offset_top + delta_y * cell_size) + 'px'
     }
   }
   function move_selection_mouse_up(event) {
