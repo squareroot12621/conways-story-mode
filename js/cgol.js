@@ -416,7 +416,10 @@ class CGoL {
   extract_selection_to_object() {
     var pattern = []
     for (var y = this.selection.top; y <= this.selection.bottom; ++y) {
-      pattern.push(this.board[y].slice(this.selection.left, this.selection.right+1))
+      pattern.push(this.board.slice(
+        y*this.grid_size + this.selection.left,
+        y*this.grid_size + this.selection.right+1,
+      ))
     }
     this.objects.unshift({
       pattern: pattern,
