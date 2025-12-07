@@ -133,6 +133,9 @@
     font-family: 'Material Symbols Outlined';
     &.icon-alt {
       font-family: 'Material Symbols Outlined Alternate';
+      position: relative;
+      top: -0.26em;
+      margin-bottom: -0.26em;
     }
     line-height: 1;
   }
