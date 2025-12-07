@@ -131,6 +131,9 @@
       background-color: transparent;
     }
     font-family: 'Material Symbols Outlined';
+    &.icon-alt {
+      font-family: 'Material Symbols Outlined Alternate';
+    }
     line-height: 1;
   }
   #sidebar-open {
