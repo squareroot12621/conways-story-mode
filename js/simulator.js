@@ -123,7 +123,6 @@ function create_simulator_main(sandbox) {
     'path', [], {d: 'M 720 -240 v -480 h -80 v 480 h 80 Z m -160 0 -400 -240 400 -240 v 480 Z'}
   )
   var back_svg = create_element('svg', back_path, {
-    xmlns: 'http://www.w3.org/2000/svg',
     viewBox: '0 -960 960 960',
     width: '1em',
     height: '1em',
@@ -216,7 +215,63 @@ function create_simulator_main(sandbox) {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
 
-  // Delete selection button
+  // Buttons in the floating toolbar
+  var rotate_ccw_selection_button = create_element(
+    'button', 'rotate_left', {
+      'aria-label': 'Rotate selection counterclockwise',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-rotate-ccw',
+      type: 'button',
+    }
+  )
+  var rotate_cw_selection_button = create_element(
+    'button', 'rotate_right', {
+      'aria-label': 'Rotate selection clockwise',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-rotate-cw',
+      type: 'button',
+    }
+  )
+  var flip_horiz_selection_button = create_element(
+    'button', 'flip', {
+      'aria-label': 'Flip selection horizontally',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-flip-horiz',
+      type: 'button',
+    }
+  )
+  var flip_vert_selection_button = create_element(
+    'button', '\u{F10E8}', {
+      'aria-label': 'Flip selection vertically',
+      class: 'simulator-toolbar-item icon-alt',
+      id: 'simulator-selection-flip-vert',
+      type: 'button',
+    }
+  )
+  var cut_selection_button = create_element(
+    'button', 'cut', {
+      'aria-label': 'Cut selection',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-cut',
+      type: 'button',
+    }
+  )
+  var copy_selection_button = create_element(
+    'button', 'content_copy', {
+      'aria-label': 'Copy selection',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-copy',
+      type: 'button',
+    }
+  )
+  var select_objects_selection_button = create_element(
+    'button', 'vignette_2', {
+      'aria-label': 'Select objects in selection',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-select-objects',
+      type: 'button',
+    }
+  )
   var delete_selection_button = create_element(
     'button', 'delete', {
       'aria-label': 'Delete selection',
@@ -228,7 +283,16 @@ function create_simulator_main(sandbox) {
   // The floating toolbar when a selection is made
   var selection_toolbar = create_element(
     'section',
-    [delete_selection_button],
+    [
+      rotate_ccw_selection_button,
+      rotate_cw_selection_button,
+      flip_horiz_selection_button,
+      flip_vert_selection_button,
+      cut_selection_button,
+      copy_selection_button,
+      select_objects_selection_button,
+      delete_selection_button,
+    ],
     {class: 'simulator-selection-toolbar'},
   )
   selection_toolbar.style.display = 'none'
