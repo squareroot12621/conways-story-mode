@@ -398,6 +398,26 @@ function resize_canvas() {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
 }
+function update_floating_toolbars() {
+  var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+  var simulator_selection_move = document.getElementById('simulator-selection-move')
+  if (cgol_object.selection.visible) {
+    var toolbar_position = board_to_canvas_coordinates(
+      (cgol_object.selection.left + cgol_object.selection.right + 1) / 2,
+      cgol_object.selection.top,
+    )
+    var move_position = board_to_canvas_coordinates(
+      cgol_object.selection.right + 1,
+      cgol_object.selection.top,
+    )
+    simulator_selection_toolbar.style.display = 'block'
+    simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
+    simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
+    simulator_selection_move.style.display = 'block'
+    simulator_selection_move.style.left = move_position.x + 'px'
+    simulator_selection_move.style.top = move_position.y + 'px'
+  }
+}
 
 function resize_simulator() {
   // Change direction of menu arrows
@@ -426,6 +446,7 @@ function resize_simulator() {
   toolbar_bottom.style.setProperty('--button-stretch', button_stretch)
   
   resize_canvas()
+  update_floating_toolbars()
 }
 
 
@@ -784,26 +805,6 @@ function create_event_handlers(sandbox) {
         break
     }
     canvas.style.cursor = cursor_type
-  }
-  function update_floating_toolbars() {
-    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
-    if (cgol_object.selection.visible) {
-      var toolbar_position = board_to_canvas_coordinates(
-        (cgol_object.selection.left + cgol_object.selection.right + 1) / 2,
-        cgol_object.selection.top,
-      )
-      var move_position = board_to_canvas_coordinates(
-        cgol_object.selection.right + 1,
-        cgol_object.selection.top,
-      )
-      simulator_selection_toolbar.style.display = 'block'
-      simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
-      simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
-      simulator_selection_move.style.display = 'block'
-      simulator_selection_move.style.left = move_position.x + 'px'
-      simulator_selection_move.style.top = move_position.y + 'px'
-    }
   }
 
   function page_to_board_coordinates(x, y) {
