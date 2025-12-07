@@ -5,6 +5,7 @@ import {create_element, update_root, throttle} from './utilities.js'
 function create_cgol_simulator(sandbox, objective=null, library=null) {
   var sidebar = create_simulator_sidebar(sandbox, objective, library)
   var simulator = create_simulator_main(sandbox)
+  var cgol_object = null
   
   var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
   update_root(simulator_wrapper)
@@ -446,13 +447,15 @@ function resize_simulator() {
   toolbar_bottom.style.setProperty('--button-stretch', button_stretch)
   
   resize_canvas()
-  update_floating_toolbars()
+  if (cgol_object) {
+    update_floating_toolbars()
+  }
 }
 
 
 function create_event_handlers(sandbox) {
   // Make the CGoL object
-  var cgol_object = new CGoL({
+  cgol_object = new CGoL({
     grid_size: 128, // TODO: Increase to 256 once it stops lagging
     pattern: 'x = 3, y = 3, rule = B3/S23\n3o$2bo$bo2$.ABCDEFGHIJKLMNOPQRSTUVWXY!',
     canvas: document.getElementById('simulator-cgol'),
