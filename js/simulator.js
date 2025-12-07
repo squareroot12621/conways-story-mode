@@ -950,6 +950,8 @@ function create_event_handlers(sandbox) {
       }
     }
     cgol_object.edit_cells(cells_to_remove, 0)
+    simulator_selection_toolbar.style.display = 'none'
+    simulator_selection_move.style.display = 'none'
   })
   
   // Event handlers for the "move selection" button
