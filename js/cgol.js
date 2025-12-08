@@ -383,6 +383,26 @@ class CGoL {
     this.#update_stats()
   }
 
+  page_to_board_coordinates(x, y) {
+    var canvas = this.canvas
+    var bounding_box = canvas.getBoundingClientRect()
+    var cell_size = this.zoom
+    var true_x_offset = ((this.x_offset+this.pattern_center_x) * cell_size - canvas.width/2) | 0
+    var true_y_offset = ((this.y_offset+this.pattern_center_y) * cell_size - canvas.height/2) | 0
+    var output_x = Math.floor((x-bounding_box.x + true_x_offset) / cell_size)
+    var output_y = Math.floor((y-bounding_box.y + true_y_offset) / cell_size)
+    return {x: output_x, y: output_y}
+  }
+  board_to_canvas_coordinates(i, j) {
+    var canvas = this.canvas
+    var cell_size = this.zoom
+    var true_x_offset = ((this.x_offset+this.pattern_center_x) * cell_size - canvas.width/2) | 0
+    var true_y_offset = ((this.y_offset+this.pattern_center_y) * cell_size - canvas.height/2) | 0
+    var output_x = (i * cell_size - true_x_offset) | 0
+    var output_y = (j * cell_size - true_y_offset) | 0
+    return {x: output_x, y: output_y}
+  }
+
   edit_cells(cell_array, change_to) {
     if (cell_array.length === 0) {
       return undefined
