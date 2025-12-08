@@ -826,6 +826,8 @@ function create_event_handlers(sandbox) {
       }
     } else if (tool === 'select') { // Selecting
       var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
+      x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
+      y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
       selection_start = {x: x, y: y}
       cgol_object.update_selection({
         left: x,
@@ -917,6 +919,8 @@ function create_event_handlers(sandbox) {
     } else if (tool === 'select') { // Selecting
       if (mouse_down) {
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
+        x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
+        y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
         var move_distance = Math.hypot(first_x - event.pageX, first_y - event.pageY)
         var moved_significantly = move_distance >= 3
         /* This whole moved_significantly thing is here
