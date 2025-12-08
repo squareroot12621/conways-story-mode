@@ -1003,7 +1003,9 @@ function create_event_handlers(sandbox) {
       for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
         cells_to_edit.push([x, y])
         var new_x = cgol_object.selection.right + cgol_object.selection.left - x
-        cell_ids.push(cgol_object.board[y*cgol_object.grid_size + new_x])
+        var new_coordinate = y*cgol_object.grid_size + new_x
+        cell_ids.push(cgol_object.cell_types[new_coordinate] << 1
+                      | cgol_object.board[new_coordinate])
       }
     }
     console.log(cell_ids) // DEBUG
