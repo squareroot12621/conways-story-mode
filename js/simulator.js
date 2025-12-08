@@ -993,7 +993,23 @@ function create_event_handlers(sandbox) {
   canvas.addEventListener('wheel', throttle(wheel_event_handler, THROTTLE_MILLISECONDS))
 
   // Event handlers for the floating toolbar
-  
+
+  // Flip horizontally button
+  var flip_horiz_selection_button = document.getElementById('simulator-selection-flip-horiz')
+  flip_horiz_selection_button.addEventListener('click', () => {
+    var cells_to_edit = []
+    var cell_ids = []
+    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
+      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+        cells_to_edit.push([x, y])
+        var new_x = cgol_object.selection.right + cgol_object.selection.left - x
+        cell_ids.push(cgol_object.board[y*cgol_object.grid_size + new_x])
+      }
+    }
+    cgol_object.edit_cells(cells_to_edit, (_, x, y) => {
+      return cell_ids[cells_to_edit.indexOf([x, y])]
+    })
+  })
   // Delete button
   var delete_selection_button = document.getElementById('simulator-selection-delete')
   delete_selection_button.addEventListener('click', () => {
