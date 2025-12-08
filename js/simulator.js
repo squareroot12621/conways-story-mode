@@ -2,10 +2,11 @@ import {create_main_menu} from './main-menu.js'
 import {CGoL} from './cgol.js'
 import {create_element, update_root, throttle} from './utilities.js'
 
+var cgol_object = null
+
 function create_cgol_simulator(sandbox, objective=null, library=null) {
   var sidebar = create_simulator_sidebar(sandbox, objective, library)
   var simulator = create_simulator_main(sandbox)
-  var cgol_object = null
   
   var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
   update_root(simulator_wrapper)
