@@ -134,8 +134,8 @@
     &.icon-alt {
       font-family: 'Material Symbols Outlined Alternate';
       position: relative;
-      top: -0.26em;
-      margin-bottom: -0.26em;
+      top: -0.266em;
+      margin-bottom: -0.266em;
     }
     line-height: 1;
   }
@@ -317,10 +317,13 @@
     position: absolute;
     z-index: -1;
     translate: -50% calc(-100% - 0.5rem);
-    border-radius: 100rem;
+    border-radius: 1.125rem;
     background-color: var(--gray-10);
     font-size: 1.25rem;
     padding: 0.125rem 0.375rem;
+    width: max-content;
+    max-width: calc(90 * var(--vw) - 2rem);
+    text-align: center;
     button {
       padding: 0.25rem;
     }
