@@ -1008,7 +1008,7 @@ function create_event_handlers(sandbox) {
                       | cgol_object.board[new_coordinate])
       }
     }
-    console.log(cell_ids) // DEBUG
+    console.log(cell_ids.filter((x) => x)) // DEBUG
     cgol_object.edit_cells(cells_to_edit, (_, x, y) => {
       return cell_ids[cells_to_edit.indexOf([x, y])]
     })
