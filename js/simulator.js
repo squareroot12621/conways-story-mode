@@ -404,11 +404,11 @@ function update_floating_toolbars() {
   var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
   var simulator_selection_move = document.getElementById('simulator-selection-move')
   if (cgol_object.selection.visible) {
-    var toolbar_position = board_to_canvas_coordinates(
+    var toolbar_position = cgol_object.board_to_canvas_coordinates(
       (cgol_object.selection.left + cgol_object.selection.right + 1) / 2,
       cgol_object.selection.top,
     )
-    var move_position = board_to_canvas_coordinates(
+    var move_position = cgol_object.board_to_canvas_coordinates(
       cgol_object.selection.right + 1,
       cgol_object.selection.top,
     )
@@ -811,29 +811,11 @@ function create_event_handlers(sandbox) {
     canvas.style.cursor = cursor_type
   }
 
-  function page_to_board_coordinates(x, y) {
-    var bounding_box = canvas.getBoundingClientRect()
-    var cell_size = cgol_object.zoom
-    var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
-    var true_y_offset = ((cgol_object.y_offset+cgol_object.pattern_center_y) * cell_size - canvas.height/2) | 0
-    var output_x = Math.floor((x-bounding_box.x + true_x_offset) / cell_size)
-    var output_y = Math.floor((y-bounding_box.y + true_y_offset) / cell_size)
-    return {x: output_x, y: output_y}
-  }
-  function board_to_canvas_coordinates(i, j) {
-    var cell_size = cgol_object.zoom
-    var true_x_offset = ((cgol_object.x_offset+cgol_object.pattern_center_x) * cell_size - canvas.width/2) | 0
-    var true_y_offset = ((cgol_object.y_offset+cgol_object.pattern_center_y) * cell_size - canvas.height/2) | 0
-    var output_x = (i * cell_size - true_x_offset) | 0
-    var output_y = (j * cell_size - true_y_offset) | 0
-    return {x: output_x, y: output_y}
-  }
-
   function mouse_down_event_handler(event) {
     var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     if (tool === 'draw') { // Drawing
-      var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
+      var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
       temporarily_paused = cgol_object.playing
       cgol_object.pause()
       if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
@@ -843,7 +825,7 @@ function create_event_handlers(sandbox) {
         drawing_cell_type = 1
       }
     } else if (tool === 'select') { // Selecting
-      var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
+      var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
       selection_start = {x: x, y: y}
       cgol_object.update_selection({
         left: x,
@@ -872,10 +854,10 @@ function create_event_handlers(sandbox) {
     
     if (tool === 'draw') { // Drawing
       if (mouse_down) {
-        var coords0 = page_to_board_coordinates(last_x, last_y)
+        var coords0 = cgol_object.page_to_board_coordinates(last_x, last_y)
         var x0 = coords0.x
         var y0 = coords0.y
-        var coords1 = page_to_board_coordinates(event.pageX, event.pageY)
+        var coords1 = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
         var x1 = coords1.x
         var y1 = coords1.y
         var cells_to_change = []
@@ -934,7 +916,7 @@ function create_event_handlers(sandbox) {
       }
     } else if (tool === 'select') { // Selecting
       if (mouse_down) {
-        var {x, y} = page_to_board_coordinates(event.pageX, event.pageY)
+        var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
         var move_distance = Math.hypot(first_x - event.pageX, first_y - event.pageY)
         var moved_significantly = move_distance >= 3
         /* This whole moved_significantly thing is here
