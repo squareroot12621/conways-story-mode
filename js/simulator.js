@@ -1006,6 +1006,7 @@ function create_event_handlers(sandbox) {
         cell_ids.push(cgol_object.board[y*cgol_object.grid_size + new_x])
       }
     }
+    console.log(cell_ids) // DEBUG
     cgol_object.edit_cells(cells_to_edit, (_, x, y) => {
       return cell_ids[cells_to_edit.indexOf([x, y])]
     })
