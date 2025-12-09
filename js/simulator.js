@@ -1008,10 +1008,9 @@ function create_event_handlers(sandbox) {
            with different references aren't equal. */
         var cell_index = cells_to_edit.findIndex((coords) => coords[0] === x && coords[1] === y)
         if (cell_index === -1) {
-          cell_index = cells_to_edit.length
+          cells_to_edit.push([x, y])
+          cell_ids.push(0)
         }
-        cells_to_edit[cell_index] = [x, y]
-        cell_ids[cell_index] = 0
         /* Push the new cell.
            indexOf doesn't work here because arrays
            with different references aren't equal. */
