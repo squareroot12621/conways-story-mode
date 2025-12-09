@@ -1027,6 +1027,12 @@ function create_event_handlers(sandbox) {
       }
     }
     cgol_object.edit_cells(cells_to_edit, cell_ids)
+    // Update selection
+    var old_selection = {...cgol_object.selection}
+    cgol_object.selection.left = (old_selection.top - pivot_y) + pivot_x
+    cgol_object.selection.top = (pivot_x - old_selection.right) + pivot_y
+    cgol_object.selection.right = cgol_object.selection.left + old_selection.bottom - old_selection.top - 1
+    cgol_object.selection.bottom = cgol_object.selection.top + old_selection.right - old_selection.left - 1
   })
   // Rotate clockwise button
   var rotate_cw_selection_button = document.getElementById('simulator-selection-rotate-cw')
