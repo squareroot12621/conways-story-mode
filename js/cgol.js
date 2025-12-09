@@ -407,21 +407,36 @@ class CGoL {
     if (cell_array.length === 0) {
       return undefined
     }
-    
+
+    var change_to_is_array = Array.isArray(change_to)
     var change_to_is_function = change_to instanceof Function
     if (this.generation === 0) {
-      for (var [x, y] of cell_array) {
-        var new_cell = change_to_is_function ? change_to(this.pattern[y][x], x, y) : change_to
+      for (var i = 0; i < cell_array.length; ++i) {
+        var [x, y] = cell_array[i]
+        if (change_to_is_array) {
+          var new_cell = change_to[i]
+        } else if (change_to_is_function) {
+          var new_cell = change_to(this.pattern[y][x], x, y)
+        } else {
+          var new_cell = change_to
+        }
         this.pattern[y][x] = new_cell
       }
       this.compile_pattern()
     } else {
-      for (var [x, y] of cell_array) {
+      for (var i = 0; i < cell_array.length; ++i) {
+        var [x, y] = cell_array[i]
         var cell_position = y*this.grid_size + x
-        var old_cell = this.board[cell_position] + 2*this.cell_types[cell_position]
-        var new_cell = change_to_is_function ? change_to(old_cell, x, y) : change_to
-        this.board[cell_position] = new_cell % 2
-        this.cell_types[cell_position] = Math.floor(new_cell / 2)
+        var old_cell = this.cell_types[cell_position] >> 1 | this.board[cell_position]
+        if (change_to_is_array) {
+          var new_cell = change_to[i]
+        } else if (change_to_is_function) {
+          var new_cell = change_to(old_cell, x, y)
+        } else {
+          var new_cell = change_to
+        }
+        this.board[cell_position] = new_cell & 1
+        this.cell_types[cell_position] = new_cell >> 1
       }
       this.#safe_back_generations.add(this.generation)
     }
