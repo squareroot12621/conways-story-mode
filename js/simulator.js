@@ -1008,10 +1008,9 @@ function create_event_handlers(sandbox) {
                       | cgol_object.board[new_coordinate])
       }
     }
-    console.log(cells_to_edit) // DEBUG
     cgol_object.edit_cells(cells_to_edit, (_, x, y) => {
-      console.log(x, y, cells_to_edit.indexOf([x, y])) // DEBUG
-      return cell_ids[cells_to_edit.indexOf([x, y])]
+      // We can't use indexOf here because arrays aren't equal.
+      return cell_ids[cells_to_edit.findIndex((n) => n[0] === x && n[1] === y)]
     })
   })
   // Delete button
