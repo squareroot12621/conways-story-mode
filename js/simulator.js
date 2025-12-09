@@ -1022,8 +1022,8 @@ function create_event_handlers(sandbox) {
         }
         cells_to_edit[cell_index] = [new_x, new_y]
         var old_coordinate = y*cgol_object.grid_size + x
-        cell_ids[cell_index] = (cgol_object.cell_types[new_coordinate] << 1
-                                | cgol_object.board[new_coordinate])
+        cell_ids[cell_index] = (cgol_object.cell_types[old_coordinate] << 1
+                                | cgol_object.board[old_coordinate])
       }
     }
     cgol_object.edit_cells(cells_to_edit, cell_ids)
