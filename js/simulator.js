@@ -1014,6 +1014,40 @@ function create_event_handlers(sandbox) {
         /* Push the new cell.
            indexOf doesn't work here because arrays
            with different references aren't equal. */
+        var new_x = (y - pivot_y) + pivot_x
+        var new_y = (pivot_x - x) + pivot_y
+        cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
+        if (cell_index === -1) {
+          cell_index = cells_to_edit.length
+        }
+        cells_to_edit[cell_index] = [new_x, new_y]
+        var old_coordinate = y*cgol_object.grid_size + x
+        cell_ids[cell_index] = (cgol_object.cell_types[old_coordinate] << 1
+                                | cgol_object.board[old_coordinate])
+      }
+    }
+    cgol_object.edit_cells(cells_to_edit, cell_ids)
+  })
+  // Rotate clockwise button
+  var rotate_cw_selection_button = document.getElementById('simulator-selection-rotate-cw')
+  rotate_cw_selection_button.addEventListener('click', () => {
+    var cells_to_edit = []
+    var cell_ids = []
+    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) >> 1
+    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) >> 1
+    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
+      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+        /* Push the old cell.
+           indexOf doesn't work here because arrays
+           with different references aren't equal. */
+        var cell_index = cells_to_edit.findIndex((coords) => coords[0] === x && coords[1] === y)
+        if (cell_index === -1) {
+          cells_to_edit.push([x, y])
+          cell_ids.push(0)
+        }
+        /* Push the new cell.
+           indexOf doesn't work here because arrays
+           with different references aren't equal. */
         var new_x = (pivot_y - y) + pivot_x
         var new_y = (x - pivot_x) + pivot_y
         cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
