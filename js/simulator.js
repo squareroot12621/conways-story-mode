@@ -995,7 +995,7 @@ function create_event_handlers(sandbox) {
   // Event handlers for the floating toolbar
 
   // Rotate counterclockwise button
-  var rotate_ccw_selection_button = document.getElementById('simulator-selection-rotate_ccw')
+  var rotate_ccw_selection_button = document.getElementById('simulator-selection-rotate-ccw')
   rotate_ccw_selection_button.addEventListener('click', () => {
     var cells_to_edit = []
     var cell_ids = []
