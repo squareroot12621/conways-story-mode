@@ -1070,8 +1070,8 @@ function create_event_handlers(sandbox) {
     cgol_object.edit_cells(cells_to_edit, cell_ids)
     // Update selection
     var old_selection = {...cgol_object.selection}
-    cgol_object.selection.left = (pivot_y - old_selection.top) + pivot_x
-    cgol_object.selection.top = (old_selection.right - pivot_x) + pivot_y
+    cgol_object.selection.left = (pivot_y - old_selection.bottom) + pivot_x
+    cgol_object.selection.top = (old_selection.left - pivot_x) + pivot_y
     cgol_object.selection.right = cgol_object.selection.left + old_selection.bottom - old_selection.top
     cgol_object.selection.bottom = cgol_object.selection.top + old_selection.right - old_selection.left
     update_floating_toolbars()
