@@ -994,6 +994,41 @@ function create_event_handlers(sandbox) {
 
   // Event handlers for the floating toolbar
 
+  // Rotate counterclockwise button
+  var rotate_ccw_selection_button = document.getElementById('simulator-selection-rotate_ccw')
+  rotate_ccw_selection_button.addEventListener('click', () => {
+    var cells_to_edit = []
+    var cell_ids = []
+    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) >> 1
+    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) >> 1
+    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
+      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+        /* Push the old cell.
+           indexOf doesn't work here because arrays
+           with different references aren't equal. */
+        var cell_index = cells_to_edit.findIndex((coords) => coords[0] === x && coords[1] === y)
+        if (cell_index === -1) {
+          cell_index = cells_to_edit.length
+        }
+        cells_to_edit[cell_index] = [x, y]
+        cell_ids[cell_index] = 0
+        /* Push the new cell.
+           indexOf doesn't work here because arrays
+           with different references aren't equal. */
+        var new_x = (pivot_y - y) + pivot_x
+        var new_y = (x - pivot_x) + pivot_y
+        cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
+        if (cell_index === -1) {
+          cell_index = cells_to_edit.length
+        }
+        cells_to_edit[cell_index] = [new_x, new_y]
+        var new_coordinate = new_y*cgol_object.grid_size + new_x
+        cell_ids[cell_index] = (cgol_object.cell_types[new_coordinate] << 1
+                                | cgol_object.board[new_coordinate])
+      }
+    }
+    cgol_object.edit_cells(cells_to_edit, cell_ids)
+  })
   // Flip horizontally button
   var flip_horiz_selection_button = document.getElementById('simulator-selection-flip-horiz')
   flip_horiz_selection_button.addEventListener('click', () => {
