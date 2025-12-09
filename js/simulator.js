@@ -1021,7 +1021,7 @@ function create_event_handlers(sandbox) {
           cell_index = cells_to_edit.length
         }
         cells_to_edit[cell_index] = [new_x, new_y]
-        var new_coordinate = new_y*cgol_object.grid_size + new_x
+        var old_coordinate = y*cgol_object.grid_size + x
         cell_ids[cell_index] = (cgol_object.cell_types[new_coordinate] << 1
                                 | cgol_object.board[new_coordinate])
       }
