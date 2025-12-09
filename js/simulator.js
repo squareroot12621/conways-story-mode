@@ -1010,6 +1010,22 @@ function create_event_handlers(sandbox) {
     }
     cgol_object.edit_cells(cells_to_edit, cell_ids)
   })
+  // Flip vertically button
+  var flip_vert_selection_button = document.getElementById('simulator-selection-flip-vert')
+  flip_vert_selection_button.addEventListener('click', () => {
+    var cells_to_edit = []
+    var cell_ids = []
+    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
+      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+        cells_to_edit.push([x, y])
+        var new_y = cgol_object.selection.bottom + cgol_object.selection.top - y
+        var new_coordinate = new_y*cgol_object.grid_size + x
+        cell_ids.push(cgol_object.cell_types[new_coordinate] << 1
+                      | cgol_object.board[new_coordinate])
+      }
+    }
+    cgol_object.edit_cells(cells_to_edit, cell_ids)
+  })
   // Delete button
   var delete_selection_button = document.getElementById('simulator-selection-delete')
   delete_selection_button.addEventListener('click', () => {
