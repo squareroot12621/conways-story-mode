@@ -1039,9 +1039,9 @@ function create_event_handlers(sandbox) {
     var new_selection_right = new_selection_left + old_selection.bottom - old_selection.top
     var new_selection_bottom = new_selection_top + old_selection.right - old_selection.left
     cgol_object.selection.left = Math.max(new_selection_left, 0)
-    cgol_object.selection.top = Math.max(new_selection_left, 0)
-    cgol_object.selection.right = Math.min(new_selection_left, cgol_object.grid_size - 1)
-    cgol_object.selection.bottom = Math.min(new_selection_left, cgol_object.grid_size - 1)
+    cgol_object.selection.top = Math.max(new_selection_top, 0)
+    cgol_object.selection.right = Math.min(new_selection_right, cgol_object.grid_size - 1)
+    cgol_object.selection.bottom = Math.min(new_selection_bottom, cgol_object.grid_size - 1)
     update_floating_toolbars()
   })
   // Rotate clockwise button
@@ -1089,9 +1089,9 @@ function create_event_handlers(sandbox) {
     var new_selection_right = new_selection_left + old_selection.bottom - old_selection.top
     var new_selection_bottom = new_selection_top + old_selection.right - old_selection.left
     cgol_object.selection.left = Math.max(new_selection_left, 0)
-    cgol_object.selection.top = Math.max(new_selection_left, 0)
-    cgol_object.selection.right = Math.min(new_selection_left, cgol_object.grid_size - 1)
-    cgol_object.selection.bottom = Math.min(new_selection_left, cgol_object.grid_size - 1)
+    cgol_object.selection.top = Math.max(new_selection_top, 0)
+    cgol_object.selection.right = Math.min(new_selection_right, cgol_object.grid_size - 1)
+    cgol_object.selection.bottom = Math.min(new_selection_bottom, cgol_object.grid_size - 1)
     update_floating_toolbars()
   })
   // Flip horizontally button
