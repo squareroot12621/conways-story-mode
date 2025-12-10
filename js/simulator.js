@@ -999,8 +999,8 @@ function create_event_handlers(sandbox) {
   rotate_ccw_selection_button.addEventListener('click', () => {
     var cells_to_edit = []
     var cell_ids = []
-    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) >> 1
-    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) >> 1
+    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) / 2
+    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) / 2
     for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
       for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
         /* Push the old cell.
@@ -1014,8 +1014,8 @@ function create_event_handlers(sandbox) {
         /* Push the new cell.
            indexOf doesn't work here because arrays
            with different references aren't equal. */
-        var new_x = (y - pivot_y) + pivot_x
-        var new_y = (pivot_x - x) + pivot_y
+        var new_x = ((y - pivot_y) + pivot_x) | 0
+        var new_y = ((pivot_x - x) + pivot_y) | 0
         cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
         if (cell_index === -1) {
           cell_index = cells_to_edit.length
@@ -1029,8 +1029,8 @@ function create_event_handlers(sandbox) {
     cgol_object.edit_cells(cells_to_edit, cell_ids)
     // Update selection
     var old_selection = {...cgol_object.selection}
-    cgol_object.selection.left = (old_selection.top - pivot_y) + pivot_x
-    cgol_object.selection.top = (pivot_x - (old_selection.right-1)) + pivot_y
+    cgol_object.selection.left = ((old_selection.top - pivot_y) + pivot_x) | 0
+    cgol_object.selection.top = ((pivot_x - old_selection.right) + pivot_y) | 0
     cgol_object.selection.right = cgol_object.selection.left + old_selection.bottom - old_selection.top
     cgol_object.selection.bottom = cgol_object.selection.top + old_selection.right - old_selection.left
     update_floating_toolbars()
@@ -1040,8 +1040,8 @@ function create_event_handlers(sandbox) {
   rotate_cw_selection_button.addEventListener('click', () => {
     var cells_to_edit = []
     var cell_ids = []
-    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) >> 1
-    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) >> 1
+    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) / 2
+    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) / 2
     for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
       for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
         /* Push the old cell.
@@ -1055,8 +1055,8 @@ function create_event_handlers(sandbox) {
         /* Push the new cell.
            indexOf doesn't work here because arrays
            with different references aren't equal. */
-        var new_x = (pivot_y - y) + pivot_x
-        var new_y = (x - pivot_x) + pivot_y
+        var new_x = ((pivot_y - y) + pivot_x) | 0
+        var new_y = ((x - pivot_x) + pivot_y) | 0
         cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
         if (cell_index === -1) {
           cell_index = cells_to_edit.length
@@ -1070,8 +1070,8 @@ function create_event_handlers(sandbox) {
     cgol_object.edit_cells(cells_to_edit, cell_ids)
     // Update selection
     var old_selection = {...cgol_object.selection}
-    cgol_object.selection.left = (pivot_y - (old_selection.bottom-1)) + pivot_x
-    cgol_object.selection.top = (old_selection.left - pivot_x) + pivot_y
+    cgol_object.selection.left = ((pivot_y - (old_selection.bottom-1)) + pivot_x) | 0
+    cgol_object.selection.top = ((old_selection.left - pivot_x) + pivot_y) | 0
     cgol_object.selection.right = cgol_object.selection.left + old_selection.bottom - old_selection.top
     cgol_object.selection.bottom = cgol_object.selection.top + old_selection.right - old_selection.left
     update_floating_toolbars()
