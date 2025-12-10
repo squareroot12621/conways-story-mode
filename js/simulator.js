@@ -1016,23 +1016,32 @@ function create_event_handlers(sandbox) {
            with different references aren't equal. */
         var new_x = ((y - pivot_y) + pivot_x) | 0
         var new_y = ((pivot_x - x) + pivot_y) | 0
-        cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
-        if (cell_index === -1) {
-          cell_index = cells_to_edit.length
+        if (new_x >= 0 && new_x < cgol_object.grid_size
+            && new_y >= 0 || new_y < cgol_object.grid_size) {
+          cell_index = cells_to_edit.findIndex(
+            (coords) => coords[0] === new_x && coords[1] === new_y
+          )
+          if (cell_index === -1) {
+            cell_index = cells_to_edit.length
+          }
+          cells_to_edit[cell_index] = [new_x, new_y]
+          var old_coordinate = y*cgol_object.grid_size + x
+          cell_ids[cell_index] = (cgol_object.cell_types[old_coordinate] << 1
+                                  | cgol_object.board[old_coordinate])
         }
-        cells_to_edit[cell_index] = [new_x, new_y]
-        var old_coordinate = y*cgol_object.grid_size + x
-        cell_ids[cell_index] = (cgol_object.cell_types[old_coordinate] << 1
-                                | cgol_object.board[old_coordinate])
       }
     }
     cgol_object.edit_cells(cells_to_edit, cell_ids)
     // Update selection
     var old_selection = {...cgol_object.selection}
-    cgol_object.selection.left = ((old_selection.top - pivot_y) + pivot_x) | 0
-    cgol_object.selection.top = ((pivot_x - old_selection.right) + pivot_y) | 0
-    cgol_object.selection.right = cgol_object.selection.left + old_selection.bottom - old_selection.top
-    cgol_object.selection.bottom = cgol_object.selection.top + old_selection.right - old_selection.left
+    var new_selection_left = ((old_selection.top - pivot_y) + pivot_x) | 0
+    var new_selection_top = ((pivot_x - old_selection.right) + pivot_y) | 0
+    var new_selection_right = new_selection_left + old_selection.bottom - old_selection.top
+    var new_selection_bottom = new_selection_top + old_selection.right - old_selection.left
+    cgol_object.selection.left = Math.max(new_selection_left, 0)
+    cgol_object.selection.top = Math.max(new_selection_left, 0)
+    cgol_object.selection.right = Math.min(new_selection_left, cgol_object.grid_size - 1)
+    cgol_object.selection.bottom = Math.min(new_selection_left, cgol_object.grid_size - 1)
     update_floating_toolbars()
   })
   // Rotate clockwise button
@@ -1047,7 +1056,9 @@ function create_event_handlers(sandbox) {
         /* Push the old cell.
            indexOf doesn't work here because arrays
            with different references aren't equal. */
-        var cell_index = cells_to_edit.findIndex((coords) => coords[0] === x && coords[1] === y)
+        var cell_index = cells_to_edit.findIndex(
+          (coords) => coords[0] === x && coords[1] === y
+        )
         if (cell_index === -1) {
           cells_to_edit.push([x, y])
           cell_ids.push(0)
@@ -1057,23 +1068,30 @@ function create_event_handlers(sandbox) {
            with different references aren't equal. */
         var new_x = ((pivot_y - y) + pivot_x) | 0
         var new_y = ((x - pivot_x) + pivot_y) | 0
-        cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
-        if (cell_index === -1) {
-          cell_index = cells_to_edit.length
+        if (new_x >= 0 && new_x < cgol_object.grid_size
+            && new_y >= 0 || new_y < cgol_object.grid_size) {
+          cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
+          if (cell_index === -1) {
+            cell_index = cells_to_edit.length
+          }
+          cells_to_edit[cell_index] = [new_x, new_y]
+          var old_coordinate = y*cgol_object.grid_size + x
+          cell_ids[cell_index] = (cgol_object.cell_types[old_coordinate] << 1
+                                  | cgol_object.board[old_coordinate])
         }
-        cells_to_edit[cell_index] = [new_x, new_y]
-        var old_coordinate = y*cgol_object.grid_size + x
-        cell_ids[cell_index] = (cgol_object.cell_types[old_coordinate] << 1
-                                | cgol_object.board[old_coordinate])
       }
     }
     cgol_object.edit_cells(cells_to_edit, cell_ids)
     // Update selection
     var old_selection = {...cgol_object.selection}
-    cgol_object.selection.left = ((pivot_y - old_selection.bottom) + pivot_x) | 0
-    cgol_object.selection.top = ((old_selection.left - pivot_x) + pivot_y) | 0
-    cgol_object.selection.right = cgol_object.selection.left + old_selection.bottom - old_selection.top
-    cgol_object.selection.bottom = cgol_object.selection.top + old_selection.right - old_selection.left
+    var new_selection_left = ((pivot_y - old_selection.bottom) + pivot_x) | 0
+    var new_selection_top = ((old_selection.left - pivot_x) + pivot_y) | 0
+    var new_selection_right = var new_selection_left + old_selection.bottom - old_selection.top
+    var new_selection_bottom = var new_selection_top + old_selection.right - old_selection.left
+    cgol_object.selection.left = Math.max(new_selection_left, 0)
+    cgol_object.selection.top = Math.max(new_selection_left, 0)
+    cgol_object.selection.right = Math.min(new_selection_left, cgol_object.grid_size - 1)
+    cgol_object.selection.bottom = Math.min(new_selection_left, cgol_object.grid_size - 1)
     update_floating_toolbars()
   })
   // Flip horizontally button
