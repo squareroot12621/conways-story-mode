@@ -1086,8 +1086,8 @@ function create_event_handlers(sandbox) {
     var old_selection = {...cgol_object.selection}
     var new_selection_left = ((pivot_y - old_selection.bottom) + pivot_x) | 0
     var new_selection_top = ((old_selection.left - pivot_x) + pivot_y) | 0
-    var new_selection_right = var new_selection_left + old_selection.bottom - old_selection.top
-    var new_selection_bottom = var new_selection_top + old_selection.right - old_selection.left
+    var new_selection_right = new_selection_left + old_selection.bottom - old_selection.top
+    var new_selection_bottom = new_selection_top + old_selection.right - old_selection.left
     cgol_object.selection.left = Math.max(new_selection_left, 0)
     cgol_object.selection.top = Math.max(new_selection_left, 0)
     cgol_object.selection.right = Math.min(new_selection_left, cgol_object.grid_size - 1)
