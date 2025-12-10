@@ -999,8 +999,8 @@ function create_event_handlers(sandbox) {
   rotate_ccw_selection_button.addEventListener('click', () => {
     var cells_to_edit = []
     var cell_ids = []
-    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) / 2
-    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) / 2
+    var pivot_x = ((cgol_object.selection.left + cgol_object.selection.right) / 2) | 0
+    var pivot_y = ((cgol_object.selection.top + cgol_object.selection.bottom) / 2) | 0
     for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
       for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
         /* Push the old cell.
@@ -1049,8 +1049,8 @@ function create_event_handlers(sandbox) {
   rotate_cw_selection_button.addEventListener('click', () => {
     var cells_to_edit = []
     var cell_ids = []
-    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) / 2
-    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) / 2
+    var pivot_x = ((cgol_object.selection.left + cgol_object.selection.right) / 2) | 0
+    var pivot_y = ((cgol_object.selection.top + cgol_object.selection.bottom) / 2) | 0
     for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
       for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
         /* Push the old cell.
