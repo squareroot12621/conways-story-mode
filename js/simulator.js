@@ -1017,7 +1017,7 @@ function create_event_handlers(sandbox) {
         var new_x = ((y - pivot_y) + pivot_x) | 0
         var new_y = ((pivot_x - x) + pivot_y) | 0
         if (new_x >= 0 && new_x < cgol_object.grid_size
-            && new_y >= 0 || new_y < cgol_object.grid_size) {
+            && new_y >= 0 && new_y < cgol_object.grid_size) {
           cell_index = cells_to_edit.findIndex(
             (coords) => coords[0] === new_x && coords[1] === new_y
           )
@@ -1069,7 +1069,7 @@ function create_event_handlers(sandbox) {
         var new_x = ((pivot_y - y) + pivot_x) | 0
         var new_y = ((x - pivot_x) + pivot_y) | 0
         if (new_x >= 0 && new_x < cgol_object.grid_size
-            && new_y >= 0 || new_y < cgol_object.grid_size) {
+            && new_y >= 0 && new_y < cgol_object.grid_size) {
           cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
           if (cell_index === -1) {
             cell_index = cells_to_edit.length
