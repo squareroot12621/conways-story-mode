@@ -999,6 +999,8 @@ function create_event_handlers(sandbox) {
   rotate_ccw_selection_button.addEventListener('click', () => {
     var cells_to_edit = []
     var cell_ids = []
+    var width = cgol_object.selection.right+1 - cgol_object.selection.left
+    var height = cgol_object.selection.bottom+1 - cgol_object.selection.top
     var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) / 2
     var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) / 2
     if (width % 2 === 0 && height % 2 === 1) {
@@ -1054,6 +1056,8 @@ function create_event_handlers(sandbox) {
   rotate_cw_selection_button.addEventListener('click', () => {
     var cells_to_edit = []
     var cell_ids = []
+    var width = cgol_object.selection.right+1 - cgol_object.selection.left
+    var height = cgol_object.selection.bottom+1 - cgol_object.selection.top
     var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) / 2
     var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) / 2
     if (width % 2 === 0 && height % 2 === 1) {
