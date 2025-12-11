@@ -403,7 +403,7 @@ class CGoL {
     return {x: output_x, y: output_y}
   }
 
-  edit_cells(cell_array, change_to) {
+  edit_cells(cell_array, change_to, action_parameters) {
     if (cell_array.length === 0) {
       return undefined
     }
@@ -442,7 +442,9 @@ class CGoL {
     }
     this.#changed_pattern = true
     this.#back_snapshots[this.generation] = [...this.board]
-    this.#set_state('cell', 1, 0, (a) => Math.min(a, 1))
+
+    action_parameters ??= ['cell', 1, 0, (a) => Math.min(a, 1)]
+    this.#set_state(...action_parameters)
 
     this.#update_stats()
 
@@ -536,7 +538,7 @@ class CGoL {
     throw TypeError("Can't assign to bounding_box")
   }
 
-  #set_state(action, value1, value2, control1, control2) {
+  #set_state(action, value1, value2, control1, control2, mergeable=true) {
     control1 ??= (a) => a
     control2 ??= (b) => b
     
@@ -554,7 +556,7 @@ class CGoL {
       /* cancelable stops nested merging from happening.
          Example: Move up, rotate clockwise, rotate counterclockwise, move down.
          The rotations should merge, but not the moves. */
-      cancelable: true,
+      cancelable: mergeable,
       board: [...this.board],
       generation: this.generation,
       pattern: structuredClone(this.pattern),
