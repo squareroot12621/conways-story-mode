@@ -378,9 +378,20 @@ class CGoL {
       this.bake_object(object)
     }
     this.#changed_pattern = true
-    this.#back_snapshots = {0: [...this.board]}
+    this.#back_snapshots = {0: this.#full_board}
     
     this.#update_stats()
+  }
+
+  get #full_board() {
+    var output = []
+    for (var i = 0; i < this.board.length; ++i) {
+      output.push(this.cell_types[i] << 1 | this.board[i])
+    }
+    return output
+  }
+  set #full_board() {
+    throw TypeError("Can't assign to #full_board")
   }
 
   page_to_board_coordinates(x, y) {
@@ -441,7 +452,7 @@ class CGoL {
       this.#safe_back_generations.add(this.generation)
     }
     this.#changed_pattern = true
-    this.#back_snapshots[this.generation] = [...this.board]
+    this.#back_snapshots[this.generation] = this.#full_board
 
     action_parameters ??= ['cell', 1, 0, (a) => Math.min(a, 1)]
     this.#set_state(...action_parameters)
@@ -557,7 +568,7 @@ class CGoL {
          Example: Move up, rotate clockwise, rotate counterclockwise, move down.
          The rotations should merge, but not the moves. */
       cancelable: mergeable,
-      board: [...this.board],
+      board: this.#full_board,
       generation: this.generation,
       pattern: structuredClone(this.pattern),
       objects: structuredClone(this.objects),
@@ -596,7 +607,8 @@ class CGoL {
   #get_state(index=null) {
     index ??= this.#current_undo_state
     var snapshot = this.#undo_snapshots[index]
-    this.board = [...snapshot.board]
+    this.board = snapshot.board.map((x) => x & 1)
+    this.cell_types = snapshot.board.map((x) => x >> 1)
     this.generation = snapshot.generation
     this.pattern = structuredClone(snapshot.pattern)
     this.objects = structuredClone(snapshot.objects)
@@ -653,7 +665,7 @@ class CGoL {
     this.#set_state('step', 1, 0)
     this.#update_stats()
     // Update snapshots
-    this.#back_snapshots[this.generation] = [...this.board]
+    this.#back_snapshots[this.generation] = this.#full_board
     var old_generation = this.generation - this.#max_back_snapshots
     if (!this.#safe_back_generations.has(old_generation)) {
       delete this.#back_snapshots[old_generation]
@@ -691,7 +703,8 @@ class CGoL {
     var new_generation = this.generation - 1
     var snapshot = this.#back_snapshots[new_generation]
     if (snapshot) {
-      this.board = [...snapshot]
+      this.board = snapshot.map((x) => x & 1)
+      this.cell_types = snapshot.map((x) => x >> 1)
       delete this.#back_snapshots[this.generation]
       this.generation = new_generation
       this.#set_state('step', -1, 0)
@@ -702,7 +715,8 @@ class CGoL {
       var last_generation = this.generation
       this.generation = safe_generation
       this.#recalculating = true
-      this.board = [...this.#back_snapshots[safe_generation]]
+      this.board = this.#back_snapshots[safe_generation].map((x) => x & 1)
+      this.cell_types = this.#back_snapshots[safe_generation].map((x) => x >> 1)
       this.#set_state('step', safe_generation - last_generation, 0)
       // Then step forward until we get to the target generation
       this.#step_forward_fast(
