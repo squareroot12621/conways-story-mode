@@ -686,7 +686,8 @@ class CGoL {
     this.playing = false
     this.generation = 0
     this.#changed_pattern = true
-    this.board = [...this.#back_snapshots[0]]
+    this.board = this.#back_snapshots[0].map((x) => x & 1)
+    this.cell_types = this.#back_snapshots[0].map((x) => x >> 1)
     this.#set_state('step', -last_generation, 0)
     this.#back_snapshots = {0: this.#back_snapshots[0]}
     this.#safe_back_generations.clear()
