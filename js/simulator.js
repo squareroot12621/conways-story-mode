@@ -1038,7 +1038,11 @@ function create_event_handlers(sandbox) {
         }
       }
     }
-    cgol_object.edit_cells(cells_to_edit, cell_ids)
+    cgol_object.edit_cells(
+      cells_to_edit,
+      cell_ids,
+      ['rotate', 3, 0, (a) => a % 4, (b) => b % 2],
+    )
     // Update selection
     var old_selection = {...cgol_object.selection}
     var new_selection_left = ((old_selection.top - pivot_y) + pivot_x) | 0
@@ -1095,7 +1099,11 @@ function create_event_handlers(sandbox) {
         }
       }
     }
-    cgol_object.edit_cells(cells_to_edit, cell_ids)
+    cgol_object.edit_cells(
+      cells_to_edit,
+      cell_ids,
+      ['rotate', 1, 0, (a) => a % 4, (b) => b % 2],
+    )
     // Update selection
     var old_selection = {...cgol_object.selection}
     var new_selection_left = ((pivot_y - old_selection.bottom) + pivot_x) | 0
@@ -1122,7 +1130,11 @@ function create_event_handlers(sandbox) {
                       | cgol_object.board[new_coordinate])
       }
     }
-    cgol_object.edit_cells(cells_to_edit, cell_ids)
+    cgol_object.edit_cells(
+      cells_to_edit,
+      cell_ids,
+      ['rotate', 0, 1, (a) => a % 4, (b) => b % 2],
+    )
   })
   // Flip vertically button
   var flip_vert_selection_button = document.getElementById('simulator-selection-flip-vert')
@@ -1138,7 +1150,11 @@ function create_event_handlers(sandbox) {
                       | cgol_object.board[new_coordinate])
       }
     }
-    cgol_object.edit_cells(cells_to_edit, cell_ids)
+    cgol_object.edit_cells(
+      cells_to_edit,
+      cell_ids,
+      ['rotate', 2, 1, (a) => a % 4, (b) => b % 2],
+    )
   })
   // Delete button
   var delete_selection_button = document.getElementById('simulator-selection-delete')
@@ -1150,7 +1166,11 @@ function create_event_handlers(sandbox) {
         cells_to_remove.push([x, y])
       }
     }
-    cgol_object.edit_cells(cells_to_remove, 0)
+    cgol_object.edit_cells(
+      cells_to_remove,
+      0,
+      ['delete', 1, 0, null, null, false],
+    )
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
     var simulator_selection_move = document.getElementById('simulator-selection-move')
     simulator_selection_toolbar.style.display = 'none'
