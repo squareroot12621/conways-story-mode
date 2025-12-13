@@ -390,7 +390,7 @@ class CGoL {
     }
     return output
   }
-  set #full_board() {
+  set #full_board(value) {
     throw TypeError("Can't assign to #full_board")
   }
 
