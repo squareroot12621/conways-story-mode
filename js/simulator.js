@@ -848,6 +848,7 @@ function create_event_handlers(sandbox) {
         group.removeAttribute('data-visible')
       }
     }
+  }
 
   function mouse_down_event_handler(event) {
     var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
