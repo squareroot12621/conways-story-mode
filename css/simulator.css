@@ -327,6 +327,9 @@
     button {
       padding: 0.25rem;
     }
+    span:not([data-visible]) {
+      display: none;
+    }
   }
 
   #simulator-selection-move {
