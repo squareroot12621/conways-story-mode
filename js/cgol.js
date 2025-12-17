@@ -496,9 +496,7 @@ class CGoL {
       flip_x: false,
       moving: false,
     })
-    if (destructive) {
-      this.#changed_pattern = true
-    }
+    this.#changed_pattern = true
   }
 
   bake_object(index=0, destructive=false) {
