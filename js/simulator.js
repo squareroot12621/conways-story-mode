@@ -294,13 +294,34 @@ function create_simulator_main(sandbox) {
       select_objects_selection_button,
       delete_selection_button,
     ],
-    {class: 'simulator-selection-group'},
+    {
+      class: 'simulator-selection-group',
+      'data-visible': '',
+    },
+  )
+
+  // Paste button
+  var paste_selection_button = create_element(
+    'button', 'content_paste', {
+      'aria-label': 'Paste selection',
+      class: 'simulator-toolbar-item',
+      id: 'simulator-selection-paste',
+      type: 'button',
+    }
+  )
+  var paste_group = create_element(
+    'span',
+    [paste_selection_button],
+    {class: 'simulator-paste-group'},
   )
   
   // The floating toolbar when a selection is made
   var selection_toolbar = create_element(
     'section',
-    [selection_group],
+    [
+      selection_group,
+      paste_group,
+    ],
     {class: 'simulator-selection-toolbar'},
   )
   selection_toolbar.style.display = 'none'
