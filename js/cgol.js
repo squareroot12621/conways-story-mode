@@ -462,7 +462,7 @@ class CGoL {
     return undefined
   }
 
-  extract_selection_to_object() {
+  extract_selection_to_object(destructive=true) {
     var pattern = []
     for (var y = this.selection.top; y <= this.selection.bottom; ++y) {
       pattern.push([])
@@ -472,17 +472,19 @@ class CGoL {
           this.board[board_position] + 2*this.cell_types[board_position]
         )
       }
-      this.pattern[y].fill(0, this.selection.left, this.selection.right+1)
-      this.board.fill(
-        0,
-        y*this.grid_size + this.selection.left,
-        y*this.grid_size + this.selection.right+1,
-      )
-      this.cell_types.fill(
-        0,
-        y*this.grid_size + this.selection.left,
-        y*this.grid_size + this.selection.right+1,
-      )
+      if (destructive) {
+        this.pattern[y].fill(0, this.selection.left, this.selection.right+1)
+        this.board.fill(
+          0,
+          y*this.grid_size + this.selection.left,
+          y*this.grid_size + this.selection.right+1,
+        )
+        this.cell_types.fill(
+          0,
+          y*this.grid_size + this.selection.left,
+          y*this.grid_size + this.selection.right+1,
+        )
+      }
     }
     this.objects.unshift({
       pattern: pattern,
@@ -494,7 +496,9 @@ class CGoL {
       flip_x: false,
       moving: false,
     })
-    this.#changed_pattern = true
+    if (destructive) {
+      this.#changed_pattern = true
+    }
   }
 
   bake_object(index=0, destructive=false) {
