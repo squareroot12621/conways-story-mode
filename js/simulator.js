@@ -427,10 +427,10 @@ function resize_canvas() {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
 }
-function update_floating_toolbars() {
-  var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-  var simulator_selection_move = document.getElementById('simulator-selection-move')
-  if (cgol_object.selection.visible) {
+function update_floating_toolbars(force_visible=false) {
+  if (cgol_object.selection.visible || force_visible) {
+    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+    var simulator_selection_move = document.getElementById('simulator-selection-move')
     var toolbar_position = cgol_object.board_to_canvas_coordinates(
       (cgol_object.selection.left + cgol_object.selection.right + 1) / 2,
       cgol_object.selection.top,
@@ -838,6 +838,16 @@ function create_event_handlers(sandbox) {
     }
     canvas.style.cursor = cursor_type
   }
+  function change_visible_toolbar_group(group_index) {
+    var toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+    for (var i = 0; i < toolbar.children.length; ++i) {
+      var group = toolbar.children[i]
+      if (i === group_index) {
+        group.setAttribute('data-visible', '')
+      } else {
+        group.removeAttribute('data-visible')
+      }
+    }
 
   function mouse_down_event_handler(event) {
     var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
@@ -963,6 +973,7 @@ function create_event_handlers(sandbox) {
             bottom: Math.max(y, selection_start.y),
             visible: true,
           })
+          change_visible_toolbar_group(0)
         }
       }
     } else if (tool === 'pan') { // Panning
@@ -995,7 +1006,22 @@ function create_event_handlers(sandbox) {
         temporarily_paused = false
       }
     } else if (tool === 'select') { // Selecting
-      update_floating_toolbars()
+      var paste_group = document.getElementsByClassName('simulator-paste-group')[0]
+      if (paste_group.getAttribute('data-visible') === null) {
+        change_visible_toolbar_group(1)
+        var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
+        cgol_object.selection = {
+          left: x,
+          right: x,
+          top: y,
+          bottom: y,
+          visible: false,
+        }
+        update_floating_toolbars(true)
+      } else {
+        change_visible_toolbar_group(0)
+        update_floating_toolbars()
+      }
     }
     
     update_last_mouse_position(event)
