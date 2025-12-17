@@ -1010,13 +1010,13 @@ function create_event_handlers(sandbox) {
       if (paste_group.getAttribute('data-visible') === null) {
         change_visible_toolbar_group(1)
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-        cgol_object.selection = {
+        cgol_object.selection = ({
           left: x,
           right: x,
           top: y,
           bottom: y,
           visible: false,
-        }
+        })
         update_floating_toolbars(true)
       } else {
         change_visible_toolbar_group(0)
