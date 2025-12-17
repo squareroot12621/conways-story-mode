@@ -217,7 +217,7 @@ function create_simulator_main(sandbox) {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
 
-  // Buttons in the floating toolbar
+  // Selection buttons
   var rotate_ccw_selection_button = create_element(
     'button', 'rotate_left', {
       'aria-label': 'Rotate selection counterclockwise',
@@ -282,9 +282,8 @@ function create_simulator_main(sandbox) {
       type: 'button',
     }
   )
-  // The floating toolbar when a selection is made
-  var selection_toolbar = create_element(
-    'section',
+  var selection_group = create_element(
+    'span',
     [
       rotate_ccw_selection_button,
       rotate_cw_selection_button,
@@ -295,6 +294,13 @@ function create_simulator_main(sandbox) {
       select_objects_selection_button,
       delete_selection_button,
     ],
+    {class: 'simulator-selection-group'},
+  )
+  
+  // The floating toolbar when a selection is made
+  var selection_toolbar = create_element(
+    'section',
+    [selection_group],
     {class: 'simulator-selection-toolbar'},
   )
   selection_toolbar.style.display = 'none'
@@ -782,6 +788,7 @@ function create_event_handlers(sandbox) {
   var drawing_cell_type = 0
   var temporarily_paused = false
   var selection_start = {x: null, y: null}
+  var clipboard
 
   function update_first_mouse_position(event) {
     first_x = event.pageX
@@ -1155,6 +1162,25 @@ function create_event_handlers(sandbox) {
       cell_ids,
       ['rotate', 2, 1, (a) => a % 4, (b) => b % 2],
     )
+  })
+  // Cut button
+  var cut_selection_button = document.getElementById('simulator-selection-cut')
+  cut_selection_button.addEventListener('click', () => {
+    cgol_object.selection.visible = false
+    cgol_object.extract_selection_to_object(true)
+    clipboard = cgol_object.objects.shift()
+    cgol_object.set_state('delete', 1, 0, null, null, false)
+    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+    var simulator_selection_move = document.getElementById('simulator-selection-move')
+    simulator_selection_toolbar.style.display = 'none'
+    simulator_selection_move.style.display = 'none'
+  })
+  // Copy button
+  var copy_selection_button = document.getElementById('simulator-selection-copy')
+  copy_selection_button.addEventListener('click', () => {
+    cgol_object.selection.visible = false
+    cgol_object.extract_selection_to_object(false)
+    clipboard = cgol_object.objects.shift()
   })
   // Delete button
   var delete_selection_button = document.getElementById('simulator-selection-delete')
