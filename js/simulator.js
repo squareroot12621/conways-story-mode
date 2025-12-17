@@ -1178,7 +1178,6 @@ function create_event_handlers(sandbox) {
   // Copy button
   var copy_selection_button = document.getElementById('simulator-selection-copy')
   copy_selection_button.addEventListener('click', () => {
-    cgol_object.selection.visible = false
     cgol_object.extract_selection_to_object(false)
     clipboard = cgol_object.objects.shift()
   })
