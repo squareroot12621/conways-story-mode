@@ -79,7 +79,7 @@ class CGoL {
     this.#safe_back_generations = new Set([0])
     this.#max_undo_snapshots = options.max_undo_snapshots ?? 50
     this.#undo_snapshots = []
-    this.#current_undo_state = -1 // Gets incremented by #set_state()
+    this.#current_undo_state = -1 // Gets incremented by set_state()
     // this.#back_snapshots is already defined by this.compile_pattern()
     
     // Graphical stuff
@@ -117,7 +117,7 @@ class CGoL {
     )
 
     this.compile_pattern()
-    this.#set_state(null, 1, 0)
+    this.set_state(null, 1, 0)
     this.#update_stats()
   }
 
@@ -455,7 +455,7 @@ class CGoL {
     this.#back_snapshots[this.generation] = this.#full_board
 
     action_parameters ??= ['cell', 1, 0, (a) => Math.min(a, 1)]
-    this.#set_state(...action_parameters)
+    this.set_state(...action_parameters)
 
     this.#update_stats()
 
@@ -549,7 +549,7 @@ class CGoL {
     throw TypeError("Can't assign to bounding_box")
   }
 
-  #set_state(action, value1, value2, control1, control2, mergeable=true) {
+  set_state(action, value1, value2, control1, control2, mergeable=true) {
     control1 ??= (a) => a
     control2 ??= (b) => b
     
@@ -662,7 +662,7 @@ class CGoL {
         return 0
       }
     })
-    this.#set_state('step', 1, 0)
+    this.set_state('step', 1, 0)
     this.#update_stats()
     // Update snapshots
     this.#back_snapshots[this.generation] = this.#full_board
@@ -688,7 +688,7 @@ class CGoL {
     this.#changed_pattern = true
     this.board = this.#back_snapshots[0].map((x) => x & 1)
     this.cell_types = this.#back_snapshots[0].map((x) => x >> 1)
-    this.#set_state('step', -last_generation, 0)
+    this.set_state('step', -last_generation, 0)
     this.#back_snapshots = {0: this.#back_snapshots[0]}
     this.#safe_back_generations.clear()
     this.#safe_back_generations.add(0)
@@ -708,7 +708,7 @@ class CGoL {
       this.cell_types = snapshot.map((x) => x >> 1)
       delete this.#back_snapshots[this.generation]
       this.generation = new_generation
-      this.#set_state('step', -1, 0)
+      this.set_state('step', -1, 0)
       this.#update_stats()
     } else { // Uh oh, we couldn't find a snapshot
       // Reset to the last safe generation
@@ -718,7 +718,7 @@ class CGoL {
       this.#recalculating = true
       this.board = this.#back_snapshots[safe_generation].map((x) => x & 1)
       this.cell_types = this.#back_snapshots[safe_generation].map((x) => x >> 1)
-      this.#set_state('step', safe_generation - last_generation, 0)
+      this.set_state('step', safe_generation - last_generation, 0)
       // Then step forward until we get to the target generation
       this.#step_forward_fast(
         new_generation - safe_generation,
