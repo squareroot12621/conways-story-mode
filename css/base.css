@@ -272,7 +272,7 @@ kbd {
     font-family: inherit;
 }
 
-button, input[type~="button submit reset"], summary {
+button, input[type="button"], input[type="submit"], input[type="reset"], summary {
     --button-fg: var(--text-button-color);
     --button-bg: var(--background-button-color);
     &.primary-button {
