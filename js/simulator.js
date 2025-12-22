@@ -807,6 +807,7 @@ function create_event_handlers(sandbox) {
   var first_x, first_y
   var last_x, last_y
   var mouse_down = false
+  var ignore_
   var drawing_cell_type = 0
   var temporarily_paused = false
   var selection_start = {x: null, y: null}
@@ -882,6 +883,7 @@ function create_event_handlers(sandbox) {
       simulator_selection_move.style.display = 'none'
     }
 
+    canvas.setPointerCapture(event.pointerId)
     update_first_mouse_position(event)
     update_last_mouse_position(event)
     mouse_down = true
@@ -891,7 +893,7 @@ function create_event_handlers(sandbox) {
   function mouse_move_event_handler(event) {
     var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
     var buttons = touch ? 1 : event.buttons
-    mouse_down = buttons > 0
+    mouse_down &&= buttons > 0
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
@@ -1004,31 +1006,34 @@ function create_event_handlers(sandbox) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
-      if (temporarily_paused) {
+      if (mouse_down && temporarily_paused) {
         cgol_object.play()
         temporarily_paused = false
       }
     } else if (tool === 'select') { // Selecting
-      var toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-      var paste_group = document.getElementsByClassName('simulator-paste-group')[0]
-      if (paste_group.getAttribute('data-visible') === null
-          && toolbar.style.display === 'none') {
-        change_visible_toolbar_group(1)
-        var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-        cgol_object.selection = ({
-          left: x,
-          right: x,
-          top: y,
-          bottom: y,
-          visible: false,
-        })
-        update_floating_toolbars(true)
-      } else {
-        change_visible_toolbar_group(0)
-        update_floating_toolbars()
+      if (mouse_down) {
+        var toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+        var paste_group = document.getElementsByClassName('simulator-paste-group')[0]
+        if (paste_group.getAttribute('data-visible') === null
+            && toolbar.style.display === 'none') {
+          change_visible_toolbar_group(1)
+          var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
+          cgol_object.selection = ({
+            left: x,
+            right: x,
+            top: y,
+            bottom: y,
+            visible: false,
+          })
+          update_floating_toolbars(true)
+        } else {
+          change_visible_toolbar_group(0)
+          update_floating_toolbars()
+        }
       }
     }
     
+    canvas.releasePointerCapture(event.pointerId)
     update_last_mouse_position(event)
     mouse_down = false
     update_cursor()
