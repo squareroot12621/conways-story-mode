@@ -1007,8 +1007,10 @@ function create_event_handlers(sandbox) {
         temporarily_paused = false
       }
     } else if (tool === 'select') { // Selecting
+      var toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
       var paste_group = document.getElementsByClassName('simulator-paste-group')[0]
-      if (paste_group.getAttribute('data-visible') === null) {
+      if (paste_group.getAttribute('data-visible') === null
+          && toolbar.style.display === 'none') {
         change_visible_toolbar_group(1)
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
         cgol_object.selection = ({
