@@ -521,8 +521,8 @@ class CGoL {
     }
     
     var cell_positions = []
-    for (var y = 0; y < object.height; ++y) {
-      for (var x = 0; x < object.width; ++x) {
+    for (var y = object.y; y < object.y + object.height; ++y) {
+      for (var x = object.x; x < object.x + object.width; ++x) {
         cell_positions.push([x, y])
       }
     }
