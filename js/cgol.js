@@ -525,9 +525,11 @@ class CGoL {
         for (var x = object.x; x < object.x + object.width; ++x) {
           var new_cell = get_new_cell(this.pattern[y][x], x, y)
           this.pattern[y][x] = new_cell
+          var cell_position = y*this.grid_size + x
+          this.board[cell_position] = new_cell & 1
+          this.cell_types[cell_position] = new_cell >> 1
         }
       }
-      this.compile_pattern()
     } else {
       for (var y = object.y; y < object.y + object.height; ++y) {
         for (var x = object.x; x < object.x + object.width; ++x) {
