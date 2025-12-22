@@ -512,8 +512,8 @@ class CGoL {
       var pattern_x = cell_x - object.x
       var pattern_y = cell_y - object.y
       var pattern_cell = object.pattern[pattern_y][pattern_x]
-      var pattern_board = new_cell & 1
-      var pattern_cell_type = new_cell >> 1
+      var pattern_board = pattern_cell & 1
+      var pattern_cell_type = pattern_cell >> 1
       
       var new_board = old_board | new_board
       var new_cell_type = new_cell_type || old_cell_type
