@@ -519,17 +519,33 @@ class CGoL {
       var new_cell_type = new_cell_type || old_cell_type
       return new_cell_type << 1 | new_board
     }
-    
-    var cell_positions = []
-    for (var y = object.y; y < object.y + object.height; ++y) {
-      for (var x = object.x; x < object.x + object.width; ++x) {
-        cell_positions.push([x, y])
+
+    if (this.generation === 0) {
+      for (var y = object.y; y < object.y + object.height; ++y) {
+        for (var x = object.x; x < object.x + object.width; ++x) {
+          var new_cell = get_new_cell(this.pattern[y][x], x, y)
+          this.pattern[y][x] = new_cell
+        }
       }
+      this.compile_pattern()
+    } else {
+      for (var y = object.y; y < object.y + object.height; ++y) {
+        for (var x = object.x; x < object.x + object.width; ++x) {
+          var cell_position = y*this.grid_size + x
+          var old_cell = this.cell_types[cell_position] >> 1 | this.board[cell_position]
+          var new_cell = get_new_cell(old_cell, x, y)
+          this.board[cell_position] = new_cell & 1
+          this.cell_types[cell_position] = new_cell >> 1
+        }
+      }
+      this.#safe_back_generations.add(this.generation)
     }
-    this.edit_cells(cell_positions, get_new_cell, [])
     if (destructive) {
       this.objects.splice(index, 1)
     }
+    this.#changed_pattern = true
+    this.#back_snapshots[this.generation] = this.#full_board
+    this.#update_stats()
   }
 
   update_selection(new_selection) {
