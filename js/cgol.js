@@ -515,8 +515,8 @@ class CGoL {
       var pattern_board = pattern_cell & 1
       var pattern_cell_type = pattern_cell >> 1
       
-      var new_board = old_board | new_board
-      var new_cell_type = new_cell_type || old_cell_type
+      var new_board = old_board | pattern_board
+      var new_cell_type = pattern_cell_type || old_cell_type
       return new_cell_type << 1 | new_board
     }
 
