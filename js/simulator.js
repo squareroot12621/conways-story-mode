@@ -975,6 +975,7 @@ function create_event_handlers(sandbox) {
             visible: true,
           })
           change_visible_toolbar_group(0)
+          update_floating_toolbars()
         }
       }
     } else if (tool === 'pan') { // Panning
