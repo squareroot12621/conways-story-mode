@@ -380,7 +380,6 @@ function create_simulator_main(sandbox) {
   })
   // The settings button
   var all_extra_options = [
-    {icon: 'replay', name: 'Restart'},
     {icon: 'upload', name: 'Import RLE'},
     {icon: 'content_copy', name: 'Copy RLE'},
     {icon: 'settings', name: 'Settings'},
