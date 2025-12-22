@@ -811,7 +811,7 @@ function create_event_handlers(sandbox) {
   var temporarily_paused = false
   var selection_start = {x: null, y: null}
   var clipboard
-  var paste_allowed = false
+  var paste_visible = false
 
   function update_first_mouse_position(event) {
     first_x = event.pageX
@@ -877,6 +877,9 @@ function create_event_handlers(sandbox) {
         bottom: y,
         visible: false,
       })
+      if (simulator_selection_toolbar.style.display === 'block') {
+        paste_visible = false
+      }
       var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
       var simulator_selection_move = document.getElementById('simulator-selection-move')
       simulator_selection_toolbar.style.display = 'none'
@@ -979,7 +982,7 @@ function create_event_handlers(sandbox) {
           })
           change_visible_toolbar_group(0)
           update_floating_toolbars()
-          paste_allowed = false
+          paste_visible = false
         }
       }
     } else if (tool === 'pan') { // Panning
@@ -1013,7 +1016,7 @@ function create_event_handlers(sandbox) {
       }
     } else if (tool === 'select') { // Selecting
       if (mouse_down) {
-        if (paste_allowed) {
+        if (paste_visible) {
           change_visible_toolbar_group(1)
           var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
           cgol_object.selection = ({
@@ -1024,11 +1027,11 @@ function create_event_handlers(sandbox) {
             visible: false,
           })
           update_floating_toolbars(true)
-          paste_allowed = false
+          paste_visible = false
         } else {
           change_visible_toolbar_group(0)
           update_floating_toolbars()
-          paste_allowed = true
+          paste_visible = true
         }
       }
     }
