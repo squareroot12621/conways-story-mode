@@ -612,11 +612,10 @@ function create_event_handlers(sandbox) {
     current_button.addEventListener('click', (event) => {
       toggle_option_visibility(null, event)
     })
-    /* DEBUG
     current_button.addEventListener('blur', (event) => {
-      toggle_option_visibility(false, null)
+      console.log(event.relatedTarget) // DEBUG
+      // toggle_option_visibility(false, null)
     })
-    */
     current_button.addEventListener('keydown', (event) => {
       event.preventDefault()
       if (event.key === 'Enter' || event.key === ' ') {
