@@ -1301,6 +1301,7 @@ function create_event_handlers(sandbox) {
   function move_selection_mouse_up(event) {
     move_selection_button.releasePointerCapture(event.pointerId)
     cgol_object.bake_object(0, true)
+    cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), (b) => b, false)
   }
   move_selection_button.addEventListener('pointerdown', move_selection_mouse_down)
   move_selection_button.addEventListener('pointermove', move_selection_mouse_move)
