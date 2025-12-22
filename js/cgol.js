@@ -1026,11 +1026,11 @@ class CGoL {
 
     // Draw the selection
     if (this.selection.visible) {
-      var left_x = (this.selection.left * cell_size - true_x_offset) | 0
-      var right_x = ((this.selection.right+1) * cell_size - true_x_offset) | 0
+      var left_x = ((this.selection.left * cell_size - true_x_offset) | 0) + 0.5
+      var right_x = (((this.selection.right+1) * cell_size - true_x_offset) | 0) + 0.5
       var width = right_x - left_x
-      var top_y = (this.selection.top * cell_size - true_y_offset) | 0
-      var bottom_y = ((this.selection.bottom+1) * cell_size - true_y_offset) | 0
+      var top_y = ((this.selection.top * cell_size - true_y_offset) | 0) + 0.5
+      var bottom_y = (((this.selection.bottom+1) * cell_size - true_y_offset) | 0) + 0.5
       var height = bottom_y - top_y
       ctx.fillStyle = '#40404040'
       ctx.fillRect(left_x, top_y, width, height)
