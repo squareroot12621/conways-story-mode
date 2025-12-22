@@ -807,11 +807,11 @@ function create_event_handlers(sandbox) {
   var first_x, first_y
   var last_x, last_y
   var mouse_down = false
-  var ignore_
   var drawing_cell_type = 0
   var temporarily_paused = false
   var selection_start = {x: null, y: null}
   var clipboard
+  var paste_allowed = false
 
   function update_first_mouse_position(event) {
     first_x = event.pageX
@@ -979,6 +979,7 @@ function create_event_handlers(sandbox) {
           })
           change_visible_toolbar_group(0)
           update_floating_toolbars()
+          paste_allowed = false
         }
       }
     } else if (tool === 'pan') { // Panning
@@ -1012,10 +1013,7 @@ function create_event_handlers(sandbox) {
       }
     } else if (tool === 'select') { // Selecting
       if (mouse_down) {
-        var toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-        var paste_group = document.getElementsByClassName('simulator-paste-group')[0]
-        if (paste_group.getAttribute('data-visible') === null
-            && toolbar.style.display === 'none') {
+        if (paste_allowed) {
           change_visible_toolbar_group(1)
           var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
           cgol_object.selection = ({
@@ -1026,9 +1024,11 @@ function create_event_handlers(sandbox) {
             visible: false,
           })
           update_floating_toolbars(true)
+          paste_allowed = false
         } else {
           change_visible_toolbar_group(0)
           update_floating_toolbars()
+          paste_allowed = true
         }
       }
     }
