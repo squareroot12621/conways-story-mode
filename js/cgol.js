@@ -455,7 +455,9 @@ class CGoL {
     this.#back_snapshots[this.generation] = this.#full_board
 
     action_parameters ??= ['cell', 1, 0, (a) => Math.min(a, 1)]
-    this.set_state(...action_parameters)
+    if (Array.isArray(action_parameters) && action_parameters.length) {
+      this.set_state(...action_parameters)
+    }
 
     this.#update_stats()
 
@@ -499,17 +501,32 @@ class CGoL {
     this.#changed_pattern = true
   }
 
-  bake_object(index=0, destructive=false) {
+  bake_object(index=0, destructive=false) {    
     var object = this.objects[index]
-    // TODO: Add flip_x and rotation
+    
+    function get_new_cell(old_cell, cell_x, cell_y) {
+      // TODO: Add flip_x and rotation
+      var old_board = old_cell & 1
+      var old_cell_type = old_cell >> 1
+      
+      var pattern_x = cell_x - object.x
+      var pattern_y = cell_y - object.y
+      var pattern_cell = object.pattern[pattern_y][pattern_x]
+      var pattern_board = new_cell & 1
+      var pattern_cell_type = new_cell >> 1
+      
+      var new_board = old_board | new_board
+      var new_cell_type = new_cell_type || old_cell_type
+      return new_cell_type << 1 | new_board
+    }
+    
+    var cell_positions = []
     for (var y = 0; y < object.height; ++y) {
       for (var x = 0; x < object.width; ++x) {
-        var cell = object.pattern[y][x]
-        var board_position = (y+object.y) * this.grid_size + (x+object.x)
-        this.board[board_position] |= cell & 1
-        this.cell_types[board_position] = cell >> 1 || this.cell_types[board_position]
+        cell_positions.push([x, y])
       }
     }
+    this.edit_cells(cell_positions, get_new_cell, [])
     if (destructive) {
       this.objects.splice(index, 1)
     }
