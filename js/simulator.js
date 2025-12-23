@@ -893,24 +893,26 @@ function create_event_handlers(sandbox) {
         drawing_cell_type = 1
       }
     } else if (tool === 'select') { // Selecting
-      var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-      x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
-      y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
-      selection_start = {x: x, y: y}
-      cgol_object.update_selection({
-        left: x,
-        right: x,
-        top: y,
-        bottom: y,
-        visible: false,
-      })
-      var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-      var simulator_selection_move = document.getElementById('simulator-selection-move')
-      if (simulator_selection_toolbar.style.display === 'block') {
-        paste_visible = false
+      if (!currently_pasting) {
+        var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
+        x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
+        y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
+        selection_start = {x: x, y: y}
+        cgol_object.update_selection({
+          left: x,
+          right: x,
+          top: y,
+          bottom: y,
+          visible: false,
+        })
+        var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+        var simulator_selection_move = document.getElementById('simulator-selection-move')
+        if (simulator_selection_toolbar.style.display === 'block') {
+          paste_visible = false
+        }
+        simulator_selection_toolbar.style.display = 'none'
+        simulator_selection_move.style.display = 'none'
       }
-      simulator_selection_toolbar.style.display = 'none'
-      simulator_selection_move.style.display = 'none'
     }
 
     canvas.setPointerCapture(event.pointerId)
@@ -989,7 +991,7 @@ function create_event_handlers(sandbox) {
         }
       }
     } else if (tool === 'select') { // Selecting
-      if (mouse_down) {
+      if (mouse_down && !currently_pasting) {
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
         x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
         y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
