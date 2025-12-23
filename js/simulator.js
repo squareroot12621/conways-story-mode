@@ -1314,6 +1314,24 @@ function create_event_handlers(sandbox) {
     update_floating_toolbars()
   })
   
+  // Abort paste button
+  var abort_paste_button = document.getElementById('simulator-paste-abort')
+  abort_paste_button.addEventListener('click', () => {
+    currently_pasting = false
+    cgol_object.selection.visible = false
+    cgol_object.objects.shift()
+    update_floating_toolbars()
+  })
+  // Confirm paste button
+  var confirm_paste_button = document.getElementById('simulator-paste-confirm')
+  confirm_paste_button.addEventListener('click', () => {
+    currently_pasting = false
+    cgol_object.selection.visible = false
+    cgol_object.bake_object(0, true)
+    cgol_object.set_state(['paste', 1, 0, null, null, false])
+    update_floating_toolbars()
+  })
+  
   // Event handlers for the "move selection" button
   var move_selection_button = document.getElementById('simulator-selection-move')
   var drag_offset_x, drag_offset_y
@@ -1356,7 +1374,7 @@ function create_event_handlers(sandbox) {
     move_selection_button.releasePointerCapture(event.pointerId)
     if (!currently_pasting) {
       cgol_object.bake_object(0, true)
-      cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), (b) => b, false)
+      cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), null, false)
     }
   }
   move_selection_button.addEventListener('pointerdown', move_selection_mouse_down)
