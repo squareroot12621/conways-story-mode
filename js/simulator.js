@@ -469,12 +469,12 @@ function update_floating_toolbars(force_visible=false, update_visibility=true) {
     )
     if (update_visibility) {
       simulator_selection_toolbar.style.display = 'block'
-      simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
-      simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
       simulator_selection_move.style.display = 'block'
-      simulator_selection_move.style.left = move_position.x + 'px'
-      simulator_selection_move.style.top = move_position.y + 'px'
     }
+    simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
+    simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
+    simulator_selection_move.style.left = move_position.x + 'px'
+    simulator_selection_move.style.top = move_position.y + 'px'
   }
 }
 
