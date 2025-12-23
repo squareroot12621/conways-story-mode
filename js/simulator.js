@@ -1270,6 +1270,7 @@ function create_event_handlers(sandbox) {
   // Paste button
   var paste_selection_button = document.getElementById('simulator-selection-paste')
   paste_selection_button.addEventListener('click', () => {
+    console.log(clipboard) // DEBUG
     currently_pasting = true
     cgol_object.objects.unshift(clipboard)
     cgol_object.selection.visible = true
