@@ -1303,8 +1303,7 @@ function create_event_handlers(sandbox) {
     cgol_object.selection.right = cgol_object.selection.left + clipboard.width - 1
     cgol_object.selection.bottom = cgol_object.selection.top + clipboard.height - 1
     change_visible_toolbar_group(2)
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
-    simulator_selection_move.style.display = 'block'
+    update_floating_toolbars()
   })
   
   // Event handlers for the "move selection" button
