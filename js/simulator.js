@@ -452,7 +452,7 @@ function resize_canvas() {
   canvas.width = canvas.clientWidth
   canvas.height = canvas.clientHeight
 }
-function update_floating_toolbars(force_visible=false) {
+function update_floating_toolbars(force_visible=false, update_visibility=true) {
   var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
   var simulator_selection_move = document.getElementById('simulator-selection-move')
   if (cgol_object.selection.visible
@@ -467,12 +467,14 @@ function update_floating_toolbars(force_visible=false) {
       cgol_object.selection.right + 1,
       cgol_object.selection.top,
     )
-    simulator_selection_toolbar.style.display = 'block'
-    simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
-    simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
-    simulator_selection_move.style.display = 'block'
-    simulator_selection_move.style.left = move_position.x + 'px'
-    simulator_selection_move.style.top = move_position.y + 'px'
+    if (update_visibility) {
+      simulator_selection_toolbar.style.display = 'block'
+      simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
+      simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
+      simulator_selection_move.style.display = 'block'
+      simulator_selection_move.style.left = move_position.x + 'px'
+      simulator_selection_move.style.top = move_position.y + 'px'
+    }
   }
 }
 
@@ -504,7 +506,7 @@ function resize_simulator() {
   
   resize_canvas()
   if (cgol_object) {
-    update_floating_toolbars()
+    update_floating_toolbars(false, false)
   }
 }
 
@@ -774,7 +776,7 @@ function create_event_handlers(sandbox) {
     zoom_label.innerText = 'Zoom ' + shown_zoom
     zoom_slider.value = slider_value
     cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, true_zoom)
-    update_floating_toolbars()
+    update_floating_toolbars(false, false)
   }
   
   zoom_button.addEventListener('click', () => {
