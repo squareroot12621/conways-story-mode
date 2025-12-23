@@ -1274,6 +1274,8 @@ function create_event_handlers(sandbox) {
     currently_pasting = true
     cgol_object.objects.unshift(clipboard)
     cgol_object.objects[0].moving = true
+    cgol_object.objects[0].x = cgol_object.selection.left_x
+    cgol_object.objects[0].y = cgol_object.selection.top_y
     cgol_object.selection.visible = true
     cgol_object.selection.right_x = cgol_object.selection.left_x + clipboard.width - 1
     cgol_object.selection.bottom_y = cgol_object.selection.top_y + clipboard.height - 1
