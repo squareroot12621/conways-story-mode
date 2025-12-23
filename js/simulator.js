@@ -321,12 +321,35 @@ function create_simulator_main(sandbox) {
     {class: 'simulator-paste-group'},
   )
   
+  // Paste confirmation buttons
+  var abort_paste_button = create_element('button', 'close', {
+    'aria-label': 'Abort paste',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-paste-abort',
+    type: 'button',
+  })
+  var confirm_paste_button = create_element('button', 'check', {
+    'aria-label': 'Confirm paste',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-paste-confirm',
+    type: 'button',
+  })
+  var paste_confirmation_group = create_element(
+    'span',
+    [
+      abort_paste_button,
+      confirm_paste_button,
+    ],
+    {class: 'simulator-paste-confirmation-group'},
+  )
+  
   // The floating toolbar when a selection is made
   var selection_toolbar = create_element(
     'section',
     [
       selection_group,
       paste_group,
+      paste_confirmation_group,
     ],
     {class: 'simulator-selection-toolbar'},
   )
@@ -1279,8 +1302,7 @@ function create_event_handlers(sandbox) {
     cgol_object.selection.visible = true
     cgol_object.selection.right = cgol_object.selection.left + clipboard.width - 1
     cgol_object.selection.bottom = cgol_object.selection.top + clipboard.height - 1
-    // TODO: Add the "confirm paste" group
-    // change_visible_toolbar_group(2)
+    change_visible_toolbar_group(2)
     var simulator_selection_move = document.getElementById('simulator-selection-move')
     simulator_selection_move.style.display = 'block'
   })
