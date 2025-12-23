@@ -453,9 +453,12 @@ function resize_canvas() {
   canvas.height = canvas.clientHeight
 }
 function update_floating_toolbars(force_visible=false) {
-  if (cgol_object.selection.visible || force_visible) {
-    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
+  var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+  var simulator_selection_move = document.getElementById('simulator-selection-move')
+  if (cgol_object.selection.visible
+      || simulator_selection_toolbar.style.display === 'block'
+      || simulator_selection_move.style.display === 'block'
+      || force_visible) {
     var toolbar_position = cgol_object.board_to_canvas_coordinates(
       (cgol_object.selection.left + cgol_object.selection.right + 1) / 2,
       cgol_object.selection.top,
