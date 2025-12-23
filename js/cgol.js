@@ -1113,13 +1113,6 @@ class CGoL {
       ctx.stroke()
     }
     
-    // START DEBUG
-    ctx.font = '30px sans-serif'
-    ctx.fillStyle = 'white'
-    var time_ms = Math.round((performance.now() - start_time) * 1000) / 1000
-    ctx.fillText(`${time_ms} ms`, 50, 150)
-    // END DEBUG
-    
     this.#cached_picture = ctx.getImageData(0, 0, canvas.width, canvas.height)
   }
 }
