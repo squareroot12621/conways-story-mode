@@ -1042,7 +1042,7 @@ function create_event_handlers(sandbox) {
         temporarily_paused = false
       }
     } else if (tool === 'select') { // Selecting
-      if (mouse_down) {
+      if (mouse_down && !currently_pasting) {
         if (paste_visible) {
           change_visible_toolbar_group(1)
           var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
