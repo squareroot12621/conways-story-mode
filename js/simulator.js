@@ -312,7 +312,10 @@ function create_simulator_main(sandbox) {
   var paste_group = create_element(
     'span',
     [paste_selection_button],
-    {class: 'simulator-paste-group'},
+    {
+      class: 'simulator-paste-group',
+      disabled: '', // We can't paste anything yet
+    },
   )
   
   // The floating toolbar when a selection is made
@@ -1022,6 +1025,8 @@ function create_event_handlers(sandbox) {
             visible: false,
           })
           update_floating_toolbars(true)
+          var simulator_selection_move = document.getElementById('simulator-selection-move')
+          simulator_selection_move.style.display = 'none'
           paste_visible = false
         } else {
           change_visible_toolbar_group(0)
@@ -1229,12 +1234,16 @@ function create_event_handlers(sandbox) {
     var simulator_selection_move = document.getElementById('simulator-selection-move')
     simulator_selection_toolbar.style.display = 'none'
     simulator_selection_move.style.display = 'none'
+    var paste_selection_button = document.getElementById('simulator-selection-paste')
+    paste_selection_button.removeAttribute('disabled')
   })
   // Copy button
   var copy_selection_button = document.getElementById('simulator-selection-copy')
   copy_selection_button.addEventListener('click', () => {
     cgol_object.extract_selection_to_object(false)
     clipboard = cgol_object.objects.shift()
+    var paste_selection_button = document.getElementById('simulator-selection-paste')
+    paste_selection_button.removeAttribute('disabled')
   })
   // Delete button
   var delete_selection_button = document.getElementById('simulator-selection-delete')
