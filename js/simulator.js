@@ -19,11 +19,16 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
 function create_simulator_sidebar(sandbox, objective=null, library=null) {
   var back_icon = create_element('span', 'arrow_back', {class: 'icon', 'aria-hidden': true})
-  var back_button = create_element('button', [back_icon, ' Back'], {class: 'back-button'})
+  var back_button = create_element('button', [back_icon, ' Back'], {
+    class: 'back-button',
+    type: 'button',
+  })
   var close_menu_icon = create_element('span', 'arrow_left', {class: 'icon', 'aria-hidden': true})
-  var close_menu_button = create_element(
-    'button', close_menu_icon, {class: 'invisible-button', 'aria-label': 'Close sidebar'}
-  )
+  var close_menu_button = create_element('button', close_menu_icon, {
+    class: 'invisible-button',
+    'aria-label': 'Close sidebar',
+    type: 'button',
+  })
   
   if (objective !== null) {
     var mission_icon = create_element('span', 'list_alt', {class: 'icon', 'aria-hidden': true})
@@ -63,12 +68,20 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
 
   if (!sandbox) { // Sandbox doesn't have any hints
     var lightbulb_icon = create_element('span', 'lightbulb_2', {class: 'icon', 'aria-hidden': true})
-    var hint_button = create_element('button', lightbulb_icon, {class: 'invisible-button', 'aria-label': 'Show hint'})
+    var hint_button = create_element('button', lightbulb_icon, {
+      class: 'invisible-button',
+      'aria-label': 'Show hint',
+      type: 'button',
+    })
     var hint_tooltip = create_element('div', 'Need a hint?', {class: 'hint-tooltip'})
     var hint_wrapper = create_element('div', [hint_button, hint_tooltip], {class: 'hint-button'})
   }
   var reset_icon = create_element('span', 'replay', {class: 'icon', 'aria-hidden': true})
-  var reset_button = create_element('button', reset_icon, {class: 'invisible-button', 'aria-label': 'Reset level'})
+  var reset_button = create_element('button', reset_icon, {
+    class: 'invisible-button',
+    'aria-label': 'Reset level',
+    type: 'button',
+  })
   var sidebar_bottom = create_element(
     'div', sandbox ? [reset_button] : [hint_wrapper, reset_button], {class: 'simulator-sidebar-bottom'}
   )
@@ -82,9 +95,12 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
 
 function create_simulator_main(sandbox) {  
   // The button that opens the sidebar
-  var sidebar_open = create_element(
-    'button', 'arrow_right', {class: 'simulator-toolbar-item', id: 'sidebar-open', 'aria-label': 'Open sidebar'}
-  )
+  var sidebar_open = create_element('button', 'arrow_right', {
+    class: 'simulator-toolbar-item',
+    id: 'sidebar-open',
+    'aria-label': 'Open sidebar',
+    type: 'button',
+  })
   sidebar_open.style.display = 'none'
   /* The tool selector. I can't just use <select>/<option>
      because you can't put icons in <option> elements, unfortunately. */
@@ -102,6 +118,7 @@ function create_simulator_main(sandbox) {
   var tool_selected = create_element('button', tools[0].icon, {
     class: 'simulator-toolbar-item',
     tabindex: 0, // Fix a bug on Safari
+    type: 'button',
   })
   var tools_inner = create_element('div', tool_array, {class: 'simulator-option-wrapper'})
   var tools_outer = create_element('div', tools_inner, {id: 'simulator-options'})
@@ -115,9 +132,12 @@ function create_simulator_main(sandbox) {
   })
   var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
   // Reset, step back, step forward, and play buttons
-  var gen_0_button = create_element(
-    'button', 'skip_previous', {class: 'simulator-toolbar-item', id: 'simulator-reset', 'aria-label': 'Reset to generation 0'}
-  )
+  var gen_0_button = create_element('button', 'skip_previous', {
+    class: 'simulator-toolbar-item',
+    id: 'simulator-reset',
+    'aria-label': 'Reset to generation 0',
+    type: 'button',
+  })
   /* We can't just do scale: -1 because that'll make the GPU kick in,
      and that kills the hinting and makes everything blurry.
      So instead of letting the GPU do that, we do it ourselves with the SVG. */
@@ -135,13 +155,20 @@ function create_simulator_main(sandbox) {
     id: 'simulator-back',
     'aria-label': 'Step back 1 generation',
     disabled: '', // We're at generation 0 right now so we can't step back
+    type: 'button',
   })
-  var step_button = create_element(
-    'button', 'resume', {class: 'simulator-toolbar-item', id: 'simulator-step', 'aria-label': 'Step forward 1 generation'}
-  )
-  var play_button = create_element(
-    'button', 'play_arrow', {class: 'simulator-toolbar-item', id: 'simulator-play', 'aria-label': 'Play simulation'}
-  )
+  var step_button = create_element('button', 'resume', {
+    class: 'simulator-toolbar-item',
+    id: 'simulator-step',
+    'aria-label': 'Step forward 1 generation',
+    type: 'button',
+  })
+  var play_button = create_element('button', 'play_arrow', {
+    class: 'simulator-toolbar-item',
+    id: 'simulator-play',
+    'aria-label': 'Play simulation',
+    type: 'button',
+  })
   // The speed slider
   var slider = create_element('input', [], {
     type: 'range',
@@ -160,15 +187,13 @@ function create_simulator_main(sandbox) {
     'div', slider_inner, {id: 'simulator-speed-wrapper'}
   )
   slider_outer.style.display = 'none'
-  var speed_button = create_element(
-    'button', 'speed', {
-      'aria-label': 'Change simulation speed',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-speed-button',
-      tabindex: 0, // Fix a bug on Safari
-      type: 'button',
-    }
-  )
+  var speed_button = create_element('button', 'speed', {
+    'aria-label': 'Change simulation speed',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-speed-button',
+    tabindex: 0, // Fix a bug on Safari
+    type: 'button',
+  })
   var speed_wrapper = create_element(
     'div', [speed_button, slider_outer], {id: 'simulator-speed'}
   )
@@ -190,15 +215,13 @@ function create_simulator_main(sandbox) {
     'div', zoom_slider_inner, {id: 'simulator-zoom-wrapper'}
   )
   zoom_slider_outer.style.display = 'none'
-  var zoom_button = create_element(
-    'button', 'zoom_in', {
-      'aria-label': 'Change zoom level',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-zoom-button',
-      tabindex: 0, // Fix a bug on Safari
-      type: 'button',
-    }
-  )
+  var zoom_button = create_element('button', 'zoom_in', {
+    'aria-label': 'Change zoom level',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-zoom-button',
+    tabindex: 0, // Fix a bug on Safari
+    type: 'button',
+  })
   var zoom_wrapper = create_element(
     'div', [zoom_button, zoom_slider_outer], {id: 'simulator-zoom'}
   )
@@ -218,70 +241,54 @@ function create_simulator_main(sandbox) {
   canvas.height = canvas.clientHeight
 
   // Selection buttons
-  var rotate_ccw_selection_button = create_element(
-    'button', 'rotate_left', {
-      'aria-label': 'Rotate selection counterclockwise',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-rotate-ccw',
-      type: 'button',
-    }
-  )
-  var rotate_cw_selection_button = create_element(
-    'button', 'rotate_right', {
-      'aria-label': 'Rotate selection clockwise',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-rotate-cw',
-      type: 'button',
-    }
-  )
-  var flip_horiz_selection_button = create_element(
-    'button', 'flip', {
-      'aria-label': 'Flip selection horizontally',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-flip-horiz',
-      type: 'button',
-    }
-  )
-  var flip_vert_selection_button = create_element(
-    'button', '\u{F10E8}', {
-      'aria-label': 'Flip selection vertically',
-      class: 'simulator-toolbar-item icon-alt',
-      id: 'simulator-selection-flip-vert',
-      type: 'button',
-    }
-  )
-  var cut_selection_button = create_element(
-    'button', 'cut', {
-      'aria-label': 'Cut selection',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-cut',
-      type: 'button',
-    }
-  )
-  var copy_selection_button = create_element(
-    'button', 'content_copy', {
-      'aria-label': 'Copy selection',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-copy',
-      type: 'button',
-    }
-  )
-  var select_objects_selection_button = create_element(
-    'button', 'vignette_2', {
-      'aria-label': 'Select objects in selection',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-select-objects',
-      type: 'button',
-    }
-  )
-  var delete_selection_button = create_element(
-    'button', 'delete', {
-      'aria-label': 'Delete selection',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-delete',
-      type: 'button',
-    }
-  )
+  var rotate_ccw_selection_button = create_element('button', 'rotate_left', {
+    'aria-label': 'Rotate selection counterclockwise',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-selection-rotate-ccw',
+    type: 'button',
+  })
+  var rotate_cw_selection_button = create_element('button', 'rotate_right', {
+    'aria-label': 'Rotate selection clockwise',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-selection-rotate-cw',
+    type: 'button',
+  })
+  var flip_horiz_selection_button = create_element('button', 'flip', {
+    'aria-label': 'Flip selection horizontally',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-selection-flip-horiz',
+    type: 'button',
+  })
+  var flip_vert_selection_button = create_element('button', '\u{F10E8}', {
+    'aria-label': 'Flip selection vertically',
+    class: 'simulator-toolbar-item icon-alt',
+    id: 'simulator-selection-flip-vert',
+    type: 'button',
+  })
+  var cut_selection_button = create_element('button', 'cut', {
+    'aria-label': 'Cut selection',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-selection-cut',
+    type: 'button',
+  })
+  var copy_selection_button = create_element('button', 'content_copy', {
+    'aria-label': 'Copy selection',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-selection-copy',
+    type: 'button',
+  })
+  var select_objects_selection_button = create_element('button', 'vignette_2', {
+    'aria-label': 'Select objects in selection',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-selection-select-objects',
+    type: 'button',
+  })
+  var delete_selection_button = create_element('button', 'delete', {
+    'aria-label': 'Delete selection',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-selection-delete',
+    type: 'button',
+  })
   var selection_group = create_element(
     'span',
     [
@@ -301,21 +308,17 @@ function create_simulator_main(sandbox) {
   )
 
   // Paste button
-  var paste_selection_button = create_element(
-    'button', 'content_paste', {
-      'aria-label': 'Paste selection',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-paste',
-      type: 'button',
-    }
-  )
+  var paste_selection_button = create_element('button', 'content_paste', {
+    'aria-label': 'Paste selection',
+    class: 'simulator-toolbar-item',
+    disabled: '', // We can't paste anything yet
+    id: 'simulator-selection-paste',
+    type: 'button',
+  })
   var paste_group = create_element(
     'span',
     [paste_selection_button],
-    {
-      class: 'simulator-paste-group',
-      disabled: '', // We can't paste anything yet
-    },
+    {class: 'simulator-paste-group'},
   )
   
   // The floating toolbar when a selection is made
@@ -330,14 +333,12 @@ function create_simulator_main(sandbox) {
   selection_toolbar.style.display = 'none'
 
   // The floating "move selection" button
-  var selection_move = create_element(
-    'button', 'open_with', {
-      'aria-label': 'Move selection',
-      class: 'simulator-toolbar-item',
-      id: 'simulator-selection-move',
-      type: 'button',
-    }
-  )
+  var selection_move = create_element('button', 'open_with', {
+    'aria-label': 'Move selection',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-selection-move',
+    type: 'button',
+  })
   selection_move.style.display = 'none'
   
   // The "generations" statistic
@@ -356,15 +357,13 @@ function create_simulator_main(sandbox) {
     'div', extra_stats_inner, {id: 'extra-stats-wrapper'}
   )
   extra_stats_outer.style.display = 'none'
-  var extra_stats_button = create_element(
-    'button', 'bar_chart', {
-      'aria-label': 'Toggle extra statistics',
-      class: 'simulator-toolbar-item',
-      id: 'extra-stats-button',
-      tabindex: 0, // Fix a bug on Safari
-      type: 'button',
-    }
-  )
+  var extra_stats_button = create_element('button', 'bar_chart', {
+    'aria-label': 'Toggle extra statistics',
+    class: 'simulator-toolbar-item',
+    id: 'extra-stats-button',
+    tabindex: 0, // Fix a bug on Safari
+    type: 'button',
+  })
   var extra_stats_wrapper = create_element(
     'div', [extra_stats_button, extra_stats_outer], {id: 'simulator-extra-stats'}
   )
@@ -374,12 +373,14 @@ function create_simulator_main(sandbox) {
     id: 'simulator-undo',
     'aria-label': 'Undo',
     disabled: '', // We haven't done anything yet so we can't undo
+    type: 'button',
   })
   var redo_button = create_element('button', 'redo', {
     class: 'simulator-toolbar-item',
     id: 'simulator-redo',
     'aria-label': 'Redo',
     disabled: '', // We haven't done anything yet so we can't redo
+    type: 'button',
   })
   // The settings button
   var all_extra_options = [
@@ -387,14 +388,13 @@ function create_simulator_main(sandbox) {
     {icon: 'content_copy', name: 'Copy RLE'},
     {icon: 'settings', name: 'Settings'},
   ]
-  var settings_button = create_element(
-    'button', 'more_vert', {
-      class: 'simulator-toolbar-item',
-      id: 'simulator-settings',
-      'aria-label': 'Toggle options',
-      tabindex: 0, // Fix a bug on Safari
-    }
-  )
+  var settings_button = create_element('button', 'more_vert', {
+    class: 'simulator-toolbar-item',
+    id: 'simulator-settings',
+    'aria-label': 'Toggle options',
+    tabindex: 0, // Fix a bug on Safari
+    type: 'button',
+  })
   var extra_option_array = []
   for (var {icon, name} of all_extra_options) {
     var option_icon = create_element('span', icon, {class: 'icon', 'aria-hidden': true})
