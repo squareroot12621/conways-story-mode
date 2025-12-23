@@ -1293,15 +1293,16 @@ function create_event_handlers(sandbox) {
   // Paste button
   var paste_selection_button = document.getElementById('simulator-selection-paste')
   paste_selection_button.addEventListener('click', () => {
-    console.log(clipboard) // DEBUG
     currently_pasting = true
+    cgol_object.selection.left = Math.min(Math.max(cgol_object.selection.left, 0), cgol_object.grid_size - clipboard.width)
+    cgol_object.selection.top = Math.min(Math.max(cgol_object.selection.top, 0), cgol_object.grid_size - clipboard.height)
+    cgol_object.selection.right = cgol_object.selection.left + clipboard.width - 1
+    cgol_object.selection.bottom = cgol_object.selection.top + clipboard.height - 1
+    cgol_object.selection.visible = true
     cgol_object.objects.unshift(clipboard)
     cgol_object.objects[0].moving = true
     cgol_object.objects[0].x = cgol_object.selection.left
     cgol_object.objects[0].y = cgol_object.selection.top
-    cgol_object.selection.visible = true
-    cgol_object.selection.right = cgol_object.selection.left + clipboard.width - 1
-    cgol_object.selection.bottom = cgol_object.selection.top + clipboard.height - 1
     change_visible_toolbar_group(2)
     update_floating_toolbars()
   })
@@ -1319,8 +1320,10 @@ function create_event_handlers(sandbox) {
     original_selection_x = cgol_object.selection.left
     original_selection_y = cgol_object.selection.top
     move_selection_button.setPointerCapture(event.pointerId)
-    cgol_object.extract_selection_to_object()
-    cgol_object.objects[0].moving = true
+    if (!currently_pasting) {
+      cgol_object.extract_selection_to_object()
+      cgol_object.objects[0].moving = true
+    }
   }
   function move_selection_mouse_move(event) {
     var touch = event.pointerType === 'pen' || event.pointerType === 'touch'
@@ -1344,8 +1347,10 @@ function create_event_handlers(sandbox) {
   }
   function move_selection_mouse_up(event) {
     move_selection_button.releasePointerCapture(event.pointerId)
-    cgol_object.bake_object(0, true)
-    cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), (b) => b, false)
+    if (!currently_pasting) {
+      cgol_object.bake_object(0, true)
+      cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), (b) => b, false)
+    }
   }
   move_selection_button.addEventListener('pointerdown', move_selection_mouse_down)
   move_selection_button.addEventListener('pointermove', move_selection_mouse_move)
