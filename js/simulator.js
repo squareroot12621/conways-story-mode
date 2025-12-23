@@ -810,6 +810,7 @@ function create_event_handlers(sandbox) {
   var selection_start = {x: null, y: null}
   var clipboard
   var paste_visible = false
+  var currently_pasting = false
 
   function update_first_mouse_position(event) {
     first_x = event.pageX
@@ -1264,6 +1265,20 @@ function create_event_handlers(sandbox) {
     var simulator_selection_move = document.getElementById('simulator-selection-move')
     simulator_selection_toolbar.style.display = 'none'
     simulator_selection_move.style.display = 'none'
+  })
+  
+  // Paste button
+  var paste_selection_button = document.getElementById('simulator-selection-paste')
+  paste_selection_button.addEventListener('click', () => {
+    currently_pasting = true
+    cgol_object.objects.unshift(clipboard)
+    cgol_object.selection.visible = true
+    cgol_object.selection.right_x = cgol_object.selection.left_x + clipboard.width - 1
+    cgol_object.selection.bottom_y = cgol_object.selection.top_y + clipboard.height - 1
+    // TODO: Add the "confirm paste" group
+    // change_visible_toolbar_group(2)
+    var simulator_selection_move = document.getElementById('simulator-selection-move')
+    simulator_selection_move.style.display = 'block'
   })
   
   // Event handlers for the "move selection" button
