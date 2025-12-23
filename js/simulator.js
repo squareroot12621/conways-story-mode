@@ -1318,18 +1318,26 @@ function create_event_handlers(sandbox) {
   var abort_paste_button = document.getElementById('simulator-paste-abort')
   abort_paste_button.addEventListener('click', () => {
     currently_pasting = false
-    cgol_object.selection.visible = false
     cgol_object.objects.shift()
+    cgol_object.update_selection({...cgol_object.selection, visible: false})
     update_floating_toolbars()
+    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+    var simulator_selection_move = document.getElementById('simulator-selection-move')
+    simulator_selection_toolbar.style.display = 'none'
+    simulator_selection_move.style.display = 'none'
   })
   // Confirm paste button
   var confirm_paste_button = document.getElementById('simulator-paste-confirm')
   confirm_paste_button.addEventListener('click', () => {
     currently_pasting = false
-    cgol_object.selection.visible = false
     cgol_object.bake_object(0, true)
     cgol_object.set_state(['paste', 1, 0, null, null, false])
+    cgol_object.update_selection({...cgol_object.selection, visible: false})
     update_floating_toolbars()
+    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+    var simulator_selection_move = document.getElementById('simulator-selection-move')
+    simulator_selection_toolbar.style.display = 'none'
+    simulator_selection_move.style.display = 'none'
   })
   
   // Event handlers for the "move selection" button
