@@ -97,7 +97,7 @@
     list-style-type: none;
     padding-left: 0;
   }
-  .simulator-add-object {
+  .simulator-toolbar-item.simulator-add-object {
     font-size: 1.25rem;
     padding: 0.125rem;
     vertical-align: -0.25rem;
