@@ -238,6 +238,7 @@ footer {
 
 a {
     color: var(--link-color);
+    text-underline-offset: 0.08rem;
     text-decoration: underline;
 }
 a:visited {
