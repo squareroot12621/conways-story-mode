@@ -82,8 +82,12 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
     var library_items = []
     for (var object of library) {
       // TODO: Add support for other languages
-      var item_name = `${object.count}\u00D7 ${object.data.name['en-US']}`
-      library_items.push(create_element('li', item_name))
+      var item_name = `${object.count}\u00D7 ${object.data.name['en-US']} `
+      var add_object_button = create_element('button', 'add', {
+        class: 'simulator-add-object',
+        'data-object': object.id,
+      })
+      library_items.push(create_element('li', [item_name, add_object_button]))
     }
     var library_list = create_element('ul', library_items, {class: 'simulator-library-list'})
   } else {
