@@ -230,7 +230,7 @@
   #simulator-reset, #simulator-step, #simulator-play {
     font-variation-settings: 'FILL' 1;
   }
-  #simulator-back svg {
+  #simulator-back svg, #simulator-object-back svg {
     max-width: none;
   }
   #simulator-speed, #simulator-zoom {
