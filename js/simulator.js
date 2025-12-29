@@ -342,6 +342,70 @@ function create_simulator_main(sandbox) {
     ],
     {class: 'simulator-paste-confirmation-group'},
   )
+
+  // Object buttons
+  var rotate_ccw_object_button = create_element('button', 'rotate_left', {
+    'aria-label': 'Rotate object counterclockwise',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-rotate-ccw',
+    type: 'button',
+  })
+  var rotate_cw_object_button = create_element('button', 'rotate_right', {
+    'aria-label': 'Rotate object clockwise',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-rotate-cw',
+    type: 'button',
+  })
+  var flip_horiz_object_button = create_element('button', 'flip', {
+    'aria-label': 'Flip object horizontally',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-flip-horiz',
+    type: 'button',
+  })
+  var flip_vert_object_button = create_element('button', '\u{F10E8}', {
+    'aria-label': 'Flip object vertically',
+    class: 'simulator-toolbar-item icon-alt',
+    id: 'simulator-object-flip-vert',
+    type: 'button',
+  })
+  var cut_object_button = create_element('button', 'cut', {
+    'aria-label': 'Cut object',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-cut',
+    type: 'button',
+  })
+  var copy_object_button = create_element('button', 'content_copy', {
+    'aria-label': 'Copy object',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-copy',
+    type: 'button',
+  })
+  var break_object_button = create_element('button', 'grid_view', {
+    'aria-label': 'Break object into cells',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-break',
+    type: 'button',
+  })
+  var delete_object_button = create_element('button', 'delete', {
+    'aria-label': 'Delete object',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-delete',
+    type: 'button',
+  })
+  var object_group = create_element(
+    'span',
+    [
+      rotate_ccw_object_button,
+      rotate_cw_object_button,
+      flip_horiz_object_button,
+      flip_vert_object_button,
+      cut_object_button,
+      copy_object_button,
+      break_object_button,
+      delete_object_button,
+    ],
+    {class: 'simulator-object-group'},
+  )
   
   // The floating toolbar when a selection is made
   var selection_toolbar = create_element(
@@ -350,6 +414,7 @@ function create_simulator_main(sandbox) {
       selection_group,
       paste_group,
       paste_confirmation_group,
+      object_group
     ],
     {class: 'simulator-selection-toolbar'},
   )
