@@ -5,6 +5,40 @@ import {create_element, update_root, throttle} from './utilities.js'
 var cgol_object = null
 
 function create_cgol_simulator(sandbox, objective=null, library=null) {
+  library = [
+    {
+      "id": "blinker",
+      "count": 1,
+      "data": {
+        "pattern": "A$A$A",
+        "name": {
+          "en-US": "Blinker"
+        }
+        "type": "oscillator",
+        "period": 2,
+        "discoverer": "John Conway",
+        "discover_date": [1969, null, null],
+        "add_to_sandbox_library": [1, 3]
+      }
+    },
+    {
+      "id": "glider",
+      "count": 2,
+      "data": {
+        "pattern": ".A$2.A$3A",
+        "name": {
+          "en-US": "Glider"
+        }
+        "type": "spaceship",
+        "period": 4,
+        "displacement": [1, 1],
+        "discoverer": "Richard K. Guy",
+        "discover_date": [1969, 11, null],
+        "add_to_sandbox_library": false
+      }
+    }
+  ] // DEBUG
+  
   var sidebar = create_simulator_sidebar(sandbox, objective, library)
   var simulator = create_simulator_main(sandbox)
   
