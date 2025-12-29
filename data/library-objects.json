@@ -3,7 +3,7 @@
     "pattern": "2A$2A",
     "name": {
       "en-US": "Block"
-    }
+    },
     "type": "still_life",
     "discoverer": "John Conway",
     "discover_date": [1969, null, null],
@@ -13,7 +13,7 @@
     "pattern": "A$A$A",
     "name": {
       "en-US": "Blinker"
-    }
+    },
     "type": "oscillator",
     "period": 2,
     "discoverer": "John Conway",
@@ -24,7 +24,7 @@
     "pattern": ".A$2.A$3A",
     "name": {
       "en-US": "Glider"
-    }
+    },
     "type": "spaceship",
     "period": 4,
     "displacement": [1, 1],
