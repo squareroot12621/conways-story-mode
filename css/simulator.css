@@ -227,7 +227,7 @@
       color: var(--gray-10);
     }
   }
-  #simulator-reset, #simulator-step, #simulator-play {
+  #simulator-reset, #simulator-step, #simulator-play, #simulator-object-forward {
     font-variation-settings: 'FILL' 1;
   }
   #simulator-back svg, #simulator-object-back svg {
