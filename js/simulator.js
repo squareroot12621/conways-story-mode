@@ -13,7 +13,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
         "pattern": "A$A$A",
         "name": {
           "en-US": "Blinker"
-        }
+        },
         "type": "oscillator",
         "period": 2,
         "discoverer": "John Conway",
@@ -28,7 +28,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
         "pattern": ".A$2.A$3A",
         "name": {
           "en-US": "Glider"
-        }
+        },
         "type": "spaceship",
         "period": 4,
         "displacement": [1, 1],
