@@ -368,6 +368,28 @@ function create_simulator_main(sandbox) {
     id: 'simulator-object-flip-vert',
     type: 'button',
   })
+  // Same trick as back_svg
+  var back_object_path = create_element(
+    'path', [], {d: 'M 720 -240 v -480 h -80 v 480 h 80 Z m -160 0 -400 -240 400 -240 v 480 Z'}
+  )
+  var back_object_svg = create_element('svg', back_object_path, {
+    viewBox: '0 -960 960 960',
+    width: '1em',
+    height: '1em',
+    fill: 'currentColor',
+  })
+  var back_object_button = create_element('button', back_object_svg, {
+    'aria-label': 'Step object back 1 generation',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-back',
+    type: 'button',
+  })
+  var forward_object_button = create_element('button', 'resume', {
+    'aria-label': 'Step object forward 1 generation',
+    class: 'simulator-toolbar-item',
+    id: 'simulator-object-forward',
+    type: 'button',
+  })
   var cut_object_button = create_element('button', 'cut', {
     'aria-label': 'Cut object',
     class: 'simulator-toolbar-item',
@@ -399,6 +421,8 @@ function create_simulator_main(sandbox) {
       rotate_cw_object_button,
       flip_horiz_object_button,
       flip_vert_object_button,
+      back_object_button,
+      forward_object_button,
       cut_object_button,
       copy_object_button,
       break_object_button,
