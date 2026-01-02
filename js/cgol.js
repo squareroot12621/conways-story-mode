@@ -52,6 +52,7 @@ class CGoL {
         rotation: object.rotation ?? 0, // 0 = upright, 1 = 90 degrees CW
         flip_x: object.flip_x ?? false,
         moving: false,
+        selected: false,
       })
     }
 
@@ -497,6 +498,7 @@ class CGoL {
       rotation: 0,
       flip_x: false,
       moving: false,
+      selected: false,
     })
     this.#changed_pattern = true
   }
@@ -1060,6 +1062,17 @@ class CGoL {
     }
 
     // Draw the selection
+    selection_positions = []
+    if (this.selection.visible) {
+      selection_positions.push({
+        left: this.selection.left,
+        right: this.selection.right + 1,
+        top: this.selection.top,
+        bottom: this.selection.bottom,
+        color: '#FFF080',
+      })
+    }
+    // TODO: CONTINUE
     if (this.selection.visible) {
       var left_x = ((this.selection.left * cell_size - true_x_offset) | 0) + 0.5
       var right_x = (((this.selection.right+1) * cell_size - true_x_offset) | 0) + 0.5
