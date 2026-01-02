@@ -682,12 +682,12 @@ function create_event_handlers(sandbox) {
         
         var object_metadata = {}
         if (current_object_data.type) {
-          object_metadata[type] = current_object_data.type
+          object_metadata.type = current_object_data.type
         } else {
           throw new TypeError(`Missing type field for object ${data_object}`)
         }
         if (current_object_data.period) {
-          object_metadata[period] = current_object_data.period
+          object_metadata.period = current_object_data.period
         }
         
         cgol_object.objects.push({
