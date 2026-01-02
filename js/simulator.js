@@ -701,6 +701,7 @@ function create_event_handlers(sandbox) {
           moving: false,
           object_metadata: object_metadata,
         })
+        cgol_object.compile_pattern()
         --data_count
       }
       if (data_count <= 0) {
