@@ -1062,7 +1062,7 @@ class CGoL {
     }
 
     // Draw the selection
-    selection_positions = []
+    var selection_positions = []
     if (this.selection.visible) {
       selection_positions.push({
         left: this.selection.left,
