@@ -1,6 +1,6 @@
 import {create_main_menu} from './main-menu.js'
 import {CGoL} from './cgol.js'
-import {create_element, update_root, throttle} from './utilities.js'
+import {create_element, update_root, throttle, object_data} from './utilities.js'
 
 var cgol_object = null
 
@@ -86,6 +86,7 @@ function create_simulator_sidebar(sandbox, objective=null, library=null) {
       var add_object_button = create_element('button', 'add', {
         class: 'simulator-add-object simulator-toolbar-item',
         'data-object': object.id,
+        'data-count': object.count,
       })
       library_items.push(create_element('li', [item_name, add_object_button]))
     }
@@ -664,11 +665,50 @@ function create_event_handlers(sandbox) {
   // Sidebar event handlers
   var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
   var [back_button, close_menu_button] = sidebar_top.children
+  var add_object_buttons = document.getElementsByClassName('simulator-add-object')
   var sidebar_bottom = document.getElementsByClassName('simulator-sidebar-bottom')[0]
   var hint_button = document.getElementsByClassName('hint-button')[0]?.children[0]
   var reset_button = sidebar_bottom.children[sidebar_bottom.children.length - 1]
   var open_menu_button = document.getElementById('sidebar-open')
   back_button.addEventListener('click', create_main_menu)
+  for (var add_object_button of add_object_buttons) {
+    add_object_button.addEventListener('click', () => {
+      var data_object = add_object_button.getAttribute('data-object')
+      var data_count = add_object_button.getAttribute('data-count')
+      if (data_count > 0) {
+        var current_object_data = object_data[data_object]
+        var object_pattern = current_object_data.pattern
+        var parsed_object = CGoL.parse_rle(object_pattern)
+        
+        var object_metadata = {}
+        if (current_object_data.type) {
+          object_metadata[type] = current_object_data.type
+        } else {
+          throw new TypeError(`Missing type field for object ${data_object}`)
+        }
+        if (current_object_data.period) {
+          object_metadata[period] = current_object_data.period
+        }
+        
+        cgol_object.objects.push({
+          pattern: parsed_object.pattern,
+          x: Math.floor((cgol_object.grid_size - parsed_object.width) / 2),
+          y: Math.floor((cgol_object.grid_size - parsed_object.height) / 2),
+          width: parsed_object.width,
+          height: parsed_object.height,
+          rotation: 0,
+          flip_x: false,
+          moving: false,
+          object_metadata: object_metadata,
+        })
+        --data_count
+      }
+      if (data_count <= 0) {
+        add_object_button.setAttribute('disabled', '')
+      }
+      add_object_button.setAttribute('data-count', data_count)
+    })
+  }
   if (!sandbox) {
     hint_button.addEventListener('click', () => {
       // TODO: Make the hint button show a hint
