@@ -127,7 +127,7 @@ async function load_assets() {
     var library_object_response = await fetch('https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@a3132b3/data/library-objects.json')
     var library_object_json = await library_object_response.json()
     // JavaScript gets mad when trying to assign object_data directly
-    for ([key, value] of Object.entries(library_object_json) {
+    for ([key, value] of Object.entries(library_object_json)) {
         object_data[key] = value
     }
     ++tasks_done
