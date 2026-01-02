@@ -1072,13 +1072,23 @@ class CGoL {
         color: '#FFF080',
       })
     }
-    // TODO: CONTINUE
-    if (this.selection.visible) {
-      var left_x = ((this.selection.left * cell_size - true_x_offset) | 0) + 0.5
-      var right_x = (((this.selection.right+1) * cell_size - true_x_offset) | 0) + 0.5
+    for (var object of this.objects) {
+      if (object.selected && !object.moving) {
+        selection_positions.push({
+          left: object.x,
+          right: object.x + object.width,
+          top: object.y,
+          bottom: object.y + object.height,
+          color: '#D080FF',
+        })
+      }
+    }
+    for (var selection_position of selection_positions) {
+      var left_x = ((selection_position.left * cell_size - true_x_offset) | 0) + 0.5
+      var right_x = ((selection_position.right * cell_size - true_x_offset) | 0) + 0.5
       var width = right_x - left_x
-      var top_y = ((this.selection.top * cell_size - true_y_offset) | 0) + 0.5
-      var bottom_y = (((this.selection.bottom+1) * cell_size - true_y_offset) | 0) + 0.5
+      var top_y = ((selection_position.top * cell_size - true_y_offset) | 0) + 0.5
+      var bottom_y = ((selection_position.bottom * cell_size - true_y_offset) | 0) + 0.5
       var height = bottom_y - top_y
       ctx.fillStyle = '#40404040'
       ctx.fillRect(left_x, top_y, width, height)
@@ -1092,7 +1102,7 @@ class CGoL {
       ctx.lineJoin = 'round'
       ctx.strokeStyle = 'black'
       ctx.strokeRect(left_x, top_y, width, height)
-      ctx.strokeStyle = '#FFF080'
+      ctx.strokeStyle = selection_position.color
       ctx.setLineDash([dash_width_px, dash_width_px])
       ctx.lineDashOffset = performance.now()/1000 * rotations_per_second * dash_width_px
                            % (2*dash_width_px)
