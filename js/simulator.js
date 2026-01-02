@@ -1226,7 +1226,7 @@ function create_event_handlers(sandbox) {
       var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
       if (mouse_down && cgol_object.generation === 0) {
         // Check whether any objects are in range
-        cgol_object.forEach((object) => {
+        cgol_object.objects.forEach((object) => {
           object.selected = false
         })
         for (var object of cgol_object.objects.toReversed()) {
