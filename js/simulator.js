@@ -671,7 +671,7 @@ function create_event_handlers(sandbox) {
   var reset_button = sidebar_bottom.children[sidebar_bottom.children.length - 1]
   var open_menu_button = document.getElementById('sidebar-open')
   back_button.addEventListener('click', create_main_menu)
-  for (var add_object_button of add_object_buttons) {
+  for (let add_object_button of add_object_buttons) {
     add_object_button.addEventListener('click', () => {
       var data_object = add_object_button.getAttribute('data-object')
       var data_count = add_object_button.getAttribute('data-count')
