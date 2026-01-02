@@ -125,12 +125,14 @@ async function load_assets() {
 
     // Load the library object JSON
     var library_object_response = await fetch('https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@a3132b3/data/library-objects.json')
+    var library_object_json = await library_object_response.json()
     // START DEBUG
     console.log(object_data)
     object_data['test'] = 'test'
     console.log(object_data)
+    console.log(library_object_json)
     // END DEBUG
-    object_data = await library_object_response.json()
+    object_data = library_object_json
     ++tasks_done
     update_progress(tasks_done / tasks_to_do)
 }
