@@ -702,6 +702,7 @@ function create_event_handlers(sandbox) {
           rotation: 0,
           flip_x: false,
           moving: false,
+          selected: false,
           object_metadata: object_metadata,
         })
         cgol_object.compile_pattern()
@@ -1220,6 +1221,24 @@ function create_event_handlers(sandbox) {
       if (mouse_down && temporarily_paused) {
         cgol_object.play()
         temporarily_paused = false
+      }
+    } else if (tool === 'object') { // Object
+      var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
+      if (mouse_down && cgol_object.generation === 0) {
+        // Check whether any objects are in range
+        cgol_objects.forEach((object) => {
+          object.selected = false
+        })
+        for (var object of cgol_object.objects.toReversed()) {
+          if (object.moving) {
+            continue
+          }
+          if (x >= object.x && x < object.x + object.width
+              && y >= object.y && y < object.y + object.height) {
+            object.selected = true
+            break
+          }
+        }
       }
     } else if (tool === 'select') { // Selecting
       if (mouse_down && !currently_pasting) {
