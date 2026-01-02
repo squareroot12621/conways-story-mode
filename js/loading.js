@@ -1,4 +1,4 @@
-import {create_element, update_root, images} from './utilities.js'
+import {create_element, update_root, images, object_data} from './utilities.js'
 
 function create_loading_screen() {
     var loading_progress = create_element(
@@ -79,7 +79,8 @@ function update_progress(percentage) {
 
 async function load_assets() {
     var tasks_done = 0
-    const tasks_to_do = 24
+    const tasks_to_do = 25
+    
     // Load the cell icons
     const id_to_name_table = {
         2: 'delete-off',
@@ -108,7 +109,7 @@ async function load_assets() {
         25: 'connect-nw-on',
     } // 0 and 1 don't get icons
     var promises = Object.values(id_to_name_table).map((name) => {
-        return fetch(`https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@cd255ee/images/cell-icons/${name}.svg`)
+        return fetch(`https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@a3132b3/images/cell-icons/${name}.svg`)
     })
     var responses = await Promise.all(promises)
     var ids = Object.keys(id_to_name_table)
@@ -121,6 +122,12 @@ async function load_assets() {
         ++tasks_done
         update_progress(tasks_done / tasks_to_do)
     }
+
+    // Load the library object JSON
+    var library_objects = await fetch('https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@a3132b3/data/library-objects.json')
+    object_data = JSON.parse(library_objects)
+    ++tasks_done
+    update_progress(tasks_done / tasks_to_do)
 }
 
 export {create_loading_screen, load_assets}
