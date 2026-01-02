@@ -689,6 +689,9 @@ function create_event_handlers(sandbox) {
         if (current_object_data.period) {
           object_metadata.period = current_object_data.period
         }
+        if (current_object_data.displacement) {
+          object_metadata.displacement = current_object_data.displacement
+        }
         
         cgol_object.objects.push({
           pattern: parsed_object.pattern,
