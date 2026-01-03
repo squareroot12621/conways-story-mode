@@ -1071,7 +1071,7 @@ class CGoL {
         left: this.selection.left,
         right: this.selection.right + 1,
         top: this.selection.top,
-        bottom: this.selection.bottom,
+        bottom: this.selection.bottom + 1,
         color: '#FFF080',
       })
     }
