@@ -1071,6 +1071,13 @@ function create_event_handlers(sandbox) {
       } else {
         drawing_cell_type = 1
       }
+    } else if (tool === 'object') { // Object
+      cgol_object.selection.visible = false
+      cgol_object.objects.forEach((object) => {
+        object.selected = false
+      })
+      paste_visible = false
+      update_floating_toolbars()
     } else if (tool === 'select') { // Selecting
       if (!currently_pasting) {
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
@@ -1084,6 +1091,9 @@ function create_event_handlers(sandbox) {
           bottom: y,
           visible: false,
         }
+        cgol_object.objects.forEach((object) => {
+          object.selected = false
+        })
         cgol_object.force_update()
         var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
         var simulator_selection_move = document.getElementById('simulator-selection-move')
