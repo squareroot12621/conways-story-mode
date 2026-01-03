@@ -1,4 +1,9 @@
 #conways-story-mode {
+    .back-button:has(+ .levels-heading) {
+        position: relative;
+        z-index: 1;
+    }
+    
     .levels-heading {
         margin: 0.5rem 0.5rem 0rem;
     }
