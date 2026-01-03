@@ -877,8 +877,10 @@ class CGoL {
     if (timestamp === null || timestamp === undefined) {
       this.#draw_inner(options)
     } else {
+      var selection_visible = this.objects.some((object) => object.selected)
+                              || this.selection.visible
       var cache_expired = timestamp - this.#last_draw_time >= 1000
-                          || this.selection.visible
+                          || selection_visible
       // TODO: Make the cache interval changeable using the speed slider
       var changed_size = this.canvas.width !== this.#last_width
                          || this.canvas.height !== this.#last_height
