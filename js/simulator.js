@@ -1077,7 +1077,10 @@ function create_event_handlers(sandbox) {
         object.selected = false
       })
       paste_visible = false
-      update_floating_toolbars()
+      var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+      var simulator_selection_move = document.getElementById('simulator-selection-move')
+      simulator_selection_toolbar.style.display = 'none'
+      simulator_selection_move.style.display = 'none'
     } else if (tool === 'select') { // Selecting
       if (!currently_pasting) {
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
