@@ -308,6 +308,7 @@ class CGoL {
     }
     // Push the last line because it doesn't end in a $
     grid.push(current_line)
+    console.log(grid) // DEBUG
     grid = grid.concat(Array(count - 1).fill([]))
     max_row_width = Math.max(row_width, max_row_width)
     // Pad the rows with zeroes
