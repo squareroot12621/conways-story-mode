@@ -1077,13 +1077,14 @@ function create_event_handlers(sandbox) {
         x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
         y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
         selection_start = {x: x, y: y}
-        cgol_object.update_selection({
+        cgol_object.selection = {
           left: x,
           right: x,
           top: y,
           bottom: y,
           visible: false,
-        })
+        }
+        cgol_object.force_update()
         var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
         var simulator_selection_move = document.getElementById('simulator-selection-move')
         if (simulator_selection_toolbar.style.display === 'block') {
@@ -1181,13 +1182,14 @@ function create_event_handlers(sandbox) {
            shouldn't cause a selection to automatically appear,
            especially if you're trying to remove one already. */
         if (moved_significantly || cgol_object.selection.visible) {
-          cgol_object.update_selection({
+          cgol_object.selection = {
             left: Math.min(x, selection_start.x),
             right: Math.max(x, selection_start.x),
             top: Math.min(y, selection_start.y),
             bottom: Math.max(y, selection_start.y),
             visible: true,
-          })
+          }
+          cgol_object.force_update()
           change_visible_toolbar_group(0)
           update_floating_toolbars()
           paste_visible = false
@@ -1239,6 +1241,7 @@ function create_event_handlers(sandbox) {
             break
           }
         }
+        cgol_object.force_update()
       }
     } else if (tool === 'select') { // Selecting
       if (mouse_down && !currently_pasting) {
@@ -1516,7 +1519,8 @@ function create_event_handlers(sandbox) {
   abort_paste_button.addEventListener('click', () => {
     currently_pasting = false
     cgol_object.objects.shift()
-    cgol_object.update_selection({...cgol_object.selection, visible: false})
+    cgol_object.selection = {...cgol_object.selection, visible: false}
+    cgol_object.force_update()
     update_floating_toolbars()
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
     var simulator_selection_move = document.getElementById('simulator-selection-move')
@@ -1529,7 +1533,8 @@ function create_event_handlers(sandbox) {
     currently_pasting = false
     cgol_object.bake_object(0, true)
     cgol_object.set_state(['paste', 1, 0, null, null, false])
-    cgol_object.update_selection({...cgol_object.selection, visible: false})
+    cgol_object.selection = {...cgol_object.selection, visible: false}
+    cgol_object.force_update()
     update_floating_toolbars()
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
     var simulator_selection_move = document.getElementById('simulator-selection-move')
