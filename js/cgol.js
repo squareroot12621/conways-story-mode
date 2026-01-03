@@ -347,6 +347,7 @@ class CGoL {
     output.height = grid.length
     output.center_x = (output.width - (fullsize ? pad_right-pad_left : 0)) / 2 + x_offset
     output.center_y = (output.height - (fullsize ? pad_bottom-pad_top : 0)) / 2 + y_offset
+    console.log(output) // DEBUG
     return output
   }
 
