@@ -132,10 +132,10 @@ class CGoL {
         [survival, birth] = [birth, survival]
       }
       if (birth.includes('0')) {
-        throw Error("B0 rules aren't supported yet")
+        throw new Error("B0 rules aren't supported yet")
       }
       if (generations) {
-        throw Error("Generations rules aren't supported yet")
+        throw new Error("Generations rules aren't supported yet")
       }
       return generations > 2 ? `B${birth}/S${survival}/G${generations}` : `B${birth}/S${survival}`
     } else {
@@ -234,9 +234,9 @@ class CGoL {
         default:
           var rule_match = rule.match(/^[A-Za-z][A-Za-z0-9_\-]*$/)
           if (rule_match) {
-            throw Error(`Unknown rule name ${rule}`)
+            throw new Error(`Unknown rule name ${rule}`)
           }
-          throw SyntaxError(`Invalid rule name ${rule}`)
+          throw new SyntaxError(`Invalid rule name ${rule}`)
       }
       return rule
     }
@@ -272,11 +272,11 @@ class CGoL {
       while (processing_line) {
         var part = processing_line.match(/([1-9][0-9]*)?([.boA-Y$!])/)
         if (!part) {
-          throw SyntaxError(`Invalid RLE ${processing_line}`)
+          throw new SyntaxError(`Invalid RLE ${processing_line}`)
         } else if (part.index) {
-          throw SyntaxError(`Invalid RLE ${processing_line.slice(0, part.index)}`)
+          throw new SyntaxError(`Invalid RLE ${processing_line.slice(0, part.index)}`)
         }
-        var count = parseInt(part[1]) || 1 // No count gets turned into 1
+        var count = parseInt(part[1]) || 1 // Count is 1 by default
         var cell = part[2]
         var cell_number
         if (cell === '$') {
@@ -286,6 +286,9 @@ class CGoL {
           current_line = []
           row_width = 0
         } else if (cell === '!') {
+          if (part[1]) {
+            throw new SyntaxError('! should not have a count')
+          }
           break parse_rle_loop // No more RLE
         } else {
           switch (cell) {
@@ -309,7 +312,6 @@ class CGoL {
     // Push the last line because it doesn't end in a $
     grid.push(current_line)
     console.log(grid) // DEBUG
-    grid = grid.concat(Array(count - 1).fill([]))
     max_row_width = Math.max(row_width, max_row_width)
     // Pad the rows with zeroes
     for (var [index, row] of grid.entries()) {
@@ -319,7 +321,7 @@ class CGoL {
        until the size of the pattern is the same as grid_size */
     if (fullsize) {
       if (grid_size == null) { // Also catches undefined
-        throw TypeError('grid_size must be this.grid_size')
+        throw new TypeError('grid_size must be this.grid_size')
       }
       var pad_left = Math.floor((grid_size-max_row_width) / 2) + x_offset
       var pad_right = Math.ceil((grid_size-max_row_width) / 2) - x_offset
@@ -394,7 +396,7 @@ class CGoL {
     return output
   }
   set #full_board(value) {
-    throw TypeError("Can't assign to #full_board")
+    throw new TypeError("Can't assign to #full_board")
   }
 
   page_to_board_coordinates(x, y) {
@@ -567,7 +569,7 @@ class CGoL {
     return population
   }
   set population(value) {
-    throw TypeError("Can't assign to population")
+    throw new TypeError("Can't assign to population")
   }
   get bounding_box() {
     var left_x = this.grid_size, right_x = 0, top_y = this.grid_size, bottom_y = 0
@@ -587,7 +589,7 @@ class CGoL {
     return [width, height]
   }
   set bounding_box(value) {
-    throw TypeError("Can't assign to bounding_box")
+    throw new TypeError("Can't assign to bounding_box")
   }
 
   set_state(action, value1, value2, control1, control2, mergeable=true) {
