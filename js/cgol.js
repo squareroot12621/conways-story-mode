@@ -311,7 +311,6 @@ class CGoL {
     }
     // Push the last line because it doesn't end in a $
     grid.push(current_line)
-    console.log(grid) // DEBUG
     max_row_width = Math.max(row_width, max_row_width)
     // Pad the rows with zeroes
     for (var [index, row] of grid.entries()) {
@@ -350,7 +349,6 @@ class CGoL {
     output.height = grid.length
     output.center_x = (output.width - (fullsize ? pad_right-pad_left : 0)) / 2 + x_offset
     output.center_y = (output.height - (fullsize ? pad_bottom-pad_top : 0)) / 2 + y_offset
-    console.log(output) // DEBUG
     return output
   }
 
