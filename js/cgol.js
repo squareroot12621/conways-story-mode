@@ -554,8 +554,7 @@ class CGoL {
     this.#update_stats()
   }
 
-  update_selection(new_selection) {
-    this.selection = new_selection
+  force_update() {
     this.#changed_pattern = true
   }
 
