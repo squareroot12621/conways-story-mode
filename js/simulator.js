@@ -1638,6 +1638,7 @@ function create_event_handlers(sandbox) {
   delete_object_button.addEventListener('click', () => {
     var selected_object_index = cgol_object.objects.findIndex((object) => object.selected)
     cgol_object.objects.splice(selected_object_index, 1)
+    cgol_object.compile_pattern()
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
     var simulator_selection_move = document.getElementById('simulator-selection-move')
     simulator_selection_toolbar.style.display = 'none'
