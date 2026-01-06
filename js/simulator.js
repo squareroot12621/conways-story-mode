@@ -1280,6 +1280,7 @@ function create_event_handlers(sandbox) {
           }
         }
         cgol_object.force_update()
+        update_floating_toolbars()
       }
     } else if (tool === 'select') { // Selecting
       if (mouse_down && !currently_pasting) {
