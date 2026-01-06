@@ -1630,6 +1630,19 @@ function create_event_handlers(sandbox) {
   move_selection_button.addEventListener('pointerdown', move_selection_mouse_down)
   move_selection_button.addEventListener('pointermove', move_selection_mouse_move)
   move_selection_button.addEventListener('pointerup', move_selection_mouse_up)
+
+  // Object group event handlers
+
+  // Delete object button
+  var delete_object_button = document.getElementById('simulator-object-delete')
+  delete_object_button.addEventListener('click', () => {
+    var selected_object_index = cgol_object.objects.findIndex((object) => object.selected)
+    cgol_object.objects.splice(selected_object_index, 1)
+    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+    var simulator_selection_move = document.getElementById('simulator-selection-move')
+    simulator_selection_toolbar.style.display = 'none'
+    simulator_selection_move.style.display = 'none'
+  })
   
   // Draw the CGoL simulation
   var now = document.timeline.currentTime
