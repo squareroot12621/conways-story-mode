@@ -704,7 +704,7 @@ function create_event_handlers(sandbox) {
         var object_pattern = current_object_data.pattern
         var parsed_object = CGoL.parse_rle(object_pattern)
         
-        var object_metadata = {}
+        var object_metadata = {id: data_object}
         if (current_object_data.type) {
           object_metadata.type = current_object_data.type
         } else {
@@ -1637,6 +1637,16 @@ function create_event_handlers(sandbox) {
   var delete_object_button = document.getElementById('simulator-object-delete')
   delete_object_button.addEventListener('click', () => {
     var selected_object_index = cgol_object.objects.findIndex((object) => object.selected)
+    // Increase the corresponding object's count in the sidebar
+    var object_id = cgol_object.objects[selected_object_index].object_metadata.id
+    var current_add_object_button = document.querySelector(
+      `.simulator-add-object[data-object="${object_id}"]`
+    )
+    current_add_object_button.setAttribute(
+      "data-count",
+      current_add_object_button.getAttribute("data-count") + 1,
+    )
+    // Delete the object
     cgol_object.objects.splice(selected_object_index, 1)
     cgol_object.compile_pattern()
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
