@@ -1642,10 +1642,9 @@ function create_event_handlers(sandbox) {
     var current_add_object_button = document.querySelector(
       `.simulator-add-object[data-object="${object_id}"]`
     )
-    current_add_object_button.setAttribute(
-      "data-count",
-      current_add_object_button.getAttribute("data-count") + 1,
-    )
+    var object_count = parseInt(current_add_object_button.getAttribute("data-count"))
+    current_add_object_button.setAttribute("data-count", object_count + 1)
+    // TODO: Update text before it
     // Delete the object
     cgol_object.objects.splice(selected_object_index, 1)
     cgol_object.compile_pattern()
