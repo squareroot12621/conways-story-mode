@@ -378,7 +378,7 @@ class CGoL {
       }
     }
     for (var object = 0; object < this.objects.length; ++object) {
-      this.bake_object(object)
+      this.bake_object(object, false, false)
     }
     this.#changed_pattern = true
     this.#back_snapshots = {0: this.#full_board}
@@ -505,7 +505,7 @@ class CGoL {
     this.#changed_pattern = true
   }
 
-  bake_object(index=0, destructive=false) {    
+  bake_object(index=0, destructive=false, update_pattern=true) {    
     var object = this.objects[index]
     
     function get_new_cell(old_cell, cell_x, cell_y) {
@@ -524,7 +524,7 @@ class CGoL {
       return new_cell_type << 1 | new_board
     }
 
-    if (this.generation === 0) {
+    if (this.generation === 0 && update_pattern) {
       for (var y = object.y; y < object.y + object.height; ++y) {
         for (var x = object.x; x < object.x + object.width; ++x) {
           var new_cell = get_new_cell(this.pattern[y][x], x, y)
