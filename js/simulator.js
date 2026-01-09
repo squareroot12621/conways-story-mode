@@ -1647,9 +1647,9 @@ function create_event_handlers(sandbox) {
     current_add_object_button.removeAttribute("disabled")
     // Edit the text next to the button
     // TODO: Add support for other languages
-    var data_name = current_object_data.name['en-US']
+    var data_name = object_data[object_id].name['en-US']
     var object_info = `${data_count}\u00D7 ${data_name} `
-    add_object_button.previousSibling.data = object_info
+    current_add_object_button.previousSibling.data = object_info
     // Delete the object
     cgol_object.objects.splice(selected_object_index, 1)
     cgol_object.compile_pattern()
