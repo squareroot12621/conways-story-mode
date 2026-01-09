@@ -554,6 +554,27 @@ class CGoL {
     this.#update_stats()
   }
 
+  get_selection() {
+    for (var object of this.objects) {
+      if (object.selected && !object.moving) {
+        return {
+          left: object.x,
+          right: object.x + object.width,
+          top: object.y,
+          bottom: object.y + object.height,
+          type: 'object',
+        }
+      }
+    }
+    return {
+      left: this.selection.left,
+      right: this.selection.right + 1,
+      top: this.selection.top,
+      bottom: this.selection.bottom + 1,
+      type: this.selection.visible ? 'selection' : 'none',
+    }
+  }
+
   force_update() {
     this.#changed_pattern = true
   }
@@ -1065,28 +1086,16 @@ class CGoL {
     }
 
     // Draw the selection
-    var selection_positions = []
-    if (this.selection.visible) {
-      selection_positions.push({
-        left: this.selection.left,
-        right: this.selection.right + 1,
-        top: this.selection.top,
-        bottom: this.selection.bottom + 1,
-        color: '#FFF080',
-      })
+    var selection_position = this.get_selection()
+    var selection_color
+    if (selection_position.type === 'object') {
+      selection_color = '#D080FF'
+    } else if (selection_position.type === 'selection') {
+      selection_color = '#FFF080'
+    } else {
+      selection_color = '#00000000'
     }
-    for (var object of this.objects) {
-      if (object.selected && !object.moving) {
-        selection_positions.push({
-          left: object.x,
-          right: object.x + object.width,
-          top: object.y,
-          bottom: object.y + object.height,
-          color: '#D080FF',
-        })
-      }
-    }
-    for (var selection_position of selection_positions) {
+    if (selection_position.type !== 'none') {
       var left_x = ((selection_position.left * cell_size - true_x_offset) | 0) + 0.5
       var right_x = ((selection_position.right * cell_size - true_x_offset) | 0) + 0.5
       var width = right_x - left_x
@@ -1105,7 +1114,7 @@ class CGoL {
       ctx.lineJoin = 'round'
       ctx.strokeStyle = 'black'
       ctx.strokeRect(left_x, top_y, width, height)
-      ctx.strokeStyle = selection_position.color
+      ctx.strokeStyle = selection_color
       ctx.setLineDash([dash_width_px, dash_width_px])
       ctx.lineDashOffset = performance.now()/1000 * rotations_per_second * dash_width_px
                            % (2*dash_width_px)
