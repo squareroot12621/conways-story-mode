@@ -1643,12 +1643,13 @@ function create_event_handlers(sandbox) {
       `.simulator-add-object[data-object="${object_id}"]`
     )
     var object_count = parseInt(current_add_object_button.getAttribute("data-count"))
-    current_add_object_button.setAttribute("data-count", object_count + 1)
+    ++object_count
+    current_add_object_button.setAttribute("data-count", object_count)
     current_add_object_button.removeAttribute("disabled")
     // Edit the text next to the button
     // TODO: Add support for other languages
     var data_name = object_data[object_id].name['en-US']
-    var object_info = `${data_count}\u00D7 ${data_name} `
+    var object_info = `${object_count}\u00D7 ${data_name} `
     current_add_object_button.previousSibling.data = object_info
     // Delete the object
     cgol_object.objects.splice(selected_object_index, 1)
