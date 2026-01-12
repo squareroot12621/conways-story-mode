@@ -582,43 +582,20 @@ function resize_canvas() {
   canvas.height = canvas.clientHeight
 }
 function update_floating_toolbars(force_visible=false, update_visibility=true) {
-  // Check whether a selection is visible and where it is
-  var selection_visible = false
-  var selection_left
-  var selection_right
-  var selection_top
-  var selection_bottom
-  if (cgol_object.selection.visible) {
-    selection_visible = true
-    selection_left = cgol_object.selection.left
-    selection_right = cgol_object.selection.right + 1
-    selection_top = cgol_object.selection.top
-    selection_bottom = cgol_object.selection.bottom + 1
-  } else {
-    for (var object of cgol_object.objects) {
-      if (object.selected && !object.moving) {
-        selection_visible = true
-        selection_left = object.x
-        selection_right = object.x + object.width
-        selection_top = object.y
-        selection_bottom = object.y + object.height
-        break
-      }
-    }
-  }
+  var selection = cgol_object.get_selection()
   var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
   var simulator_selection_move = document.getElementById('simulator-selection-move')
-  if (selection_visible
+  if (selection.visible
       || simulator_selection_toolbar.style.display === 'block'
       || simulator_selection_move.style.display === 'block'
       || force_visible) {
     var toolbar_position = cgol_object.board_to_canvas_coordinates(
-      (selection_left + selection_right) / 2,
-      selection_top,
+      (selection.left + selection.right) / 2,
+      selection.top,
     )
     var move_position = cgol_object.board_to_canvas_coordinates(
-      selection_right,
-      selection_top,
+      selection.right,
+      selection.top,
     )
     if (update_visibility) {
       simulator_selection_toolbar.style.display = 'block'
