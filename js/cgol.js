@@ -563,6 +563,7 @@ class CGoL {
           top: object.y,
           bottom: object.y + object.height,
           type: 'object',
+          visible: this.generation === 0,
         }
       }
     }
@@ -571,7 +572,8 @@ class CGoL {
       right: this.selection.right + 1,
       top: this.selection.top,
       bottom: this.selection.bottom + 1,
-      type: this.selection.visible ? 'selection' : 'none',
+      type: 'selection',
+      visible: this.selection.visible,
     }
   }
 
@@ -1095,7 +1097,7 @@ class CGoL {
     } else {
       selection_color = '#00000000'
     }
-    if (selection_position.type !== 'none') {
+    if (selection_position.visible) {
       var left_x = ((selection_position.left * cell_size - true_x_offset) | 0) + 0.5
       var right_x = ((selection_position.right * cell_size - true_x_offset) | 0) + 0.5
       var width = right_x - left_x
