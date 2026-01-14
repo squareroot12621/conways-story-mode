@@ -1564,23 +1564,32 @@ function create_event_handlers(sandbox) {
   var drag_offset_x, drag_offset_y
   var drag_original_x, drag_original_y
   var original_selection_x, original_selection_y
+  var moving_object_index
   function move_selection_mouse_down(event) {
+    var selection = cgol_object.get_selection()
     drag_original_x = event.pageX
     drag_original_y = event.pageY
     drag_offset_x = event.pageX - move_selection_button.offsetLeft
     drag_offset_y = event.pageY - move_selection_button.offsetTop
-    original_selection_x = cgol_object.selection.left
-    original_selection_y = cgol_object.selection.top
+    original_selection_x = selection.left
+    original_selection_y = selection.top
     move_selection_button.setPointerCapture(event.pointerId)
     if (!currently_pasting) {
-      cgol_object.extract_selection_to_object()
-      cgol_object.objects[0].moving = true
+      if (selection.type === 'selection') {
+        cgol_object.extract_selection_to_object()
+        cgol_object.objects[0].moving = true
+        moving_object_index = 0
+      } else {
+        moving_object_index = cgol_object.objects.findIndex((object) => object.selected)
+      }
     }
   }
   function move_selection_mouse_move(event) {
     var touch = event.pointerType === 'pen' || event.pointerType === 'touch'
     if (event.buttons || touch) {
       // Update cgol_object
+      var selection = cgol_object.get_selection()
+      // TODO: FINISH
       var cell_size = cgol_object.zoom
       var selection_width = cgol_object.selection.right - cgol_object.selection.left
       var selection_height = cgol_object.selection.bottom - cgol_object.selection.top
