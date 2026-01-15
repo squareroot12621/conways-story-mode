@@ -612,7 +612,7 @@ class CGoL {
     throw new TypeError("Can't assign to bounding_box")
   }
 
-  set_state(action, value1, value2, control1, control2, mergeable=true) {
+  set_state(action, value1, value2, control1, control2, mergeable=true, end_merge=false) {
     control1 ??= (a) => a
     control2 ??= (b) => b
     
@@ -659,6 +659,9 @@ class CGoL {
         this.#undo_snapshots.pop()
         --this.#current_undo_state
       }
+    }
+    if (end_merge && this.#undo_snapshots.length > 0) {
+      this.#undo_snapshots[this.#undo_snapshots.length - 1].cancelable = false
     }
     // If the array is longer than #max_undo_snapshots, remove the first element.
     if (this.#undo_snapshots.length >= this.#max_undo_snapshots) {
