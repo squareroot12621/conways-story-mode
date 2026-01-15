@@ -1243,9 +1243,13 @@ function create_event_handlers(sandbox) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
-      if (mouse_down && temporarily_paused) {
-        cgol_object.play()
-        temporarily_paused = false
+      if (mouse_down) {
+        // The last true parameter ends the 'cell' action merging
+        cgol_object.set_state('cell', 0, 0, null, null, true, true)
+        if (temporarily_paused) {
+          cgol_object.play()
+          temporarily_paused = false
+        }
       }
     } else if (tool === 'object') { // Object
       var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
