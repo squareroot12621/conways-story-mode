@@ -1616,6 +1616,7 @@ function create_event_handlers(sandbox) {
         cgol_object.bake_object(0, true)
         cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), null, false)
       } else {
+        cgol_object.compile_pattern()
         var delta_x = selection.left - original_selection_x
         var delta_y = selection.top - original_selection_y
         cgol_object.set_state('move', delta_x, delta_y)
