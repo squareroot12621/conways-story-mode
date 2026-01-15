@@ -1598,12 +1598,13 @@ function create_event_handlers(sandbox) {
       var new_y = Math.min(Math.max(original_selection_y+delta_y, 0), cgol_object.grid_size-selection_height)
       cgol_object.objects[moving_object_index].x = new_x
       cgol_object.objects[moving_object_index].y = new_y
-      console.log(new_x, new_y) // DEBUG
       if (selection.type === 'selection') {
         cgol_object.selection.left = new_x
         cgol_object.selection.right = new_x + selection_width - 1
         cgol_object.selection.top = new_y
         cgol_object.selection.bottom = new_y + selection_height - 1
+      } else {
+        cgol_object.compile_pattern()
       }
       update_floating_toolbars()
     }
@@ -1616,7 +1617,6 @@ function create_event_handlers(sandbox) {
         cgol_object.bake_object(0, true)
         cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), null, false)
       } else {
-        cgol_object.compile_pattern()
         var delta_x = selection.left - original_selection_x
         var delta_y = selection.top - original_selection_y
         cgol_object.set_state('move', delta_x, delta_y)
