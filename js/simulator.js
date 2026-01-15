@@ -1589,28 +1589,36 @@ function create_event_handlers(sandbox) {
     if (event.buttons || touch) {
       // Update cgol_object
       var selection = cgol_object.get_selection()
-      // TODO: FINISH
       var cell_size = cgol_object.zoom
-      var selection_width = cgol_object.selection.right - cgol_object.selection.left
-      var selection_height = cgol_object.selection.bottom - cgol_object.selection.top
+      var selection_width = selection.right - selection.left
+      var selection_height = selection.bottom - selection.top
       var delta_x = Math.round((event.pageX - drag_original_x) / cell_size)
       var delta_y = Math.round((event.pageY - drag_original_y) / cell_size)
-      var new_x = Math.min(Math.max(original_selection_x+delta_x, 0), cgol_object.grid_size-selection_width-1)
-      var new_y = Math.min(Math.max(original_selection_y+delta_y, 0), cgol_object.grid_size-selection_height-1)
-      cgol_object.objects[0].x = new_x
-      cgol_object.objects[0].y = new_y
-      cgol_object.selection.left = new_x
-      cgol_object.selection.right = new_x + selection_width
-      cgol_object.selection.top = new_y
-      cgol_object.selection.bottom = new_y + selection_height
+      var new_x = Math.min(Math.max(original_selection_x+delta_x, 0), cgol_object.grid_size-selection_width)
+      var new_y = Math.min(Math.max(original_selection_y+delta_y, 0), cgol_object.grid_size-selection_height)
+      cgol_object.objects[moving_object_index].x = new_x
+      cgol_object.objects[moving_object_index].y = new_y
+      if (selection.type === 'selection') {
+        cgol_object.selection.left = new_x
+        cgol_object.selection.right = new_x + selection_width - 1
+        cgol_object.selection.top = new_y
+        cgol_object.selection.bottom = new_y + selection_height - 1
+      }
       update_floating_toolbars()
     }
   }
   function move_selection_mouse_up(event) {
     move_selection_button.releasePointerCapture(event.pointerId)
     if (!currently_pasting) {
-      cgol_object.bake_object(0, true)
-      cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), null, false)
+      var selection = cgol_object.get_selection()
+      if (selection.type === 'selection') {
+        cgol_object.bake_object(0, true)
+        cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), null, false)
+      } else {
+        var delta_x = selection.left - original_selection_x
+        var delta_y = selection.top - original_selection_y
+        cgol_object.set_state('move', delta_x, delta_y)
+      }
     }
   }
   move_selection_button.addEventListener('pointerdown', move_selection_mouse_down)
