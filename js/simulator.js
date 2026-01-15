@@ -715,6 +715,7 @@ function create_event_handlers(sandbox) {
           object_metadata: object_metadata,
         })
         cgol_object.compile_pattern()
+        cgol_object.set_state('object', 1, 0, null, null, false)
         --data_count
 
         // Edit the text next to the button
