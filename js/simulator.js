@@ -1580,7 +1580,6 @@ function create_event_handlers(sandbox) {
         cgol_object.objects[0].moving = true
         moving_object_index = 0
       } else {
-        console.log('Working') // DEBUG
         moving_object_index = cgol_object.objects.findIndex((object) => object.selected)
       }
     }
@@ -1599,6 +1598,7 @@ function create_event_handlers(sandbox) {
       var new_y = Math.min(Math.max(original_selection_y+delta_y, 0), cgol_object.grid_size-selection_height)
       cgol_object.objects[moving_object_index].x = new_x
       cgol_object.objects[moving_object_index].y = new_y
+      console.log(new_x, new_y) // DEBUG
       if (selection.type === 'selection') {
         cgol_object.selection.left = new_x
         cgol_object.selection.right = new_x + selection_width - 1
