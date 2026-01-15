@@ -660,6 +660,14 @@ function create_event_handlers(sandbox) {
       undo_button.disabled = !cgol_object.can_undo()
       var redo_button = document.getElementById('simulator-redo')
       redo_button.disabled = !cgol_object.can_redo()
+      // Remove object toolbars after generation 0
+      var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+      var simulator_selection_move = document.getElementById('simulator-selection-move')
+      if (cgol_object.get_selection().type === 'object') {
+        var toolbar_display = cgol_object.generation === 0 ? 'block' : 'none'
+        simulator_selection_toolbar.style.display = toolbar_display
+        simulator_selection_move.style.display = toolbar_display
+      }
     },
   })
   
