@@ -1580,6 +1580,7 @@ function create_event_handlers(sandbox) {
         cgol_object.objects[0].moving = true
         moving_object_index = 0
       } else {
+        console.log('Working') // DEBUG
         moving_object_index = cgol_object.objects.findIndex((object) => object.selected)
       }
     }
