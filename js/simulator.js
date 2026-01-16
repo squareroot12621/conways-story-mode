@@ -642,6 +642,13 @@ function resize_simulator() {
 
 
 function create_event_handlers(sandbox) {
+  function state_handler(cgol_object) {
+    var undo_button = document.getElementById('simulator-undo')
+    undo_button.disabled = !cgol_object.can_undo()
+    var redo_button = document.getElementById('simulator-redo')
+    redo_button.disabled = !cgol_object.can_redo()
+  }
+  
   // Make the CGoL object
   cgol_object = new CGoL({
     grid_size: 128, // TODO: Increase to 256 once it stops lagging
@@ -651,15 +658,13 @@ function create_event_handlers(sandbox) {
     generation_counter: document.getElementById('simulator-stat-generations'),
     population_counter: document.getElementById('simulator-stat-population'),
     bounding_box_counter: document.getElementById('simulator-stat-bounding-box'),
+    state_handler: state_handler,
     tick_handler: (cgol_object) => {
       // Update the step back button
       var step_backward_button = document.getElementById('simulator-back')
       step_backward_button.disabled = cgol_object.generation === 0
       // Update the undo and redo buttons
-      var undo_button = document.getElementById('simulator-undo')
-      undo_button.disabled = !cgol_object.can_undo()
-      var redo_button = document.getElementById('simulator-redo')
-      redo_button.disabled = !cgol_object.can_redo()
+      state_handler(cgol_object)
       // Remove object toolbars after generation 0
       var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
       var simulator_selection_move = document.getElementById('simulator-selection-move')
