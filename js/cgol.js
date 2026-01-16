@@ -74,6 +74,7 @@ class CGoL {
       generation: options.generation_counter ?? null,
       population: options.population_counter ?? null,
       bounding_box: options.bounding_box_counter ?? null,
+      state_handler: options.state_handler ?? null,
       tick_handler: options.tick_handler ?? null, // Custom function for when the generation changes
     }
     this.#max_back_snapshots = options.max_back_snapshots ?? 100
@@ -668,6 +669,12 @@ class CGoL {
       this.#undo_snapshots.shift()
       --this.#current_undo_state
     }
+
+    // Run the state handler
+    var state_handler = this.#stat_counters.state_handler
+    if (state_handler) {
+      state_handler(this)
+    }
   }
 
   #get_state(index=null) {
@@ -892,6 +899,11 @@ class CGoL {
       var bounding_height_text = CGoL.#convert_to_string(bounding_height)
       bounding_box_element.replaceChildren(`${bounding_width_text}\u00D7${bounding_height_text}`)
       bounding_box_element.ariaLabel = `Bounding box: ${bounding_width_text} by ${bounding_height_text}`
+    }
+    // Run the state handler
+    var state_handler = this.#stat_counters.state_handler
+    if (state_handler) {
+      state_handler(this)
     }
     // Run the tick handler
     var tick_handler = this.#stat_counters.tick_handler
