@@ -856,9 +856,11 @@ function create_event_handlers(sandbox) {
         event.preventDefault()
         select_option(1, true)
       } else if (event.key === 'PageUp') {
+        console.log('PageUp detected') // DEBUG
         event.preventDefault()
         select_option(-5, true)
       } else if (event.key === 'PageDown') {
+        console.log('PageDown detected') // DEBUG
         event.preventDefault()
         select_option(5, true)
       } else if (event.key === 'Home') {
