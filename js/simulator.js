@@ -834,8 +834,8 @@ function create_event_handlers(sandbox) {
       toggle_option_visibility(null, event)
     })
     current_button.addEventListener('keydown', (event) => {
-      event.preventDefault()
       if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault()
         toggle_option_visibility(null, null)
         if (current_options.every((option) => option.getAttribute('data-selected') === null)) {
           /* If the Enter key is used to open the dialog
@@ -844,18 +844,25 @@ function create_event_handlers(sandbox) {
           select_option(0)
         }
       } else if (event.key === 'Escape') {
+        event.preventDefault()
         toggle_option_visibility(false, null)
       } else if (event.key === 'ArrowUp') {
+        event.preventDefault()
         select_option(-1, true)
       } else if (event.key === 'ArrowDown') {
+        event.preventDefault()
         select_option(1, true)
       } else if (event.key === 'PageUp') {
+        event.preventDefault()
         select_option(-5, true)
       } else if (event.key === 'PageDown') {
+        event.preventDefault()
         select_option(5, true)
       } else if (event.key === 'Home') {
+        event.preventDefault()
         select_option(0)
       } else if (event.key === 'End') {
+        event.preventDefault()
         select_option(current_options.length - 1)
       }
     })
