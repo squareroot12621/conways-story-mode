@@ -458,7 +458,7 @@ class CGoL {
     this.#changed_pattern = true
     this.#back_snapshots[this.generation] = this.#full_board
 
-    action_parameters ??= ['cell', 1, 0, (a) => Math.min(a, 1)]
+    action_parameters ??= ['cell', 1, 0, {control1: (a) => Math.min(a, 1)}]
     if (Array.isArray(action_parameters) && action_parameters.length) {
       this.set_state(...action_parameters)
     }
@@ -613,9 +613,11 @@ class CGoL {
     throw new TypeError("Can't assign to bounding_box")
   }
 
-  set_state(action, value1, value2, control1, control2, mergeable=true, end_merge=false) {
-    control1 ??= (a) => a
-    control2 ??= (b) => b
+  set_state(action, value1, value2, options) {
+    control1 = options.control1 ?? (a) => a
+    control2 = options.control2 ?? (b) => b
+    mergeable = options.mergeable ?? true
+    end_merge = options.end_merge ?? false
     
     /* Remove the other branch of undos, if necessary.
        This can happen if you undo something and then do an action normally. */
