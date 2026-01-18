@@ -614,10 +614,10 @@ class CGoL {
   }
 
   set_state(action, value1, value2, options) {
-    control1 = options.control1 ?? (a) => a
-    control2 = options.control2 ?? (b) => b
-    mergeable = options.mergeable ?? true
-    end_merge = options.end_merge ?? false
+    var control1 = options.control1 ?? (a) => a
+    var control2 = options.control2 ?? (b) => b
+    var mergeable = options.mergeable ?? true
+    var end_merge = options.end_merge ?? false
     
     /* Remove the other branch of undos, if necessary.
        This can happen if you undo something and then do an action normally. */
