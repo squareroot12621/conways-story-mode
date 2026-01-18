@@ -717,7 +717,7 @@ function create_event_handlers(sandbox) {
           object_metadata: object_metadata,
         })
         cgol_object.compile_pattern()
-        cgol_object.set_state('object', 1, 0, null, null, false)
+        cgol_object.set_state('object', 1, 0, {mergeable: false})
         --data_count
 
         // Edit the text next to the button
@@ -1260,7 +1260,7 @@ function create_event_handlers(sandbox) {
     if (tool === 'draw') { // Drawing
       if (mouse_down) {
         // The last true parameter ends the 'cell' action merging
-        cgol_object.set_state('cell', 0, 0, null, null, true, true)
+        cgol_object.set_state('cell', 0, 0, {end_merge: true})
         if (temporarily_paused) {
           cgol_object.play()
           temporarily_paused = false
@@ -1383,7 +1383,7 @@ function create_event_handlers(sandbox) {
     cgol_object.edit_cells(
       cells_to_edit,
       cell_ids,
-      ['rotate', 3, 0, (a) => a % 4, (b) => b % 2],
+      ['rotate', 3, 0, {control1: (a) => a % 4, control2: (b) => b % 2}],
     )
     // Update selection
     var old_selection = {...cgol_object.selection}
@@ -1444,7 +1444,7 @@ function create_event_handlers(sandbox) {
     cgol_object.edit_cells(
       cells_to_edit,
       cell_ids,
-      ['rotate', 1, 0, (a) => a % 4, (b) => b % 2],
+      ['rotate', 1, 0, {control1: (a) => a % 4, control2: (b) => b % 2}],
     )
     // Update selection
     var old_selection = {...cgol_object.selection}
@@ -1475,7 +1475,7 @@ function create_event_handlers(sandbox) {
     cgol_object.edit_cells(
       cells_to_edit,
       cell_ids,
-      ['rotate', 0, 1, (a) => a % 4, (b) => b % 2],
+      ['rotate', 0, 1, {control1: (a) => a % 4, control2: (b) => b % 2}],
     )
   })
   // Flip vertically button
@@ -1495,7 +1495,7 @@ function create_event_handlers(sandbox) {
     cgol_object.edit_cells(
       cells_to_edit,
       cell_ids,
-      ['rotate', 2, 1, (a) => a % 4, (b) => b % 2],
+      ['rotate', 2, 1, {control1: (a) => a % 4, control2: (b) => b % 2}],
     )
   })
   // Cut button
@@ -1504,7 +1504,7 @@ function create_event_handlers(sandbox) {
     cgol_object.selection.visible = false
     cgol_object.extract_selection_to_object(true)
     clipboard = cgol_object.objects.shift()
-    cgol_object.set_state('delete', 1, 0, null, null, false)
+    cgol_object.set_state('delete', 1, 0, {mergeable: false})
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
     var simulator_selection_move = document.getElementById('simulator-selection-move')
     simulator_selection_toolbar.style.display = 'none'
@@ -1533,7 +1533,7 @@ function create_event_handlers(sandbox) {
     cgol_object.edit_cells(
       cells_to_remove,
       0,
-      ['delete', 1, 0, null, null, false],
+      ['delete', 1, 0, {mergeable: false}],
     )
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
     var simulator_selection_move = document.getElementById('simulator-selection-move')
@@ -1576,7 +1576,7 @@ function create_event_handlers(sandbox) {
   confirm_paste_button.addEventListener('click', () => {
     currently_pasting = false
     cgol_object.bake_object(0, true)
-    cgol_object.set_state(['paste', 1, 0, null, null, false])
+    cgol_object.set_state('paste', 1, 0, {mergeable: false})
     cgol_object.selection = {...cgol_object.selection, visible: false}
     cgol_object.force_update()
     update_floating_toolbars()
@@ -1642,7 +1642,7 @@ function create_event_handlers(sandbox) {
       var selection = cgol_object.get_selection()
       if (selection.type === 'selection') {
         cgol_object.bake_object(0, true)
-        cgol_object.set_state('cell', 1, 0, (a) => Math.min(a, 1), null, false)
+        cgol_object.set_state('cell', 1, 0, {control1: (a) => Math.min(a, 1), mergeable: false})
       } else {
         var delta_x = selection.left - original_selection_x
         var delta_y = selection.top - original_selection_y
