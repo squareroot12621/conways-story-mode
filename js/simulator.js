@@ -805,11 +805,13 @@ function create_event_handlers(sandbox) {
     var selected_new = relative ? selected_old + num : num
     if (selected_old === -1 && relative) {
       selected_new = 0
+    } else if (selected_new < 0) {
+      selected_new = 0
+    } else if (selected_new >= current_options.length) {
+      selected_new = current_options.length - 1
     }
-    if (selected_new >= 0 && selected_new < current_options.length) { // We can't move out of the array
-      current_options[selected_old]?.toggleAttribute('data-selected')
-      current_options[selected_new].toggleAttribute('data-selected')
-    }
+    current_options[selected_old]?.toggleAttribute('data-selected')
+    current_options[selected_new].toggleAttribute('data-selected')
   }
   
   for (let dropdown_type of ['tools', 'extras']) {
