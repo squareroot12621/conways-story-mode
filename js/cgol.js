@@ -613,7 +613,7 @@ class CGoL {
     throw new TypeError("Can't assign to bounding_box")
   }
 
-  set_state(action, value1, value2, options) {
+  set_state(action, value1, value2, options={}) {
     var control1 = options.control1 ?? (a) => a
     var control2 = options.control2 ?? (b) => b
     var mergeable = options.mergeable ?? true
