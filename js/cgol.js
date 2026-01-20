@@ -614,8 +614,8 @@ class CGoL {
   }
 
   set_state(action, value1, value2, options={}) {
-    var control1 = options.control1 ?? (a) => a
-    var control2 = options.control2 ?? (b) => b
+    var control1 = options.control1 ?? ((a) => a)
+    var control2 = options.control2 ?? ((b) => b)
     var mergeable = options.mergeable ?? true
     var end_merge = options.end_merge ?? false
     
