@@ -662,11 +662,12 @@ function create_event_handlers(sandbox, library) {
       var object_ids = cgol_object.objects.map((object) => object.object_metadata.id)
       for (var library_object of library) {
         var object_id = library_object.id
-        var object_count = library_object.count - object_ids.filter(object_id).length
+        var used_object_count = object_ids.filter((id) => id === object_id).length
+        var remaining_object_count = library_object.count - used_object_count
         var add_object_button = document.querySelector(
           `.simulator-add-object[data-object="${CSS.escape(object_id)}"]`
         )
-        add_object_button.setAttribute('data-count', object_count)
+        add_object_button.setAttribute('data-count', remaining_object_count)
       }
     },
     tick_handler: (cgol_object) => {
