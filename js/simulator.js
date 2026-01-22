@@ -47,7 +47,7 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
 
   resize_simulator()
 
-  create_event_handlers(sandbox)
+  create_event_handlers(sandbox, library)
 }
 
 
@@ -641,7 +641,7 @@ function resize_simulator() {
 }
 
 
-function create_event_handlers(sandbox) {
+function create_event_handlers(sandbox, library) {
   // Make the CGoL object
   cgol_object = new CGoL({
     grid_size: 128, // TODO: Increase to 256 once it stops lagging
@@ -657,6 +657,7 @@ function create_event_handlers(sandbox) {
       undo_button.disabled = !cgol_object.can_undo()
       var redo_button = document.getElementById('simulator-redo')
       redo_button.disabled = !cgol_object.can_redo()
+      console.log(cgol_object.objects) // DEBUG
     },
     tick_handler: (cgol_object) => {
       // Update the step back button
