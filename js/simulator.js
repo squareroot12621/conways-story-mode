@@ -746,7 +746,7 @@ function create_event_handlers(sandbox, library) {
         cgol_object.set_state('object', 1, 0, {mergeable: false})
         --data_count
       }
-      change_object_count(add_object_button, remaining_object_count)
+      change_object_count(add_object_button, data_count)
     })
   }
   if (!sandbox) {
@@ -1684,7 +1684,7 @@ function create_event_handlers(sandbox, library) {
     )
     var object_count = parseInt(current_add_object_button.getAttribute("data-count"))
     ++object_count
-    change_object_count(current_add_object_button, remaining_object_count)
+    change_object_count(current_add_object_button, object_count)
     // Delete the object
     cgol_object.objects.splice(selected_object_index, 1)
     cgol_object.compile_pattern()
