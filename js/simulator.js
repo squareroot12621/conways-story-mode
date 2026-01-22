@@ -657,7 +657,10 @@ function create_event_handlers(sandbox, library) {
       undo_button.disabled = !cgol_object.can_undo()
       var redo_button = document.getElementById('simulator-redo')
       redo_button.disabled = !cgol_object.can_redo()
-      console.log(cgol_object.objects) // DEBUG
+
+      // Update the number of objects in the sidebar
+      var object_ids = cgol_object.objects.map((object) => object.object_metadata.id)
+      console.log(object_ids) // DEBUG
     },
     tick_handler: (cgol_object) => {
       // Update the step back button
