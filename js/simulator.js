@@ -578,8 +578,8 @@ function create_simulator_main(sandbox) {
 function resize_canvas() {
   // Resize the canvas so it doesn't get stretched weirdly
   var canvas = document.getElementById('simulator-cgol')
-  canvas.width = canvas.clientWidth
-  canvas.height = canvas.clientHeight
+  canvas.width = Math.max(canvas.clientWidth, 1)
+  canvas.height = Math.max(canvas.clientHeight, 1)
 }
 function update_floating_toolbars(force_visible=false, update_visibility=true) {
   var selection = cgol_object.get_selection()
