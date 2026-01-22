@@ -660,7 +660,14 @@ function create_event_handlers(sandbox, library) {
 
       // Update the number of objects in the sidebar
       var object_ids = cgol_object.objects.map((object) => object.object_metadata.id)
-      console.log(object_ids) // DEBUG
+      for (var library_object of library) {
+        var object_id = library_object.id
+        var object_count = library_object.count - object_ids.filter(object_id).length
+        var add_object_button = document.querySelector(
+          `.simulator-add-object[data-object="${CSS.escape(object_id)}"]`
+        )
+        add_object_button.setAttribute('data-count', object_count)
+      }
     },
     tick_handler: (cgol_object) => {
       // Update the step back button
