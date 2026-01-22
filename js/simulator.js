@@ -575,12 +575,6 @@ function create_simulator_main(sandbox) {
 }
 
 
-function resize_canvas() {
-  // Resize the canvas so it doesn't get stretched weirdly
-  var canvas = document.getElementById('simulator-cgol')
-  canvas.width = Math.max(canvas.clientWidth, 1)
-  canvas.height = Math.max(canvas.clientHeight, 1)
-}
 function update_floating_toolbars(force_visible=false, update_visibility=true) {
   var selection = cgol_object.get_selection()
   var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
@@ -607,7 +601,27 @@ function update_floating_toolbars(force_visible=false, update_visibility=true) {
     simulator_selection_move.style.top = move_position.y + 'px'
   }
 }
+function change_object_count(add_object_button, new_count) {
+  // Edit the text next to the button
+  // TODO: Add support for other languages
+  var data_object = add_object_button.getAttribute('data-object')
+  var current_object_data = object_data[data_object]
+  var data_name = current_object_data.name['en-US']
+  var object_info = `${new_count}\u00D7 ${data_name} `
+  add_object_button.previousSibling.data = object_info
+  // Edit the button itself
+  if (new_count <= 0) {
+    add_object_button.setAttribute('disabled', '')
+  }
+  add_object_button.setAttribute('data-count', new_count)
+}
 
+function resize_canvas() {
+  // Resize the canvas so it doesn't get stretched weirdly
+  var canvas = document.getElementById('simulator-cgol')
+  canvas.width = Math.max(canvas.clientWidth, 1)
+  canvas.height = Math.max(canvas.clientHeight, 1)
+}
 function resize_simulator() {
   // Change direction of menu arrows
   var root = document.getElementById('conways-story-mode')
@@ -667,7 +681,7 @@ function create_event_handlers(sandbox, library) {
         var add_object_button = document.querySelector(
           `.simulator-add-object[data-object="${CSS.escape(object_id)}"]`
         )
-        add_object_button.setAttribute('data-count', remaining_object_count)
+        change_object_count(add_object_button, remaining_object_count)
       }
     },
     tick_handler: (cgol_object) => {
@@ -731,17 +745,8 @@ function create_event_handlers(sandbox, library) {
         cgol_object.compile_pattern()
         cgol_object.set_state('object', 1, 0, {mergeable: false})
         --data_count
-
-        // Edit the text next to the button
-        // TODO: Add support for other languages
-        var data_name = current_object_data.name['en-US']
-        var object_info = `${data_count}\u00D7 ${data_name} `
-        add_object_button.previousSibling.data = object_info
       }
-      if (data_count <= 0) {
-        add_object_button.setAttribute('disabled', '')
-      }
-      add_object_button.setAttribute('data-count', data_count)
+      change_object_count(add_object_button, remaining_object_count)
     })
   }
   if (!sandbox) {
@@ -1675,17 +1680,11 @@ function create_event_handlers(sandbox, library) {
     // Increase the corresponding object's count in the sidebar
     var object_id = cgol_object.objects[selected_object_index].object_metadata.id
     var current_add_object_button = document.querySelector(
-      `.simulator-add-object[data-object="${object_id}"]`
+      `.simulator-add-object[data-object="${CSS.escape(object_id)}"]`
     )
     var object_count = parseInt(current_add_object_button.getAttribute("data-count"))
     ++object_count
-    current_add_object_button.setAttribute("data-count", object_count)
-    current_add_object_button.removeAttribute("disabled")
-    // Edit the text next to the button
-    // TODO: Add support for other languages
-    var data_name = object_data[object_id].name['en-US']
-    var object_info = `${object_count}\u00D7 ${data_name} `
-    current_add_object_button.previousSibling.data = object_info
+    change_object_count(current_add_object_button, remaining_object_count)
     // Delete the object
     cgol_object.objects.splice(selected_object_index, 1)
     cgol_object.compile_pattern()
