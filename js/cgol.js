@@ -522,6 +522,7 @@ class CGoL {
       
       var new_board = old_board | pattern_board
       var new_cell_type = pattern_cell_type || old_cell_type
+      console.log(`Old ${old_cell}, new ${pattern_cell}, return ${new_cell_type << 1 | new_board}`) // DEBUG
       return new_cell_type << 1 | new_board
     }
 
