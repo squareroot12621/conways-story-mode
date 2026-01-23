@@ -522,7 +522,6 @@ class CGoL {
       
       var new_board = old_board | pattern_board
       var new_cell_type = pattern_cell_type || old_cell_type
-      console.log(`Old ${old_cell}, new ${pattern_cell}, return ${new_cell_type << 1 | new_board}`) // DEBUG
       return new_cell_type << 1 | new_board
     }
 
@@ -540,7 +539,7 @@ class CGoL {
       for (var y = object.y; y < object.y + object.height; ++y) {
         for (var x = object.x; x < object.x + object.width; ++x) {
           var cell_position = y*this.grid_size + x
-          var old_cell = this.cell_types[cell_position] >> 1 | this.board[cell_position]
+          var old_cell = this.cell_types[cell_position] << 1 | this.board[cell_position]
           var new_cell = get_new_cell(old_cell, x, y)
           this.board[cell_position] = new_cell & 1
           this.cell_types[cell_position] = new_cell >> 1
