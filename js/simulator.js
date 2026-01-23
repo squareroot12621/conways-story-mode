@@ -688,6 +688,15 @@ function create_event_handlers(sandbox, library) {
       // Update the step back button
       var step_backward_button = document.getElementById('simulator-back')
       step_backward_button.disabled = cgol_object.generation === 0
+      /* Update the "add object" buttons
+         because you can't add objects after generation 0 */
+      for (var add_object_button of document.getElementsByClassName('simulator-add-object')) {
+        if (cgol_object.generation > 0 || add_object_button.getAttribute('data-count') <= 0) {
+          add_object_button.setAttribute('disabled', '')
+        } else {
+          add_object_button.removeAttribute('disabled')
+        }
+      }
       // Remove object toolbars after generation 0
       var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
       var simulator_selection_move = document.getElementById('simulator-selection-move')
