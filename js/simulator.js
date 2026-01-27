@@ -1371,6 +1371,7 @@ function create_event_handlers(sandbox, library) {
   canvas.addEventListener('pointermove', throttle(mouse_move_event_handler, THROTTLE_MILLISECONDS))
   canvas.addEventListener('pointerup', throttle(mouse_up_event_handler, THROTTLE_MILLISECONDS))
   canvas.addEventListener('wheel', throttle(wheel_event_handler, THROTTLE_MILLISECONDS))
+  canvas.addEventListener('contextmenu', (event) => { event.preventDefault() })
 
   // Event handlers for the floating toolbar
 
