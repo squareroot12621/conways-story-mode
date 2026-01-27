@@ -1077,7 +1077,10 @@ function create_event_handlers(sandbox, library) {
     last_x = event.pageX
     last_y = event.pageY
   }
-  function update_cursor() {
+  function update_cursor(cursor=null) {
+    if (cursor !== null) {
+      canvas.style.cursor = cursor
+    }
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     var cursor_type
     switch (tool) {
@@ -1110,30 +1113,38 @@ function create_event_handlers(sandbox, library) {
 
   function mouse_down_event_handler(event) {
     var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
+    var buttons = touch ? 1 : event.buttons
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
-    if (tool === 'draw') { // Drawing
-      var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-      temporarily_paused = cgol_object.playing
-      cgol_object.pause()
-      if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
-        drawing_cell_type = cgol_object.board[y*cgol_object.grid_size + x] & 1 ^ 1
-        cgol_object.edit_cells([[x, y]], (c) => c & ~1 | drawing_cell_type)
-      } else {
-        drawing_cell_type = 1
+
+    if (buttons & 2) { // Quick panning
+      update_cursor('grabbing')
+    } else if (tool === 'draw') { // Drawing
+      if (buttons & 1) {
+        var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
+        temporarily_paused = cgol_object.playing
+        cgol_object.pause()
+        if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
+          drawing_cell_type = cgol_object.board[y*cgol_object.grid_size + x] & 1 ^ 1
+          cgol_object.edit_cells([[x, y]], (c) => c & ~1 | drawing_cell_type)
+        } else {
+          drawing_cell_type = 1
+        }
       }
     } else if (tool === 'object') { // Object
-      cgol_object.selection.visible = false
-      cgol_object.objects.forEach((object) => {
-        object.selected = false
-      })
-      paste_visible = false
-      var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-      var simulator_selection_move = document.getElementById('simulator-selection-move')
-      simulator_selection_toolbar.style.display = 'none'
-      simulator_selection_move.style.display = 'none'
-      cgol_object.force_update()
+      if (buttons & 1) {
+        cgol_object.selection.visible = false
+        cgol_object.objects.forEach((object) => {
+          object.selected = false
+        })
+        paste_visible = false
+        var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+        var simulator_selection_move = document.getElementById('simulator-selection-move')
+        simulator_selection_toolbar.style.display = 'none'
+        simulator_selection_move.style.display = 'none'
+        cgol_object.force_update()
+      }
     } else if (tool === 'select') { // Selecting
-      if (!currently_pasting) {
+      if (!currently_pasting && buttons & 1) {
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
         x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
         y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
@@ -1163,7 +1174,9 @@ function create_event_handlers(sandbox, library) {
     update_first_mouse_position(event)
     update_last_mouse_position(event)
     mouse_down = true
-    update_cursor()
+    if (!(buttons & 2)) { // No quick panning
+      update_cursor()
+    }
   }
 
   function mouse_move_event_handler(event) {
@@ -1171,9 +1184,23 @@ function create_event_handlers(sandbox, library) {
     var buttons = touch ? 1 : event.buttons
     mouse_down &&= buttons > 0
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
-    
-    if (tool === 'draw') { // Drawing
-      if (mouse_down) {
+
+    if ((tool === 'pan' && buttons & 1) || buttons & 2) {
+      // Panning: Left mouse button or touchscreen
+      // Every other mode: Right mouse button
+      var new_x = event.pageX
+      var new_y = event.pageY
+      var change_x = new_x - last_x
+      var change_y = new_y - last_y
+      var zoom_level = cgol_object.zoom
+      cgol_object.move_to(
+        cgol_object.x_offset - change_x/zoom_level,
+        cgol_object.y_offset - change_y/zoom_level,
+        zoom_level,
+      )
+      update_floating_toolbars()
+    } else if (tool === 'draw') { // Drawing
+      if (mouse_down && buttons & 1) {
         var coords0 = cgol_object.page_to_board_coordinates(last_x, last_y)
         var x0 = coords0.x
         var y0 = coords0.y
@@ -1235,7 +1262,7 @@ function create_event_handlers(sandbox, library) {
         }
       }
     } else if (tool === 'select') { // Selecting
-      if (mouse_down && !currently_pasting) {
+      if (mouse_down && !currently_pasting && buttons & 1) {
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
         x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
         y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
@@ -1259,21 +1286,6 @@ function create_event_handlers(sandbox, library) {
           paste_visible = false
         }
       }
-    } else if (tool === 'pan') { // Panning
-      // Left mouse button or touchscreen
-      if (buttons & 1) {
-        var new_x = event.pageX
-        var new_y = event.pageY
-        var change_x = new_x - last_x
-        var change_y = new_y - last_y
-        var zoom_level = cgol_object.zoom
-        cgol_object.move_to(
-          cgol_object.x_offset - change_x/zoom_level,
-          cgol_object.y_offset - change_y/zoom_level,
-          zoom_level,
-        )
-        update_floating_toolbars()
-      }
     }
     
     update_last_mouse_position(event)
@@ -1284,7 +1296,7 @@ function create_event_handlers(sandbox, library) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
-      if (mouse_down) {
+      if (mouse_down && buttons & 1) {
         // The last true parameter ends the 'cell' action merging
         cgol_object.set_state('cell', 0, 0, {end_merge: true})
         if (temporarily_paused) {
@@ -1294,7 +1306,7 @@ function create_event_handlers(sandbox, library) {
       }
     } else if (tool === 'object') { // Object
       var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-      if (mouse_down && cgol_object.generation === 0) {
+      if (mouse_down && buttons & 1 && cgol_object.generation === 0) {
         // Check whether any objects are in range
         cgol_object.objects.forEach((object) => {
           object.selected = false
@@ -1314,7 +1326,7 @@ function create_event_handlers(sandbox, library) {
         update_floating_toolbars()
       }
     } else if (tool === 'select') { // Selecting
-      if (mouse_down && !currently_pasting) {
+      if (mouse_down && !currently_pasting && buttons & 1) {
         if (paste_visible) {
           change_visible_toolbar_group(1)
           var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
