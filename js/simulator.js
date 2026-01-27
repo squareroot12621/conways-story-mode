@@ -1296,7 +1296,7 @@ function create_event_handlers(sandbox, library) {
     var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
     
     if (tool === 'draw') { // Drawing
-      if (mouse_down && buttons & 1) {
+      if (mouse_down) {
         // The last true parameter ends the 'cell' action merging
         cgol_object.set_state('cell', 0, 0, {end_merge: true})
         if (temporarily_paused) {
@@ -1306,7 +1306,7 @@ function create_event_handlers(sandbox, library) {
       }
     } else if (tool === 'object') { // Object
       var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-      if (mouse_down && buttons & 1 && cgol_object.generation === 0) {
+      if (mouse_down && cgol_object.generation === 0) {
         // Check whether any objects are in range
         cgol_object.objects.forEach((object) => {
           object.selected = false
@@ -1326,7 +1326,7 @@ function create_event_handlers(sandbox, library) {
         update_floating_toolbars()
       }
     } else if (tool === 'select') { // Selecting
-      if (mouse_down && !currently_pasting && buttons & 1) {
+      if (mouse_down && !currently_pasting) {
         if (paste_visible) {
           change_visible_toolbar_group(1)
           var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
