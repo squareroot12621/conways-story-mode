@@ -357,8 +357,94 @@ class CGoL {
   }
 
   static rotate(pattern, rotation=0, flip_x=false) {
-    // TODO
-    return pattern
+    // TODO: flip_x
+    
+    var height = pattern.length
+    var width = height === 0 ? 0 : pattern[0].length
+    
+    var new_pattern
+    var x_offset
+    var y_offset
+    var new_width
+    var new_height
+    
+    if (rotation === 1 || rotation === 3) {
+      // Annoying rotation
+
+      // Find the pivot point and offset
+      var pivot_x = (width - 1) / 2
+      var pivot_y = (height - 1) / 2
+      if (rotation === 1) {
+        if (width % 2 === 0 && height % 2 === 1) {
+          pivot_x -= 0.5
+        } else if (width % 2 === 1 && height % 2 === 0) {
+          pivot_x += 0.5
+        }
+        x_offset = (pivot_x + pivot_y - (height - 1)) | 0
+        y_offset = (pivot_y - pivot_x) | 0
+      } else {
+        if (width % 2 === 0 && height % 2 === 1) {
+          pivot_y += 0.5
+        } else if (width % 2 === 1 && height % 2 === 0) {
+          pivot_y -= 0.5
+        }
+        x_offset = (pivot_x - pivot_y) | 0
+        y_offset = (pivot_x + pivot_y - (width - 1)) | 0
+      }
+
+      // Generate new_pattern
+      new_pattern = []
+      for (var new_row = 0; new_row < width; ++new_row) {
+        new_pattern.push(Array(height))
+      }
+      for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
+        for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+          if (rotation === 1) {
+            var new_x = ((pivot_y - y) + pivot_x) | 0
+            var new_y = ((x - pivot_x) + pivot_y) | 0
+          } else {
+            var new_x = ((y - pivot_y) + pivot_x) | 0
+            var new_y = ((pivot_x - x) + pivot_y) | 0
+          }
+          new_x -= x_offset
+          new_y -= y_offset
+          new_pattern[new_y][new_x] = pattern[y][x]
+        }
+      }
+    } else if (rotation === 2) {
+      // Easier rotation
+      x_offset = 0
+      y_offset = 0
+      new_width = width
+      new_height = height
+
+      new_pattern = []
+      for (var new_row = 0; new_row < width; ++new_row) {
+        new_pattern.push(Array(height))
+      }
+      for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
+        for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+          new_x = width - 1 - x
+          new_y = height - 1 - y
+          new_pattern[new_y][new_x] = pattern[y][x]
+        }
+      }
+    } else if (rotation === 0) {
+      // No rotation
+      x_offset = 0
+      y_offset = 0
+      new_width = width
+      new_height = height
+      new_pattern = pattern
+    }
+    
+    return {
+      pattern: new_pattern,
+      x: x_offset,
+      y: y_offset,
+      width: new_width,
+      height: new_height,
+    }
   }
 
   compile_pattern() {
