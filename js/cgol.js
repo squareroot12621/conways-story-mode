@@ -43,14 +43,17 @@ class CGoL {
     this.objects = []
     for (var object of options.objects ?? []) {
       var parsed_object = CGoL.parse_rle(object.pattern)
+      var rotated_object = CGoL.rotate_pattern(
+        parsed_object.pattern,
+        object.rotation ?? 0, // 0 = upright, 1 = 90 degrees CW
+        object.flip_x ?? false,
+      )
       this.objects.push({
-        pattern: parsed_object.pattern,
-        x: (object.x ?? 0) + (options.pattern_x ?? 0),
-        y: (object.y ?? 0) + (options.pattern_y ?? 0),
-        width: parsed_object.width,
-        height: parsed_object.height,
-        rotation: object.rotation ?? 0, // 0 = upright, 1 = 90 degrees CW
-        flip_x: object.flip_x ?? false,
+        pattern: rotated_object.pattern,
+        x: (object.x ?? 0) + rotated_object.x + (options.pattern_x ?? 0),
+        y: (object.y ?? 0) + rotated_object.y + (options.pattern_y ?? 0),
+        width: rotated_object.width,
+        height: rotated_object.height,
         moving: false,
         selected: false,
       })
@@ -353,6 +356,11 @@ class CGoL {
     return output
   }
 
+  static rotate(pattern, rotation=0, flip_x=false) {
+    // TODO
+    return pattern
+  }
+
   compile_pattern() {
     this.board = Array(this.grid_size * this.grid_size).fill(0)
     this.cell_types = Array(this.grid_size * this.grid_size).fill(0)
@@ -498,8 +506,6 @@ class CGoL {
       y: this.selection.top,
       width: this.selection.right+1 - this.selection.left,
       height: this.selection.bottom+1 - this.selection.top,
-      rotation: 0,
-      flip_x: false,
       moving: false,
       selected: false,
     })
@@ -510,7 +516,6 @@ class CGoL {
     var object = this.objects[index]
     
     function get_new_cell(old_cell, cell_x, cell_y) {
-      // TODO: Add flip_x and rotation
       var old_board = old_cell & 1
       var old_cell_type = old_cell >> 1
       
@@ -631,8 +636,8 @@ class CGoL {
       value1: value1,
       value2: value2,
       /* cancelable stops nested merging from happening.
-         Example: Move up, rotate clockwise, rotate counterclockwise, move down.
-         The rotations should merge, but not the moves. */
+         Example: Move up, step forward, step backward, move down.
+         The steps should merge, but not the moves. */
       cancelable: mergeable,
       board: this.#full_board,
       generation: this.generation,
