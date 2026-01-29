@@ -357,8 +357,6 @@ class CGoL {
   }
 
   static rotate(pattern, rotation=0, flip_x=false) {
-    // TODO: flip_x
-    
     var height = pattern.length
     var width = height === 0 ? 0 : pattern[0].length
     
@@ -397,8 +395,8 @@ class CGoL {
       for (var new_row = 0; new_row < width; ++new_row) {
         new_pattern.push(Array(height))
       }
-      for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
-        for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+      for (var y = 0; y < height; ++y) {
+        for (var x = 0; x < width; ++x) {
           if (rotation === 1) {
             var new_x = ((pivot_y - y) + pivot_x) | 0
             var new_y = ((x - pivot_x) + pivot_y) | 0
@@ -422,8 +420,8 @@ class CGoL {
       for (var new_row = 0; new_row < width; ++new_row) {
         new_pattern.push(Array(height))
       }
-      for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
-        for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
+      for (var y = 0; y < height; ++y) {
+        for (var x = 0; x < width; ++x) {
           new_x = width - 1 - x
           new_y = height - 1 - y
           new_pattern[new_y][new_x] = pattern[y][x]
@@ -435,7 +433,14 @@ class CGoL {
       y_offset = 0
       new_width = width
       new_height = height
-      new_pattern = pattern
+      new_pattern = structuredClone(pattern)
+    }
+
+    // Flip new_pattern
+    if (flip_x) {
+      for (var y = 0; y < new_height; ++y) {
+        new_pattern[y].reverse()
+      }
     }
     
     return {
