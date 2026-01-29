@@ -745,8 +745,6 @@ function create_event_handlers(sandbox, library) {
           y: Math.floor((cgol_object.grid_size - parsed_object.height) / 2),
           width: parsed_object.width,
           height: parsed_object.height,
-          rotation: 0,
-          flip_x: false,
           moving: false,
           selected: false,
           object_metadata: object_metadata,
