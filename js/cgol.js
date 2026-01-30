@@ -578,7 +578,9 @@ class CGoL {
         )
       }
       if (destructive) {
-        this.pattern[y].fill(0, this.selection.left, this.selection.right+1)
+        if (this.generation === 0) {
+          this.pattern[y].fill(0, this.selection.left, this.selection.right+1)
+        }
         this.board.fill(
           0,
           y*this.grid_size + this.selection.left,
