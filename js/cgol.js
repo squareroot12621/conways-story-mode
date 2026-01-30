@@ -583,20 +583,8 @@ class CGoL {
         }
         pattern[pattern.length-1].push(new_cell)
       }
-      if (destructive) {
-        if (this.generation === 0) {
-          this.pattern[y].fill(0, this.selection.left, this.selection.right+1)
-        }
-        this.board.fill(
-          0,
-          y*this.grid_size + this.selection.left,
-          y*this.grid_size + this.selection.right+1,
-        )
-        this.cell_types.fill(
-          0,
-          y*this.grid_size + this.selection.left,
-          y*this.grid_size + this.selection.right+1,
-        )
+      if (destructive && this.generation === 0) {
+        this.pattern[y].fill(0, this.selection.left, this.selection.right+1)
       }
     }
     this.objects.unshift({
@@ -608,6 +596,7 @@ class CGoL {
       moving: false,
       selected: false,
     })
+    this.compile_pattern()
     this.#changed_pattern = true
   }
 
