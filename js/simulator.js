@@ -1404,9 +1404,11 @@ function create_event_handlers(sandbox, library) {
       }
     }
 
-    // Bake and update state
+    // Update state
     if (is_selection) {
       cgol_object.bake_object(object_index, true)
+    } else {
+      cgol_object.compile_pattern()
     }
     cgol_object.set_state('rotate', 1, 0, {control1: (a) => Math.min(a, 1)})
     update_floating_toolbars()
