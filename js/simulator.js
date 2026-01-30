@@ -673,7 +673,7 @@ function create_event_handlers(sandbox, library) {
       redo_button.disabled = !cgol_object.can_redo()
 
       // Update the number of objects in the sidebar
-      var object_ids = cgol_object.objects.map((object) => object.object_metadata.id)
+      var object_ids = cgol_object.objects.map((object) => object?.object_metadata?.id)
       for (var library_object of library) {
         var object_id = library_object.id
         var used_object_count = object_ids.filter((id) => id === object_id).length
