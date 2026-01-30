@@ -577,7 +577,7 @@ class CGoL {
         var board_position = y*this.grid_size + x
         var new_cell
         if (this.generation === 0) {
-          new_cell = this.pattern[board_position]
+          new_cell = this.pattern[y][x]
         } else {
           new_cell = this.cell_types[board_position] << 1 | this.board[board_position]
         }
