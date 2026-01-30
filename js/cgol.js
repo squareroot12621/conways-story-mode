@@ -368,6 +368,8 @@ class CGoL {
     
     if (rotation === 1 || rotation === 3) {
       // Annoying rotation
+      new_width = height
+      new_height = width
 
       // Find the pivot point and offset
       var pivot_x = (width - 1) / 2
