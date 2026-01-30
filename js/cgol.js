@@ -691,7 +691,10 @@ class CGoL {
     throw new TypeError("Can't assign to population")
   }
   get bounding_box() {
-    var left_x = this.grid_size, right_x = 0, top_y = this.grid_size, bottom_y = 0
+    var left_x = this.grid_size
+    var right_x = 0
+    var top_y = this.grid_size
+    var bottom_y = 0
     var x, y
     for (var i = 0; i < this.board.length; ++i) {
       if (this.board[i]) {
