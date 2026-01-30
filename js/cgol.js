@@ -596,6 +596,7 @@ class CGoL {
       moving: false,
       selected: false,
     })
+    console.log(this.objects) // DEBUG
     this.compile_pattern()
     this.#changed_pattern = true
   }
