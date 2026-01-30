@@ -1373,11 +1373,11 @@ function create_event_handlers(sandbox, library) {
 
   // Event handlers for the floating toolbar
 
-  // Rotate counterclockwise button
-  var rotate_ccw_selection_button = document.getElementById('simulator-selection-rotate-ccw')
-  rotate_ccw_selection_button.addEventListener('click', () => {
+  function rotate_or_flip(rotation, flip_x, object_index=null) {
+    // TODO: object_index !== null
+    
     cgol_object.extract_selection_to_object()
-    var rotated_pattern = CGoL.rotate(cgol_object.objects[0].pattern, 3, false)
+    var rotated_pattern = CGoL.rotate(cgol_object.objects[0].pattern, rotation, flip_x)
     
     // Update object
     cgol_object.objects[0].pattern = rotated_pattern.pattern
@@ -1397,112 +1397,31 @@ function create_event_handlers(sandbox, library) {
       bottom: Math.min(selection_bottom, cgol_object.grid_size - 1),
       visible: true,
     }
-    console.log(cgol_object.objects[0]) // DEBUG
-    console.log(cgol_object.selection) // DEBUG
     
     cgol_object.bake_object(0, true)
+    cgol_object.set_state('rotate', 1, 0, {control1: (a) => Math.min(a, 1)})
     update_floating_toolbars()
+  }
+  
+  // Rotate counterclockwise button
+  var rotate_ccw_selection_button = document.getElementById('simulator-selection-rotate-ccw')
+  rotate_ccw_selection_button.addEventListener('click', () => {
+    rotate_or_flip(3, false)
   })
   // Rotate clockwise button
   var rotate_cw_selection_button = document.getElementById('simulator-selection-rotate-cw')
   rotate_cw_selection_button.addEventListener('click', () => {
-    var cells_to_edit = []
-    var cell_ids = []
-    var width = cgol_object.selection.right+1 - cgol_object.selection.left
-    var height = cgol_object.selection.bottom+1 - cgol_object.selection.top
-    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) / 2
-    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) / 2
-    if (width % 2 === 0 && height % 2 === 1) {
-      pivot_x -= 0.5
-    } else if (width % 2 === 1 && height % 2 === 0) {
-      pivot_x += 0.5
-    }
-    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
-      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
-        /* Push the old cell.
-           indexOf doesn't work here because arrays
-           with different references aren't equal. */
-        var cell_index = cells_to_edit.findIndex(
-          (coords) => coords[0] === x && coords[1] === y
-        )
-        if (cell_index === -1) {
-          cells_to_edit.push([x, y])
-          cell_ids.push(0)
-        }
-        /* Push the new cell.
-           indexOf doesn't work here because arrays
-           with different references aren't equal. */
-        var new_x = ((pivot_y - y) + pivot_x) | 0
-        var new_y = ((x - pivot_x) + pivot_y) | 0
-        if (new_x >= 0 && new_x < cgol_object.grid_size
-            && new_y >= 0 && new_y < cgol_object.grid_size) {
-          cell_index = cells_to_edit.findIndex((coords) => coords[0] === new_x && coords[1] === new_y)
-          if (cell_index === -1) {
-            cell_index = cells_to_edit.length
-          }
-          cells_to_edit[cell_index] = [new_x, new_y]
-          var old_coordinate = y*cgol_object.grid_size + x
-          cell_ids[cell_index] = (cgol_object.cell_types[old_coordinate] << 1
-                                  | cgol_object.board[old_coordinate])
-        }
-      }
-    }
-    cgol_object.edit_cells(
-      cells_to_edit,
-      cell_ids,
-      ['rotate', 1, 0, {control1: (a) => a % 4, control2: (b) => b % 2}],
-    )
-    // Update selection
-    var old_selection = {...cgol_object.selection}
-    var new_selection_left = ((pivot_y - old_selection.bottom) + pivot_x) | 0
-    var new_selection_top = ((old_selection.left - pivot_x) + pivot_y) | 0
-    var new_selection_right = new_selection_left + old_selection.bottom - old_selection.top
-    var new_selection_bottom = new_selection_top + old_selection.right - old_selection.left
-    cgol_object.selection.left = Math.max(new_selection_left, 0)
-    cgol_object.selection.top = Math.max(new_selection_top, 0)
-    cgol_object.selection.right = Math.min(new_selection_right, cgol_object.grid_size - 1)
-    cgol_object.selection.bottom = Math.min(new_selection_bottom, cgol_object.grid_size - 1)
-    update_floating_toolbars()
+    rotate_or_flip(1, false)
   })
   // Flip horizontally button
   var flip_horiz_selection_button = document.getElementById('simulator-selection-flip-horiz')
   flip_horiz_selection_button.addEventListener('click', () => {
-    var cells_to_edit = []
-    var cell_ids = []
-    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
-      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
-        cells_to_edit.push([x, y])
-        var new_x = cgol_object.selection.right + cgol_object.selection.left - x
-        var new_coordinate = y*cgol_object.grid_size + new_x
-        cell_ids.push(cgol_object.cell_types[new_coordinate] << 1
-                      | cgol_object.board[new_coordinate])
-      }
-    }
-    cgol_object.edit_cells(
-      cells_to_edit,
-      cell_ids,
-      ['rotate', 0, 1, {control1: (a) => a % 4, control2: (b) => b % 2}],
-    )
+    rotate_or_flip(0, true)
   })
   // Flip vertically button
   var flip_vert_selection_button = document.getElementById('simulator-selection-flip-vert')
   flip_vert_selection_button.addEventListener('click', () => {
-    var cells_to_edit = []
-    var cell_ids = []
-    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
-      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
-        cells_to_edit.push([x, y])
-        var new_y = cgol_object.selection.bottom + cgol_object.selection.top - y
-        var new_coordinate = new_y*cgol_object.grid_size + x
-        cell_ids.push(cgol_object.cell_types[new_coordinate] << 1
-                      | cgol_object.board[new_coordinate])
-      }
-    }
-    cgol_object.edit_cells(
-      cells_to_edit,
-      cell_ids,
-      ['rotate', 2, 1, {control1: (a) => a % 4, control2: (b) => b % 2}],
-    )
+    rotate_or_flip(2, true)
   })
   // Cut button
   var cut_selection_button = document.getElementById('simulator-selection-cut')
