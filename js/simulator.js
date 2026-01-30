@@ -1397,6 +1397,8 @@ function create_event_handlers(sandbox, library) {
       bottom: Math.max(selection_bottom, cgol_object.grid_size - 1),
       visible: true,
     }
+    console.log(cgol_object.objects[0]) // DEBUG
+    console.log(cgol_object.selection) // DEBUG
     
     cgol_object.bake_object(0, true)
     update_floating_toolbars()
