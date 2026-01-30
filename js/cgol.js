@@ -575,9 +575,13 @@ class CGoL {
       pattern.push([])
       for (var x = this.selection.left; x <= this.selection.right; ++x) {
         var board_position = y*this.grid_size + x
-        pattern[pattern.length-1].push(
-          this.board[board_position] + 2*this.cell_types[board_position]
-        )
+        var new_cell
+        if (this.generation === 0) {
+          new_cell = this.pattern[board_position]
+        } else {
+          new_cell = this.cell_types[board_position] << 1 | this.board[board_position]
+        }
+        pattern[pattern.length-1].push(new_cell)
       }
       if (destructive) {
         if (this.generation === 0) {
