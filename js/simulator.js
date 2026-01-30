@@ -1374,31 +1374,40 @@ function create_event_handlers(sandbox, library) {
   // Event handlers for the floating toolbar
 
   function rotate_or_flip(rotation, flip_x, object_index=null) {
-    // TODO: object_index !== null
-    
-    cgol_object.extract_selection_to_object()
-    var rotated_pattern = CGoL.rotate(cgol_object.objects[0].pattern, rotation, flip_x)
+    var is_selection = object_index === null
+    object_index ??= 0
+
+    if (is_selection) {
+      cgol_object.extract_selection_to_object()
+    }
+    var current_object = cgol_object.objects[object_index]
+    var rotated_pattern = CGoL.rotate(current_object.pattern, rotation, flip_x)
     
     // Update object
-    cgol_object.objects[0].pattern = rotated_pattern.pattern
-    cgol_object.objects[0].x += rotated_pattern.x
-    cgol_object.objects[0].y += rotated_pattern.y
-    cgol_object.objects[0].width = rotated_pattern.width
-    cgol_object.objects[0].height = rotated_pattern.height
+    current_object.pattern = rotated_pattern.pattern
+    current_object.x += rotated_pattern.x
+    current_object.y += rotated_pattern.y
+    current_object.width = rotated_pattern.width
+    current_object.height = rotated_pattern.height
     // Update selection
-    var selection_left = cgol_object.objects[0].x
-    var selection_top = cgol_object.objects[0].y
-    var selection_right = selection_left + cgol_object.objects[0].width - 1
-    var selection_bottom = selection_top + cgol_object.objects[0].height - 1
-    cgol_object.selection = {
-      left: Math.max(selection_left, 0),
-      top: Math.max(selection_top, 0),
-      right: Math.min(selection_right, cgol_object.grid_size - 1),
-      bottom: Math.min(selection_bottom, cgol_object.grid_size - 1),
-      visible: true,
+    if (is_selection) {
+      var selection_left = current_object.x
+      var selection_top = current_object.y
+      var selection_right = selection_left + current_object.width - 1
+      var selection_bottom = selection_top + current_object.height - 1
+      cgol_object.selection = {
+        left: Math.max(selection_left, 0),
+        top: Math.max(selection_top, 0),
+        right: Math.min(selection_right, cgol_object.grid_size - 1),
+        bottom: Math.min(selection_bottom, cgol_object.grid_size - 1),
+        visible: true,
+      }
     }
-    
-    cgol_object.bake_object(0, true)
+
+    // Bake and update state
+    if (is_selection) {
+      cgol_object.bake_object(object_index, true)
+    }
     cgol_object.set_state('rotate', 1, 0, {control1: (a) => Math.min(a, 1)})
     update_floating_toolbars()
   }
@@ -1581,6 +1590,31 @@ function create_event_handlers(sandbox, library) {
 
   // Object group event handlers
 
+  // Rotate counterclockwise button
+  var rotate_ccw_object_button = document.getElementById('simulator-object-rotate-ccw')
+  rotate_ccw_object_button.addEventListener('click', () => {
+    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
+    rotate_or_flip(3, false, selected_object)
+  })
+  // Rotate clockwise button
+  var rotate_cw_object_button = document.getElementById('simulator-object-rotate-cw')
+  rotate_cw_object_button.addEventListener('click', () => {
+    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
+    rotate_or_flip(1, false, selected_object)
+  })
+  // Flip horizontally button
+  var flip_horiz_object_button = document.getElementById('simulator-object-flip-horiz')
+  flip_horiz_object_button.addEventListener('click', () => {
+    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
+    rotate_or_flip(0, true, selected_object)
+  })
+  // Flip vertically button
+  var flip_vert_object_button = document.getElementById('simulator-object-flip-vert')
+  flip_vert_object_button.addEventListener('click', () => {
+    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
+    rotate_or_flip(2, true, selected_object)
+  })
+  
   // Delete object button
   var delete_object_button = document.getElementById('simulator-object-delete')
   delete_object_button.addEventListener('click', () => {
