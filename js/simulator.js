@@ -1393,8 +1393,8 @@ function create_event_handlers(sandbox, library) {
     cgol_object.selection = {
       left: Math.max(selection_left, 0),
       top: Math.max(selection_top, 0),
-      right: Math.max(selection_right, cgol_object.grid_size - 1),
-      bottom: Math.max(selection_bottom, cgol_object.grid_size - 1),
+      right: Math.min(selection_right, cgol_object.grid_size - 1),
+      bottom: Math.min(selection_bottom, cgol_object.grid_size - 1),
       visible: true,
     }
     console.log(cgol_object.objects[0]) // DEBUG
