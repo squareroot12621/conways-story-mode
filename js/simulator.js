@@ -1376,62 +1376,29 @@ function create_event_handlers(sandbox, library) {
   // Rotate counterclockwise button
   var rotate_ccw_selection_button = document.getElementById('simulator-selection-rotate-ccw')
   rotate_ccw_selection_button.addEventListener('click', () => {
-    var cells_to_edit = []
-    var cell_ids = []
-    var width = cgol_object.selection.right+1 - cgol_object.selection.left
-    var height = cgol_object.selection.bottom+1 - cgol_object.selection.top
-    var pivot_x = (cgol_object.selection.left + cgol_object.selection.right) / 2
-    var pivot_y = (cgol_object.selection.top + cgol_object.selection.bottom) / 2
-    if (width % 2 === 0 && height % 2 === 1) {
-      pivot_y += 0.5
-    } else if (width % 2 === 1 && height % 2 === 0) {
-      pivot_y -= 0.5
-    }
-    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
-      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
-        /* Push the old cell.
-           indexOf doesn't work here because arrays
-           with different references aren't equal. */
-        var cell_index = cells_to_edit.findIndex((coords) => coords[0] === x && coords[1] === y)
-        if (cell_index === -1) {
-          cells_to_edit.push([x, y])
-          cell_ids.push(0)
-        }
-        /* Push the new cell.
-           indexOf doesn't work here because arrays
-           with different references aren't equal. */
-        var new_x = ((y - pivot_y) + pivot_x) | 0
-        var new_y = ((pivot_x - x) + pivot_y) | 0
-        if (new_x >= 0 && new_x < cgol_object.grid_size
-            && new_y >= 0 && new_y < cgol_object.grid_size) {
-          cell_index = cells_to_edit.findIndex(
-            (coords) => coords[0] === new_x && coords[1] === new_y
-          )
-          if (cell_index === -1) {
-            cell_index = cells_to_edit.length
-          }
-          cells_to_edit[cell_index] = [new_x, new_y]
-          var old_coordinate = y*cgol_object.grid_size + x
-          cell_ids[cell_index] = (cgol_object.cell_types[old_coordinate] << 1
-                                  | cgol_object.board[old_coordinate])
-        }
-      }
-    }
-    cgol_object.edit_cells(
-      cells_to_edit,
-      cell_ids,
-      ['rotate', 3, 0, {control1: (a) => a % 4, control2: (b) => b % 2}],
-    )
+    cgol_object.extract_selection_to_object()
+    var rotated_pattern = CGoL.rotate(cgol_object.objects[0].pattern, 3, false)
+    
+    // Update object
+    cgol_object.objects[0].pattern = rotated_pattern.pattern
+    cgol_object.objects[0].x += rotated_pattern.x
+    cgol_object.objects[0].y += rotated_pattern.y
+    cgol_object.objects[0].width = rotated_pattern.width
+    cgol_object.objects[0].height = rotated_pattern.height
     // Update selection
-    var old_selection = {...cgol_object.selection}
-    var new_selection_left = ((old_selection.top - pivot_y) + pivot_x) | 0
-    var new_selection_top = ((pivot_x - old_selection.right) + pivot_y) | 0
-    var new_selection_right = new_selection_left + old_selection.bottom - old_selection.top
-    var new_selection_bottom = new_selection_top + old_selection.right - old_selection.left
-    cgol_object.selection.left = Math.max(new_selection_left, 0)
-    cgol_object.selection.top = Math.max(new_selection_top, 0)
-    cgol_object.selection.right = Math.min(new_selection_right, cgol_object.grid_size - 1)
-    cgol_object.selection.bottom = Math.min(new_selection_bottom, cgol_object.grid_size - 1)
+    var selection_left = cgol_object.objects[0].x
+    var selection_top = cgol_object.objects[0].y
+    var selection_right = selection_left + cgol_object.objects[0].width - 1
+    var selection_bottom = selection_top + cgol_object.objects[0].height - 1
+    cgol_object.selection = {
+      left: Math.max(selection_left, 0),
+      top: Math.max(selection_top, 0),
+      right: Math.max(selection_right, cgol_object.grid_size - 1),
+      bottom: Math.max(selection_bottom, cgol_object.grid_size - 1),
+      visible: true,
+    }
+    
+    cgol_object.bake_object(0, true)
     update_floating_toolbars()
   })
   // Rotate clockwise button
