@@ -1067,6 +1067,7 @@ function create_event_handlers(sandbox, library) {
   var clipboard_is_object
   var paste_visible = false
   var currently_pasting = false
+  var cursor_moved_significantly = false
 
   function update_first_mouse_position(event) {
     first_x = event.pageX
@@ -1162,6 +1163,7 @@ function create_event_handlers(sandbox, library) {
           })
           cgol_object.force_update()
         }
+        cursor_moved_significantly = false
         var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
         var simulator_selection_move = document.getElementById('simulator-selection-move')
         if (simulator_selection_toolbar.style.display === 'block') {
@@ -1201,8 +1203,9 @@ function create_event_handlers(sandbox, library) {
         zoom_level,
       )
       update_floating_toolbars()
-    } else if (tool === 'draw') { // Drawing
-      if (mouse_down && buttons & 1) {
+    }
+    if (tool === 'draw') { // Drawing
+      if (mouse_down && (buttons & 1) && !(buttons & 2)) {
         var coords0 = cgol_object.page_to_board_coordinates(last_x, last_y)
         var x0 = coords0.x
         var y0 = coords0.y
@@ -1264,17 +1267,18 @@ function create_event_handlers(sandbox, library) {
         }
       }
     } else if (tool === 'select') { // Selecting
-      if (mouse_down && !currently_pasting && buttons & 1) {
+      if (mouse_down && !currently_pasting) {
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
         x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
         y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
         var move_distance = Math.hypot(first_x - event.pageX, first_y - event.pageY)
-        var moved_significantly = move_distance >= 3
-        /* This whole moved_significantly thing is here
+        cursor_moved_significantly ||= move_distance >= 3
+        /* This whole cursor_moved_significantly thing is here
            because moving the cursor 2 pixels
            shouldn't cause a selection to automatically appear,
            especially if you're trying to remove one already. */
-        if (moved_significantly || cgol_object.selection.visible) {
+        if ((cursor_moved_significantly || cgol_object.selection.visible)
+            && (buttons & 1) && !(buttons & 2)) {
           cgol_object.selection = {
             left: Math.min(x, selection_start.x),
             right: Math.max(x, selection_start.x),
@@ -1343,7 +1347,7 @@ function create_event_handlers(sandbox, library) {
           var simulator_selection_move = document.getElementById('simulator-selection-move')
           simulator_selection_move.style.display = 'none'
           paste_visible = false
-        } else {
+        } else if (!cursor_moved_significantly) {
           change_visible_toolbar_group(0)
           update_floating_toolbars()
           paste_visible = true
