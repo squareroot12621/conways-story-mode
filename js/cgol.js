@@ -587,6 +587,7 @@ class CGoL {
         this.pattern[y].fill(0, this.selection.left, this.selection.right+1)
       }
     }
+    this.compile_pattern()
     this.objects.unshift({
       pattern: pattern,
       x: this.selection.left,
@@ -597,7 +598,6 @@ class CGoL {
       selected: false,
     })
     console.log(this.objects) // DEBUG
-    this.compile_pattern()
     this.#changed_pattern = true
   }
 
