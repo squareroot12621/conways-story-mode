@@ -1064,6 +1064,7 @@ function create_event_handlers(sandbox, library) {
   var temporarily_paused = false
   var selection_start = {x: null, y: null}
   var clipboard
+  var clipboard_is_object
   var paste_visible = false
   var currently_pasting = false
 
@@ -1440,6 +1441,7 @@ function create_event_handlers(sandbox, library) {
     cgol_object.selection.visible = false
     cgol_object.extract_selection_to_object(true)
     clipboard = cgol_object.objects.shift()
+    clipboard_is_object = false
     cgol_object.set_state('delete', 1, 0, {mergeable: false})
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
     var simulator_selection_move = document.getElementById('simulator-selection-move')
@@ -1453,6 +1455,7 @@ function create_event_handlers(sandbox, library) {
   copy_selection_button.addEventListener('click', () => {
     cgol_object.extract_selection_to_object(false)
     clipboard = cgol_object.objects.shift()
+    clipboard_is_object = false
     var paste_selection_button = document.getElementById('simulator-selection-paste')
     paste_selection_button.removeAttribute('disabled')
   })
@@ -1616,7 +1619,29 @@ function create_event_handlers(sandbox, library) {
     var selected_object = cgol_object.objects.findIndex((object) => object.selected)
     rotate_or_flip(2, true, selected_object)
   })
-  
+  // Cut button
+  var cut_object_button = document.getElementById('simulator-object-cut')
+  cut_object_button.addEventListener('click', () => {
+    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
+    clipboard = cgol_object.objects.splice(selected_object, 1)[0]
+    clipboard_is_object = true
+    cgol_object.set_state('delete', 1, 0, {mergeable: false})
+    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
+    var simulator_selection_move = document.getElementById('simulator-selection-move')
+    simulator_selection_toolbar.style.display = 'none'
+    simulator_selection_move.style.display = 'none'
+    var paste_selection_button = document.getElementById('simulator-selection-paste')
+    paste_selection_button.removeAttribute('disabled')
+  })
+  // Copy button
+  var copy_object_button = document.getElementById('simulator-object-copy')
+  copy_object_button.addEventListener('click', () => {
+    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
+    clipboard = cgol_object.objects.splice(selected_object, 1)[0]
+    clipboard_is_object = true
+    var paste_selection_button = document.getElementById('simulator-selection-paste')
+    paste_selection_button.removeAttribute('disabled')
+  })
   // Delete object button
   var delete_object_button = document.getElementById('simulator-object-delete')
   delete_object_button.addEventListener('click', () => {
