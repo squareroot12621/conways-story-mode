@@ -1117,8 +1117,9 @@ function create_event_handlers(sandbox, library) {
 
     if (buttons & 2) { // Quick panning
       update_cursor('grabbing')
-    } else if (tool === 'draw') { // Drawing
-      if (buttons & 1) {
+    }
+    if (tool === 'draw') { // Drawing
+      if ((buttons & 1) && !(buttons & 2)) { // Left click but not right click
         var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
         temporarily_paused = cgol_object.playing
         cgol_object.pause()
@@ -1130,7 +1131,7 @@ function create_event_handlers(sandbox, library) {
         }
       }
     } else if (tool === 'object') { // Object
-      if (buttons & 1) {
+      if ((buttons & 1) && !(buttons & 2)) {
         cgol_object.selection.visible = false
         cgol_object.objects.forEach((object) => {
           object.selected = false
@@ -1143,22 +1144,24 @@ function create_event_handlers(sandbox, library) {
         cgol_object.force_update()
       }
     } else if (tool === 'select') { // Selecting
-      if (!currently_pasting && buttons & 1) {
-        var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-        x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
-        y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
-        selection_start = {x: x, y: y}
-        cgol_object.selection = {
-          left: x,
-          right: x,
-          top: y,
-          bottom: y,
-          visible: false,
+      if (!currently_pasting) {
+        if ((buttons & 1) && !(buttons & 2)) {
+          var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
+          x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
+          y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
+          selection_start = {x: x, y: y}
+          cgol_object.selection = {
+            left: x,
+            right: x,
+            top: y,
+            bottom: y,
+            visible: false,
+          }
+          cgol_object.objects.forEach((object) => {
+            object.selected = false
+          })
+          cgol_object.force_update()
         }
-        cgol_object.objects.forEach((object) => {
-          object.selected = false
-        })
-        cgol_object.force_update()
         var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
         var simulator_selection_move = document.getElementById('simulator-selection-move')
         if (simulator_selection_toolbar.style.display === 'block') {
@@ -1502,7 +1505,7 @@ function create_event_handlers(sandbox, library) {
   abort_paste_button.addEventListener('click', () => {
     currently_pasting = false
     cgol_object.objects.shift()
-    cgol_object.selection = {...cgol_object.selection, visible: false}
+    cgol_object.selection.visible = false
     cgol_object.force_update()
     update_floating_toolbars()
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
@@ -1516,7 +1519,7 @@ function create_event_handlers(sandbox, library) {
     currently_pasting = false
     cgol_object.bake_object(0, true)
     cgol_object.set_state('paste', 1, 0, {mergeable: false})
-    cgol_object.selection = {...cgol_object.selection, visible: false}
+    cgol_object.selection.visible = false
     cgol_object.force_update()
     update_floating_toolbars()
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
