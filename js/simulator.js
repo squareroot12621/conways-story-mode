@@ -1717,21 +1717,16 @@ function create_event_handlers(sandbox, library) {
   // Paste object button
   var paste_object_button = document.getElementById('simulator-object-paste')
   paste_object_button.addEventListener('click', () => {
-    console.log(clipboard)
-    /*
     currently_pasting = true
-    cgol_object.selection.left = Math.min(Math.max(cgol_object.selection.left, 0), cgol_object.grid_size - clipboard.width)
-    cgol_object.selection.top = Math.min(Math.max(cgol_object.selection.top, 0), cgol_object.grid_size - clipboard.height)
-    cgol_object.selection.right = cgol_object.selection.left + clipboard.width - 1
-    cgol_object.selection.bottom = cgol_object.selection.top + clipboard.height - 1
-    cgol_object.selection.visible = true
-    cgol_object.objects.unshift(clipboard)
+    cgol_object.objects.push(clipboard)
     cgol_object.objects[0].moving = true
-    cgol_object.objects[0].x = cgol_object.selection.left
-    cgol_object.objects[0].y = cgol_object.selection.top
+    cgol_object.objects[0].selected = true
+    /* selection.left and selection.top define the cell
+       where the "paste object" button popped up */
+    cgol_object.objects[0].x = Math.min(Math.max(cgol_object.selection.left, 0), cgol_object.grid_size - clipboard.width)
+    cgol_object.objects[0].y = Math.min(Math.max(cgol_object.selection.top, 0), cgol_object.grid_size - clipboard.height)
     change_visible_toolbar_group(2)
     update_floating_toolbars()
-    */
   })
   
   // Draw the CGoL simulation
