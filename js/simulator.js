@@ -1547,7 +1547,11 @@ function create_event_handlers(sandbox, library) {
   var abort_paste_button = document.getElementById('simulator-paste-abort')
   abort_paste_button.addEventListener('click', () => {
     currently_pasting = false
-    cgol_object.objects.shift()
+    if (clipboard_is_object) {
+      cgol_object.objects.pop()
+    } else {
+      cgol_object.objects.shift()
+    }
     cgol_object.selection.visible = false
     cgol_object.force_update()
     update_floating_toolbars()
@@ -1560,9 +1564,13 @@ function create_event_handlers(sandbox, library) {
   var confirm_paste_button = document.getElementById('simulator-paste-confirm')
   confirm_paste_button.addEventListener('click', () => {
     currently_pasting = false
-    cgol_object.bake_object(0, true)
+    if (clipboard_is_object) {
+      cgol_object.objects[cgol_object.objects.length - 1].selected = false
+    } else {
+      cgol_object.bake_object(0, true)
+      cgol_object.selection.visible = false
+    }
     cgol_object.set_state('paste', 1, 0, {mergeable: false})
-    cgol_object.selection.visible = false
     cgol_object.force_update()
     update_floating_toolbars()
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
