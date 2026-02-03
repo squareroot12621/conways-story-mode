@@ -1471,6 +1471,8 @@ function create_event_handlers(sandbox, library) {
     simulator_selection_move.style.display = 'none'
     var paste_selection_button = document.getElementById('simulator-selection-paste')
     paste_selection_button.removeAttribute('disabled')
+    var paste_object_button = document.getElementById('simulator-object-paste')
+    paste_object_button.setAttribute('disabled', '')
   })
   // Copy button
   var copy_selection_button = document.getElementById('simulator-selection-copy')
@@ -1480,6 +1482,8 @@ function create_event_handlers(sandbox, library) {
     clipboard_is_object = false
     var paste_selection_button = document.getElementById('simulator-selection-paste')
     paste_selection_button.removeAttribute('disabled')
+    var paste_object_button = document.getElementById('simulator-object-paste')
+    paste_object_button.setAttribute('disabled', '')
   })
   // Delete button
   var delete_selection_button = document.getElementById('simulator-selection-delete')
@@ -1653,6 +1657,8 @@ function create_event_handlers(sandbox, library) {
     var simulator_selection_move = document.getElementById('simulator-selection-move')
     simulator_selection_toolbar.style.display = 'none'
     simulator_selection_move.style.display = 'none'
+    var paste_selection_button = document.getElementById('simulator-selection-paste')
+    paste_selection_button.setAttribute('disabled', '')
     var paste_object_button = document.getElementById('simulator-object-paste')
     paste_object_button.removeAttribute('disabled')
   })
@@ -1662,6 +1668,8 @@ function create_event_handlers(sandbox, library) {
     var selected_object = cgol_object.objects.findIndex((object) => object.selected)
     clipboard = structuredClone(cgol_object.objects[selected_object])
     clipboard_is_object = true
+    var paste_selection_button = document.getElementById('simulator-selection-paste')
+    paste_selection_button.setAttribute('disabled', '')
     var paste_object_button = document.getElementById('simulator-object-paste')
     paste_object_button.removeAttribute('disabled')
   })
