@@ -1329,6 +1329,7 @@ function create_event_handlers(sandbox, library) {
       var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
       if (mouse_down && cgol_object.generation === 0) {
         // Check whether any objects are in range
+        var object_selected = false
         cgol_object.objects.forEach((object) => {
           object.selected = false
         })
@@ -1339,12 +1340,29 @@ function create_event_handlers(sandbox, library) {
           if (x >= object.x && x < object.x + object.width
               && y >= object.y && y < object.y + object.height) {
             object.selected = true
+            object_selected = true
             break
           }
         }
-        cgol_object.force_update()
-        change_visible_toolbar_group(3)
-        update_floating_toolbars()
+        if (object_selected || !paste_visible) {
+          cgol_object.force_update()
+          change_visible_toolbar_group(3)
+          update_floating_toolbars()
+          paste_visible = true
+        } else {
+          change_visible_toolbar_group(4)
+          cgol_object.selection = ({
+            left: x,
+            right: x,
+            top: y,
+            bottom: y,
+            visible: false,
+          })
+          update_floating_toolbars(true)
+          var simulator_selection_move = document.getElementById('simulator-selection-move')
+          simulator_selection_move.style.display = 'none'
+          paste_visible = false
+        }
       }
     } else if (tool === 'select') { // Selecting
       if (mouse_down && !currently_pasting) {
