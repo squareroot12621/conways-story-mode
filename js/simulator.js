@@ -1344,6 +1344,7 @@ function create_event_handlers(sandbox, library) {
             break
           }
         }
+        console.log(object_selected, paste_visible) // DEBUG
         if (object_selected || !paste_visible) {
           cgol_object.force_update()
           change_visible_toolbar_group(3)
