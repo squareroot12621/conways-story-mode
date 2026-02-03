@@ -1152,9 +1152,11 @@ function create_event_handlers(sandbox, library) {
         cgol_object.objects.forEach((object) => {
           object.selected = false
         })
-        paste_visible = false
         var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
         var simulator_selection_move = document.getElementById('simulator-selection-move')
+        if (simulator_selection_toolbar.style.display === 'block') {
+          paste_visible = false
+        }
         simulator_selection_toolbar.style.display = 'none'
         simulator_selection_move.style.display = 'none'
         cgol_object.force_update()
