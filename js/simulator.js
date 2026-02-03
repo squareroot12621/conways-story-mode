@@ -347,7 +347,7 @@ function create_simulator_main(sandbox) {
     },
   )
 
-  // Paste button
+  // Paste selection button
   var paste_selection_button = create_element('button', 'content_paste', {
     'aria-label': 'Paste selection',
     class: 'simulator-toolbar-item',
@@ -355,10 +355,10 @@ function create_simulator_main(sandbox) {
     id: 'simulator-selection-paste',
     type: 'button',
   })
-  var paste_group = create_element(
+  var paste_selection_group = create_element(
     'span',
     [paste_selection_button],
-    {class: 'simulator-paste-group'},
+    {class: 'simulator-paste-selection-group'},
   )
   
   // Paste confirmation buttons
@@ -470,15 +470,30 @@ function create_simulator_main(sandbox) {
     ],
     {class: 'simulator-object-group'},
   )
+
+  // Paste object button
+  var paste_object_button = create_element('button', 'content_paste', {
+    'aria-label': 'Paste object',
+    class: 'simulator-toolbar-item',
+    disabled: '', // We can't paste anything yet
+    id: 'simulator-object-paste',
+    type: 'button',
+  })
+  var paste_object_group = create_element(
+    'span',
+    [paste_object_button],
+    {class: 'simulator-paste-object-group'},
+  )
   
   // The floating toolbar when a selection is made
   var selection_toolbar = create_element(
     'section',
     [
       selection_group,
-      paste_group,
+      paste_selection_group,
       paste_confirmation_group,
-      object_group
+      object_group,
+      paste_object_group,
     ],
     {class: 'simulator-selection-toolbar'},
   )
@@ -1638,8 +1653,8 @@ function create_event_handlers(sandbox, library) {
     var simulator_selection_move = document.getElementById('simulator-selection-move')
     simulator_selection_toolbar.style.display = 'none'
     simulator_selection_move.style.display = 'none'
-    var paste_selection_button = document.getElementById('simulator-selection-paste')
-    paste_selection_button.removeAttribute('disabled')
+    var paste_object_button = document.getElementById('simulator-object-paste')
+    paste_object_button.removeAttribute('disabled')
   })
   // Copy button
   var copy_object_button = document.getElementById('simulator-object-copy')
@@ -1647,8 +1662,8 @@ function create_event_handlers(sandbox, library) {
     var selected_object = cgol_object.objects.findIndex((object) => object.selected)
     clipboard = structuredClone(cgol_object.objects[selected_object])
     clipboard_is_object = true
-    var paste_selection_button = document.getElementById('simulator-selection-paste')
-    paste_selection_button.removeAttribute('disabled')
+    var paste_object_button = document.getElementById('simulator-object-paste')
+    paste_object_button.removeAttribute('disabled')
   })
   // Delete object button
   var delete_object_button = document.getElementById('simulator-object-delete')
