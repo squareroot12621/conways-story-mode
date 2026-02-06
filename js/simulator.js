@@ -1695,6 +1695,7 @@ function create_event_handlers(sandbox, library) {
   copy_object_button.addEventListener('click', () => {
     var selected_object = cgol_object.objects.findIndex((object) => object.selected)
     clipboard = structuredClone(cgol_object.objects[selected_object])
+    console.log(clipboard) // DEBUG
     clipboard_is_object = true
     var paste_selection_button = document.getElementById('simulator-selection-paste')
     paste_selection_button.setAttribute('disabled', '')
@@ -1726,13 +1727,13 @@ function create_event_handlers(sandbox, library) {
   var paste_object_button = document.getElementById('simulator-object-paste')
   paste_object_button.addEventListener('click', () => {
     currently_pasting = true
-    cgol_object.objects.push(clipboard)
-    cgol_object.objects[0].moving = true
-    cgol_object.objects[0].selected = true
+    clipboard.moving = true
+    clipboard.selected = true
     /* selection.left and selection.top define the cell
        where the "paste object" button popped up */
-    cgol_object.objects[0].x = Math.min(Math.max(cgol_object.selection.left, 0), cgol_object.grid_size - clipboard.width)
-    cgol_object.objects[0].y = Math.min(Math.max(cgol_object.selection.top, 0), cgol_object.grid_size - clipboard.height)
+    clipboard.x = Math.min(Math.max(cgol_object.selection.left, 0), cgol_object.grid_size - clipboard.width)
+    clipboard.y = Math.min(Math.max(cgol_object.selection.top, 0), cgol_object.grid_size - clipboard.height)
+    cgol_object.objects.push(clipboard)
     change_visible_toolbar_group(2)
     update_floating_toolbars()
   })
