@@ -1541,6 +1541,8 @@ function create_event_handlers(sandbox, library) {
     cgol_object.objects[0].y = cgol_object.selection.top
     change_visible_toolbar_group(2)
     update_floating_toolbars()
+
+    console.log(cgol_object.objects) // DEBUG
   })
   
   // Abort paste button
@@ -1602,7 +1604,6 @@ function create_event_handlers(sandbox, library) {
         moving_object_index = 0
       } else {
         moving_object_index = cgol_object.objects.findIndex((object) => object.selected)
-        console.log(cgol_object.objects[moving_object_index]) // DEBUG
       }
     } else {
       if (clipboard_is_object) {
@@ -1703,7 +1704,6 @@ function create_event_handlers(sandbox, library) {
   copy_object_button.addEventListener('click', () => {
     var selected_object = cgol_object.objects.findIndex((object) => object.selected)
     clipboard = structuredClone(cgol_object.objects[selected_object])
-    console.log(clipboard) // DEBUG
     clipboard_is_object = true
     var paste_selection_button = document.getElementById('simulator-selection-paste')
     paste_selection_button.setAttribute('disabled', '')
@@ -1744,6 +1744,8 @@ function create_event_handlers(sandbox, library) {
     cgol_object.objects.push(clipboard)
     change_visible_toolbar_group(2)
     update_floating_toolbars()
+
+    console.log(cgol_object.objects) // DEBUG
   })
   
   // Draw the CGoL simulation
