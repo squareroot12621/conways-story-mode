@@ -1565,6 +1565,7 @@ function create_event_handlers(sandbox, library) {
   confirm_paste_button.addEventListener('click', () => {
     currently_pasting = false
     if (clipboard_is_object) {
+      cgol_object.objects[cgol_object.objects.length - 1].moving = false
       cgol_object.objects[cgol_object.objects.length - 1].selected = false
     } else {
       cgol_object.bake_object(0, true)
