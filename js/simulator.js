@@ -1604,6 +1604,12 @@ function create_event_handlers(sandbox, library) {
         moving_object_index = cgol_object.objects.findIndex((object) => object.selected)
         console.log(cgol_object.objects[moving_object_index]) // DEBUG
       }
+    } else {
+      if (clipboard_is_object) {
+        moving_object_index = 0
+      } else {
+        moving_object_index = cgol_object.objects.length - 1
+      }
     }
   }
   function move_selection_mouse_move(event) {
