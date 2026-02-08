@@ -1535,7 +1535,7 @@ function create_event_handlers(sandbox, library) {
     cgol_object.selection.right = cgol_object.selection.left + clipboard.width - 1
     cgol_object.selection.bottom = cgol_object.selection.top + clipboard.height - 1
     cgol_object.selection.visible = true
-    cgol_object.objects.unshift(clipboard)
+    cgol_object.objects.unshift(structuredClone(clipboard))
     cgol_object.objects[0].moving = true
     cgol_object.objects[0].x = cgol_object.selection.left
     cgol_object.objects[0].y = cgol_object.selection.top
@@ -1569,6 +1569,7 @@ function create_event_handlers(sandbox, library) {
     if (clipboard_is_object) {
       cgol_object.objects[cgol_object.objects.length - 1].moving = false
       cgol_object.objects[cgol_object.objects.length - 1].selected = false
+      cgol_object.compile_pattern()
     } else {
       cgol_object.bake_object(0, true)
       cgol_object.selection.visible = false
@@ -1632,7 +1633,9 @@ function create_event_handlers(sandbox, library) {
         cgol_object.selection.right = new_x + selection_width - 1
         cgol_object.selection.top = new_y
         cgol_object.selection.bottom = new_y + selection_height - 1
-      } else {
+      }
+      if (selection.type !== 'selection'
+          || (currently_pasting && clipboard_is_object)) {
         cgol_object.compile_pattern()
       }
       update_floating_toolbars()
@@ -1741,7 +1744,7 @@ function create_event_handlers(sandbox, library) {
        where the "paste object" button popped up */
     clipboard.x = Math.min(Math.max(cgol_object.selection.left, 0), cgol_object.grid_size - clipboard.width)
     clipboard.y = Math.min(Math.max(cgol_object.selection.top, 0), cgol_object.grid_size - clipboard.height)
-    cgol_object.objects.push(clipboard)
+    cgol_object.objects.push(structuredClone(clipboard))
     change_visible_toolbar_group(2)
     update_floating_toolbars()
 
