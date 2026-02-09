@@ -1739,7 +1739,7 @@ function create_event_handlers(sandbox, library) {
   var paste_object_button = document.getElementById('simulator-object-paste')
   paste_object_button.addEventListener('click', () => {
     currently_pasting = true
-    clipboard.moving = true
+    clipboard.moving = false
     clipboard.selected = true
     /* selection.left and selection.top define the cell
        where the "paste object" button popped up */
