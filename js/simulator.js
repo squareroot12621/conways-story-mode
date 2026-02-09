@@ -1608,9 +1608,9 @@ function create_event_handlers(sandbox, library) {
       }
     } else {
       if (clipboard_is_object) {
-        moving_object_index = 0
-      } else {
         moving_object_index = cgol_object.objects.length - 1
+      } else {
+        moving_object_index = 0
       }
     }
   }
