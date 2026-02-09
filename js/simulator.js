@@ -1549,13 +1549,14 @@ function create_event_handlers(sandbox, library) {
   var abort_paste_button = document.getElementById('simulator-paste-abort')
   abort_paste_button.addEventListener('click', () => {
     currently_pasting = false
+    cgol_object.selection.visible = false
     if (clipboard_is_object) {
       cgol_object.objects.pop()
+      cgol_object.compile_pattern()
     } else {
       cgol_object.objects.shift()
+      cgol_object.force_update()
     }
-    cgol_object.selection.visible = false
-    cgol_object.force_update()
     update_floating_toolbars()
     var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
     var simulator_selection_move = document.getElementById('simulator-selection-move')
