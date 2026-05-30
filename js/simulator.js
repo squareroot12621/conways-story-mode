@@ -1,10 +1,11 @@
-import {create_main_menu} from './main-menu.js'
-import {CGoL} from './cgol.js'
-import {create_element, update_root, throttle, object_data} from './utilities.js'
+import {createMainMenu} from "./main-menu.js";
+import {CGoL} from "./cgol.js";
+import {createElement, updateRoot, throttle, objectData} from "./utilities.js";
 
-var cgol_object = null
+let cgolObject = null;
 
-function create_cgol_simulator(sandbox, objective=null, library=null) {
+function createCgolSimulator(sandbox, objective = null, library = null) {
+  // DEBUG
   library = [
     {
       "id": "blinker",
@@ -12,14 +13,14 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       "data": {
         "pattern": "A$A$A",
         "name": {
-          "en-US": "Blinker"
+          "en-US": "Blinker",
         },
         "type": "oscillator",
         "period": 2,
         "discoverer": "John Conway",
-        "discover_date": [1969, null, null],
-        "add_to_sandbox_library": [1, 3]
-      }
+        "discoverDate": [1969, null, null],
+        "addToSandboxLibrary": [1, 3],
+      },
     },
     {
       "id": "glider",
@@ -27,1733 +28,2009 @@ function create_cgol_simulator(sandbox, objective=null, library=null) {
       "data": {
         "pattern": ".A$2.A$3A",
         "name": {
-          "en-US": "Glider"
+          "en-US": "Glider",
         },
         "type": "spaceship",
         "period": 4,
         "displacement": [1, 1],
         "discoverer": "Richard K. Guy",
-        "discover_date": [1969, 11, null],
-        "add_to_sandbox_library": false
-      }
-    }
-  ] // DEBUG
-  
-  var sidebar = create_simulator_sidebar(sandbox, objective, library)
-  var simulator = create_simulator_main(sandbox)
-  
-  var simulator_wrapper = create_element('div', [sidebar, simulator], {class: 'simulator-wrapper'})
-  update_root(simulator_wrapper)
+        "discoverDate": [1969, 11, null],
+        "addToSandboxLibrary": false,
+      },
+    },
+  ];
 
-  resize_simulator()
+  const sidebar = createSimulatorSidebar(sandbox, objective, library);
+  const simulator = createSimulatorMain();
 
-  create_event_handlers(sandbox, library)
+  const simulatorWrapper = createElement(
+    "div", [sidebar, simulator], {"class": "simulator-wrapper"},
+  );
+  updateRoot(simulatorWrapper);
+
+  resizeSimulator();
+
+  createEventHandlers(sandbox, library);
 }
 
 
-function create_simulator_sidebar(sandbox, objective=null, library=null) {
-  var back_icon = create_element('span', 'arrow_back', {class: 'icon', 'aria-hidden': true})
-  var back_button = create_element('button', [back_icon, ' Back'], {
-    class: 'back-button',
-    type: 'button',
-  })
-  var close_menu_icon = create_element('span', 'arrow_left', {class: 'icon', 'aria-hidden': true})
-  var close_menu_button = create_element('button', close_menu_icon, {
-    class: 'invisible-button',
-    'aria-label': 'Close sidebar',
-    type: 'button',
-  })
-  
+function createSimulatorSidebar(sandbox, objective = null, library = null) {
+  const backIcon = createElement(
+    "span", "arrow_back", {"class": "icon", "aria-hidden": true},
+  );
+  const backButton = createElement(
+    "button", [backIcon, " Back"], {"class": "back-button", "type": "button"},
+  );
+  const closeMenuIcon = createElement(
+    "span", "arrow_left", {"class": "icon", "aria-hidden": true},
+  );
+  const closeMenuButton = createElement("button", closeMenuIcon, {
+    "class": "invisible-button",
+    "aria-label": "Close sidebar",
+    "type": "button",
+  });
+
+  let missionWrapper;
   if (objective !== null) {
-    var mission_icon = create_element('span', 'list_alt', {class: 'icon', 'aria-hidden': true})
-    var mission_heading = create_element('h3', [mission_icon, ' Mission'])
-    var mission_text = []
-    for (var line of objective.split('\n')) {
-      mission_text.push(create_element('p', line))
+    const missionIcon = createElement(
+      "span", "list_alt", {"class": "icon", "aria-hidden": true},
+    );
+    const missionHeading = createElement("h3", [missionIcon, " Mission"]);
+    const missionText = [];
+    for (const line of objective.split("\n")) {
+      missionText.push(createElement("p", line));
     }
-    var mission_wrapper = create_element(
-      'div', [mission_heading].concat(mission_text), {class: 'simulator-mission-wrapper'}
-    )
+    missionWrapper = createElement(
+      "div",
+      [missionHeading].concat(missionText),
+      {"class": "simulator-mission-wrapper"},
+    );
   }
-  library ??= [] // TODO: Change to everything you've learned so far
-  var library_icon = create_element('span', 'menu_book', {class: 'icon', 'aria-hidden': true})
-  var library_heading = create_element('h3', [library_icon, ' Library'])
-  if (library.length) {
-    var library_items = []
-    for (var object of library) {
-      // TODO: Add support for other languages
-      var item_name = `${object.count}\u00D7 ${object.data.name['en-US']} `
-      var add_object_button = create_element('button', 'add', {
-        class: 'simulator-add-object simulator-toolbar-item',
-        'data-object': object.id,
-        'data-count': object.count,
-      })
-      library_items.push(create_element('li', [item_name, add_object_button]))
-    }
-    var library_list = create_element('ul', library_items, {class: 'simulator-library-list'})
+  if (sandbox) {
+    // TODO: Change library to everything you've learned so far
   } else {
-    var library_list = create_element('p', 'No objects.', {class: 'simulator-library-empty'})
+    library ??= [];
   }
-  var library_wrapper = create_element(
-    'div', [library_heading].concat(library_list), {class: 'simulator-library-wrapper'}
-  )
-
-  var sidebar_top = create_element('div', [back_button, close_menu_button], {class: 'simulator-sidebar-top'})
-  
-  var sidebar_main = create_element(
-    'div',
-    objective === null ? [library_wrapper] : [mission_wrapper, library_wrapper],
-    {class: 'simulator-sidebar-main'}
-  )
-
-  if (!sandbox) { // Sandbox doesn't have any hints
-    var lightbulb_icon = create_element('span', 'lightbulb_2', {class: 'icon', 'aria-hidden': true})
-    var hint_button = create_element('button', lightbulb_icon, {
-      class: 'invisible-button',
-      'aria-label': 'Show hint',
-      type: 'button',
-    })
-    var hint_tooltip = create_element('div', 'Need a hint?', {class: 'hint-tooltip'})
-    var hint_wrapper = create_element('div', [hint_button, hint_tooltip], {class: 'hint-button'})
+  const libraryIcon = createElement(
+    "span", "menu_book", {"class": "icon", "aria-hidden": true},
+  );
+  const libraryHeading = createElement("h3", [libraryIcon, " Library"]);
+  let libraryList;
+  if (library.length) {
+    const libraryItems = [];
+    for (const object of library) {
+      // TODO: Add support for other languages
+      const itemName = `${object.count}\u00D7 ${object.data.name["en-US"]} `;
+      const addObjectButton = createElement("button", "add", {
+        "class": "simulator-add-object simulator-toolbar-item",
+        "data-object": object.id,
+        "data-count": object.count,
+      });
+      libraryItems.push(createElement("li", [itemName, addObjectButton]));
+    }
+    libraryList = createElement(
+      "ul", libraryItems, {"class": "simulator-library-list"},
+    );
+  } else {
+    libraryList = createElement(
+      "p", "No objects.", {"class": "simulator-library-empty"},
+    );
   }
-  var reset_icon = create_element('span', 'replay', {class: 'icon', 'aria-hidden': true})
-  var reset_button = create_element('button', reset_icon, {
-    class: 'invisible-button',
-    'aria-label': 'Reset level',
-    type: 'button',
-  })
-  var sidebar_bottom = create_element(
-    'div', sandbox ? [reset_button] : [hint_wrapper, reset_button], {class: 'simulator-sidebar-bottom'}
-  )
-  var sidebar = create_element(
-    'article', [sidebar_top, sidebar_main, sidebar_bottom], {class: 'simulator-sidebar'}
-  )
-  
-  return sidebar
+  const libraryWrapper = createElement(
+    "div",
+    [libraryHeading].concat(libraryList),
+    {"class": "simulator-library-wrapper"},
+  );
+
+  const sidebarTop = createElement(
+    "div", [backButton, closeMenuButton], {"class": "simulator-sidebar-top"},
+  );
+
+  const sidebarMain = createElement(
+    "div",
+    objective === null ? [libraryWrapper] : [missionWrapper, libraryWrapper],
+    {"class": "simulator-sidebar-main"},
+  );
+
+  let hintWrapper;
+  // Sandbox doesn't have any hints
+  if (!sandbox) {
+    const lightbulbIcon = createElement(
+      "span", "lightbulb2", {"class": "icon", "aria-hidden": true},
+    );
+    const hintButton = createElement("button", lightbulbIcon, {
+      "class": "invisible-button",
+      "aria-label": "Show hint",
+      "type": "button",
+    });
+    const hintTooltip = createElement(
+      "div", "Need a hint?", {"class": "hint-tooltip"},
+    );
+    hintWrapper = createElement(
+      "div", [hintButton, hintTooltip], {"class": "hint-button"},
+    );
+  }
+  const resetIcon = createElement(
+    "span", "replay", {"class": "icon", "aria-hidden": true},
+  );
+  const resetButton = createElement("button", resetIcon, {
+    "class": "invisible-button",
+    "aria-label": "Reset level",
+    "type": "button",
+  });
+  const sidebarBottom = createElement(
+    "div",
+    sandbox ? [resetButton] : [hintWrapper, resetButton],
+    {"class": "simulator-sidebar-bottom"},
+  );
+  const sidebar = createElement(
+    "article",
+    [sidebarTop, sidebarMain, sidebarBottom],
+    {"class": "simulator-sidebar"},
+  );
+
+  return sidebar;
 }
 
 
-function create_simulator_main(sandbox) {  
+function createSimulatorMain() {
   // The button that opens the sidebar
-  var sidebar_open = create_element('button', 'arrow_right', {
-    class: 'simulator-toolbar-item',
-    id: 'sidebar-open',
-    'aria-label': 'Open sidebar',
-    type: 'button',
-  })
-  sidebar_open.style.display = 'none'
-  /* The tool selector. I can't just use <select>/<option>
-     because you can't put icons in <option> elements, unfortunately. */
-  var tools = [
-    {icon: 'edit', name: 'Draw'},
-    {icon: 'vignette_2', name: 'Object'},
-    {icon: 'select', name: 'Select'},
-    {icon: 'pan_tool', name: 'Pan'},
-  ]
-  var tool_array = []
-  for (var {icon, name} of tools) {
-    var tool_icon = create_element('span', icon, {class: 'icon', 'aria-hidden': true})
-    tool_array.push(create_element('div', [tool_icon, ' ' + name], {class: 'simulator-option', role: 'option'}))
+  const sidebarOpen = createElement("button", "arrow_right", {
+    "class": "simulator-toolbar-item",
+    "id": "sidebar-open",
+    "aria-label": "Open sidebar",
+    "type": "button",
+  });
+  sidebarOpen.style.display = "none";
+  /*
+   * The tool selector. I can't just use <select>/<option>
+   * because you can't put icons in <option> elements, unfortunately.
+   */
+  const tools = [
+    {"icon": "edit", "name": "Draw"},
+    {"icon": "vignette_2", "name": "Object"},
+    {"icon": "select", "name": "Select"},
+    {"icon": "pan_tool", "name": "Pan"},
+  ];
+  const toolArray = [];
+  for (const {icon, name} of tools) {
+    const toolIcon = createElement(
+      "span", icon, {"class": "icon", "aria-hidden": true},
+    );
+    toolArray.push(createElement(
+      "div",
+      [toolIcon, " " + name],
+      {"class": "simulator-option", "role": "option"},
+    ));
   }
-  var tool_selected = create_element('button', tools[0].icon, {
-    class: 'simulator-toolbar-item',
-    tabindex: 0, // Fix a bug on Safari
-    type: 'button',
-  })
-  var tools_inner = create_element('div', tool_array, {class: 'simulator-option-wrapper'})
-  var tools_outer = create_element('div', tools_inner, {id: 'simulator-options'})
-  tools_outer.style.display = 'none'
-  tool_array[0].toggleAttribute('data-selected')
-  var tool_selector = create_element('div', [tool_selected, tools_outer], {
-    id: 'simulator-tool',
-    role: 'listbox',
-    'data-tool': 'draw',
-    'aria-label': 'Currently using Draw. Change tool:'
-  })
-  var tool_wrapper = create_element('div', tool_selector, {class: 'simulator-toolbar-item'})
+  const toolSelected = createElement("button", tools[0].icon, {
+    "class": "simulator-toolbar-item",
+    // Fix a bug on Safari
+    "tabindex": 0,
+    "type": "button",
+  });
+  const toolsInner = createElement(
+    "div", toolArray, {"class": "simulator-option-wrapper"},
+  );
+  const toolsOuter
+    = createElement("div", toolsInner, {"id": "simulator-options"});
+  toolsOuter.style.display = "none";
+  toolArray[0].toggleAttribute("data-selected");
+  const toolSelector = createElement("div", [toolSelected, toolsOuter], {
+    "id": "simulator-tool",
+    "role": "listbox",
+    "data-tool": "draw",
+    "aria-label": "Currently using Draw. Change tool:",
+  });
+  const toolWrapper = createElement(
+    "div", toolSelector, {"class": "simulator-toolbar-item"},
+  );
   // Reset, step back, step forward, and play buttons
-  var gen_0_button = create_element('button', 'skip_previous', {
-    class: 'simulator-toolbar-item',
-    id: 'simulator-reset',
-    'aria-label': 'Reset to generation 0',
-    type: 'button',
-  })
-  /* We can't just do scale: -1 because that'll make the GPU kick in,
-     and that kills the hinting and makes everything blurry.
-     So instead of letting the GPU do that, we do it ourselves with the SVG. */
-  var back_path = create_element(
-    'path', [], {d: 'M 720 -240 v -480 h -80 v 480 h 80 Z m -160 0 -400 -240 400 -240 v 480 Z'}
-  )
-  var back_svg = create_element('svg', back_path, {
-    viewBox: '0 -960 960 960',
-    width: '1em',
-    height: '1em',
-    fill: 'currentColor',
-  })
-  var back_button = create_element('button', back_svg, {
-    class: 'simulator-toolbar-item',
-    id: 'simulator-back',
-    'aria-label': 'Step back 1 generation',
-    disabled: '', // We're at generation 0 right now so we can't step back
-    type: 'button',
-  })
-  var step_button = create_element('button', 'resume', {
-    class: 'simulator-toolbar-item',
-    id: 'simulator-step',
-    'aria-label': 'Step forward 1 generation',
-    type: 'button',
-  })
-  var play_button = create_element('button', 'play_arrow', {
-    class: 'simulator-toolbar-item',
-    id: 'simulator-play',
-    'aria-label': 'Play simulation',
-    type: 'button',
-  })
+  const gen0Button = createElement("button", "skip_previous", {
+    "class": "simulator-toolbar-item",
+    "id": "simulator-reset",
+    "aria-label": "Reset to generation 0",
+    "type": "button",
+  });
+  /*
+   * We can't just do scale: -1 because that'll make the GPU kick in,
+   * and that kills the hinting and makes everything blurry.
+   * So instead of letting the GPU do that, we do it ourselves with the SVG.
+   */
+  const backPath = createElement("path", [], {
+    "d": "M 720 -240 v -480 h -80 v 480 h 80 Z "
+      + "m -160 0 -400 -240 400 -240 v 480 Z",
+  });
+  const backSvg = createElement("svg", backPath, {
+    "viewBox": "0 -960 960 960",
+    "width": "1em",
+    "height": "1em",
+    "fill": "currentColor",
+  });
+  const backButton = createElement("button", backSvg, {
+    "class": "simulator-toolbar-item",
+    "id": "simulator-back",
+    "aria-label": "Step back 1 generation",
+    // We're at generation 0 right now so we can't step back
+    "disabled": "",
+    "type": "button",
+  });
+  const stepButton = createElement("button", "resume", {
+    "class": "simulator-toolbar-item",
+    "id": "simulator-step",
+    "aria-label": "Step forward 1 generation",
+    "type": "button",
+  });
+  const playButton = createElement("button", "play_arrow", {
+    "class": "simulator-toolbar-item",
+    "id": "simulator-play",
+    "aria-label": "Play simulation",
+    "type": "button",
+  });
   // The speed slider
-  var slider = create_element('input', [], {
-    type: 'range',
-    min: 0,
-    max: 1,
-    step: 'any',
-    class: 'slider-true',
-    'aria-label': '5 generations per second',
-  })
-  slider.value = Math.log(95/59) / Math.log(10) // Found with WolframAlpha
-  var slider_value = create_element('div', '5/s', {class: 'slider-value', 'aria-hidden': true})
-  var slider_inner = create_element(
-    'div', [slider, slider_value], {class: 'slider-wrapper'}
-  )
-  var slider_outer = create_element(
-    'div', slider_inner, {id: 'simulator-speed-wrapper'}
-  )
-  slider_outer.style.display = 'none'
-  var speed_button = create_element('button', 'speed', {
-    'aria-label': 'Change simulation speed',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-speed-button',
-    tabindex: 0, // Fix a bug on Safari
-    type: 'button',
-  })
-  var speed_wrapper = create_element(
-    'div', [speed_button, slider_outer], {id: 'simulator-speed'}
-  )
+  const slider = createElement("input", [], {
+    "type": "range",
+    "min": 0,
+    "max": 1,
+    "step": "any",
+    "class": "slider-true",
+    "aria-label": "5 generations per second",
+  });
+  slider.value = Math.log(95 / 59) / Math.log(10);
+  const sliderValue = createElement(
+    "div", "5/s", {"class": "slider-value", "aria-hidden": true},
+  );
+  const sliderInner = createElement(
+    "div", [slider, sliderValue], {"class": "slider-wrapper"},
+  );
+  const sliderOuter = createElement(
+    "div", sliderInner, {"id": "simulator-speed-wrapper"},
+  );
+  sliderOuter.style.display = "none";
+  const speedButton = createElement("button", "speed", {
+    "aria-label": "Change simulation speed",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-speed-button",
+    // Fix a bug on Safari
+    "tabindex": 0,
+    "type": "button",
+  });
+  const speedWrapper = createElement(
+    "div", [speedButton, sliderOuter], {"id": "simulator-speed"},
+  );
   // The zoom slider
-  var zoom_slider = create_element('input', [], {
-    type: 'range',
-    min: 0,
-    max: 1,
-    step: 'any',
-    class: 'slider-true',
-    'aria-labelledby': 'zoom-slider-label',
-  })
-  zoom_slider.value = Math.log(20) / Math.log(50)
-  var zoom_slider_value = create_element('div', 'Zoom 20', {class: 'slider-value', id: 'zoom-slider-label'})
-  var zoom_slider_inner = create_element(
-    'div', [zoom_slider, zoom_slider_value], {class: 'slider-wrapper'}
-  )
-  var zoom_slider_outer = create_element(
-    'div', zoom_slider_inner, {id: 'simulator-zoom-wrapper'}
-  )
-  zoom_slider_outer.style.display = 'none'
-  var zoom_button = create_element('button', 'zoom_in', {
-    'aria-label': 'Change zoom level',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-zoom-button',
-    tabindex: 0, // Fix a bug on Safari
-    type: 'button',
-  })
-  var zoom_wrapper = create_element(
-    'div', [zoom_button, zoom_slider_outer], {id: 'simulator-zoom'}
-  )
+  const zoomSlider = createElement("input", [], {
+    "type": "range",
+    "min": 0,
+    "max": 1,
+    "step": "any",
+    "class": "slider-true",
+    "aria-labelledby": "zoom-slider-label",
+  });
+  zoomSlider.value = Math.log(20) / Math.log(50);
+  const zoomSliderValue = createElement(
+    "div", "Zoom 20", {"class": "slider-value", "id": "zoom-slider-label"},
+  );
+  const zoomSliderInner = createElement(
+    "div", [zoomSlider, zoomSliderValue], {"class": "slider-wrapper"},
+  );
+  const zoomSliderOuter = createElement(
+    "div", zoomSliderInner, {"id": "simulator-zoom-wrapper"},
+  );
+  zoomSliderOuter.style.display = "none";
+  const zoomButton = createElement("button", "zoom_in", {
+    "aria-label": "Change zoom level",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-zoom-button",
+    // Fix a bug on Safari
+    "tabindex": 0,
+    "type": "button",
+  });
+  const zoomWrapper = createElement(
+    "div", [zoomButton, zoomSliderOuter], {"id": "simulator-zoom"},
+  );
   // The top toolbar
-  var toolbar_top = create_element(
-    'section',
-    [sidebar_open, tool_wrapper,
-     gen_0_button, back_button, step_button, play_button,
-     speed_wrapper, zoom_wrapper],
-    {class: 'simulator-toolbar-top'},
-  )
+  const toolbarTop = createElement("section", [
+    sidebarOpen,
+    toolWrapper,
+    gen0Button,
+    backButton,
+    stepButton,
+    playButton,
+    speedWrapper,
+    zoomWrapper,
+  ], {"class": "simulator-toolbar-top"});
 
   // The canvas in the middle
-  var canvas = create_element('canvas', "Sorry, your browser doesn't support the <canvas> element.", {id: 'simulator-cgol'})
+  const canvas = createElement(
+    "canvas",
+    "Sorry, your browser doesn't support the <canvas> element.",
+    {"id": "simulator-cgol"},
+  );
   // Resize the canvas so it doesn't get stretched weirdly
-  canvas.width = canvas.clientWidth
-  canvas.height = canvas.clientHeight
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
 
   // Selection buttons
-  var rotate_ccw_selection_button = create_element('button', 'rotate_left', {
-    'aria-label': 'Rotate selection counterclockwise',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-selection-rotate-ccw',
-    type: 'button',
-  })
-  var rotate_cw_selection_button = create_element('button', 'rotate_right', {
-    'aria-label': 'Rotate selection clockwise',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-selection-rotate-cw',
-    type: 'button',
-  })
-  var flip_horiz_selection_button = create_element('button', 'flip', {
-    'aria-label': 'Flip selection horizontally',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-selection-flip-horiz',
-    type: 'button',
-  })
-  var flip_vert_selection_button = create_element('button', '\u{F10E8}', {
-    'aria-label': 'Flip selection vertically',
-    class: 'simulator-toolbar-item icon-alt',
-    id: 'simulator-selection-flip-vert',
-    type: 'button',
-  })
-  var cut_selection_button = create_element('button', 'cut', {
-    'aria-label': 'Cut selection',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-selection-cut',
-    type: 'button',
-  })
-  var copy_selection_button = create_element('button', 'content_copy', {
-    'aria-label': 'Copy selection',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-selection-copy',
-    type: 'button',
-  })
-  var select_objects_selection_button = create_element('button', 'vignette_2', {
-    'aria-label': 'Select objects in selection',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-selection-select-objects',
-    type: 'button',
-  })
-  var delete_selection_button = create_element('button', 'delete', {
-    'aria-label': 'Delete selection',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-selection-delete',
-    type: 'button',
-  })
-  var selection_group = create_element(
-    'span',
-    [
-      rotate_ccw_selection_button,
-      rotate_cw_selection_button,
-      flip_horiz_selection_button,
-      flip_vert_selection_button,
-      cut_selection_button,
-      copy_selection_button,
-      select_objects_selection_button,
-      delete_selection_button,
-    ],
-    {
-      class: 'simulator-selection-group',
-      'data-visible': '',
-    },
-  )
+  const rotateCcwSelectionButton = createElement("button", "rotate_left", {
+    "aria-label": "Rotate selection counterclockwise",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-selection-rotate-ccw",
+    "type": "button",
+  });
+  const rotateCwSelectionButton = createElement("button", "rotate_right", {
+    "aria-label": "Rotate selection clockwise",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-selection-rotate-cw",
+    "type": "button",
+  });
+  const flipHorizSelectionButton = createElement("button", "flip", {
+    "aria-label": "Flip selection horizontally",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-selection-flip-horiz",
+    "type": "button",
+  });
+  const flipVertSelectionButton = createElement("button", "\u{F10E8}", {
+    "aria-label": "Flip selection vertically",
+    "class": "simulator-toolbar-item icon-alt",
+    "id": "simulator-selection-flip-vert",
+    "type": "button",
+  });
+  const cutSelectionButton = createElement("button", "cut", {
+    "aria-label": "Cut selection",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-selection-cut",
+    "type": "button",
+  });
+  const copySelectionButton = createElement("button", "content_copy", {
+    "aria-label": "Copy selection",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-selection-copy",
+    "type": "button",
+  });
+  const selectObjectsSelectionButton = createElement("button", "vignette_2", {
+    "aria-label": "Select objects in selection",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-selection-select-objects",
+    "type": "button",
+  });
+  const deleteSelectionButton = createElement("button", "delete", {
+    "aria-label": "Delete selection",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-selection-delete",
+    "type": "button",
+  });
+  const selectionGroup = createElement("span", [
+    rotateCcwSelectionButton,
+    rotateCwSelectionButton,
+    flipHorizSelectionButton,
+    flipVertSelectionButton,
+    cutSelectionButton,
+    copySelectionButton,
+    selectObjectsSelectionButton,
+    deleteSelectionButton,
+  ], {
+    "class": "simulator-selection-group",
+    "data-visible": "",
+  });
 
   // Paste selection button
-  var paste_selection_button = create_element('button', 'content_paste', {
-    'aria-label': 'Paste selection',
-    class: 'simulator-toolbar-item',
-    disabled: '', // We can't paste anything yet
-    id: 'simulator-selection-paste',
-    type: 'button',
-  })
-  var paste_selection_group = create_element(
-    'span',
-    [paste_selection_button],
-    {class: 'simulator-paste-selection-group'},
-  )
-  
+  const pasteSelectionButton = createElement("button", "content_paste", {
+    "aria-label": "Paste selection",
+    "class": "simulator-toolbar-item",
+    // We can't paste anything yet
+    "disabled": "",
+    "id": "simulator-selection-paste",
+    "type": "button",
+  });
+  const pasteSelectionGroup = createElement(
+    "span",
+    [pasteSelectionButton],
+    {"class": "simulator-paste-selection-group"},
+  );
+
   // Paste confirmation buttons
-  var abort_paste_button = create_element('button', 'close', {
-    'aria-label': 'Abort paste',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-paste-abort',
-    type: 'button',
-  })
-  var confirm_paste_button = create_element('button', 'check', {
-    'aria-label': 'Confirm paste',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-paste-confirm',
-    type: 'button',
-  })
-  var paste_confirmation_group = create_element(
-    'span',
-    [
-      abort_paste_button,
-      confirm_paste_button,
-    ],
-    {class: 'simulator-paste-confirmation-group'},
-  )
+  const abortPasteButton = createElement("button", "close", {
+    "aria-label": "Abort paste",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-paste-abort",
+    "type": "button",
+  });
+  const confirmPasteButton = createElement("button", "check", {
+    "aria-label": "Confirm paste",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-paste-confirm",
+    "type": "button",
+  });
+  const pasteConfirmationGroup = createElement("span", [
+    abortPasteButton,
+    confirmPasteButton,
+  ], {"class": "simulator-paste-confirmation-group"});
 
   // Object buttons
-  var rotate_ccw_object_button = create_element('button', 'rotate_left', {
-    'aria-label': 'Rotate object counterclockwise',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-rotate-ccw',
-    type: 'button',
-  })
-  var rotate_cw_object_button = create_element('button', 'rotate_right', {
-    'aria-label': 'Rotate object clockwise',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-rotate-cw',
-    type: 'button',
-  })
-  var flip_horiz_object_button = create_element('button', 'flip', {
-    'aria-label': 'Flip object horizontally',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-flip-horiz',
-    type: 'button',
-  })
-  var flip_vert_object_button = create_element('button', '\u{F10E8}', {
-    'aria-label': 'Flip object vertically',
-    class: 'simulator-toolbar-item icon-alt',
-    id: 'simulator-object-flip-vert',
-    type: 'button',
-  })
-  // Same trick as back_svg
-  var back_object_path = create_element(
-    'path', [], {d: 'M 720 -240 v -480 h -80 v 480 h 80 Z m -160 0 -400 -240 400 -240 v 480 Z'}
-  )
-  var back_object_svg = create_element('svg', back_object_path, {
-    viewBox: '0 -960 960 960',
-    width: '1em',
-    height: '1em',
-    fill: 'currentColor',
-  })
-  var back_object_button = create_element('button', back_object_svg, {
-    'aria-label': 'Step object back 1 generation',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-back',
-    type: 'button',
-  })
-  var forward_object_button = create_element('button', 'resume', {
-    'aria-label': 'Step object forward 1 generation',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-forward',
-    type: 'button',
-  })
-  var cut_object_button = create_element('button', 'cut', {
-    'aria-label': 'Cut object',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-cut',
-    type: 'button',
-  })
-  var copy_object_button = create_element('button', 'content_copy', {
-    'aria-label': 'Copy object',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-copy',
-    type: 'button',
-  })
-  var break_object_button = create_element('button', 'grid_view', {
-    'aria-label': 'Break object into cells',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-break',
-    type: 'button',
-  })
-  var delete_object_button = create_element('button', 'delete', {
-    'aria-label': 'Delete object',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-object-delete',
-    type: 'button',
-  })
-  var object_group = create_element(
-    'span',
-    [
-      rotate_ccw_object_button,
-      rotate_cw_object_button,
-      flip_horiz_object_button,
-      flip_vert_object_button,
-      back_object_button,
-      forward_object_button,
-      cut_object_button,
-      copy_object_button,
-      break_object_button,
-      delete_object_button,
-    ],
-    {class: 'simulator-object-group'},
-  )
+  const rotateCcwObjectButton = createElement("button", "rotate_left", {
+    "aria-label": "Rotate object counterclockwise",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-rotate-ccw",
+    "type": "button",
+  });
+  const rotateCwObjectButton = createElement("button", "rotate_right", {
+    "aria-label": "Rotate object clockwise",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-rotate-cw",
+    "type": "button",
+  });
+  const flipHorizObjectButton = createElement("button", "flip", {
+    "aria-label": "Flip object horizontally",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-flip-horiz",
+    "type": "button",
+  });
+  const flipVertObjectButton = createElement("button", "\u{F10E8}", {
+    "aria-label": "Flip object vertically",
+    "class": "simulator-toolbar-item icon-alt",
+    "id": "simulator-object-flip-vert",
+    "type": "button",
+  });
+  // Same trick as backSvg
+  const backObjectPath = createElement("path", [], {
+    "d": "M 720 -240 v -480 h -80 v 480 h 80 Z "
+      + "m -160 0 -400 -240 400 -240 v 480 Z",
+  });
+  const backObjectSvg = createElement("svg", backObjectPath, {
+    "viewBox": "0 -960 960 960",
+    "width": "1em",
+    "height": "1em",
+    "fill": "currentColor",
+  });
+  const backObjectButton = createElement("button", backObjectSvg, {
+    "aria-label": "Step object back 1 generation",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-back",
+    "type": "button",
+  });
+  const forwardObjectButton = createElement("button", "resume", {
+    "aria-label": "Step object forward 1 generation",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-forward",
+    "type": "button",
+  });
+  const cutObjectButton = createElement("button", "cut", {
+    "aria-label": "Cut object",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-cut",
+    "type": "button",
+  });
+  const copyObjectButton = createElement("button", "content_copy", {
+    "aria-label": "Copy object",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-copy",
+    "type": "button",
+  });
+  const breakObjectButton = createElement("button", "grid_view", {
+    "aria-label": "Break object into cells",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-break",
+    "type": "button",
+  });
+  const deleteObjectButton = createElement("button", "delete", {
+    "aria-label": "Delete object",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-object-delete",
+    "type": "button",
+  });
+  const objectGroup = createElement("span", [
+    rotateCcwObjectButton,
+    rotateCwObjectButton,
+    flipHorizObjectButton,
+    flipVertObjectButton,
+    backObjectButton,
+    forwardObjectButton,
+    cutObjectButton,
+    copyObjectButton,
+    breakObjectButton,
+    deleteObjectButton,
+  ], {"class": "simulator-object-group"});
 
   // Paste object button
-  var paste_object_button = create_element('button', 'content_paste', {
-    'aria-label': 'Paste object',
-    class: 'simulator-toolbar-item',
-    disabled: '', // We can't paste anything yet
-    id: 'simulator-object-paste',
-    type: 'button',
-  })
-  var paste_object_group = create_element(
-    'span',
-    [paste_object_button],
-    {class: 'simulator-paste-object-group'},
-  )
-  
+  const pasteObjectButton = createElement("button", "content_paste", {
+    "aria-label": "Paste object",
+    "class": "simulator-toolbar-item",
+    // We can't paste anything yet
+    "disabled": "",
+    "id": "simulator-object-paste",
+    "type": "button",
+  });
+  const pasteObjectGroup = createElement(
+    "span",
+    [pasteObjectButton],
+    {"class": "simulator-paste-object-group"},
+  );
+
   // The floating toolbar when a selection is made
-  var selection_toolbar = create_element(
-    'section',
-    [
-      selection_group,
-      paste_selection_group,
-      paste_confirmation_group,
-      object_group,
-      paste_object_group,
-    ],
-    {class: 'simulator-selection-toolbar'},
-  )
-  selection_toolbar.style.display = 'none'
+  const selectionToolbar = createElement("section", [
+    selectionGroup,
+    pasteSelectionGroup,
+    pasteConfirmationGroup,
+    objectGroup,
+    pasteObjectGroup,
+  ], {"class": "simulator-selection-toolbar"});
+  selectionToolbar.style.display = "none";
 
   // The floating "move selection" button
-  var selection_move = create_element('button', 'open_with', {
-    'aria-label': 'Move selection',
-    class: 'simulator-toolbar-item',
-    id: 'simulator-selection-move',
-    type: 'button',
-  })
-  selection_move.style.display = 'none'
-  
+  const selectionMove = createElement("button", "open_with", {
+    "aria-label": "Move selection",
+    "class": "simulator-toolbar-item",
+    "id": "simulator-selection-move",
+    "type": "button",
+  });
+  selectionMove.style.display = "none";
+
   // The "generations" statistic
-  var generations_stat = create_element(
-    'div', 'Gen. 0', {id: 'simulator-stat-generations', 'aria-label': 'Generation 0'}
-  )
+  const generationsStat = createElement("div", "Gen. 0", {
+    "id": "simulator-stat-generations",
+    "aria-label": "Generation 0",
+  });
   // The other statistics
-  var population_stat = create_element('div', '0 cells', {id: 'simulator-stat-population'})
-  var bounding_box_stat = create_element(
-    'div', '0\u00D70', {id: 'simulator-stat-bounding-box', 'aria-label': 'Bounding box: 0 by 0'}
-  )
-  var extra_stats_inner = create_element(
-    'div', [population_stat, bounding_box_stat], {class: 'extra-stats-inner'}
-  )
-  var extra_stats_outer = create_element(
-    'div', extra_stats_inner, {id: 'extra-stats-wrapper'}
-  )
-  extra_stats_outer.style.display = 'none'
-  var extra_stats_button = create_element('button', 'bar_chart', {
-    'aria-label': 'Toggle extra statistics',
-    class: 'simulator-toolbar-item',
-    id: 'extra-stats-button',
-    tabindex: 0, // Fix a bug on Safari
-    type: 'button',
-  })
-  var extra_stats_wrapper = create_element(
-    'div', [extra_stats_button, extra_stats_outer], {id: 'simulator-extra-stats'}
-  )
+  const populationStat = createElement(
+    "div", "0 cells", {"id": "simulator-stat-population"},
+  );
+  const boundingBoxStat = createElement("div", "0\u00D70", {
+    "id": "simulator-stat-bounding-box",
+    "aria-label": "Bounding box: 0 by 0",
+  });
+  const extraStatsInner = createElement(
+    "div", [populationStat, boundingBoxStat], {"class": "extra-stats-inner"},
+  );
+  const extraStatsOuter = createElement(
+    "div", extraStatsInner, {"id": "extra-stats-wrapper"},
+  );
+  extraStatsOuter.style.display = "none";
+  const extraStatsButton = createElement("button", "bar_chart", {
+    "aria-label": "Toggle extra statistics",
+    "class": "simulator-toolbar-item",
+    "id": "extra-stats-button",
+    // Fix a bug on Safari
+    "tabindex": 0,
+    "type": "button",
+  });
+  const extraStatsWrapper = createElement(
+    "div", [extraStatsButton, extraStatsOuter], {"id": "simulator-extra-stats"},
+  );
   // Undo and redo buttons
-  var undo_button = create_element('button', 'undo', {
-    class: 'simulator-toolbar-item',
-    id: 'simulator-undo',
-    'aria-label': 'Undo',
-    disabled: '', // We haven't done anything yet so we can't undo
-    type: 'button',
-  })
-  var redo_button = create_element('button', 'redo', {
-    class: 'simulator-toolbar-item',
-    id: 'simulator-redo',
-    'aria-label': 'Redo',
-    disabled: '', // We haven't done anything yet so we can't redo
-    type: 'button',
-  })
+  const undoButton = createElement("button", "undo", {
+    "class": "simulator-toolbar-item",
+    "id": "simulator-undo",
+    "aria-label": "Undo",
+    // We haven't done anything yet so we can't undo
+    "disabled": "",
+    "type": "button",
+  });
+  const redoButton = createElement("button", "redo", {
+    "class": "simulator-toolbar-item",
+    "id": "simulator-redo",
+    "aria-label": "Redo",
+    // We haven't done anything yet so we can't redo
+    "disabled": "",
+    "type": "button",
+  });
   // The settings button
-  var all_extra_options = [
-    {icon: 'upload', name: 'Import RLE'},
-    {icon: 'content_copy', name: 'Copy RLE'},
-    {icon: 'settings', name: 'Settings'},
-  ]
-  var settings_button = create_element('button', 'more_vert', {
-    class: 'simulator-toolbar-item',
-    id: 'simulator-settings',
-    'aria-label': 'Toggle options',
-    tabindex: 0, // Fix a bug on Safari
-    type: 'button',
-  })
-  var extra_option_array = []
-  for (var {icon, name} of all_extra_options) {
-    var option_icon = create_element('span', icon, {class: 'icon', 'aria-hidden': true})
-    extra_option_array.push(create_element('div', [option_icon, ' ' + name], {class: 'simulator-option'}))
+  const allExtraOptions = [
+    {"icon": "upload", "name": "Import RLE"},
+    {"icon": "content_copy", "name": "Copy RLE"},
+    {"icon": "settings", "name": "Settings"},
+  ];
+  const settingsButton = createElement("button", "more_vert", {
+    "class": "simulator-toolbar-item",
+    "id": "simulator-settings",
+    "aria-label": "Toggle options",
+    // Fix a bug on Safari
+    "tabindex": 0,
+    "type": "button",
+  });
+  const extraOptionArray = [];
+  for (const {icon, name} of allExtraOptions) {
+    const optionIcon = createElement(
+      "span", icon, {"class": "icon", "aria-hidden": true},
+    );
+    extraOptionArray.push(createElement(
+      "div", [optionIcon, " " + name], {"class": "simulator-option"},
+    ));
   }
-  var extra_option_wrapper = create_element('div', extra_option_array, {class: 'simulator-option-wrapper'})
-  var extra_options = create_element('div', extra_option_wrapper, {id: 'simulator-extra-options'})
-  extra_options.style.display = 'none'
-  var settings_wrapper = create_element(
-    'div', [settings_button, extra_options], {id: 'simulator-settings-wrapper'}
-  )
+  const extraOptionWrapper = createElement(
+    "div", extraOptionArray, {"class": "simulator-option-wrapper"},
+  );
+  const extraOptions = createElement(
+    "div", extraOptionWrapper, {"id": "simulator-extra-options"},
+  );
+  extraOptions.style.display = "none";
+  const settingsWrapper = createElement(
+    "div", [settingsButton, extraOptions], {"id": "simulator-settings-wrapper"},
+  );
   // The bottom toolbar
-  var toolbar_bottom = create_element(
-    'section',
-    [generations_stat, extra_stats_wrapper, undo_button, redo_button, settings_wrapper],
-    {class: 'simulator-toolbar-bottom'}
-  )
-  
-  var simulator = create_element(
-    'article',
-    [toolbar_top, canvas, selection_toolbar, selection_move, toolbar_bottom],
-    {class: 'simulator-main'},
-  )
+  const toolbarBottom = createElement(
+    "section",
+    [
+      generationsStat,
+      extraStatsWrapper,
+      undoButton,
+      redoButton,
+      settingsWrapper,
+    ],
+    {"class": "simulator-toolbar-bottom"},
+  );
 
-  return simulator
+  const simulator = createElement(
+    "article",
+    [toolbarTop, canvas, selectionToolbar, selectionMove, toolbarBottom],
+    {"class": "simulator-main"},
+  );
+
+  return simulator;
 }
 
 
-function update_floating_toolbars(force_visible=false, update_visibility=true) {
-  var selection = cgol_object.get_selection()
-  var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-  var simulator_selection_move = document.getElementById('simulator-selection-move')
+function updateFloatingToolbars(forceVisible = false, updateVisibility = true) {
+  const selection = cgolObject.getSelection();
+  const simulatorSelectionToolbar
+    = document.getElementsByClassName("simulator-selection-toolbar")[0];
+  const simulatorSelectionMove
+    = document.getElementById("simulator-selection-move");
   if (selection.visible
-      || simulator_selection_toolbar.style.display === 'block'
-      || simulator_selection_move.style.display === 'block'
-      || force_visible) {
-    var toolbar_position = cgol_object.board_to_canvas_coordinates(
-      (selection.left + selection.right) / 2,
-      selection.top,
-    )
-    var move_position = cgol_object.board_to_canvas_coordinates(
-      selection.right,
-      selection.top,
-    )
-    if (update_visibility) {
-      simulator_selection_toolbar.style.display = 'block'
-      simulator_selection_move.style.display = 'block'
+    || simulatorSelectionToolbar.style.display === "block"
+    || simulatorSelectionMove.style.display === "block"
+    || forceVisible) {
+    const toolbarPosition = cgolObject.boardToCanvasCoordinates(
+      (selection.left + selection.right) / 2, selection.top,
+    );
+    const movePosition = cgolObject.boardToCanvasCoordinates(
+      selection.right, selection.top,
+    );
+    if (updateVisibility) {
+      simulatorSelectionToolbar.style.display = "block";
+      simulatorSelectionMove.style.display = "block";
     }
-    simulator_selection_toolbar.style.left = toolbar_position.x + 'px'
-    simulator_selection_toolbar.style.top = toolbar_position.y + 'px'
-    simulator_selection_move.style.left = move_position.x + 'px'
-    simulator_selection_move.style.top = move_position.y + 'px'
+    simulatorSelectionToolbar.style.left = toolbarPosition.x + "px";
+    simulatorSelectionToolbar.style.top = toolbarPosition.y + "px";
+    simulatorSelectionMove.style.left = movePosition.x + "px";
+    simulatorSelectionMove.style.top = movePosition.y + "px";
   }
 }
-function change_object_count(add_object_button, new_count) {
-  // Edit the text next to the button
-  // TODO: Add support for other languages
-  var data_object = add_object_button.getAttribute('data-object')
-  var current_object_data = object_data[data_object]
-  var data_name = current_object_data.name['en-US']
-  var object_info = `${new_count}\u00D7 ${data_name} `
-  add_object_button.previousSibling.data = object_info
+function changeObjectCount(addObjectButton, newCount) {
+  /*
+   * Edit the text next to the button
+   * TODO: Add support for other languages
+   */
+  const currentObject = addObjectButton.getAttribute("data-object");
+  const currentObjectData = objectData[currentObject];
+  const objectName = currentObjectData.name["en-US"];
+  const objectInfo = `${newCount}\u00D7 ${objectName} `;
+  addObjectButton.previousSibling.data = objectInfo;
   // Edit the button itself
-  if (new_count <= 0) {
-    add_object_button.setAttribute('disabled', '')
+  if (newCount <= 0) {
+    addObjectButton.setAttribute("disabled", "");
   }
-  add_object_button.setAttribute('data-count', new_count)
+  addObjectButton.setAttribute("data-count", newCount);
 }
 
-function resize_canvas() {
+function resizeCanvas() {
   // Resize the canvas so it doesn't get stretched weirdly
-  var canvas = document.getElementById('simulator-cgol')
-  canvas.width = Math.max(canvas.clientWidth, 1)
-  canvas.height = Math.max(canvas.clientHeight, 1)
+  const canvas = document.getElementById("simulator-cgol");
+  canvas.width = Math.max(canvas.clientWidth, 1);
+  canvas.height = Math.max(canvas.clientHeight, 1);
 }
-function resize_simulator() {
+function resizeSimulator() {
   // Change direction of menu arrows
-  var root = document.getElementById('conways-story-mode')
-  var portrait = root.getAttribute('data-portrait') === 'true'
-  var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
-  var close_menu_icon = sidebar_top.children[1].children[0]
-  close_menu_icon.replaceChildren(portrait ? 'arrow_drop_up' : 'arrow_left')
-  var open_menu_icon = document.getElementById('sidebar-open')
-  open_menu_icon.replaceChildren(portrait ? 'arrow_drop_down' : 'arrow_right')
+  const root = document.getElementById("conways-story-mode");
+  const portrait = root.getAttribute("data-portrait") === "true";
+  const sidebarTop
+    = document.getElementsByClassName("simulator-sidebar-top")[0];
+  const closeMenuIcon = sidebarTop.children[1].children[0];
+  closeMenuIcon.replaceChildren(portrait ? "arrow_drop_up" : "arrow_left");
+  const openMenuIcon
+    = document.getElementById("sidebar-open");
+  openMenuIcon.replaceChildren(portrait ? "arrow_drop_down" : "arrow_right");
 
   // Change --button-stretch of the top toolbar
-  var toolbar_top = document.getElementsByClassName('simulator-toolbar-top')[0]
-  var toolbar_bottom = document.getElementsByClassName('simulator-toolbar-bottom')[0]
-  var toolbar_width = toolbar_top.clientWidth
-  var MIN_STRETCH = 380
-  var MAX_STRETCH = 650
-  if (toolbar_width < MIN_STRETCH) {
-    var button_stretch = 0
-  } else if (toolbar_width > MAX_STRETCH) {
-    var button_stretch = 1
+  const toolbarTop
+    = document.getElementsByClassName("simulator-toolbar-top")[0];
+  const toolbarBottom
+    = document.getElementsByClassName("simulator-toolbar-bottom")[0];
+  const toolbarWidth = toolbarTop.clientWidth;
+  const MINSTRETCH = 380;
+  const MAXSTRETCH = 650;
+  let buttonStretch;
+  if (toolbarWidth < MINSTRETCH) {
+    buttonStretch = 0;
+  } else if (toolbarWidth > MAXSTRETCH) {
+    buttonStretch = 1;
   } else {
-    var button_stretch = (toolbar_width - MIN_STRETCH) / (MAX_STRETCH - MIN_STRETCH)
+    buttonStretch = (toolbarWidth - MINSTRETCH) / (MAXSTRETCH - MINSTRETCH);
   }
-  toolbar_top.style.setProperty('--button-stretch', button_stretch)
-  toolbar_bottom.style.setProperty('--button-stretch', button_stretch)
-  
-  resize_canvas()
-  if (cgol_object) {
-    update_floating_toolbars(false, false)
+  toolbarTop.style.setProperty("--button-stretch", buttonStretch);
+  toolbarBottom.style.setProperty("--button-stretch", buttonStretch);
+
+  resizeCanvas();
+  if (cgolObject) {
+    updateFloatingToolbars(false, false);
   }
 }
 
 
-function create_event_handlers(sandbox, library) {
+function createEventHandlers(sandbox, library) {
   // Make the CGoL object
-  cgol_object = new CGoL({
-    grid_size: 128, // TODO: Increase to 256 once it stops lagging
-    pattern: 'x = 3, y = 3, rule = B3/S23\n3o$2bo$bo2$.ABCDEFGHIJKLMNOPQRSTUVWXY!',
-    canvas: document.getElementById('simulator-cgol'),
-    zoom: 20,
-    generation_counter: document.getElementById('simulator-stat-generations'),
-    population_counter: document.getElementById('simulator-stat-population'),
-    bounding_box_counter: document.getElementById('simulator-stat-bounding-box'),
-    state_handler: (cgol_object) => {
+  cgolObject = new CGoL({
+    // TODO: Increase to 256 once it stops lagging
+    "gridSize": 128,
+    "pattern": "x = 3, y = 3, rule = B3/S23\n"
+      + "3o$2bo$bo2$.ABCDEFGHIJKLMNOPQRSTUVWXY!",
+    "canvas": document.getElementById("simulator-cgol"),
+    "zoom": 20,
+    "generationCounter": document.getElementById("simulator-stat-generations"),
+    "populationCounter": document.getElementById("simulator-stat-population"),
+    "boundingBoxCounter":
+      document.getElementById("simulator-stat-bounding-box"),
+    "stateHandler": (cgolObject) => {
+      // Update the step back button
+      const stepBackwardButton = document.getElementById("simulator-back");
+      stepBackwardButton.disabled = cgolObject.generation === 0;
       // Update the undo and redo buttons
-      var undo_button = document.getElementById('simulator-undo')
-      undo_button.disabled = !cgol_object.can_undo()
-      var redo_button = document.getElementById('simulator-redo')
-      redo_button.disabled = !cgol_object.can_redo()
+      const undoButton = document.getElementById("simulator-undo");
+      undoButton.disabled = !cgolObject.canUndo();
+      const redoButton = document.getElementById("simulator-redo");
+      redoButton.disabled = !cgolObject.canRedo();
 
       // Update the number of objects in the sidebar
-      var object_ids = cgol_object.objects.map((object) => object?.object_metadata?.id)
-      for (var library_object of library) {
-        var object_id = library_object.id
-        var used_object_count = object_ids.filter((id) => id === object_id).length
-        var remaining_object_count = library_object.count - used_object_count
-        var add_object_button = document.querySelector(
-          `.simulator-add-object[data-object="${CSS.escape(object_id)}"]`
-        )
-        change_object_count(add_object_button, remaining_object_count)
+      const objectIds
+        = cgolObject.objects.map((object) => object?.objectMetadata?.id);
+      for (const libraryObject of library) {
+        const objectId = libraryObject.id;
+        const usedObjectCount
+          = objectIds.filter((id) => id === objectId).length;
+        const remainingObjectCount = libraryObject.count - usedObjectCount;
+        const addObjectButton = document.querySelector(
+          `.simulator-add-object[data-object="${CSS.escape(objectId)}"]`,
+        );
+        changeObjectCount(addObjectButton, remainingObjectCount);
       }
     },
-    tick_handler: (cgol_object) => {
+    "tickHandler": (cgolObject) => {
       // Update the step back button
-      var step_backward_button = document.getElementById('simulator-back')
-      step_backward_button.disabled = cgol_object.generation === 0
-      /* Update the "add object" buttons
-         because you can't add objects after generation 0 */
-      for (var add_object_button of document.getElementsByClassName('simulator-add-object')) {
-        if (cgol_object.generation > 0 || add_object_button.getAttribute('data-count') <= 0) {
-          add_object_button.setAttribute('disabled', '')
+      const stepBackwardButton = document.getElementById("simulator-back");
+      stepBackwardButton.disabled = cgolObject.generation === 0;
+      /*
+       * Update the "add object" buttons
+       * because you can't add objects after generation 0
+       */
+      const addObjectButtons
+        = document.getElementsByClassName("simulator-add-object");
+      for (const addObjectButton of addObjectButtons) {
+        if (cgolObject.generation > 0
+          || addObjectButton.getAttribute("data-count") <= 0) {
+          addObjectButton.setAttribute("disabled", "");
         } else {
-          add_object_button.removeAttribute('disabled')
+          addObjectButton.removeAttribute("disabled");
         }
       }
       // Remove object toolbars after generation 0
-      var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-      var simulator_selection_move = document.getElementById('simulator-selection-move')
-      if (cgol_object.get_selection().type === 'object') {
-        var toolbar_display = cgol_object.generation === 0 ? 'block' : 'none'
-        simulator_selection_toolbar.style.display = toolbar_display
-        simulator_selection_move.style.display = toolbar_display
+      const simulatorSelectionToolbar
+        = document.getElementsByClassName("simulator-selection-toolbar")[0];
+      const simulatorSelectionMove
+        = document.getElementById("simulator-selection-move");
+      if (cgolObject.getSelection().type === "object") {
+        const toolbarDisplay = cgolObject.generation === 0 ? "block" : "none";
+        simulatorSelectionToolbar.style.display = toolbarDisplay;
+        simulatorSelectionMove.style.display = toolbarDisplay;
       }
     },
-  })
-  
+  });
+
   // Sidebar event handlers
-  var sidebar_top = document.getElementsByClassName('simulator-sidebar-top')[0]
-  var [back_button, close_menu_button] = sidebar_top.children
-  var add_object_buttons = document.getElementsByClassName('simulator-add-object')
-  var sidebar_bottom = document.getElementsByClassName('simulator-sidebar-bottom')[0]
-  var hint_button = document.getElementsByClassName('hint-button')[0]?.children[0]
-  var reset_button = sidebar_bottom.children[sidebar_bottom.children.length - 1]
-  var open_menu_button = document.getElementById('sidebar-open')
-  back_button.addEventListener('click', create_main_menu)
-  for (let add_object_button of add_object_buttons) {
-    add_object_button.addEventListener('click', () => {
-      var data_object = add_object_button.getAttribute('data-object')
-      var data_count = add_object_button.getAttribute('data-count')
-      if (data_count > 0) {
-        var current_object_data = object_data[data_object]
-        var object_pattern = current_object_data.pattern
-        var parsed_object = CGoL.parse_rle(object_pattern)
-        
-        var object_metadata = {id: data_object}
-        if (current_object_data.type) {
-          object_metadata.type = current_object_data.type
+  const sidebarTop
+    = document.getElementsByClassName("simulator-sidebar-top")[0];
+  const [backButton, closeMenuButton] = sidebarTop.children;
+  const addObjectButtons
+    = document.getElementsByClassName("simulator-add-object");
+  const sidebarBottom
+    = document.getElementsByClassName("simulator-sidebar-bottom")[0];
+  const hintButton
+    = document.getElementsByClassName("hint-button")[0]?.children[0];
+  const resetButton = sidebarBottom.children[sidebarBottom.children.length - 1];
+  const openMenuButton = document.getElementById("sidebar-open");
+  backButton.addEventListener("click", createMainMenu);
+  for (const addObjectButton of addObjectButtons) {
+    addObjectButton.addEventListener("click", () => {
+      const dataObject = addObjectButton.getAttribute("data-object");
+      let dataCount = addObjectButton.getAttribute("data-count");
+      if (dataCount > 0) {
+        const currentObjectData = objectData[dataObject];
+        const objectPattern = currentObjectData.pattern;
+        const parsedObject = CGoL.parseRle(objectPattern);
+
+        const objectMetadata = {"id": dataObject};
+        if (currentObjectData.type) {
+          objectMetadata.type = currentObjectData.type;
         } else {
-          throw new TypeError(`Missing type field for object ${data_object}`)
+          throw new TypeError(`Missing type field for object ${dataObject}`);
         }
-        if (current_object_data.period) {
-          object_metadata.period = current_object_data.period
+        if (currentObjectData.period) {
+          objectMetadata.period = currentObjectData.period;
         }
-        if (current_object_data.displacement) {
-          object_metadata.displacement = current_object_data.displacement
+        if (currentObjectData.displacement) {
+          objectMetadata.displacement = currentObjectData.displacement;
         }
-        
-        cgol_object.objects.push({
-          pattern: parsed_object.pattern,
-          x: Math.floor((cgol_object.grid_size - parsed_object.width) / 2),
-          y: Math.floor((cgol_object.grid_size - parsed_object.height) / 2),
-          width: parsed_object.width,
-          height: parsed_object.height,
-          moving: false,
-          selected: false,
-          object_metadata: object_metadata,
-        })
-        cgol_object.compile_pattern()
-        cgol_object.set_state('object', 1, 0, {mergeable: false})
-        --data_count
+
+        cgolObject.objects.push({
+          "pattern": parsedObject.pattern,
+          "x": Math.floor((cgolObject.gridSize - parsedObject.width) / 2),
+          "y": Math.floor((cgolObject.gridSize - parsedObject.height) / 2),
+          "width": parsedObject.width,
+          "height": parsedObject.height,
+          "moving": false,
+          "selected": false,
+          "objectMetadata": objectMetadata,
+        });
+        cgolObject.compilePattern();
+        cgolObject.setState("object", 1, 0, {"mergeable": false});
+        --dataCount;
       }
-      change_object_count(add_object_button, data_count)
-    })
+      changeObjectCount(addObjectButton, dataCount);
+    });
   }
   if (!sandbox) {
-    hint_button.addEventListener('click', () => {
+    hintButton.addEventListener("click", () => {
       // TODO: Make the hint button show a hint
-    })
+    });
   }
-  reset_button.addEventListener('click', () => {
+  resetButton.addEventListener("click", () => {
     // TODO: Reset the level after a confirmation
-  })
+  });
 
   // Event handlers for opening/closing the sidebar
-  close_menu_button.addEventListener('click', () => {
-    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'none'
-    open_menu_button.style.display = 'block'
-    open_menu_button.setAttribute('data-visible', '')
-    resize_canvas()
-  })
-  open_menu_button.addEventListener('click', () => {
-    document.getElementsByClassName('simulator-sidebar')[0].style.display = 'flex'
-    open_menu_button.style.display = 'none'
-    open_menu_button.removeAttribute('data-visible')
-    resize_canvas()
-  })
-  
-  /* Event handlers for the tools and extra options
-     (they work in mostly the same way) */
-  function toggle_option_visibility_inner(required_variables, set_to=null, event=null) {
-    let {current_button, current_option_wrapper, current_options, dropdown_type} = required_variables
-    var display = window.getComputedStyle(current_option_wrapper).display
-    if (set_to !== null) {
-      var new_display = set_to ? 'block' : 'none'
+  closeMenuButton.addEventListener("click", () => {
+    const sidebar = document.getElementsByClassName("simulator-sidebar")[0];
+    sidebar.style.display = "none";
+    openMenuButton.style.display = "block";
+    openMenuButton.setAttribute("data-visible", "");
+    resizeCanvas();
+  });
+  openMenuButton.addEventListener("click", () => {
+    const sidebar = document.getElementsByClassName("simulator-sidebar")[0];
+    sidebar.style.display = "flex";
+    openMenuButton.style.display = "none";
+    openMenuButton.removeAttribute("data-visible");
+    resizeCanvas();
+  });
+
+  /*
+   * Event handlers for the tools and extra options
+   * (they work in mostly the same way)
+   */
+  function toggleOptionVisibilityInner(
+    requiredVariables,
+    setTo = null,
+    event = null,
+  ) {
+    const {
+      currentButton,
+      currentOptionWrapper,
+      currentOptions,
+      dropdownType,
+    } = requiredVariables;
+    const display = window.getComputedStyle(currentOptionWrapper).display;
+    let newDisplay;
+    if (setTo === null) {
+      // Toggle display when not explicitly set
+      newDisplay = display === "none" ? "block" : "none";
     } else {
-      var new_display = display === 'none' ? 'block' : 'none' // Toggle display
+      newDisplay = setTo ? "block" : "none";
     }
-    current_option_wrapper.style.display = new_display
-    if (new_display === 'none') {
-      if (dropdown_type === 'tools') {
+    currentOptionWrapper.style.display = newDisplay;
+    if (newDisplay === "none") {
+      if (dropdownType === "tools") {
         // Update the icon on the selector when we close it
-        for (var option of current_options) {
-          if (option.getAttribute('data-selected') !== null) {
-            var icon_name = option.children[0].innerText
-            current_button.innerText = icon_name
-            var tool_name = option.lastChild.data.trim()
-            var aria_label = `Currently using ${tool_name}. Change tool:`
-            current_button.parentElement.ariaLabel = aria_label
-            /* The data-tool name shouldn't be translated,
-               so we're getting it ourselves based on the child index. */
-            var child_index = current_options.indexOf(option)
-            var tool_name_untranslated = ['draw', 'object', 'select', 'pan'][child_index]
-            current_button.parentElement.setAttribute('data-tool', tool_name_untranslated)
+        for (const option of currentOptions) {
+          if (option.getAttribute("data-selected") !== null) {
+            const iconName = option.children[0].innerText;
+            currentButton.innerText = iconName;
+            const toolName = option.lastChild.data.trim();
+            const ariaLabel = `Currently using ${toolName}. Change tool:`;
+            currentButton.parentElement.ariaLabel = ariaLabel;
+            /*
+             * The data-tool name shouldn't be translated,
+             * so we're getting it ourselves based on the child index.
+             */
+            const childIndex = currentOptions.indexOf(option);
+            const toolNameArray = ["draw", "object", "select", "pan"];
+            const toolNameUntranslated = toolNameArray[childIndex];
+            currentButton.parentElement.setAttribute(
+              "data-tool", toolNameUntranslated,
+            );
             // Also change the cursor type because the tool changed
-            update_cursor()
-            break
+            updateCursor();
+            break;
           }
         }
-      } else if (dropdown_type === 'extras') {
-        current_options.forEach((option) => option.removeAttribute('data-selected'))
+      } else if (dropdownType === "extras") {
+        currentOptions.forEach(
+          (option) => option.removeAttribute("data-selected"),
+        );
       }
       if (event) {
-        current_button.setPointerCapture(event.pointerId)
-        current_button.addEventListener('pointerup', (new_event) => {
-          current_button.releasePointerCapture(new_event.pointerId)
-        }, {once: true})
+        currentButton.setPointerCapture(event.pointerId);
+        currentButton.addEventListener("pointerup", (newEvent) => {
+          currentButton.releasePointerCapture(newEvent.pointerId);
+        }, {"once": true});
       }
     }
   }
-  function select_option_inner(required_variables, num, relative=false) {
-    let {current_button, current_option_wrapper, current_options, dropdown_type} = required_variables
-    var selected_old = current_options.map((option) => {
-      return option.getAttribute('data-selected') !== null
-    }).indexOf(true)
-    var selected_new = relative ? selected_old + num : num
-    if (selected_old === -1 && relative) {
-      selected_new = 0
-    } else if (selected_new < 0) {
-      selected_new = 0
-    } else if (selected_new >= current_options.length) {
-      selected_new = current_options.length - 1
+  function selectOptionInner(requiredVariables, num, relative = false) {
+    const currentOptions = requiredVariables.currentOptions;
+    const selectedOld = currentOptions.map((option) => {
+      return option.getAttribute("data-selected") !== null;
+    }).indexOf(true);
+    let selectedNew = relative ? selectedOld + num : num;
+    if (selectedOld === -1 && relative) {
+      selectedNew = 0;
+    } else if (selectedNew < 0) {
+      selectedNew = 0;
+    } else if (selectedNew >= currentOptions.length) {
+      selectedNew = currentOptions.length - 1;
     }
-    current_options[selected_old]?.toggleAttribute('data-selected')
-    current_options[selected_new].toggleAttribute('data-selected')
+    currentOptions[selectedOld]?.toggleAttribute("data-selected");
+    currentOptions[selectedNew].toggleAttribute("data-selected");
   }
-  
-  for (let dropdown_type of ['tools', 'extras']) {
-    let current_button, current_option_wrapper
-    if (dropdown_type === 'tools') {
-      current_button = document.querySelector('#simulator-tool button')
-      current_option_wrapper = document.getElementById('simulator-options')
+
+  for (const dropdownType of ["tools", "extras"]) {
+    let currentButton;
+    let currentOptionWrapper;
+    if (dropdownType === "tools") {
+      currentButton = document.querySelector("#simulator-tool button");
+      currentOptionWrapper = document.getElementById("simulator-options");
     } else {
-      current_button = document.getElementById('simulator-settings')
-      current_option_wrapper = document.getElementById('simulator-extra-options')
+      currentButton = document.getElementById("simulator-settings");
+      currentOptionWrapper = document.getElementById("simulator-extra-options");
     }
-    let current_options = [...current_option_wrapper.getElementsByClassName('simulator-option')]
-    let required_variables = {
-      current_button: current_button,
-      current_option_wrapper: current_option_wrapper,
-      current_options: current_options,
-      dropdown_type: dropdown_type,
-    }
-    let toggle_option_visibility = (...args) => toggle_option_visibility_inner(required_variables, ...args)
-    let select_option = (...args) => select_option_inner(required_variables, ...args)
-    current_button.addEventListener('click', (event) => {
-      toggle_option_visibility(null, event)
-    })
-    current_button.addEventListener('blur', (event) => {
-      toggle_option_visibility(false, null)
-    })
-    current_button.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault()
-        toggle_option_visibility(null, null)
-        if (current_options.every((option) => option.getAttribute('data-selected') === null)) {
-          /* If the Enter key is used to open the dialog
-             and no option is selected yet,
-             automatically select the first option */
-          select_option(0)
+    const currentOptions
+      = [...currentOptionWrapper.getElementsByClassName("simulator-option")];
+    const requiredVariables = {
+      "currentButton": currentButton,
+      "currentOptionWrapper": currentOptionWrapper,
+      "currentOptions": currentOptions,
+      "dropdownType": dropdownType,
+    };
+    const toggleOptionVisibility
+      = (...args) => toggleOptionVisibilityInner(requiredVariables, ...args);
+    const selectOption
+      = (...args) => selectOptionInner(requiredVariables, ...args);
+    currentButton.addEventListener("click", (event) => {
+      toggleOptionVisibility(null, event);
+    });
+    currentButton.addEventListener("blur", () => {
+      toggleOptionVisibility(false, null);
+    });
+    currentButton.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleOptionVisibility(null, null);
+        const noOptionSelected = currentOptions.every(
+          (option) => option.getAttribute("data-selected") === null,
+        );
+        if (noOptionSelected) {
+          /*
+           * If the Enter key is used to open the dialog
+           * and no option is selected yet,
+           * automatically select the first option
+           */
+          selectOption(0);
         }
-      } else if (event.key === 'Escape') {
-        event.preventDefault()
-        toggle_option_visibility(false, null)
-      } else if (event.key === 'ArrowUp') {
-        event.preventDefault()
-        select_option(-1, true)
-      } else if (event.key === 'ArrowDown') {
-        event.preventDefault()
-        select_option(1, true)
-      } else if (event.key === 'PageUp') {
-        event.preventDefault()
-        select_option(-5, true)
-      } else if (event.key === 'PageDown') {
-        event.preventDefault()
-        select_option(5, true)
-      } else if (event.key === 'Home') {
-        event.preventDefault()
-        select_option(0)
-      } else if (event.key === 'End') {
-        event.preventDefault()
-        select_option(current_options.length - 1)
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        toggleOptionVisibility(false, null);
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        selectOption(-1, true);
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        selectOption(1, true);
+      } else if (event.key === "PageUp") {
+        event.preventDefault();
+        selectOption(-5, true);
+      } else if (event.key === "PageDown") {
+        event.preventDefault();
+        selectOption(5, true);
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        selectOption(0);
+      } else if (event.key === "End") {
+        event.preventDefault();
+        selectOption(currentOptions.length - 1);
       }
-    })
-    for (let [index, option] of current_options.entries()) {
-      option.addEventListener('mouseenter', () => {
-        select_option(index)
-      })
-      option.addEventListener('click', (event) => {
-        select_option(index)
-        toggle_option_visibility(false, event)
-      })
+    });
+    for (const [index, option] of currentOptions.entries()) {
+      option.addEventListener("mouseenter", () => {
+        selectOption(index);
+      });
+      option.addEventListener("click", (event) => {
+        selectOption(index);
+        toggleOptionVisibility(false, event);
+      });
     }
   }
 
   // Reset, step back, step forward, play
-  function set_playing(new_playing, only_button=false) {
-    if (new_playing) {
-      if (!only_button) {
-        cgol_object.play()
+  const resetGenerationButton = document.getElementById("simulator-reset");
+  const stepBackwardButton = document.getElementById("simulator-back");
+  const stepForwardButton = document.getElementById("simulator-step");
+  const playButton = document.getElementById("simulator-play");
+
+  function setPlaying(newPlaying, onlyButton = false) {
+    if (newPlaying) {
+      if (!onlyButton) {
+        cgolObject.play();
       }
-      play_button.replaceChildren('pause')
+      playButton.replaceChildren("pause");
     } else {
-      if (!only_button) {
-        cgol_object.pause()
+      if (!onlyButton) {
+        cgolObject.pause();
       }
-      play_button.replaceChildren('play_arrow')
+      playButton.replaceChildren("play_arrow");
     }
   }
-  
-  var reset_generation_button = document.getElementById('simulator-reset')
-  var step_backward_button = document.getElementById('simulator-back')
-  var step_forward_button = document.getElementById('simulator-step')
-  var play_button = document.getElementById('simulator-play')
-  reset_generation_button.addEventListener('click', () => {
-    cgol_object.reset_to_generation_0()
-    set_playing(false, true)
-  })
-  step_backward_button.addEventListener('click', () => {
-    cgol_object.step_back()
-    set_playing(false, true)
-  })
-  step_forward_button.addEventListener('click', () => {
-    cgol_object.step_forward()
-    set_playing(false)
-  })
-  play_button.addEventListener('click', () => {
-    set_playing(!cgol_object.playing)
-  })
-  
+
+  resetGenerationButton.addEventListener("click", () => {
+    cgolObject.resetToGeneration0();
+    setPlaying(false, true);
+  });
+  stepBackwardButton.addEventListener("click", () => {
+    cgolObject.stepBack();
+    setPlaying(false, true);
+  });
+  stepForwardButton.addEventListener("click", () => {
+    cgolObject.stepForward();
+    setPlaying(false);
+  });
+  playButton.addEventListener("click", () => {
+    setPlaying(!cgolObject.playing);
+  });
+
   // Simulation speed event handlers
-  var speed_button = document.getElementById('simulator-speed-button')
-  var speed_wrapper = document.getElementById('simulator-speed-wrapper')
-  var speed_outer = document.getElementById('simulator-speed')
-  var speed_slider = speed_wrapper.getElementsByClassName('slider-true')[0]
-  var speed_label = speed_wrapper.getElementsByClassName('slider-value')[0]
-  speed_button.addEventListener('click', () => {
-    var display = window.getComputedStyle(speed_wrapper).display
-    var new_display = display === 'none' ? 'block' : 'none'
-    speed_wrapper.style.display = new_display
-    if (new_display === 'block') {
-      speed_slider.focus()
+  const speedButton = document.getElementById("simulator-speed-button");
+  const speedWrapper = document.getElementById("simulator-speed-wrapper");
+  const speedOuter = document.getElementById("simulator-speed");
+  const speedSlider = speedWrapper.getElementsByClassName("slider-true")[0];
+  const speedLabel = speedWrapper.getElementsByClassName("slider-value")[0];
+  speedButton.addEventListener("click", () => {
+    const display = window.getComputedStyle(speedWrapper).display;
+    const newDisplay = display === "none" ? "block" : "none";
+    speedWrapper.style.display = newDisplay;
+    if (newDisplay === "block") {
+      speedSlider.focus();
     }
-  })
-  speed_slider.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      speed_wrapper.style.display = 'none'
-      speed_button.focus()
-      event.preventDefault()
+  });
+  speedSlider.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      speedWrapper.style.display = "none";
+      speedButton.focus();
+      event.preventDefault();
     }
-  })
-  speed_outer.addEventListener('blur', (event) => {
-    var focused_element = event.relatedTarget
-    if (focused_element !== speed_button && focused_element !== speed_slider) {
-      speed_wrapper.style.display = 'none'
+  });
+  speedOuter.addEventListener("blur", (event) => {
+    const focusedElement = event.relatedTarget;
+    if (focusedElement !== speedButton && focusedElement !== speedSlider) {
+      speedWrapper.style.display = "none";
     }
-  }, true)
-  var EASE = 10 // Lower number = curve becomes more of a line
-  var MAX_SPEED = 60
-  speed_slider.addEventListener('input', () => {
-    var true_speed = (MAX_SPEED-1)/(EASE-1) * (EASE**speed_slider.value - 1) + 1
-    cgol_object.speed = true_speed
-    var shown_speed = Math.round(true_speed)
-    speed_label.innerText = shown_speed + '/s'
-    if (shown_speed === 1) {
-      speed_slider.ariaLabel = '1 generation per second'
+  }, true);
+  // Lowering the number makes the curve become more of a line
+  const EASE = 10;
+  const MAX_SPEED = 60;
+  speedSlider.addEventListener("input", () => {
+    const trueSpeed
+      = (MAX_SPEED - 1) / (EASE - 1) * (EASE ** speedSlider.value - 1) + 1;
+    cgolObject.speed = trueSpeed;
+    const shownSpeed = Math.round(trueSpeed);
+    speedLabel.innerText = `${shownSpeed}/s`;
+    if (shownSpeed === 1) {
+      speedSlider.ariaLabel = "1 generation per second";
     } else {
-      speed_slider.ariaLabel = shown_speed + ' generations per second'
+      speedSlider.ariaLabel = `${shownSpeed} generations per second`;
     }
-  })
+  });
 
   // Simulation zoom event handlers
-  var zoom_button = document.getElementById('simulator-zoom-button')
-  var zoom_wrapper = document.getElementById('simulator-zoom-wrapper')
-  var zoom_outer = document.getElementById('simulator-zoom')
-  var zoom_slider = zoom_wrapper.getElementsByClassName('slider-true')[0]
-  var zoom_label = zoom_wrapper.getElementsByClassName('slider-value')[0]
-  const MIN_ZOOM = 1
-  const MAX_ZOOM = 50
-  
-  function set_zoom(new_zoom, slider_value=false) {
-    if (slider_value) {
-      var true_zoom = (MAX_ZOOM/MIN_ZOOM)**new_zoom * MIN_ZOOM
-      var slider_value = new_zoom
+  const zoomButton = document.getElementById("simulator-zoom-button");
+  const zoomWrapper = document.getElementById("simulator-zoom-wrapper");
+  const zoomOuter = document.getElementById("simulator-zoom");
+  const zoomSlider = zoomWrapper.getElementsByClassName("slider-true")[0];
+  const zoomLabel = zoomWrapper.getElementsByClassName("slider-value")[0];
+  const MIN_ZOOM = 1;
+  const MAX_ZOOM = 50;
+
+  function setZoom(newZoom, sliderValue = false) {
+    let trueZoom;
+    if (sliderValue) {
+      trueZoom = (MAX_ZOOM / MIN_ZOOM) ** newZoom * MIN_ZOOM;
+      sliderValue = newZoom;
     } else {
-      var true_zoom = new_zoom
-      var slider_value = Math.log(new_zoom/MIN_ZOOM) / Math.log(MAX_ZOOM/MIN_ZOOM)
+      trueZoom = newZoom;
+      sliderValue
+        = Math.log(newZoom / MIN_ZOOM) / Math.log(MAX_ZOOM / MIN_ZOOM);
     }
-    var shown_zoom = Math.round(true_zoom)
-    zoom_label.innerText = 'Zoom ' + shown_zoom
-    zoom_slider.value = slider_value
-    cgol_object.move_to(cgol_object.x_offset, cgol_object.y_offset, true_zoom)
-    update_floating_toolbars(false, false)
+    const shownZoom = Math.round(trueZoom);
+    zoomLabel.innerText = `Zoom ${shownZoom}`;
+    zoomSlider.value = sliderValue;
+    cgolObject.moveTo(cgolObject.xOffset, cgolObject.yOffset, trueZoom);
+    updateFloatingToolbars(false, false);
   }
-  
-  zoom_button.addEventListener('click', () => {
-    var display = window.getComputedStyle(zoom_wrapper).display
-    var new_display = display === 'none' ? 'block' : 'none'
-    zoom_wrapper.style.display = new_display
-    if (new_display === 'block') {
-      zoom_slider.focus()
+
+  zoomButton.addEventListener("click", () => {
+    const display = window.getComputedStyle(zoomWrapper).display;
+    const newDisplay = display === "none" ? "block" : "none";
+    zoomWrapper.style.display = newDisplay;
+    if (newDisplay === "block") {
+      zoomSlider.focus();
     }
-  })
-  zoom_slider.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      zoom_wrapper.style.display = 'none'
-      zoom_button.focus()
-      event.preventDefault()
+  });
+  zoomSlider.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      zoomWrapper.style.display = "none";
+      zoomButton.focus();
+      event.preventDefault();
     }
-  })
-  zoom_outer.addEventListener('blur', () => {
-    var focused_element = event.relatedTarget
-    if (focused_element !== zoom_button && focused_element !== zoom_slider) {
-      zoom_wrapper.style.display = 'none'
+  });
+  zoomOuter.addEventListener("blur", () => {
+    const focusedElement = event.relatedTarget;
+    if (focusedElement !== zoomButton && focusedElement !== zoomSlider) {
+      zoomWrapper.style.display = "none";
     }
-  }, true)
-  zoom_slider.addEventListener('input', () => set_zoom(zoom_slider.value, true))
+  }, true);
+  zoomSlider.addEventListener("input", () => setZoom(zoomSlider.value, true));
 
   // Simulation extra stat event handlers
-  var extra_stats_button = document.getElementById('extra-stats-button')
-  var extra_stats_wrapper = document.getElementById('extra-stats-wrapper')
-  extra_stats_button.addEventListener('click', () => {
-    var display = window.getComputedStyle(extra_stats_wrapper).display
-    var new_display = display === 'none' ? 'block' : 'none'
-    extra_stats_wrapper.style.display = new_display
-  })
-  extra_stats_button.addEventListener('blur', () => {
-    extra_stats_wrapper.style.display = 'none'
-  })
+  const extraStatsButton = document.getElementById("extra-stats-button");
+  const extraStatsWrapper = document.getElementById("extra-stats-wrapper");
+  extraStatsButton.addEventListener("click", () => {
+    const display = window.getComputedStyle(extraStatsWrapper).display;
+    const newDisplay = display === "none" ? "block" : "none";
+    extraStatsWrapper.style.display = newDisplay;
+  });
+  extraStatsButton.addEventListener("blur", () => {
+    extraStatsWrapper.style.display = "none";
+  });
 
   // Undo and redo event handlers
-  var undo_button = document.getElementById('simulator-undo')
-  var redo_button = document.getElementById('simulator-redo')
-  undo_button.addEventListener('click', () => {
-    set_playing(false)
-    cgol_object.undo()
-  })
-  redo_button.addEventListener('click', () => {
-    set_playing(false)
-    cgol_object.redo()
-  })
+  const undoButton = document.getElementById("simulator-undo");
+  const redoButton = document.getElementById("simulator-redo");
+  undoButton.addEventListener("click", () => {
+    setPlaying(false);
+    cgolObject.undo();
+  });
+  redoButton.addEventListener("click", () => {
+    setPlaying(false);
+    cgolObject.redo();
+  });
 
-  
+
   // All event handlers for canvas
-  var canvas = document.getElementById('simulator-cgol')
+  const canvas = document.getElementById("simulator-cgol");
 
-  var first_x, first_y
-  var last_x, last_y
-  var mouse_down = false
-  var drawing_cell_type = 0
-  var temporarily_paused = false
-  var selection_start = {x: null, y: null}
-  var clipboard
-  var clipboard_is_object
-  var paste_visible = false
-  var currently_pasting = false
-  var cursor_moved_significantly = false
+  let firstX;
+  let firstY;
+  let lastX;
+  let lastY;
+  let mouseDown = false;
+  let drawingCellType = 0;
+  let temporarilyPaused = false;
+  let selectionStart = {"x": null, "y": null};
+  let clipboard;
+  let clipboardIsObject;
+  let pasteVisible = false;
+  let currentlyPasting = false;
+  let cursorMovedSignificantly = false;
 
-  function update_first_mouse_position(event) {
-    first_x = event.pageX
-    first_y = event.pageY
+  function updateFirstMousePosition(event) {
+    firstX = event.pageX;
+    firstY = event.pageY;
   }
-  function update_last_mouse_position(event) {
-    last_x = event.pageX
-    last_y = event.pageY
+  function updateLastMousePosition(event) {
+    lastX = event.pageX;
+    lastY = event.pageY;
   }
-  function update_cursor(cursor=null) {
+  function updateCursor(cursor = null) {
     if (cursor !== null) {
-      canvas.style.cursor = cursor
+      canvas.style.cursor = cursor;
     }
-    var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
-    var cursor_type
+    const tool
+      = document.getElementById("simulator-tool").getAttribute("data-tool");
+    let cursorType;
     switch (tool) {
-      case 'draw':
-        cursor_type = 'default'
-        break
-      case 'object':
-        cursor_type = 'default'
-        break
-      case 'select':
-        cursor_type = 'cell'
-        break
-      case 'pan':
-        cursor_type = mouse_down ? 'grabbing' : 'grab'
-        break
+      case "draw":
+        cursorType = "default";
+        break;
+      case "object":
+        cursorType = "default";
+        break;
+      case "select":
+        cursorType = "cell";
+        break;
+      case "pan":
+        cursorType = mouseDown ? "grabbing" : "grab";
+        break;
     }
-    canvas.style.cursor = cursor_type
+    canvas.style.cursor = cursorType;
   }
-  function change_visible_toolbar_group(group_index) {
-    var toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    for (var i = 0; i < toolbar.children.length; ++i) {
-      var group = toolbar.children[i]
-      if (i === group_index) {
-        group.setAttribute('data-visible', '')
+  function changeVisibleToolbarGroup(groupIndex) {
+    const toolbar
+      = document.getElementsByClassName("simulator-selection-toolbar")[0];
+    for (let i = 0; i < toolbar.children.length; ++i) {
+      const group = toolbar.children[i];
+      if (i === groupIndex) {
+        group.setAttribute("data-visible", "");
       } else {
-        group.removeAttribute('data-visible')
+        group.removeAttribute("data-visible");
       }
     }
   }
 
-  function mouse_down_event_handler(event) {
-    var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
-    var buttons = touch ? 1 : event.buttons
-    var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
+  function mouseDownEventHandler(event) {
+    const touch
+      = event.pointerEvent === "pen" || event.pointerEvent === "touch";
+    const buttons = touch ? 1 : event.buttons;
+    const tool
+      = document.getElementById("simulator-tool").getAttribute("data-tool");
 
-    if (buttons & 2) { // Quick panning
-      update_cursor('grabbing')
+    // Quick panning
+    if (buttons & 2) {
+      updateCursor("grabbing");
     }
-    if (tool === 'draw') { // Drawing
-      if ((buttons & 1) && !(buttons & 2)) { // Left click but not right click
-        var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-        temporarily_paused = cgol_object.playing
-        cgol_object.pause()
-        if (x >= 0 && x < cgol_object.grid_size && y >= 0 && y < cgol_object.grid_size) {
-          drawing_cell_type = cgol_object.board[y*cgol_object.grid_size + x] & 1 ^ 1
-          cgol_object.edit_cells([[x, y]], (c) => c & ~1 | drawing_cell_type)
-        } else {
-          drawing_cell_type = 1
-        }
-      }
-    } else if (tool === 'object') { // Object
+    // Drawing
+    if (tool === "draw") {
+      // Left click but not right click
       if ((buttons & 1) && !(buttons & 2)) {
-        cgol_object.selection.visible = false
-        cgol_object.objects.forEach((object) => {
-          object.selected = false
-        })
-        var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-        var simulator_selection_move = document.getElementById('simulator-selection-move')
-        if (simulator_selection_toolbar.style.display === 'block') {
-          paste_visible = false
+        const {x, y}
+          = cgolObject.pageToBoardCoordinates(event.pageX, event.pageY);
+        temporarilyPaused = cgolObject.playing;
+        cgolObject.pause();
+        if (x >= 0 && x < cgolObject.gridSize
+          && y >= 0 && y < cgolObject.gridSize) {
+          drawingCellType
+            = (cgolObject.board[y * cgolObject.gridSize + x] & 1) ^ 1;
+          cgolObject.editCells([[x, y]], (c) => (c & ~1) | drawingCellType);
+        } else {
+          drawingCellType = 1;
         }
-        simulator_selection_toolbar.style.display = 'none'
-        simulator_selection_move.style.display = 'none'
-        cgol_object.force_update()
       }
-    } else if (tool === 'select') { // Selecting
-      if (!currently_pasting) {
+    // Object
+    } else if (tool === "object") {
+      if ((buttons & 1) && !(buttons & 2)) {
+        cgolObject.selection.visible = false;
+        cgolObject.objects.forEach((object) => {
+          object.selected = false;
+        });
+        const simulatorSelectionToolbar
+          = document.getElementsByClassName("simulator-selection-toolbar")[0];
+        const simulatorSelectionMove
+          = document.getElementById("simulator-selection-move");
+        if (simulatorSelectionToolbar.style.display === "block") {
+          pasteVisible = false;
+        }
+        simulatorSelectionToolbar.style.display = "none";
+        simulatorSelectionMove.style.display = "none";
+        cgolObject.forceUpdate();
+      }
+    // Selecting
+    } else if (tool === "select") {
+      if (!currentlyPasting) {
         if ((buttons & 1) && !(buttons & 2)) {
-          var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-          x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
-          y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
-          selection_start = {x: x, y: y}
-          cgol_object.selection = {
-            left: x,
-            right: x,
-            top: y,
-            bottom: y,
-            visible: false,
-          }
-          cgol_object.objects.forEach((object) => {
-            object.selected = false
-          })
-          cgol_object.force_update()
+          let {x, y}
+            = cgolObject.pageToBoardCoordinates(event.pageX, event.pageY);
+          x = Math.min(Math.max(x, 0), cgolObject.gridSize - 1);
+          y = Math.min(Math.max(y, 0), cgolObject.gridSize - 1);
+          selectionStart = {"x": x, "y": y};
+          cgolObject.selection = {
+            "left": x,
+            "right": x,
+            "top": y,
+            "bottom": y,
+            "visible": false,
+          };
+          cgolObject.objects.forEach((object) => {
+            object.selected = false;
+          });
+          cgolObject.forceUpdate();
         }
-        cursor_moved_significantly = false
-        var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-        var simulator_selection_move = document.getElementById('simulator-selection-move')
-        if (simulator_selection_toolbar.style.display === 'block') {
-          paste_visible = false
+        cursorMovedSignificantly = false;
+        const simulatorSelectionToolbar
+          = document.getElementsByClassName("simulator-selection-toolbar")[0];
+        const simulatorSelectionMove
+          = document.getElementById("simulator-selection-move");
+        if (simulatorSelectionToolbar.style.display === "block") {
+          pasteVisible = false;
         }
-        simulator_selection_toolbar.style.display = 'none'
-        simulator_selection_move.style.display = 'none'
+        simulatorSelectionToolbar.style.display = "none";
+        simulatorSelectionMove.style.display = "none";
       }
     }
 
-    canvas.setPointerCapture(event.pointerId)
-    update_first_mouse_position(event)
-    update_last_mouse_position(event)
-    mouse_down = true
-    if (!(buttons & 2)) { // No quick panning
-      update_cursor()
+    canvas.setPointerCapture(event.pointerId);
+    updateFirstMousePosition(event);
+    updateLastMousePosition(event);
+    mouseDown = true;
+    // No quick panning
+    if (!(buttons & 2)) {
+      updateCursor();
     }
   }
 
-  function mouse_move_event_handler(event) {
-    var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
-    var buttons = touch ? 1 : event.buttons
-    mouse_down &&= buttons > 0
-    var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
+  function mouseMoveEventHandler(event) {
+    const touch
+      = event.pointerEvent === "pen" || event.pointerEvent === "touch";
+    const buttons = touch ? 1 : event.buttons;
+    mouseDown &&= buttons > 0;
+    const tool
+      = document.getElementById("simulator-tool").getAttribute("data-tool");
 
-    if ((tool === 'pan' && buttons & 1) || buttons & 2) {
-      // Panning: Left mouse button or touchscreen
-      // Every other mode: Right mouse button
-      var new_x = event.pageX
-      var new_y = event.pageY
-      var change_x = new_x - last_x
-      var change_y = new_y - last_y
-      var zoom_level = cgol_object.zoom
-      cgol_object.move_to(
-        cgol_object.x_offset - change_x/zoom_level,
-        cgol_object.y_offset - change_y/zoom_level,
-        zoom_level,
-      )
-      update_floating_toolbars()
+    if ((tool === "pan" && (buttons & 1)) || (buttons & 2)) {
+      /*
+       * Panning: Left mouse button or touchscreen
+       * Every other mode: Right mouse button
+       */
+      const newX = event.pageX;
+      const newY = event.pageY;
+      const changeX = newX - lastX;
+      const changeY = newY - lastY;
+      const zoomLevel = cgolObject.zoom;
+      cgolObject.moveTo(
+        cgolObject.xOffset - changeX / zoomLevel,
+        cgolObject.yOffset - changeY / zoomLevel,
+        zoomLevel,
+      );
+      updateFloatingToolbars();
     }
-    if (tool === 'draw') { // Drawing
-      if (mouse_down && (buttons & 1) && !(buttons & 2)) {
-        var coords0 = cgol_object.page_to_board_coordinates(last_x, last_y)
-        var x0 = coords0.x
-        var y0 = coords0.y
-        var coords1 = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-        var x1 = coords1.x
-        var y1 = coords1.y
-        var cells_to_change = []
+    // Drawing
+    if (tool === "draw") {
+      if (mouseDown) {
+        const coords0 = cgolObject.pageToBoardCoordinates(lastX, lastY);
+        let x0 = coords0.x;
+        let y0 = coords0.y;
+        const coords1
+          = cgolObject.pageToBoardCoordinates(event.pageX, event.pageY);
+        let x1 = coords1.x;
+        let y1 = coords1.y;
+        const cellsToChange = [];
+        let swapped;
+        let iterations;
         // Bresenham's line algorithm
         if (x0 !== x1 || y0 !== y1) {
           // Only follow the algorithm if the coordinates changed
           if (x1 - x0 < y0 - y1 || (x1 - x0 === y0 - y1 && x1 < x0)) {
-            /* Swap coordinates to try to go south and east.
-               If there's a tie, prefer NE over SW. */
-            [x1, x0, y1, y0] = [x0, x1, y0, y1]
-            var swapped = true
+            /*
+             * Swap coordinates to try to go south and east.
+             * If there's a tie, prefer NE over SW.
+             */
+            [x1, x0, y1, y0] = [x0, x1, y0, y1];
+            swapped = true;
           } else {
-            var swapped = false
+            swapped = false;
           }
-          var slope = (y1 - y0) / (x1 - x0)
+          const slope = (y1 - y0) / (x1 - x0);
           if (Math.abs(slope) <= 1) {
             // Horizontal line
-            var iterations = x1 - x0
+            iterations = x1 - x0;
             if (!swapped) {
-              ++x0
-              y0 += slope
+              ++x0;
+              y0 += slope;
             }
             for (; iterations > 0; --iterations) {
-              /* We add the - 0.5 to the y0 check because of rounding.
-                 If y0 is cgol_object.grid_size - 0.1,
-                 it is less than cgol_object.grid_size, but gets rounded to it.
-                 This causes an error when we index into cgol_object.pattern. */
-              if (x0 >= 0 && x0 < cgol_object.grid_size && y0 >= 0 && y0 < cgol_object.grid_size - 0.5) {
-                cells_to_change.push([x0, Math.round(y0)])
+              /*
+               * We add the - 0.5 to the y0 check because of rounding.
+               * If y0 is cgolObject.gridSize - 0.1,
+               * it is less than cgolObject.gridSize, but gets rounded to it.
+               * This causes an error when we index into cgolObject.pattern.
+               */
+              if (x0 >= 0 && x0 < cgolObject.gridSize
+                && y0 >= 0 && y0 < cgolObject.gridSize - 0.5) {
+                cellsToChange.push([x0, Math.round(y0)]);
               }
-              ++x0
-              y0 += slope
+              ++x0;
+              y0 += slope;
             }
           } else {
             // Vertical line
-            var iterations = y1 - y0
+            iterations = y1 - y0;
             if (!swapped) {
-              ++y0
-              x0 += 1/slope
+              ++y0;
+              x0 += 1 / slope;
             }
             for (; iterations > 0; --iterations) {
-              /* We add - 0.5 to the x0 check here for the same reason,
-                 but now the error manifests itself
-                 as an increase in the length of the array,
-                 which is WAY more sneaky. */
-              if (x0 >= 0 && x0 < cgol_object.grid_size - 0.5 && y0 >= 0 && y0 < cgol_object.grid_size) {
-                cells_to_change.push([Math.round(x0), y0])
+              /*
+               * We add - 0.5 to the x0 check here for the same reason,
+               * but now the error manifests itself
+               * as an increase in the length of the array,
+               * which is WAY more sneaky.
+               */
+              if (x0 >= 0 && x0 < cgolObject.gridSize - 0.5
+                && y0 >= 0 && y0 < cgolObject.gridSize) {
+                cellsToChange.push([Math.round(x0), y0]);
               }
-              ++y0
-              x0 += 1/slope
+              ++y0;
+              x0 += 1 / slope;
             }
           }
-          var cell_change_function = drawing_cell_type ? (c) => c|1 : (c) => c&~1
-          cgol_object.edit_cells(cells_to_change, cell_change_function)
+          const cellChangeFunction
+            = drawingCellType ? ((c) => c | 1) : ((c) => c & ~1);
+          cgolObject.editCells(cellsToChange, cellChangeFunction);
         }
       }
-    } else if (tool === 'select') { // Selecting
-      if (mouse_down && !currently_pasting) {
-        var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-        x = Math.min(Math.max(x, 0), cgol_object.grid_size - 1)
-        y = Math.min(Math.max(y, 0), cgol_object.grid_size - 1)
-        var move_distance = Math.hypot(first_x - event.pageX, first_y - event.pageY)
-        cursor_moved_significantly ||= move_distance >= 3
-        /* This whole cursor_moved_significantly thing is here
-           because moving the cursor 2 pixels
-           shouldn't cause a selection to automatically appear,
-           especially if you're trying to remove one already. */
-        if ((cursor_moved_significantly || cgol_object.selection.visible)
-            && (buttons & 1) && !(buttons & 2)) {
-          cgol_object.selection = {
-            left: Math.min(x, selection_start.x),
-            right: Math.max(x, selection_start.x),
-            top: Math.min(y, selection_start.y),
-            bottom: Math.max(y, selection_start.y),
-            visible: true,
-          }
-          cgol_object.force_update()
-          change_visible_toolbar_group(0)
-          update_floating_toolbars()
-          paste_visible = false
+    // Selecting
+    } else if (tool === "select") {
+      if (mouseDown && !currentlyPasting) {
+        let {x, y}
+          = cgolObject.pageToBoardCoordinates(event.pageX, event.pageY);
+        x = Math.min(Math.max(x, 0), cgolObject.gridSize - 1);
+        y = Math.min(Math.max(y, 0), cgolObject.gridSize - 1);
+        const moveDistance
+          = Math.hypot(firstX - event.pageX, firstY - event.pageY);
+        cursorMovedSignificantly ||= moveDistance >= 3;
+        /*
+         * This whole cursorMovedSignificantly thing is here
+         * because moving the cursor 2 pixels
+         * shouldn't cause a selection to automatically appear,
+         * especially if you're trying to remove one already.
+         */
+        if ((cursorMovedSignificantly || cgolObject.selection.visible)
+          && (buttons & 1) && !(buttons & 2)) {
+          cgolObject.selection = {
+            "left": Math.min(x, selectionStart.x),
+            "right": Math.max(x, selectionStart.x),
+            "top": Math.min(y, selectionStart.y),
+            "bottom": Math.max(y, selectionStart.y),
+            "visible": true,
+          };
+          cgolObject.forceUpdate();
+          changeVisibleToolbarGroup(0);
+          updateFloatingToolbars();
+          pasteVisible = false;
         }
       }
     }
-    
-    update_last_mouse_position(event)
+
+    updateLastMousePosition(event);
   }
 
-  function mouse_up_event_handler(event) {
-    var touch = event.pointerEvent === 'pen' || event.pointerEvent === 'touch'
-    var tool = document.getElementById('simulator-tool').getAttribute('data-tool')
-    
-    if (tool === 'draw') { // Drawing
-      if (mouse_down) {
+  function mouseUpEventHandler(event) {
+    const tool
+      = document.getElementById("simulator-tool").getAttribute("data-tool");
+
+    // Drawing
+    if (tool === "draw") {
+      if (mouseDown) {
         // The last true parameter ends the 'cell' action merging
-        cgol_object.set_state('cell', 0, 0, {end_merge: true})
-        if (temporarily_paused) {
-          cgol_object.play()
-          temporarily_paused = false
+        cgolObject.setState("cell", 0, 0, {"endMerge": true});
+        if (temporarilyPaused) {
+          cgolObject.play();
+          temporarilyPaused = false;
         }
       }
-    } else if (tool === 'object') { // Object
-      var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-      if (mouse_down && cgol_object.generation === 0) {
+    // Object
+    } else if (tool === "object") {
+      const {x, y}
+        = cgolObject.pageToBoardCoordinates(event.pageX, event.pageY);
+      if (mouseDown && cgolObject.generation === 0) {
         // Check whether any objects are in range
-        var object_selected = false
-        cgol_object.objects.forEach((object) => {
-          object.selected = false
-        })
-        for (var object of cgol_object.objects.toReversed()) {
+        let objectSelected = false;
+        cgolObject.objects.forEach((object) => {
+          object.selected = false;
+        });
+        for (const object of cgolObject.objects.toReversed()) {
           if (object.moving) {
-            continue
+            continue;
           }
           if (x >= object.x && x < object.x + object.width
-              && y >= object.y && y < object.y + object.height) {
-            object.selected = true
-            object_selected = true
-            break
+            && y >= object.y && y < object.y + object.height) {
+            object.selected = true;
+            objectSelected = true;
+            break;
           }
         }
-        if (object_selected || !paste_visible) {
-          cgol_object.force_update()
-          change_visible_toolbar_group(3)
-          update_floating_toolbars()
-          paste_visible = true
+        if (objectSelected || !pasteVisible) {
+          cgolObject.forceUpdate();
+          changeVisibleToolbarGroup(3);
+          updateFloatingToolbars();
+          pasteVisible = true;
         } else {
-          change_visible_toolbar_group(4)
-          cgol_object.selection = ({
-            left: x,
-            right: x,
-            top: y,
-            bottom: y,
-            visible: false,
-          })
-          update_floating_toolbars(true)
-          var simulator_selection_move = document.getElementById('simulator-selection-move')
-          simulator_selection_move.style.display = 'none'
-          paste_visible = false
+          changeVisibleToolbarGroup(4);
+          cgolObject.selection = ({
+            "left": x,
+            "right": x,
+            "top": y,
+            "bottom": y,
+            "visible": false,
+          });
+          updateFloatingToolbars(true);
+          const simulatorSelectionMove
+            = document.getElementById("simulator-selection-move");
+          simulatorSelectionMove.style.display = "none";
+          pasteVisible = false;
         }
       }
-    } else if (tool === 'select') { // Selecting
-      if (mouse_down && !currently_pasting) {
-        if (paste_visible) {
-          change_visible_toolbar_group(1)
-          var {x, y} = cgol_object.page_to_board_coordinates(event.pageX, event.pageY)
-          cgol_object.selection = ({
-            left: x,
-            right: x,
-            top: y,
-            bottom: y,
-            visible: false,
-          })
-          update_floating_toolbars(true)
-          var simulator_selection_move = document.getElementById('simulator-selection-move')
-          simulator_selection_move.style.display = 'none'
-          paste_visible = false
-        } else if (!cursor_moved_significantly) {
-          change_visible_toolbar_group(0)
-          update_floating_toolbars()
-          paste_visible = true
+    // Selecting
+    } else if (tool === "select") {
+      if (mouseDown && !currentlyPasting) {
+        if (pasteVisible) {
+          changeVisibleToolbarGroup(1);
+          const {x, y}
+            = cgolObject.pageToBoardCoordinates(event.pageX, event.pageY);
+          cgolObject.selection = ({
+            "left": x,
+            "right": x,
+            "top": y,
+            "bottom": y,
+            "visible": false,
+          });
+          updateFloatingToolbars(true);
+          const simulatorSelectionMove
+            = document.getElementById("simulator-selection-move");
+          simulatorSelectionMove.style.display = "none";
+          pasteVisible = false;
+        } else if (!cursorMovedSignificantly) {
+          changeVisibleToolbarGroup(0);
+          updateFloatingToolbars();
+          pasteVisible = true;
         }
       }
     }
-    
-    canvas.releasePointerCapture(event.pointerId)
-    update_last_mouse_position(event)
-    mouse_down = false
-    update_cursor()
+
+    canvas.releasePointerCapture(event.pointerId);
+    updateLastMousePosition(event);
+    mouseDown = false;
+    updateCursor();
   }
 
-  function wheel_event_handler(event) {
-    var delta_multiplier = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 18 : 1
-    var scroll_y = event.deltaY * delta_multiplier
-    
+  function wheelEventHandler(event) {
+    const deltaMultiplier
+      = event.deltaMode === WheelEvent.DOMDELTALINE ? 18 : 1;
+    const scrollY = event.deltaY * deltaMultiplier;
+
     // Zoom in and out, regardless of mode
-    var zoom_multiplier = 2 ** (-scroll_y / 400)
-    var new_zoom = Math.min(Math.max(cgol_object.zoom * zoom_multiplier, MIN_ZOOM), MAX_ZOOM)
-    set_zoom(new_zoom)
+    const zoomMultiplier = 2 ** (-scrollY / 400);
+    const newZoom = Math.min(
+      Math.max(cgolObject.zoom * zoomMultiplier, MIN_ZOOM),
+      MAX_ZOOM,
+    );
+    setZoom(newZoom);
   }
 
   // Add the event listeners
-  const THROTTLE_MILLISECONDS = 16
-  canvas.addEventListener('pointerdown', throttle(mouse_down_event_handler, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('pointermove', throttle(mouse_move_event_handler, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('pointerup', throttle(mouse_up_event_handler, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('wheel', throttle(wheel_event_handler, THROTTLE_MILLISECONDS))
-  canvas.addEventListener('contextmenu', (event) => { event.preventDefault() })
+
+  // 16 milliseconds, around 1 frame
+  const THROTTLE_TIME = 16;
+  canvas.addEventListener(
+    "pointerdown", throttle(mouseDownEventHandler, THROTTLE_TIME),
+  );
+  canvas.addEventListener(
+    "pointermove", throttle(mouseMoveEventHandler, THROTTLE_TIME),
+  );
+  canvas.addEventListener(
+    "pointerup", throttle(mouseUpEventHandler, THROTTLE_TIME),
+  );
+  canvas.addEventListener(
+    "wheel", throttle(wheelEventHandler, THROTTLE_TIME),
+  );
+  canvas.addEventListener(
+    "contextmenu", (event) => { event.preventDefault(); },
+  );
 
   // Event handlers for the floating toolbar
 
-  function rotate_or_flip(rotation, flip_x, object_index=null) {
-    var is_selection = object_index === null
-    object_index ??= 0
+  function rotateOrFlip(rotation, flipX, objectIndex = null) {
+    const isSelection = objectIndex === null;
+    objectIndex ??= 0;
 
-    if (is_selection) {
-      cgol_object.extract_selection_to_object()
+    if (isSelection) {
+      cgolObject.extractSelectionToObject();
     }
-    var current_object = cgol_object.objects[object_index]
-    var rotated_pattern = CGoL.rotate(current_object.pattern, rotation, flip_x)
-    
+    const currentObject = cgolObject.objects[objectIndex];
+    const rotatedPattern = CGoL.rotate(currentObject.pattern, rotation, flipX);
+
     // Update object
-    current_object.pattern = rotated_pattern.pattern
-    current_object.x += rotated_pattern.x
-    current_object.y += rotated_pattern.y
-    current_object.width = rotated_pattern.width
-    current_object.height = rotated_pattern.height
+    currentObject.pattern = rotatedPattern.pattern;
+    currentObject.x += rotatedPattern.x;
+    currentObject.y += rotatedPattern.y;
+    currentObject.width = rotatedPattern.width;
+    currentObject.height = rotatedPattern.height;
     // Update selection
-    if (is_selection) {
-      var selection_left = current_object.x
-      var selection_top = current_object.y
-      var selection_right = selection_left + current_object.width - 1
-      var selection_bottom = selection_top + current_object.height - 1
-      cgol_object.selection = {
-        left: Math.max(selection_left, 0),
-        top: Math.max(selection_top, 0),
-        right: Math.min(selection_right, cgol_object.grid_size - 1),
-        bottom: Math.min(selection_bottom, cgol_object.grid_size - 1),
-        visible: true,
-      }
+    if (isSelection) {
+      const selectionLeft = currentObject.x;
+      const selectionTop = currentObject.y;
+      const selectionRight = selectionLeft + currentObject.width - 1;
+      const selectionBottom = selectionTop + currentObject.height - 1;
+      cgolObject.selection = {
+        "left": Math.max(selectionLeft, 0),
+        "top": Math.max(selectionTop, 0),
+        "right": Math.min(selectionRight, cgolObject.gridSize - 1),
+        "bottom": Math.min(selectionBottom, cgolObject.gridSize - 1),
+        "visible": true,
+      };
     }
 
     // Update state
-    if (is_selection) {
-      cgol_object.bake_object(object_index, true)
+    if (isSelection) {
+      cgolObject.bakeObject(objectIndex, true);
     } else {
-      cgol_object.compile_pattern()
+      cgolObject.compilePattern();
     }
-    cgol_object.set_state('rotate', 1, 0, {control1: (a) => Math.min(a, 1)})
-    update_floating_toolbars()
+    cgolObject.setState("rotate", 1, 0, {"control1": (a) => Math.min(a, 1)});
+    updateFloatingToolbars();
   }
-  
-  // Rotate counterclockwise button
-  var rotate_ccw_selection_button = document.getElementById('simulator-selection-rotate-ccw')
-  rotate_ccw_selection_button.addEventListener('click', () => {
-    rotate_or_flip(3, false)
-  })
-  // Rotate clockwise button
-  var rotate_cw_selection_button = document.getElementById('simulator-selection-rotate-cw')
-  rotate_cw_selection_button.addEventListener('click', () => {
-    rotate_or_flip(1, false)
-  })
-  // Flip horizontally button
-  var flip_horiz_selection_button = document.getElementById('simulator-selection-flip-horiz')
-  flip_horiz_selection_button.addEventListener('click', () => {
-    rotate_or_flip(0, true)
-  })
-  // Flip vertically button
-  var flip_vert_selection_button = document.getElementById('simulator-selection-flip-vert')
-  flip_vert_selection_button.addEventListener('click', () => {
-    rotate_or_flip(2, true)
-  })
-  // Cut button
-  var cut_selection_button = document.getElementById('simulator-selection-cut')
-  cut_selection_button.addEventListener('click', () => {
-    cgol_object.selection.visible = false
-    cgol_object.extract_selection_to_object(true)
-    clipboard = cgol_object.objects.shift()
-    clipboard_is_object = false
-    cgol_object.set_state('delete', 1, 0, {mergeable: false})
-    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
-    simulator_selection_toolbar.style.display = 'none'
-    simulator_selection_move.style.display = 'none'
-    var paste_selection_button = document.getElementById('simulator-selection-paste')
-    paste_selection_button.removeAttribute('disabled')
-    var paste_object_button = document.getElementById('simulator-object-paste')
-    paste_object_button.setAttribute('disabled', '')
-  })
-  // Copy button
-  var copy_selection_button = document.getElementById('simulator-selection-copy')
-  copy_selection_button.addEventListener('click', () => {
-    cgol_object.extract_selection_to_object(false)
-    clipboard = cgol_object.objects.shift()
-    clipboard_is_object = false
-    var paste_selection_button = document.getElementById('simulator-selection-paste')
-    paste_selection_button.removeAttribute('disabled')
-    var paste_object_button = document.getElementById('simulator-object-paste')
-    paste_object_button.setAttribute('disabled', '')
-  })
-  // Delete button
-  var delete_selection_button = document.getElementById('simulator-selection-delete')
-  delete_selection_button.addEventListener('click', () => {
-    cgol_object.selection.visible = false
-    var cells_to_remove = []
-    for (var y = cgol_object.selection.top; y <= cgol_object.selection.bottom; ++y) {
-      for (var x = cgol_object.selection.left; x <= cgol_object.selection.right; ++x) {
-        cells_to_remove.push([x, y])
-      }
-    }
-    cgol_object.edit_cells(
-      cells_to_remove,
-      0,
-      ['delete', 1, 0, {mergeable: false}],
-    )
-    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
-    simulator_selection_toolbar.style.display = 'none'
-    simulator_selection_move.style.display = 'none'
-  })
-  
-  // Paste button
-  var paste_selection_button = document.getElementById('simulator-selection-paste')
-  paste_selection_button.addEventListener('click', () => {
-    currently_pasting = true
-    cgol_object.selection.left = Math.min(Math.max(cgol_object.selection.left, 0), cgol_object.grid_size - clipboard.width)
-    cgol_object.selection.top = Math.min(Math.max(cgol_object.selection.top, 0), cgol_object.grid_size - clipboard.height)
-    cgol_object.selection.right = cgol_object.selection.left + clipboard.width - 1
-    cgol_object.selection.bottom = cgol_object.selection.top + clipboard.height - 1
-    cgol_object.selection.visible = true
-    cgol_object.objects.unshift(structuredClone(clipboard))
-    cgol_object.objects[0].moving = true
-    cgol_object.objects[0].x = cgol_object.selection.left
-    cgol_object.objects[0].y = cgol_object.selection.top
-    change_visible_toolbar_group(2)
-    update_floating_toolbars()
 
-    console.log(cgol_object.objects) // DEBUG
-  })
-  
+  // Rotate counterclockwise button
+  const rotateCcwSelectionButton
+    = document.getElementById("simulator-selection-rotate-ccw");
+  rotateCcwSelectionButton.addEventListener("click", () => {
+    rotateOrFlip(3, false);
+  });
+  // Rotate clockwise button
+  const rotateCwSelectionButton
+    = document.getElementById("simulator-selection-rotate-cw");
+  rotateCwSelectionButton.addEventListener("click", () => {
+    rotateOrFlip(1, false);
+  });
+  // Flip horizontally button
+  const flipHorizSelectionButton
+    = document.getElementById("simulator-selection-flip-horiz");
+  flipHorizSelectionButton.addEventListener("click", () => {
+    rotateOrFlip(0, true);
+  });
+  // Flip vertically button
+  const flipVertSelectionButton
+    = document.getElementById("simulator-selection-flip-vert");
+  flipVertSelectionButton.addEventListener("click", () => {
+    rotateOrFlip(2, true);
+  });
+  // Cut button
+  const cutSelectionButton = document.getElementById("simulator-selection-cut");
+  cutSelectionButton.addEventListener("click", () => {
+    cgolObject.selection.visible = false;
+    cgolObject.extractSelectionToObject(true);
+    clipboard = cgolObject.objects.shift();
+    clipboardIsObject = false;
+    cgolObject.setState("delete", 1, 0, {"mergeable": false});
+    const simulatorSelectionToolbar
+      = document.getElementsByClassName("simulator-selection-toolbar")[0];
+    const simulatorSelectionMove
+      = document.getElementById("simulator-selection-move");
+    simulatorSelectionToolbar.style.display = "none";
+    simulatorSelectionMove.style.display = "none";
+    const pasteSelectionButton
+      = document.getElementById("simulator-selection-paste");
+    pasteSelectionButton.removeAttribute("disabled");
+    const pasteObjectButton
+      = document.getElementById("simulator-object-paste");
+    pasteObjectButton.setAttribute("disabled", "");
+  });
+  // Copy button
+  const copySelectionButton
+    = document.getElementById("simulator-selection-copy");
+  copySelectionButton.addEventListener("click", () => {
+    cgolObject.extractSelectionToObject(false);
+    clipboard = cgolObject.objects.shift();
+    clipboardIsObject = false;
+    const pasteSelectionButton
+      = document.getElementById("simulator-selection-paste");
+    pasteSelectionButton.removeAttribute("disabled");
+    const pasteObjectButton
+      = document.getElementById("simulator-object-paste");
+    pasteObjectButton.setAttribute("disabled", "");
+  });
+  // Delete button
+  const deleteSelectionButton
+    = document.getElementById("simulator-selection-delete");
+  deleteSelectionButton.addEventListener("click", () => {
+    cgolObject.selection.visible = false;
+    const cellsToRemove = [];
+    for (let y = cgolObject.selection.top;
+      y <= cgolObject.selection.bottom;
+      ++y) {
+      for (let x = cgolObject.selection.left;
+        x <= cgolObject.selection.right;
+        ++x) {
+        cellsToRemove.push([x, y]);
+      }
+    }
+    cgolObject.editCells(
+      cellsToRemove, 0, ["delete", 1, 0, {"mergeable": false}],
+    );
+    const simulatorSelectionToolbar
+      = document.getElementsByClassName("simulator-selection-toolbar")[0];
+    const simulatorSelectionMove
+      = document.getElementById("simulator-selection-move");
+    simulatorSelectionToolbar.style.display = "none";
+    simulatorSelectionMove.style.display = "none";
+  });
+
+  // Paste button
+  const pasteSelectionButton
+    = document.getElementById("simulator-selection-paste");
+  pasteSelectionButton.addEventListener("click", () => {
+    currentlyPasting = true;
+    cgolObject.selection.left = Math.min(
+      Math.max(cgolObject.selection.left, 0),
+      cgolObject.gridSize - clipboard.width,
+    );
+    cgolObject.selection.top = Math.min(
+      Math.max(cgolObject.selection.top, 0),
+      cgolObject.gridSize - clipboard.height,
+    );
+    cgolObject.selection.right
+      = cgolObject.selection.left + clipboard.width - 1;
+    cgolObject.selection.bottom
+      = cgolObject.selection.top + clipboard.height - 1;
+    cgolObject.selection.visible = true;
+    cgolObject.objects.unshift(structuredClone(clipboard));
+    cgolObject.objects[0].moving = true;
+    cgolObject.objects[0].x = cgolObject.selection.left;
+    cgolObject.objects[0].y = cgolObject.selection.top;
+    changeVisibleToolbarGroup(2);
+    updateFloatingToolbars();
+
+    // DEBUG
+    console.log(cgolObject.objects);
+  });
+
   // Abort paste button
-  var abort_paste_button = document.getElementById('simulator-paste-abort')
-  abort_paste_button.addEventListener('click', () => {
-    currently_pasting = false
-    cgol_object.selection.visible = false
-    if (clipboard_is_object) {
-      cgol_object.objects.pop()
-      cgol_object.compile_pattern()
+  const abortPasteButton = document.getElementById("simulator-paste-abort");
+  abortPasteButton.addEventListener("click", () => {
+    currentlyPasting = false;
+    cgolObject.selection.visible = false;
+    if (clipboardIsObject) {
+      cgolObject.objects.pop();
+      cgolObject.compilePattern();
     } else {
-      cgol_object.objects.shift()
-      cgol_object.force_update()
+      cgolObject.objects.shift();
+      cgolObject.forceUpdate();
     }
-    update_floating_toolbars()
-    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
-    simulator_selection_toolbar.style.display = 'none'
-    simulator_selection_move.style.display = 'none'
-  })
+    updateFloatingToolbars();
+    const simulatorSelectionToolbar
+      = document.getElementsByClassName("simulator-selection-toolbar")[0];
+    const simulatorSelectionMove
+      = document.getElementById("simulator-selection-move");
+    simulatorSelectionToolbar.style.display = "none";
+    simulatorSelectionMove.style.display = "none";
+  });
   // Confirm paste button
-  var confirm_paste_button = document.getElementById('simulator-paste-confirm')
-  confirm_paste_button.addEventListener('click', () => {
-    currently_pasting = false
-    if (clipboard_is_object) {
-      cgol_object.objects[cgol_object.objects.length - 1].moving = false
-      cgol_object.objects[cgol_object.objects.length - 1].selected = false
-      cgol_object.compile_pattern()
+  const confirmPasteButton = document.getElementById("simulator-paste-confirm");
+  confirmPasteButton.addEventListener("click", () => {
+    currentlyPasting = false;
+    if (clipboardIsObject) {
+      cgolObject.objects[cgolObject.objects.length - 1].moving = false;
+      cgolObject.objects[cgolObject.objects.length - 1].selected = false;
+      cgolObject.compilePattern();
     } else {
-      cgol_object.bake_object(0, true)
-      cgol_object.selection.visible = false
+      cgolObject.bakeObject(0, true);
+      cgolObject.selection.visible = false;
     }
-    cgol_object.set_state('paste', 1, 0, {mergeable: false})
-    cgol_object.force_update()
-    update_floating_toolbars()
-    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
-    simulator_selection_toolbar.style.display = 'none'
-    simulator_selection_move.style.display = 'none'
-  })
-  
+    cgolObject.setState("paste", 1, 0, {"mergeable": false});
+    cgolObject.forceUpdate();
+    updateFloatingToolbars();
+    const simulatorSelectionToolbar
+      = document.getElementsByClassName("simulator-selection-toolbar")[0];
+    const simulatorSelectionMove
+      = document.getElementById("simulator-selection-move");
+    simulatorSelectionToolbar.style.display = "none";
+    simulatorSelectionMove.style.display = "none";
+  });
+
   // Event handlers for the "move selection" button
-  var move_selection_button = document.getElementById('simulator-selection-move')
-  var drag_offset_x, drag_offset_y
-  var drag_original_x, drag_original_y
-  var original_selection_x, original_selection_y
-  var moving_object_index
-  function move_selection_mouse_down(event) {
-    var selection = cgol_object.get_selection()
-    drag_original_x = event.pageX
-    drag_original_y = event.pageY
-    drag_offset_x = event.pageX - move_selection_button.offsetLeft
-    drag_offset_y = event.pageY - move_selection_button.offsetTop
-    original_selection_x = selection.left
-    original_selection_y = selection.top
-    move_selection_button.setPointerCapture(event.pointerId)
-    if (!currently_pasting) {
-      if (selection.type === 'selection') {
-        cgol_object.extract_selection_to_object()
-        cgol_object.objects[0].moving = true
-        moving_object_index = 0
+  const moveSelectionButton
+    = document.getElementById("simulator-selection-move");
+  let dragOriginalX;
+  let dragOriginalY;
+  let originalSelectionX;
+  let originalSelectionY;
+  let movingObjectIndex;
+  function moveSelectionMouseDown(event) {
+    const selection = cgolObject.getSelection();
+    dragOriginalX = event.pageX;
+    dragOriginalY = event.pageY;
+    originalSelectionX = selection.left;
+    originalSelectionY = selection.top;
+    moveSelectionButton.setPointerCapture(event.pointerId);
+    if (!currentlyPasting) {
+      if (selection.type === "selection") {
+        cgolObject.extractSelectionToObject();
+        cgolObject.objects[0].moving = true;
+        movingObjectIndex = 0;
       } else {
-        moving_object_index = cgol_object.objects.findIndex((object) => object.selected)
+        movingObjectIndex
+          = cgolObject.objects.findIndex((object) => object.selected);
       }
     } else {
-      if (clipboard_is_object) {
-        moving_object_index = cgol_object.objects.length - 1
+      if (clipboardIsObject) {
+        movingObjectIndex = cgolObject.objects.length - 1;
       } else {
-        moving_object_index = 0
+        movingObjectIndex = 0;
       }
     }
   }
-  function move_selection_mouse_move(event) {
-    var touch = event.pointerType === 'pen' || event.pointerType === 'touch'
+  function moveSelectionMouseMove(event) {
+    const touch = event.pointerType === "pen" || event.pointerType === "touch";
     if (event.buttons || touch) {
-      // Update cgol_object
-      var selection = cgol_object.get_selection()
-      var cell_size = cgol_object.zoom
-      var selection_width = selection.right - selection.left
-      var selection_height = selection.bottom - selection.top
-      var delta_x = Math.round((event.pageX - drag_original_x) / cell_size)
-      var delta_y = Math.round((event.pageY - drag_original_y) / cell_size)
-      var new_x = Math.min(Math.max(original_selection_x+delta_x, 0), cgol_object.grid_size-selection_width)
-      var new_y = Math.min(Math.max(original_selection_y+delta_y, 0), cgol_object.grid_size-selection_height)
-      cgol_object.objects[moving_object_index].x = new_x
-      cgol_object.objects[moving_object_index].y = new_y
-      if (selection.type === 'selection') {
-        cgol_object.selection.left = new_x
-        cgol_object.selection.right = new_x + selection_width - 1
-        cgol_object.selection.top = new_y
-        cgol_object.selection.bottom = new_y + selection_height - 1
+      // Update cgolObject
+      const selection = cgolObject.getSelection();
+      const cellSize = cgolObject.zoom;
+      const selectionWidth = selection.right - selection.left;
+      const selectionHeight = selection.bottom - selection.top;
+      const deltaX = Math.round((event.pageX - dragOriginalX) / cellSize);
+      const deltaY = Math.round((event.pageY - dragOriginalY) / cellSize);
+      const newX = Math.min(
+        Math.max(originalSelectionX + deltaX, 0),
+        cgolObject.gridSize - selectionWidth,
+      );
+      const newY = Math.min(
+        Math.max(originalSelectionY + deltaY, 0),
+        cgolObject.gridSize - selectionHeight,
+      );
+      cgolObject.objects[movingObjectIndex].x = newX;
+      cgolObject.objects[movingObjectIndex].y = newY;
+      if (selection.type === "selection") {
+        cgolObject.selection.left = newX;
+        cgolObject.selection.right = newX + selectionWidth - 1;
+        cgolObject.selection.top = newY;
+        cgolObject.selection.bottom = newY + selectionHeight - 1;
       }
-      if (selection.type !== 'selection'
-          || (currently_pasting && clipboard_is_object)) {
-        cgol_object.compile_pattern()
+      if (selection.type !== "selection"
+        || (currentlyPasting && clipboardIsObject)) {
+        cgolObject.compilePattern();
       }
-      update_floating_toolbars()
+      updateFloatingToolbars();
     }
   }
-  function move_selection_mouse_up(event) {
-    move_selection_button.releasePointerCapture(event.pointerId)
-    if (!currently_pasting) {
-      var selection = cgol_object.get_selection()
-      if (selection.type === 'selection') {
-        cgol_object.bake_object(0, true)
-        cgol_object.set_state('cell', 1, 0, {control1: (a) => Math.min(a, 1), mergeable: false})
+  function moveSelectionMouseUp(event) {
+    moveSelectionButton.releasePointerCapture(event.pointerId);
+    if (!currentlyPasting) {
+      const selection = cgolObject.getSelection();
+      if (selection.type === "selection") {
+        cgolObject.bakeObject(0, true);
+        cgolObject.setState("cell", 1, 0, {
+          "control1": (a) => Math.min(a, 1),
+          "mergeable": false,
+        });
       } else {
-        var delta_x = selection.left - original_selection_x
-        var delta_y = selection.top - original_selection_y
-        cgol_object.set_state('move', delta_x, delta_y)
+        const deltaX = selection.left - originalSelectionX;
+        const deltaY = selection.top - originalSelectionY;
+        cgolObject.setState("move", deltaX, deltaY);
       }
     }
   }
-  move_selection_button.addEventListener('pointerdown', move_selection_mouse_down)
-  move_selection_button.addEventListener('pointermove', move_selection_mouse_move)
-  move_selection_button.addEventListener('pointerup', move_selection_mouse_up)
+  moveSelectionButton.addEventListener("pointerdown", moveSelectionMouseDown);
+  moveSelectionButton.addEventListener("pointermove", moveSelectionMouseMove);
+  moveSelectionButton.addEventListener("pointerup", moveSelectionMouseUp);
 
   // Object group event handlers
 
   // Rotate counterclockwise button
-  var rotate_ccw_object_button = document.getElementById('simulator-object-rotate-ccw')
-  rotate_ccw_object_button.addEventListener('click', () => {
-    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
-    rotate_or_flip(3, false, selected_object)
-  })
+  const rotateCcwObjectButton
+    = document.getElementById("simulator-object-rotate-ccw");
+  rotateCcwObjectButton.addEventListener("click", () => {
+    const selectedObject
+      = cgolObject.objects.findIndex((object) => object.selected);
+    rotateOrFlip(3, false, selectedObject);
+  });
   // Rotate clockwise button
-  var rotate_cw_object_button = document.getElementById('simulator-object-rotate-cw')
-  rotate_cw_object_button.addEventListener('click', () => {
-    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
-    rotate_or_flip(1, false, selected_object)
-  })
+  const rotateCwObjectButton
+    = document.getElementById("simulator-object-rotate-cw");
+  rotateCwObjectButton.addEventListener("click", () => {
+    const selectedObject
+      = cgolObject.objects.findIndex((object) => object.selected);
+    rotateOrFlip(1, false, selectedObject);
+  });
   // Flip horizontally button
-  var flip_horiz_object_button = document.getElementById('simulator-object-flip-horiz')
-  flip_horiz_object_button.addEventListener('click', () => {
-    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
-    rotate_or_flip(0, true, selected_object)
-  })
+  const flipHorizObjectButton
+    = document.getElementById("simulator-object-flip-horiz");
+  flipHorizObjectButton.addEventListener("click", () => {
+    const selectedObject
+      = cgolObject.objects.findIndex((object) => object.selected);
+    rotateOrFlip(0, true, selectedObject);
+  });
   // Flip vertically button
-  var flip_vert_object_button = document.getElementById('simulator-object-flip-vert')
-  flip_vert_object_button.addEventListener('click', () => {
-    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
-    rotate_or_flip(2, true, selected_object)
-  })
+  const flipVertObjectButton
+    = document.getElementById("simulator-object-flip-vert");
+  flipVertObjectButton.addEventListener("click", () => {
+    const selectedObject
+      = cgolObject.objects.findIndex((object) => object.selected);
+    rotateOrFlip(2, true, selectedObject);
+  });
   // Cut button
-  var cut_object_button = document.getElementById('simulator-object-cut')
-  cut_object_button.addEventListener('click', () => {
-    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
-    clipboard = cgol_object.objects.splice(selected_object, 1)[0]
-    clipboard_is_object = true
-    cgol_object.compile_pattern()
-    cgol_object.set_state('delete', 1, 0, {mergeable: false})
-    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
-    simulator_selection_toolbar.style.display = 'none'
-    simulator_selection_move.style.display = 'none'
-    var paste_selection_button = document.getElementById('simulator-selection-paste')
-    paste_selection_button.setAttribute('disabled', '')
-    var paste_object_button = document.getElementById('simulator-object-paste')
-    paste_object_button.removeAttribute('disabled')
-  })
+  const cutObjectButton = document.getElementById("simulator-object-cut");
+  cutObjectButton.addEventListener("click", () => {
+    const selectedObject
+      = cgolObject.objects.findIndex((object) => object.selected);
+    clipboard = cgolObject.objects.splice(selectedObject, 1)[0];
+    clipboardIsObject = true;
+    cgolObject.compilePattern();
+    cgolObject.setState("delete", 1, 0, {"mergeable": false});
+    const simulatorSelectionToolbar
+      = document.getElementsByClassName("simulator-selection-toolbar")[0];
+    const simulatorSelectionMove
+      = document.getElementById("simulator-selection-move");
+    simulatorSelectionToolbar.style.display = "none";
+    simulatorSelectionMove.style.display = "none";
+    const pasteSelectionButton
+      = document.getElementById("simulator-selection-paste");
+    pasteSelectionButton.setAttribute("disabled", "");
+    const pasteObjectButton = document.getElementById("simulator-object-paste");
+    pasteObjectButton.removeAttribute("disabled");
+  });
   // Copy button
-  var copy_object_button = document.getElementById('simulator-object-copy')
-  copy_object_button.addEventListener('click', () => {
-    var selected_object = cgol_object.objects.findIndex((object) => object.selected)
-    clipboard = structuredClone(cgol_object.objects[selected_object])
-    clipboard_is_object = true
-    var paste_selection_button = document.getElementById('simulator-selection-paste')
-    paste_selection_button.setAttribute('disabled', '')
-    var paste_object_button = document.getElementById('simulator-object-paste')
-    paste_object_button.removeAttribute('disabled')
-  })
+  const copyObjectButton = document.getElementById("simulator-object-copy");
+  copyObjectButton.addEventListener("click", () => {
+    const selectedObject
+      = cgolObject.objects.findIndex((object) => object.selected);
+    clipboard = structuredClone(cgolObject.objects[selectedObject]);
+    clipboardIsObject = true;
+    const pasteSelectionButton
+      = document.getElementById("simulator-selection-paste");
+    pasteSelectionButton.setAttribute("disabled", "");
+    const pasteObjectButton
+      = document.getElementById("simulator-object-paste");
+    pasteObjectButton.removeAttribute("disabled");
+  });
+
   // Delete object button
-  var delete_object_button = document.getElementById('simulator-object-delete')
-  delete_object_button.addEventListener('click', () => {
-    var selected_object_index = cgol_object.objects.findIndex((object) => object.selected)
+  const deleteObjectButton = document.getElementById("simulator-object-delete");
+  deleteObjectButton.addEventListener("click", () => {
+    const selectedObjectIndex
+      = cgolObject.objects.findIndex((object) => object.selected);
     // Increase the corresponding object's count in the sidebar
-    var object_id = cgol_object.objects[selected_object_index].object_metadata.id
-    var current_add_object_button = document.querySelector(
-      `.simulator-add-object[data-object="${CSS.escape(object_id)}"]`
-    )
-    var object_count = parseInt(current_add_object_button.getAttribute("data-count"))
-    ++object_count
-    change_object_count(current_add_object_button, object_count)
+    const objectId = cgolObject.objects[selectedObjectIndex].objectMetadata.id;
+    const currentAddObjectButton = document.querySelector(
+      `.simulator-add-object[data-object="${CSS.escape(objectId)}"]`,
+    );
+    let objectCount
+      = parseInt(currentAddObjectButton.getAttribute("data-count"));
+    ++objectCount;
+    changeObjectCount(currentAddObjectButton, objectCount);
     // Delete the object
-    cgol_object.objects.splice(selected_object_index, 1)
-    cgol_object.compile_pattern()
-    var simulator_selection_toolbar = document.getElementsByClassName('simulator-selection-toolbar')[0]
-    var simulator_selection_move = document.getElementById('simulator-selection-move')
-    simulator_selection_toolbar.style.display = 'none'
-    simulator_selection_move.style.display = 'none'
-  })
+    cgolObject.objects.splice(selectedObjectIndex, 1);
+    cgolObject.compilePattern();
+    const simulatorSelectionToolbar
+      = document.getElementsByClassName("simulator-selection-toolbar")[0];
+    const simulatorSelectionMove
+      = document.getElementById("simulator-selection-move");
+    simulatorSelectionToolbar.style.display = "none";
+    simulatorSelectionMove.style.display = "none";
+  });
 
   // Paste object button
-  var paste_object_button = document.getElementById('simulator-object-paste')
-  paste_object_button.addEventListener('click', () => {
-    currently_pasting = true
-    clipboard.moving = false
-    clipboard.selected = true
-    /* selection.left and selection.top define the cell
-       where the "paste object" button popped up */
-    clipboard.x = Math.min(Math.max(cgol_object.selection.left, 0), cgol_object.grid_size - clipboard.width)
-    clipboard.y = Math.min(Math.max(cgol_object.selection.top, 0), cgol_object.grid_size - clipboard.height)
-    cgol_object.objects.push(structuredClone(clipboard))
-    change_visible_toolbar_group(2)
-    update_floating_toolbars()
+  const pasteObjectButton = document.getElementById("simulator-object-paste");
+  pasteObjectButton.addEventListener("click", () => {
+    currentlyPasting = true;
+    clipboard.moving = false;
+    clipboard.selected = true;
+    /*
+     * selection.left and selection.top define the cell
+     * where the "paste object" button popped up
+     */
+    clipboard.x = Math.min(
+      Math.max(cgolObject.selection.left, 0),
+      cgolObject.gridSize - clipboard.width,
+    );
+    clipboard.y = Math.min(
+      Math.max(cgolObject.selection.top, 0),
+      cgolObject.gridSize - clipboard.height,
+    );
+    cgolObject.objects.push(structuredClone(clipboard));
+    changeVisibleToolbarGroup(2);
+    updateFloatingToolbars();
 
-    console.log(cgol_object.objects) // DEBUG
-  })
-  
+    // DEBUG
+    console.log(cgolObject.objects);
+  });
+
   // Draw the CGoL simulation
-  var now = document.timeline.currentTime
-  cgol_object.draw({}, now)
+  const now = document.timeline.currentTime;
+  cgolObject.draw({}, now);
 }
-export {create_cgol_simulator, resize_simulator}
+
+export {createCgolSimulator, resizeSimulator};

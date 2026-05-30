@@ -1,137 +1,166 @@
-import {create_element, update_root, images, object_data} from './utilities.js'
+import {
+  createElement,
+  updateRoot,
+  images,
+  ruleAliases,
+  objectData,
+} from "./utilities.js";
 
-function create_loading_screen() {
-    var loading_progress = create_element(
-        'span', '0%', {id: 'loading-progress', 'aria-busy': 'true'}
-    )
-    var loading_text = create_element(
-        'p', ['Loading\u2026 ', loading_progress], {class: 'loading-text'}
-    )
-    var progress_bar = create_element('div', [], {class: 'loading-bar'})
-    var loading_container = create_element(
-        'div', [loading_text, progress_bar], {class: 'loading-container'}
-    )
-    loading_container.style.setProperty('--loading-percentage', 0)
+function createLoadingScreen() {
+  const loadingProgress = createElement(
+    "span", "0%", {"id": "loading-progress", "aria-busy": "true"},
+  );
+  const loadingText = createElement(
+    "p", ["Loading\u2026 ", loadingProgress], {"class": "loading-text"},
+  );
+  const progressBar = createElement("div", [], {"class": "loading-bar"});
+  const loadingContainer = createElement(
+    "div", [loadingText, progressBar], {"class": "loading-container"},
+  );
+  loadingContainer.style.setProperty("--loading-percentage", 0);
 
-    var root = document.getElementById('conways-story-mode')
-    var root_size = Math.min(root.clientWidth, root.clientHeight)
-    var canvas_size = Math.round(root_size / 2)
-    var glider_canvas = create_element('canvas', [], {
-        id: 'loading-canvas',
-        width: canvas_size,
-        height: canvas_size,
-        'data-frame': 0,
-    })
+  const root = document.getElementById("conways-story-mode");
+  const rootSize = Math.min(root.clientWidth, root.clientHeight);
+  const canvasSize = Math.round(rootSize / 2);
+  const gliderCanvas = createElement("canvas", [], {
+    "id": "loading-canvas",
+    "width": canvasSize,
+    "height": canvasSize,
+    "data-frame": 0,
+  });
 
-    update_root(loading_container, glider_canvas)
-    update_glider_canvas()
-    setInterval(update_glider_canvas, 55) // 18 FPS = 55 ms
+  updateRoot(loadingContainer, gliderCanvas);
+  updateGliderCanvas();
+  // 18 FPS = 55 ms
+  setInterval(updateGliderCanvas, 55);
 }
 
-function update_glider_canvas() {
-    const glider_canvas = document.getElementById('loading-canvas')
-    if (!glider_canvas) {
-        return undefined
-    }
-    var root = document.getElementById('conways-story-mode')
-    var root_size = Math.min(root.clientWidth, root.clientHeight)
-    var canvas_size = Math.round(root_size / 2)
-    glider_canvas.setAttribute('width', canvas_size)
-    glider_canvas.setAttribute('height', canvas_size)
-    const ctx = glider_canvas.getContext('2d')
-    
-    var glider_phases = [
-        [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]],
-        [[0, 1], [2, 1], [1, 2], [2, 2], [1, 3]],
-        [[2, 1], [0, 2], [2, 2], [1, 3], [2, 3]],
-        [[1, 1], [2, 2], [3, 2], [1, 3], [2, 3]],
-    ]
-    var cell_size = 8
-    var grid_buffer = 3
-    var grid_size = Math.ceil(glider_canvas.width / cell_size)
-    var current_frame = parseInt(glider_canvas.getAttribute('data-frame'))
-    
-    var glider_x = -grid_buffer
-    var glider_y = -grid_buffer
-    var glider_frame = current_frame
-    ctx.clearRect(0, 0, glider_canvas.width, glider_canvas.height)
-    ctx.fillStyle = window.getComputedStyle(glider_canvas).getPropertyValue('--text-color')
-    while (glider_x < grid_size + grid_buffer && glider_y < grid_size + grid_buffer) {
-        glider_x = Math.floor(glider_frame / 4) // - grid_buffer + grid_buffer cancels out
-        glider_y = Math.floor(glider_frame / 4) - grid_buffer
-        for (var cell of glider_phases[glider_frame % 4]) {
-            var cell_x = cell[0] + glider_x
-            var cell_y = cell[1] + glider_y
-            ctx.fillRect(cell_x * cell_size, cell_y * cell_size, cell_size, cell_size)
-        }
-        glider_frame += 30
-    }
+function updateGliderCanvas() {
+  const gliderCanvas = document.getElementById("loading-canvas");
+  if (!gliderCanvas) {
+    return undefined;
+  }
+  const root = document.getElementById("conways-story-mode");
+  const rootSize = Math.min(root.clientWidth, root.clientHeight);
+  const canvasSize = Math.round(rootSize / 2);
+  gliderCanvas.setAttribute("width", canvasSize);
+  gliderCanvas.setAttribute("height", canvasSize);
+  const ctx = gliderCanvas.getContext("2d");
 
-    glider_canvas.setAttribute('data-frame', (current_frame + 1) % 30)
+  const GLIDER_PHASES = [
+    [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]],
+    [[0, 1], [2, 1], [1, 2], [2, 2], [1, 3]],
+    [[2, 1], [0, 2], [2, 2], [1, 3], [2, 3]],
+    [[1, 1], [2, 2], [3, 2], [1, 3], [2, 3]],
+  ];
+  const CELL_SIZE = 8;
+  const GRID_BUFFER = 3;
+  const gridSize = Math.ceil(gliderCanvas.width / CELL_SIZE);
+  const currentFrame = parseInt(gliderCanvas.getAttribute("data-frame"));
+
+  let gliderX = -GRID_BUFFER;
+  let gliderY = -GRID_BUFFER;
+  let gliderFrame = currentFrame;
+  ctx.clearRect(0, 0, gliderCanvas.width, gliderCanvas.height);
+  ctx.fillStyle
+    = window.getComputedStyle(gliderCanvas).getPropertyValue("--text-color");
+  while (gliderX < gridSize + GRID_BUFFER && gliderY < gridSize + GRID_BUFFER) {
+    // - GRID_BUFFER + GRID_BUFFER cancels out
+    gliderX = Math.floor(gliderFrame / 4);
+    gliderY = Math.floor(gliderFrame / 4) - GRID_BUFFER;
+    for (const cell of GLIDER_PHASES[gliderFrame % 4]) {
+      const cellX = cell[0] + gliderX;
+      const cellY = cell[1] + gliderY;
+      ctx.fillRect(cellX * CELL_SIZE, cellY * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    }
+    gliderFrame += 30;
+  }
+
+  gliderCanvas.setAttribute("data-frame", (currentFrame + 1) % 30);
 }
 
-function update_progress(percentage) {
-    var loading_progress = document.getElementById('loading-progress')
-    var loading_container = document.getElementsByClassName('loading-container')[0]
-    loading_progress.innerText = `${Math.round(percentage * 100)}%`
-    loading_container.style.setProperty('--loading-percentage', percentage)
+function updateProgress(percentage) {
+  const loadingProgress = document.getElementById("loading-progress");
+  const loadingContainer
+    = document.getElementsByClassName("loading-container")[0];
+  loadingProgress.innerText = `${Math.round(percentage * 100)}%`;
+  loadingContainer.style.setProperty("--loading-percentage", percentage);
 }
 
-async function load_assets() {
-    var tasks_done = 0
-    const tasks_to_do = 25
-    
-    // Load the cell icons
-    const id_to_name_table = {
-        2: 'delete-off',
-        3: 'delete-on',
-        4: 'create-off',
-        5: 'create-on',
-        6: 'important-off',
-        7: 'important-on',
-        8: 'unchangeable-off',
-        9: 'unchangeable-on',
-        10: 'connect-n-off',
-        11: 'connect-n-on',
-        12: 'connect-ne-off',
-        13: 'connect-ne-on',
-        14: 'connect-e-off',
-        15: 'connect-e-on',
-        16: 'connect-se-off',
-        17: 'connect-se-on',
-        18: 'connect-s-off',
-        19: 'connect-s-on',
-        20: 'connect-sw-off',
-        21: 'connect-sw-on',
-        22: 'connect-w-off',
-        23: 'connect-w-on',
-        24: 'connect-nw-off',
-        25: 'connect-nw-on',
-    } // 0 and 1 don't get icons
-    var promises = Object.values(id_to_name_table).map((name) => {
-        return fetch(`https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@a3132b3/images/cell-icons/${name}.svg`)
-    })
-    var responses = await Promise.all(promises)
-    var ids = Object.keys(id_to_name_table)
-    for (var response of responses) {
-        var blob = await response.blob()
-        var url = URL.createObjectURL(blob)
-        var image = create_element('img', [], {src: url, width: 50, height: 50})
-        var id = ids.shift()
-        images[`cell-icon-${id}`] = image
-        ++tasks_done
-        update_progress(tasks_done / tasks_to_do)
-    }
+async function loadAssets() {
+  let tasksDone = 0;
+  const tasksToDo = 26;
 
-    // Load the library object JSON
-    var library_object_response = await fetch('https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@a3132b3/data/library-objects.json')
-    var library_object_json = await library_object_response.json()
-    // JavaScript gets mad when trying to assign object_data directly
-    for (var [key, value] of Object.entries(library_object_json)) {
-        object_data[key] = value
-    }
-    ++tasks_done
-    update_progress(tasks_done / tasks_to_do)
+  // Load the cell icons
+  const idToNameTable = {
+    // 0 and 1 don't get icons
+    "2": "delete-off",
+    "3": "delete-on",
+    "4": "create-off",
+    "5": "create-on",
+    "6": "important-off",
+    "7": "important-on",
+    "8": "unchangeable-off",
+    "9": "unchangeable-on",
+    "10": "connect-n-off",
+    "11": "connect-n-on",
+    "12": "connect-ne-off",
+    "13": "connect-ne-on",
+    "14": "connect-e-off",
+    "15": "connect-e-on",
+    "16": "connect-se-off",
+    "17": "connect-se-on",
+    "18": "connect-s-off",
+    "19": "connect-s-on",
+    "20": "connect-sw-off",
+    "21": "connect-sw-on",
+    "22": "connect-w-off",
+    "23": "connect-w-on",
+    "24": "connect-nw-off",
+    "25": "connect-nw-on",
+  };
+  const promises = Object.values(idToNameTable).map((name) => {
+    return fetch(
+      `https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@a3132b3/`
+      + `images/cell-icons/${name}.svg`,
+    );
+  });
+  const responses = await Promise.all(promises);
+  const ids = Object.keys(idToNameTable);
+  for (const response of responses) {
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const image
+      = createElement("img", [], {"src": url, "width": 50, "height": 50});
+    const id = ids.shift();
+    images[`cell-icon-${id}`] = image;
+    ++tasksDone;
+    updateProgress(tasksDone / tasksToDo);
+  }
+
+  // Load the rule aliases
+  const aliasObjectResponse = await fetch(
+    "https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode/"
+    + "data/rule-aliases.json",
+  );
+  const aliasObjectJson = await aliasObjectResponse.json();
+  // JavaScript gets mad when trying to assign ruleAliases directly
+  for (const [key, value] of Object.entries(aliasObjectJson)) {
+    ruleAliases[key] = value;
+  }
+
+  // Load the library object JSON
+  const libraryObjectResponse = await fetch(
+    "https://cdn.jsdelivr.net/gh/squareroot12621/conways-story-mode@a3132b3/"
+    + "data/library-objects.json",
+  );
+  const libraryObjectJson = await libraryObjectResponse.json();
+  // JavaScript gets mad when trying to assign objectData directly
+  for (const [key, value] of Object.entries(libraryObjectJson)) {
+    objectData[key] = value;
+  }
+  ++tasksDone;
+  updateProgress(tasksDone / tasksToDo);
 }
 
-export {create_loading_screen, load_assets}
+export {createLoadingScreen, loadAssets};
